@@ -5,10 +5,11 @@ import { AppComponent } from './components/app/app.component';
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { OptionPannelComponent } from './components/option-pannel/option-pannel.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [AppComponent, WorkspaceComponent, SidebarComponent, OptionPannelComponent],
-    imports: [BrowserModule, HttpClientModule],
+    imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule],
     providers: [],
     bootstrap: [AppComponent],
 })
