@@ -4,10 +4,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './components/app/app.component';
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { CanvasComponent } from './components/canvas/canvas.component';
+import { OptionPannelComponent } from './components/option-pannel/option-pannel.component';
 
 @NgModule({
-    declarations: [AppComponent, WorkspaceComponent, SidebarComponent, CanvasComponent],
+    declarations: [AppComponent, WorkspaceComponent, SidebarComponent, OptionPannelComponent],
     imports: [BrowserModule, HttpClientModule],
     providers: [],
     bootstrap: [AppComponent],
