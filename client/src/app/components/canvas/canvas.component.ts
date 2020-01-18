@@ -9,9 +9,11 @@ export class CanvasComponent implements OnInit {
   width: number;
   height: number;
 
+  backgroundColorHex = 'FFF2FF';
+
   constructor() { }
 
-  ngOnInit(width: number = 200, height: number = 200) {
+  ngOnInit(width: number = 800, height: number = 400) {
     this.width = width;
     this.height = height;
   }

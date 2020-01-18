@@ -1,3 +1,9 @@
-<div class="workspace-background">
-  <app-canvas></app-canvas>
+<div class="workspace-background" [style.background-color]="'#'.concat(backgroundColorHex)">
+  <div class="sideBarSpace">
+    <!-- Side-bar-app to be inserted here. -->
+  </div>
+  
+  <div class="d3">
+    <app-canvas></app-canvas>
+  </div>
 </div>
