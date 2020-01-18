@@ -7,14 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CanvasComponent implements OnInit {
   width: number;
-  heigth: number;
+  height: number;
 
-  constructor() {
-  }
+  constructor() { }
 
-  ngOnInit(width: number = 800, height: number = 400) {
-    this.heigth = height;
+  ngOnInit(width: number = 200, height: number = 200) {
     this.width = width;
+    this.height = height;
   }
 
 }

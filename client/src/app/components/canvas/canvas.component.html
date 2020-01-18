@@ -1,3 +1,5 @@
-<div class="canvas-back" [style.min-heigth.px]="heigth" [style.min-width.px]="width">
- Hello
+<div class="canvas-background" [ngStyle]="{
+    'width.px': width,
+    'height.px': height}">
+    <p>Draw here</p>
 </div>
