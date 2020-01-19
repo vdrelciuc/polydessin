@@ -1,1 +1,67 @@
-<p>sidebar works!</p>
+<div class="wrapper">
+
+  <div class="top">
+    <div class="left-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('pencil')"
+        [ngClass]="{'clicked': currentTool === 'pencil'}">
+          <i class=""></i>
+          P
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button>
+          <i class=""></i>
+          l2
+        </button>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('eraser')"
+        [ngClass]="{'clicked': currentTool === 'eraser'}">
+          <i class=""></i>
+          E
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button>
+          <i class=""></i>
+          r2
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="left-column">
+      <div class="icon">
+        <button mat-button>
+          <i class=""></i>
+          l3
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button>
+          <i class=""></i>
+          l4
+        </button>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="icon">
+        <button mat-button>
+          <i class=""></i>
+          r3
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button>
+          <i class=""></i>
+          r4
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

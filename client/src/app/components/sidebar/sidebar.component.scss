@@ -1,0 +1,20 @@
+@import "../../../global-style/colors.scss";
+
+.top {
+  display: flex;
+}
+
+.bottom {
+  display: flex;
+  position: absolute;
+  bottom: 1px;
+}
+
+.clicked {
+  background-color: $clicked-sidebar-option;
+}
+
+.mat-button {
+  height: 50px;
+  width: 50px;
+}
