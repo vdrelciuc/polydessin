@@ -5,6 +5,5 @@ import { Injectable } from '@angular/core';
 })
 export abstract class DrawableService {
 
-
-  initialize(): void;
+  abstract initialize(): void;
 }

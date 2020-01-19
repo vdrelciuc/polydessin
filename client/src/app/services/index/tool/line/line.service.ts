@@ -4,7 +4,14 @@ import { DrawableService } from '../../drawable/drawable.service';
 @Injectable({
   providedIn: 'root'
 })
-export class LineService implements DrawableService {
+export class LineService extends DrawableService {
 
-  constructor() { }
+  static serviceName: string = 'Line';
+  initialize(): void {
+    console.log('just a test - line');
+  }
+
+  constructor() {
+    super();
+  }
 }
