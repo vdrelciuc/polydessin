@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Tools } from '../../enums/tools';
+import { ToolSelectorService } from '../../services/tools/tool-selector.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -6,10 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
+  currentTool: Tools;
 
-  constructor() { }
+  constructor(private toolSelectorService: ToolSelectorService) { }
 
   ngOnInit() {
+    this.toolSelectorService.$currentTool.subscribe((tool: Tools) => {
+      this.currentTool = tool;
+    });
+  }
+
+  selectTool(tool: Tools): void {
+    this.toolSelectorService.setCurrentTool(tool);
   }
 
 }

@@ -3,9 +3,10 @@
   <div class="top">
     <div class="left-column">
       <div class="icon">
-        <button mat-button>
+        <button mat-button (click)="selectTool('pencil')"
+        [ngClass]="{'clicked': currentTool === 'pencil'}">
           <i class=""></i>
-          l1
+          P
         </button>
       </div>
       <div class="icon">
@@ -17,9 +18,10 @@
     </div>
     <div class="right-column">
       <div class="icon">
-        <button mat-button>
+        <button mat-button (click)="selectTool('eraser')"
+        [ngClass]="{'clicked': currentTool === 'eraser'}">
           <i class=""></i>
-          r1
+          E
         </button>
       </div>
       <div class="icon">
