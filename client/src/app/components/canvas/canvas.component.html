@@ -1,5 +1,5 @@
-<div class="canvas-background"
-        [ngStyle]="{'width.px': width, 'height.px': height}"
-        [style.background-color]="'#'.concat(backgroundColorHex)">
+<div [style.background-color]="'#'.concat(backgroundColorHex)"
+        [ngStyle]="{'width.px': width, 'height.px': height,
+        'border': this.workspaceService.checkIfSameBackgroundColor(backgroundColorHex) ? '2px dashed black' : none}">
     <p>Draw here</p>
 </div>

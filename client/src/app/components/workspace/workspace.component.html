@@ -1,4 +1,6 @@
-<div class="workspace-background" [style.background-color]="'#'.concat(backgroundColorHex)">
+<div class="workspace-background"
+    [style.background-color]="this.workspaceService.getBackgroundColorHex()">
+
   <div class="sideBarSpace">
     <!-- Side-bar-app to be inserted here. -->
   </div>
