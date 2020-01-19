@@ -1,19 +1,19 @@
 @import '../styles.scss';
 
 // Palette
-$light: #B0BEC5;
-$medium: #78909C;
-$dark: #37474F;
-$vivid: #ECEFF1;
+$gray: #888888;
+$medium: #434059;
+$dark: #302E40;
+$vivid: #F4EA57;
 
 // Sidebar
 $sidebar-color: $medium;
 $clicked-sidebar-option: $vivid;
 
 // Option pannel
-$option-pannel-color: $light;
+$option-pannel-color: $dark;
 
 // Workspace
-$workspace-color: $dark;
+$workspace-color: $gray;
 
 // Text
