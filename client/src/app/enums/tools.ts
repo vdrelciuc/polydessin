@@ -3,7 +3,7 @@ export enum Tools {
   Brush = 'brush',
   Bucket = 'bucket',
   ColorApplicator = 'colorApplicator',
-  Ellipsis = 'ellipsis',
+  Ellipse = 'ellipse',
   Eraser = 'eraser',
   Feather = 'feather',
   Grid = 'grid',

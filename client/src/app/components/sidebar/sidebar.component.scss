@@ -14,7 +14,12 @@
   background-color: $clicked-sidebar-option;
 }
 
+.not-clicked {
+  filter: invert(1);
+}
+
 .mat-button {
   height: 50px;
   width: 50px;
 }
+
