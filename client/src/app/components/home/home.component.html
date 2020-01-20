@@ -1,1 +1,18 @@
-<p>home works!</p>
+<div class="container">
+  <div  id="themeColor" class="jumbotron">
+    <h1 class="display-4">
+      <img  src="../../../assets/appLogo.jpg" alt="Logo de l'application" width="85" height=auto>
+      {{messageAccueil}}
+    </h1>
+    <p id="messageDescriptif" class="lead">{{messageDescriptif}}</p>
+    <hr class="hrSeparation">
+    <div class="choiceContent">
+
+      <p >Select an option :</p>
+      <div *ngFor="let option of options ">
+        <a  class="btn btn-warning btn-center " href="#" role="button">{{option}}</a>
+      </div>
+    </div>
+
+  </div>
+</div>
