@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 
 interface Options {
   element: any; // Creates an error with HTMLElement
+  description: string;
   keys: string;
 }
 
