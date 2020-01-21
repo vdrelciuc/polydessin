@@ -11,8 +11,12 @@
     <div class="choiceContent">
       <p >Veuillez choisir une option :</p>
       <div *ngFor="let option of options " >
-        <a *ngIf="option.show " class="btn btn-warning btn-center " href="#" role="button">{{option.description}}</a>
+        <a *ngIf="option.show " class="btn btn-warning btn-center " href="#" role="button">
+          {{option.description}} <img id="guideIcon" *ngIf="option.description.includes('guide')" src="../../../assets/guideIcon.svg">
+        </a>
       </div>
+
     </div>
   </div>
 </div>
+
