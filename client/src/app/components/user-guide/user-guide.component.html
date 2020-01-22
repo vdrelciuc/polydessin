@@ -1,6 +1,10 @@
 <div class="optionFrame">
   <div class="headerComponent">Guide d'utilisation <img src="../../../assets/guideIcon.svg" alt="icone guide"></div>
-  <div class="navigationGuide"> navigation</div>
+  <div class="navigationGuide">
+    <ul>
+      <li *ngFor="let categorie of categories">{{categorie.type.nom}}</li>
+    </ul>
+  </div>
   <div class="affichageGuide"> affichage</div>
 </div>
 
