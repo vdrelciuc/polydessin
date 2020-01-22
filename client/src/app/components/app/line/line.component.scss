@@ -1,0 +1,19 @@
+#container {
+  padding: 30px 40px;
+  padding-bottom: 0px;
+
+  .title {
+    text-align: center;
+    font-weight: bold;
+  }
+
+  ul {
+    list-style: none;
+    display: inline;
+  }
+}
+
+.mat-slider-horizontal {
+  width: 170px;
+}
+
