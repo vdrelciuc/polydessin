@@ -23,3 +23,17 @@
   width: 50px;
 }
 
+.tool-group {
+  display: flex;
+}
+
+.group-name {
+  margin: 5px;
+  color: white;
+  font-weight: 100;
+}
+
+hr {
+  margin: 0;
+  border-color: gray;
+}

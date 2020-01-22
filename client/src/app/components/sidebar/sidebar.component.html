@@ -1,6 +1,33 @@
 <div class="wrapper">
+  <p class="group-name">
+    Sélection
+  </p>
+  <div class="tool-group">
+    <div class="left-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('arrow')"
+        [ngClass]="{'clicked': currentTool === 'arrow',
+        'not-clicked': currentTool !== 'arrow'}">
+          <img src="../../../assets/icons/arrow.svg">
+        </button>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('selection')"
+        [ngClass]="{'clicked': currentTool === 'selection',
+        'not-clicked': currentTool !== 'selection'}">
+          <!--<img src="../../../assets/icons/selection.svg">-->
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr noshade size="1">
 
-  <div class="top">
+  <p class="group-name">
+    Traçage
+  </p>
+  <div class="tool-group">
     <div class="left-column">
       <div class="icon">
         <button mat-button (click)="selectTool('pencil')"
@@ -10,24 +37,19 @@
         </button>
       </div>
       <div class="icon">
-        <button mat-button (click)="selectTool('brush')"
-        [ngClass]="{'clicked': currentTool === 'brush',
-        'not-clicked': currentTool !== 'brush'}">
-        <img src="../../../assets/icons/brush.svg">
-        </button>
-      </div>
-      <div class="icon">
         <button mat-button (click)="selectTool('feather')"
         [ngClass]="{'clicked': currentTool === 'feather',
         'not-clicked': currentTool !== 'feather'}">
         <img src="../../../assets/icons/feather.svg">
         </button>
       </div>
+    </div>
+    <div class="right-column">
       <div class="icon">
-        <button mat-button (click)="selectTool('pipette')"
-        [ngClass]="{'clicked': currentTool === 'pipette',
-        'not-clicked': currentTool !== 'pipette'}">
-        <img src="../../../assets/icons/pipette.svg">
+        <button mat-button (click)="selectTool('brush')"
+        [ngClass]="{'clicked': currentTool === 'brush',
+        'not-clicked': currentTool !== 'brush'}">
+        <img src="../../../assets/icons/brush.svg">
         </button>
       </div>
       <div class="icon">
@@ -37,56 +59,20 @@
         <img src="../../../assets/icons/aerosol.svg">
         </button>
       </div>
-      <div class="icon">
-        <button mat-button (click)="selectTool('eraser')"
-        [ngClass]="{'clicked': currentTool === 'eraser',
-        'not-clicked': currentTool !== 'eraser'}">
-        <img src="../../../assets/icons/eraser.svg">
-        </button>
-      </div>
-      <div class="icon">
-        <button mat-button (click)="selectTool('text')"
-        [ngClass]="{'clicked': currentTool === 'text',
-        'not-clicked': currentTool !== 'text'}">
-        <img src="../../../assets/icons/text.svg">
-        </button>
-      </div>
-      <div class="icon">
-        <button mat-button (click)="selectTool('undo')"
-        [ngClass]="{'clicked': currentTool === 'undo',
-        'not-clicked': currentTool !== 'undo'}">
-        <!--<img src="../../../assets/icons/undo.svg">-->
-        </button>
-      </div>
     </div>
+  </div>
+  <hr noshade size="1">
 
-    <div class="right-column">
-      <div class="icon">
-        <button mat-button (click)="selectTool('selection')"
-        [ngClass]="{'clicked': currentTool === 'selection',
-        'not-clicked': currentTool !== 'selection'}">
-        <img src="../../../assets/icons/selection.svg">
-        </button>
-      </div>
-      <div class="icon">
-        <button mat-button (click)="selectTool('line')"
-        [ngClass]="{'clicked': currentTool === 'line',
-        'not-clicked': currentTool !== 'line'}">
-        <img src="../../../assets/icons/line.svg">
-        </button>
-      </div>
+  <p class="group-name">
+    Formes
+  </p>
+  <div class="tool-group">
+    <div class="left-column">
       <div class="icon">
         <button mat-button (click)="selectTool('rectangle')"
         [ngClass]="{'clicked': currentTool === 'rectangle',
         'not-clicked': currentTool !== 'rectangle'}">
         <img src="../../../assets/icons/rectangle.svg">
-        </button>
-      </div>
-      <div class="icon">
-        <button mat-button (click)="selectTool('ellipse')"
-        [ngClass]="{'clicked': currentTool === 'ellipse',
-        'not-clicked': currentTool !== 'ellipse'}">
-        <!--<img src="../../../assets/icons/ellipse.svg">-->
         </button>
       </div>
       <div class="icon">
@@ -96,6 +82,40 @@
         <img src="../../../assets/icons/polygon.svg">
         </button>
       </div>
+    </div>
+    <div class="right-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('ellipse')"
+        [ngClass]="{'clicked': currentTool === 'ellipse',
+        'not-clicked': currentTool !== 'ellipse'}">
+        <!--<img src="../../../assets/icons/ellipse.svg">-->
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button (click)="selectTool('line')"
+        [ngClass]="{'clicked': currentTool === 'line',
+        'not-clicked': currentTool !== 'line'}">
+        <img src="../../../assets/icons/line.svg">
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr noshade size="1">
+
+  <p class="group-name">
+    Autres
+  </p>
+  <div class="tool-group">
+    <div class="left-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('text')"
+        [ngClass]="{'clicked': currentTool === 'text',
+        'not-clicked': currentTool !== 'text'}">
+        <img src="../../../assets/icons/text.svg">
+        </button>
+      </div>
+    </div>
+    <div class="right-column">
       <div class="icon">
         <button mat-button (click)="selectTool('stamp')"
         [ngClass]="{'clicked': currentTool === 'stamp',
@@ -103,22 +123,55 @@
         <!--<img src="../../../assets/icons/stamp.svg">-->
         </button>
       </div>
+    </div>
+  </div>
+  <hr noshade size="1">
+
+  <p class="group-name">
+    Modificateurs
+  </p>
+  <div class="tool-group">
+    <div class="left-column">
       <div class="icon">
-        <button mat-button (click)="selectTool('grid')"
-        [ngClass]="{'clicked': currentTool === 'grid',
-        'not-clicked': currentTool !== 'grid'}">
-        <img src="../../../assets/icons/grid.svg">
+        <button mat-button (click)="selectTool('colorApplicator')"
+        [ngClass]="{'clicked': currentTool === 'colorApplicator',
+        'not-clicked': currentTool !== 'colorApplicator'}">
+        <img src="../../../assets/icons/color-applicator.svg">
         </button>
       </div>
       <div class="icon">
-        <button mat-button (click)="selectTool('redo')"
-        [ngClass]="{'clicked': currentTool === 'redo',
-        'not-clicked': currentTool !== 'redo'}">
-        <!--<img src="../../../assets/icons/redo.svg">-->
+        <button mat-button (click)="selectTool('pipette')"
+        [ngClass]="{'clicked': currentTool === 'pipette',
+        'not-clicked': currentTool !== 'pipette'}">
+        <img src="../../../assets/icons/pipette.svg">
+        </button>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('bucket')"
+        [ngClass]="{'clicked': currentTool === 'bucket',
+        'not-clicked': currentTool !== 'bucket'}">
+        <img src="../../../assets/icons/bucket.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button (click)="selectTool('eraser')"
+        [ngClass]="{'clicked': currentTool === 'eraser',
+        'not-clicked': currentTool !== 'eraser'}">
+        <img src="../../../assets/icons/eraser.svg">
         </button>
       </div>
     </div>
   </div>
+  <hr noshade size="1">
+
+  <p class="group-name">
+    Couleur
+  </p>
+  <hr noshade size="1">
+
+  
 
   <div class="bottom">
     <div class="left-column">
