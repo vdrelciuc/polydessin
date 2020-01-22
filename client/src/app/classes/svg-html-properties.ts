@@ -1,10 +1,13 @@
 export enum SVGProperties {
 
   fill = 'fill',
+  color = 'stroke',
   container = 'g',
   height = 'height',
   hyperlink = 'a',
   opacity = 'opacity',
+  thickness = 'stroke-width',
+  topLeftCornerCoordinates = 'viewBox',
   width = 'width',
 
   // Circle

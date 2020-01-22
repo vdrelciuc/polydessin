@@ -1,9 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
-import { DrawableService } from '../drawable.service';
-import { Stack } from 'src/app/classes/stack';
-import { Shape } from 'src/app/classes/shape';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { SVGService } from '../../svg/svg.service';
+import { Stack } from 'src/app/classes/stack';
+import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 
 @Injectable({
@@ -11,12 +9,12 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
 })
 export class LineService extends DrawableService {
 
-  private isDrawing: boolean;
-  private lineIsDone: boolean;
-  private lineStarted: boolean;
+  private isDrawing: boolean; // If the user can draw
+  private lineIsDone: boolean; // If the user has double clicked to endl
+  private lineStarted: boolean; // If the user created the first point
   private points: Stack<CoordinatesXY>;
   private currentElement: SVGPolylineElement;
-  private manipulator: Renderer2
+  private manipulator: Renderer2;
 
   constructor(private properties: DrawablePropertiesService) {
     super();
@@ -28,19 +26,19 @@ export class LineService extends DrawableService {
 
 
   onMouseMove(event: MouseEvent): void {
-    if (!this.lineIsDone) {
+    if (!this.lineIsDone && this.isDrawing) {
       this.preview(event.clientX, event.clientY);
     }
   }
 
   onMouseInCanvas(event: MouseEvent): void {
     // Change the pointer's appearance
-    throw new Error("Method not implemented.");
+    this.isDrawing = true;
   }
 
   onMouseOutCanvas(event: MouseEvent): void {
     // Change the pointer's appearance
-    throw new Error("Method not implemented.");
+    this.isDrawing = true;
   }
 
   addPointToLine(onScreenX: number, onScreenY: number): void {
@@ -81,4 +79,11 @@ export class LineService extends DrawableService {
   }
 
 
+  printPointsStack(): string {
+    let returnPoints: string = '';
+    for (const point of this.points.getAll()) {
+      returnPoints += point.getX() + ',' + point.getY + ' ';
+    }
+    return returnPoints;
+  }
 }

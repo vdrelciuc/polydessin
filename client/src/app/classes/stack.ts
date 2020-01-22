@@ -35,4 +35,6 @@ export class Stack<T> {
     this.stack = this.stack.splice(1, this.stack.length);
     return toReturn;
   }
+
+  getAll(): T[] { return this.stack; }
 }
