@@ -1,6 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 
@@ -24,42 +25,19 @@ export class LineService extends DrawableService {
     throw new Error("Method not implemented.");
   }
 
-
-  onMouseMove(event: MouseEvent): void {
-    if (!this.lineIsDone && this.isDrawing) {
-      this.preview(event.clientX, event.clientY);
-    }
-  }
-
-  onMouseInCanvas(event: MouseEvent): void {
-    // Change the pointer's appearance
-    this.isDrawing = true;
-  }
-
-  onMouseOutCanvas(event: MouseEvent): void {
-    // Change the pointer's appearance
-    this.isDrawing = true;
-  }
-
   addPointToLine(onScreenX: number, onScreenY: number): void {
-
     // Should make modifications
     // Screen's X and Y are not the same as the canvas'
 
     if (this.properties.isJunctionADot()) {
-      if (!this.lineStarted) {
-        this.currentElement = this.manipulator.createElement('g');
-      }
       this.manipulator.appendChild(this.currentElement, '')
     }
     this.points.push_back(new CoordinatesXY(onScreenX, onScreenY));
   }
 
-  onMousePress(event: MouseEvent): void {
-    this.addPointToLine(event.clientX, event.clientY);
-  }
-  onMouseRelease(event: MouseEvent): void {
-    throw new Error("Method not implemented.");
+  onBackspacePressed(): void {
+    this.points.pop_back();
+    this.update(false);
   }
 
   onDoubleClick(event: MouseEvent): void { // Should end line
@@ -69,21 +47,63 @@ export class LineService extends DrawableService {
           this.addPointToLine(event.clientX, event.clientY);
           this.lineIsDone = true;
         }
-        this.currentStack.addElement()
         this.points.clear();
     }
   }
 
-  preview(x: number, y: number): void {
-      this.manipulator.setAttribute(this.currentElement, )
+  onEscapePressed(): void {
+    this.points.clear();
+    this.update(false);
   }
 
+  onMouseInCanvas(event: MouseEvent): void {
+    // Change the pointer's appearance
+    this.isDrawing = true;
+  }
 
-  printPointsStack(): string {
+  onMouseMove(event: MouseEvent): void {
+    if (!this.lineIsDone && this.isDrawing) {
+      this.preview(event.clientX, event.clientY);
+    }
+  }
+
+  onMouseOutCanvas(event: MouseEvent): void {
+    // Change the pointer's appearance
+    this.isDrawing = true;
+  }
+
+  onMousePress(event: MouseEvent): void {
+    this.addPointToLine(event.clientX, event.clientY);
+  }
+
+  onMouseRelease(event: MouseEvent): void {
+    throw new Error("Method not implemented.");
+  }
+
+  preview(x: number, y: number): void {
+      this.manipulator.setAttribute(
+        this.currentElement,
+        SVGProperties.pointsList,
+        this.printPointsStack(this.points) + this.pointToString(x, y)
+      );
+  }
+
+  update(areNewPoints: boolean,
+         {newPoints = this.points}: {newPoints?: Stack<CoordinatesXY>}= {}): void {
+        this.manipulator.setAttribute(
+          this.currentElement,
+          SVGProperties.pointsList,
+          this.printPointsStack(newPoints)
+        );
+  }
+
+  private printPointsStack(stack: Stack<CoordinatesXY>): string {
     let returnPoints: string = '';
-    for (const point of this.points.getAll()) {
-      returnPoints += point.getX() + ',' + point.getY + ' ';
+    for (const point of stack.getAll()) {
+      returnPoints += this.pointToString(point.getX(), point.getY());
     }
     return returnPoints;
   }
+
+  private pointToString(x: number, y: number): string { return x + ',' + y + ' '; }
 }
