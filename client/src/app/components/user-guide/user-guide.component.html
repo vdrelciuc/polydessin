@@ -2,9 +2,17 @@
   <div class="headerComponent">Guide d'utilisation <img src="../../../assets/guideIcon.svg" alt="icone guide"></div>
   <div class="navigationGuide">
     <ul>
-      <li *ngFor="let categorie of categories">{{categorie.type.nom}}</li>
+      <li *ngFor="let categorie of categories, index as i">{{categorie.type.nom}}
+        <ul>
+          <li (click)="setCurrentSubCategorie(element.nom)" *ngFor="let element of  categories[i].type.elements">{{element.nom }}</li>
+        </ul>
+      </li>
     </ul>
   </div>
-  <div class="affichageGuide"> affichage</div>
+  <div class="affichageGuide">
+    <div class="currentElementDescription">
+      {{getCurrentSubCategorie()}}
+    </div>
+  </div>
 </div>
 

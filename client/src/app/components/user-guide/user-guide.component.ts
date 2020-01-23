@@ -6,7 +6,46 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-guide.component.scss']
 })
 export class UserGuideComponent implements OnInit {
-  // catégorie[position de la catégorie][positionDeL'outil].champs de l'outil
+  /**
+   * Getters
+   **/
+  getCurrentDescription(): string {
+    return this._currentDescription;
+  }
+
+  getCurrentCategorie(): string {
+    return this._currentCategorie;
+  }
+
+  getCurrentSubCategorie(): string {
+    return this._currentSubCategorie;
+  }
+  /**
+   * Setters
+   **/
+  setCurrentCategorie(value: string) {
+    this._currentCategorie = value;
+  }
+
+  setCurrentSubCategorie(value: string) {
+    this._currentSubCategorie = value;
+  }
+
+  setCurrentDescription(value: string) {
+    this._currentDescription = value;
+  }
+  /**
+   * Functions
+   **/
+
+
+  /**
+   * Attributes
+   **/
+  private _currentCategorie : string ;
+  private _currentSubCategorie : string ;
+  private _currentDescription : string ;
+
   categories : any[] = [
     {
       type: {
