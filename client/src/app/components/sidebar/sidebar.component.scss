@@ -6,8 +6,8 @@
 
 .bottom {
   display: flex;
-  position: absolute;
-  bottom: 1px;
+  //position: absolute;
+  //bottom: 1px;
 }
 
 .clicked {
@@ -25,6 +25,7 @@
 
 .tool-group {
   display: flex;
+  width: 100%;
 }
 
 .group-name {
@@ -38,6 +39,26 @@ hr {
   border-color: gray;
 }
 
-.icon {
-  
+.wrapper {
+  height: 100%;
+}
+
+#upper-icons {
+  overflow-y: auto;
+  height: 100%;
+}
+
+#upper-icons::-webkit-scrollbar {
+  display: none;
+}
+
+#lower-icons {
+  position: absolute;
+  bottom: 1px;
+  background-color: $medium;
+  border-top: 1px solid black;
+}
+
+.bumper {
+  padding: 50px 0;
 }

@@ -1,4 +1,5 @@
 <div class="wrapper">
+<div id="upper-icons">
   <p class="group-name">
     Sélection
   </p>
@@ -164,25 +165,31 @@
       </div>
     </div>
   </div>
-  <hr noshade size="1">
+  <hr noshade size="2">
 
   <p class="group-name">
     Couleur
   </p>
+  <svg width="128" height="70">
+    <rect id="primary-color" width="40" height="40" x="50" y="25" fill="gray" stroke="#302E40" stroke-width="1"></rect>
+    <rect id="secondary-color" width="40" height="40" x="30" y="5" fill="lightgray" stroke="#302E40" stroke-width="1"></rect>
+  </svg>
   <hr noshade size="1">
 
+  <div class="bumper"></div>
+</div>
   
-
+<div id="lower-icons">
   <div class="bottom">
     <div class="left-column">
       <div class="icon">
         <button mat-button>
-          <!--<img src="../../../assets/icons/new-project.svg">-->
+          <img src="../../../assets/icons/new-project.svg">
         </button>
       </div>
       <div class="icon">
         <button mat-button>
-          <!--<img src="../../../assets/icons/load-project.svg">-->
+          <img src="../../../assets/icons/load-project.svg">
         </button>
       </div>
     </div>
@@ -199,5 +206,6 @@
       </div>
     </div>
   </div>
+</div>
 
 </div>
