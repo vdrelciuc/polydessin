@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import * as CONSTANT from 'src/app/classes/constants';
+import { Junctions } from 'src/app/classes/enums';
 
 /*
 
@@ -25,18 +27,11 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DrawablePropertiesService {
 
-  readonly THICKNESS_MINIMUM: number = 1;
-  readonly THICKNESS_DEFAULT: number = 5;
-  readonly THICKNESS_MAXIMUM: number = 10;
-
-  readonly JUNCTION_NONE = 0;
-  readonly JUNCTION_DOTTED = 1;
-
   readonly JUNCTION_DIAMETER_MINIMUM = 1;
   readonly JUNCTION_DIAMETER_DEFAULT = 5;
   readonly JUNCTION_DIAMETER_MAXIMUM = 10;
 
-  thickness: BehaviorSubject<number> = new BehaviorSubject(this.THICKNESS_DEFAULT);
-  junction: BehaviorSubject<number> = new BehaviorSubject(this.JUNCTION_NONE);
-  junctionDiameter: BehaviorSubject<number> = new BehaviorSubject(this.JUNCTION_DIAMETER_DEFAULT);
+  thickness: BehaviorSubject<number> = new BehaviorSubject(CONSTANT.THICKNESS_DEFAULT);
+  junction: BehaviorSubject<Junctions> = new BehaviorSubject(Junctions.None);
+  junctionDiameter: BehaviorSubject<Junctions> = new BehaviorSubject(this.JUNCTION_DIAMETER_DEFAULT);
 }

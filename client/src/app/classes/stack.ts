@@ -1,20 +1,20 @@
-export class SVGStack {
+export class Stack<T> {
 
-  private stack: SVGGElement[];
+  private stack: T[];
 
   constructor() {
-    this.stack = new Array<SVGGElement>();
+    this.stack = new Array<T>();
   }
 
-  delete(toDelete: SVGGElement): void {
+  delete(toDelete: T): void {
     this.stack.splice(this.stack.indexOf(toDelete), 1);
   }
 
-  push_back(toAdd: SVGGElement): void {
+  push_back(toAdd: T): void {
     this.stack.push(toAdd);
   }
 
-  pop_back(): SVGGElement {
+  pop_back(): T {
     return this.stack.splice(this.stack.length - 1, 1)[0];
   }
 
@@ -22,16 +22,16 @@ export class SVGStack {
     this.stack.splice(0, this.stack.length);
   }
 
-  push_front(toAdd: SVGGElement): void {
-    const slicedArray: SVGGElement[] = this.stack.splice(0, this.stack.length);
+  push_front(toAdd: T): void {
+    const slicedArray: T[] = this.stack.splice(0, this.stack.length);
     this.stack[0] = toAdd;
     for(const element of slicedArray) {
       this.stack.push(element);
     }
   }
 
-  pop_front(): SVGGElement {
-    const toReturn: SVGGElement = this.stack[0];
+  pop_front(): T {
+    const toReturn: T = this.stack[0];
     this.stack = this.stack.splice(1, this.stack.length);
     return toReturn;
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DrawableService } from '../drawable/drawable.service';
-import { LineService } from './line/line.service';
+// import { LineService } from '../drawable/line/line.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ToolService {
 
   constructor() { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<string, DrawableService>();
-    this.tools.set(LineService.serviceName, new LineService());
+    // this.tools.set(LineService.serviceName, new LineService());
 
       // Initialize currentTool as the selector(mouse)
     this.initialize();

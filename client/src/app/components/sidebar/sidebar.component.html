@@ -33,7 +33,9 @@
       <div class="icon">
         <button mat-button (click)="selectTool('pencil')"
         [ngClass]="{'clicked': currentTool === 'pencil',
-        'not-clicked': currentTool !== 'pencil'}">
+        'not-clicked': currentTool !== 'pencil'}"
+        (dblclick)="hideProperties('pencil')"
+        >
         <img src="../../../assets/icons/pencil.svg">
         </button>
       </div>
@@ -178,7 +180,7 @@
 
   <div class="bumper"></div>
 </div>
-  
+
 <div id="lower-icons">
   <div class="bottom">
     <div class="left-column">
