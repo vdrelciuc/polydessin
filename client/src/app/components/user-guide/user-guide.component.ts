@@ -55,7 +55,7 @@ export class UserGuideComponent implements OnInit {
           { nom: 'Crayon', description: 'nonDisponible'},
           { nom: 'Ligne', description: 'nonDisponible'},
           { nom: 'Rectangle', description: 'nonDisponible'},
-          { nom: 'Couleur', description: 'nonDisponible'}
+          { nom: 'Couleur', description: 'nonDisponible'},
         ]
       }
     },

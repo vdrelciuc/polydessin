@@ -1,13 +1,18 @@
 <div class="optionFrame">
   <div class="headerComponent">Guide d'utilisation <img src="../../../assets/guideIcon.svg" alt="icone guide"></div>
   <div class="navigationGuide">
-    <ul>
-      <li *ngFor="let categorie of categories, index as i">{{categorie.type.nom}}
-        <ul>
-          <li (click)="setCurrentSubCategorie(element.nom)" *ngFor="let element of  categories[i].type.elements">{{element.nom }}</li>
-        </ul>
-      </li>
-    </ul>
+
+    <mat-expansion-panel *ngFor="let categorie of categories, index as i">
+      <mat-expansion-panel-header>
+        <mat-panel-description >{{categorie.type.nom}}</mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ul>
+        <li (click)="setCurrentSubCategorie(element.nom)" *ngFor="let element of  categories[i].type.elements">{{element.nom }}</li>
+      </ul>
+
+    </mat-expansion-panel>
+
   </div>
   <div class="affichageGuide">
     <div class="currentElementDescription">
