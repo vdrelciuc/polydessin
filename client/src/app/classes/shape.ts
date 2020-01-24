@@ -11,8 +11,10 @@ export class Shape {
   }
 
   changeOrigin(newX: number, newY: number) {
-    this.originX = newX;
-    this.originY = newY;
+    if (newX >= 0 && newY >= 0) {
+      this.originX = newX;
+      this.originY = newY;
+    }
   }
 
   getOriginX(): number { return this.originX; }
