@@ -2,9 +2,8 @@ import { Injectable, Renderer2} from '@angular/core';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { SVGProperties } from 'src/app/classes/svg-properties';
-import { DrawableService } from '../drawable.service';
-import { stringify } from 'querystring';
 import { Tools } from 'src/app/enums/tools';
+import { DrawableService } from '../drawable.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,19 +20,18 @@ export class LineService extends DrawableService {
   private isStarted: boolean;
   private points: Stack<CoordinatesXY>;
   private line: SVGPolylineElement;
-  private lineWrapper: SVGGElement;
+  // private lineWrapper: SVGGElement;
   private connectionDot: SVGCircleElement;
   private manipulator: Renderer2;
 
-  constructor(
-    ) {
+  constructor() {
     super();
   }
 
   static getName(): Tools { return Tools.Line; }
 
   initialize(): void {
-    throw new Error('Method not implemented.');
+    console.log('Init line');
   }
   onMouseInCanvas(event: MouseEvent): void {
     throw new Error('Method not implemented.');

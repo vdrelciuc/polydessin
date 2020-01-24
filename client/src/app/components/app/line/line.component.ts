@@ -4,6 +4,7 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
 import { LineService } from 'src/app/services/index/drawable/line/line.service';
 import { HotkeysService } from 'src/app/services/index/shortcuts/hotkeys.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 
 @Component({
   selector: 'app-line',
@@ -18,9 +19,11 @@ export class LineComponent implements OnInit {
 
   constructor(
     private shortcuts: HotkeysService,
-    protected service: LineService
+    protected service: LineService,
+    private toolSelector: ToolSelectorService
     ) {
     this.setupShortcuts();
+    this.service = <LineService>this.toolSelector.getTool(Tools.Line);
   }
 
   ngOnInit(): void {

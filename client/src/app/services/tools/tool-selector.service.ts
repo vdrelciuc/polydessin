@@ -34,14 +34,14 @@ export class ToolSelectorService {
   getCurrentTool(): DrawableService { return this.currentTool; }
 
   setCurrentTool(tool: Tools): void {
-    const foundTool = this.findTool(tool);
+    const foundTool = this.getTool(tool);
     if (foundTool !== undefined) {
       this.$currentTool.next(tool);
       this.isHidden = false;
     }
   }
 
-  private findTool(toFind: Tools): DrawableService | undefined {
+  getTool(toFind: Tools): DrawableService | undefined {
     if (this.tools.has(toFind)) {
       return this.tools.get(toFind);
     }
