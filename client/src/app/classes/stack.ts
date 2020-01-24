@@ -4,10 +4,13 @@ export class Stack<T> {
 
   constructor() {
     this.stack = new Array<T>();
+    this.stack = [];
   }
 
   delete(toDelete: T): void {
-    this.stack.splice(this.stack.indexOf(toDelete), 1);
+    if (this.stack.length > 0) {
+      this.stack.splice(this.stack.indexOf(toDelete), 1);
+    }
   }
 
   push_back(toAdd: T): void {
@@ -19,7 +22,10 @@ export class Stack<T> {
   }
 
   clear(): void {
-    this.stack.splice(0, this.stack.length);
+    const stackLength = this.stack.length;
+    if (stackLength > 0) {
+      this.stack.splice(0, this.stack.length);
+    }
   }
 
   push_front(toAdd: T): void {
