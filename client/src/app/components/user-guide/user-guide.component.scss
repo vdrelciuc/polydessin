@@ -12,7 +12,7 @@
 }
 
 .navigationGuide{
-  width: 30%;
+  width: 15%;
   background-color: #F1F1F1;
   float: left;
   height: 100%;
@@ -49,6 +49,11 @@ li {
 .subCategoryStyle {
   outline: none !important;
   height: auto !important;
+}
+.mat-action-list :hover{
+  outline: none !important;
+  height: auto !important;
+  background-color: #dbdbdb !important;
 }
 
 mat-action-list{
