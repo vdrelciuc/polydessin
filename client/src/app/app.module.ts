@@ -9,19 +9,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './components/app/app.component';
 import { LineComponent } from './components/app/line/line.component';
-<<<<<<< HEAD
 import { CanvasComponent } from './components/canvas/canvas.component';
 import { OptionPannelComponent } from './components/option-pannel/option-pannel.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
-=======
->>>>>>> b6ae071e39bd5fc2dbbd572d56f23e9c65cb172a
 
 @NgModule({
     declarations: [
       AppComponent,
-<<<<<<< HEAD
       CanvasComponent,
       OptionPannelComponent,
       SidebarComponent,
@@ -30,11 +26,6 @@ import { AngularMaterialModule } from './modules/angular-material.module';
     ],
     imports: [
       AngularMaterialModule,
-=======
-      LineComponent
-    ],
-    imports: [
->>>>>>> b6ae071e39bd5fc2dbbd572d56f23e9c65cb172a
       BrowserModule,
       BrowserAnimationsModule,
       FormsModule,
