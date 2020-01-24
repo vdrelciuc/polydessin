@@ -46,6 +46,8 @@ export class UserGuideComponent implements OnInit {
   private _currentSubCategorie : string ;
   private _currentDescription : string ;
 
+  welcomeObject : object={ nom: 'Bienvenue', description: 'nonDisponible'};
+
   categories : any[] = [
     {
       type: {
@@ -64,8 +66,8 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'Fichier',
         elements: [
-          { nom: 'sauvegarde', description: 'nonDisponible' },
-          { nom: 'une autre type de sauvegarde', description: 'nonDisponible' }
+          { nom: 'Sauvegarde', description: 'nonDisponible' },
+          { nom: 'Une autre type de sauvegarde', description: 'nonDisponible' }
         ]
       }
     }

@@ -43,6 +43,11 @@ li {
   font-weight: bold;
 }
 
+//please note that important is used since we want
+//to modify external css sheets from angular material
+//and that ng-deep deprecated
+
+
 ::ng-deep .mat-expansion-panel-body{
   padding-bottom: 0 !important;
 }
@@ -51,9 +56,11 @@ li {
   outline: none !important;
   height: auto !important;
 }
+subCategoryStyleAlone{
+  margin: auto;
+}
 .mat-action-list :hover{
   outline: none !important;
-  height: auto !important;
   background-color: #dbdbdb !important;
 }
 
