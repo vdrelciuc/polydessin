@@ -17,27 +17,23 @@
     <p>Couleur:</p>
   </div>
   <div class="col6">
-    <div class="col4">
-      <input type="number" min="0" max="255" [value]="backgroundColor[0]" (change) = changeColor(0,$event.target.value)> <br>
-      R
-    </div>
-    <div class="col4">
-      <input type="number" min="0" max="255" [value]="backgroundColor[1]" (change) = changeColor(1,$event.target.value)> <br>
-      G
-    </div>
-    <div class="col4">
-      <input type="number" min="0" max="255" [value]="backgroundColor[2]" (change) = changeColor(2,$event.target.value)> <br>
+      <mat-slider min="0" max="255" step="1" thumbLabel="true" [(ngModel)]='backgroundColor[0]'></mat-slider> <br/>
+      R <br/>
+      <mat-slider min="0" max="255" step="1" thumbLabel="true" [(ngModel)] = 'backgroundColor[1]'></mat-slider> <br/>
+      G <br/>
+      <mat-slider min="0" max="255" step="1" thumbLabel="true" [(ngModel)] = 'backgroundColor[2]'></mat-slider> <br/>
       B
-    </div>
   </div>
   <div class="verticalLine"></div>
   <div class="col6">
     <div class="col9 hexColor">
-      <span>#</span>
-      <input class="col9" type="string" maxlength="6" [value]="getBackgroundColor().substr(1)" (change) = changeColorHex($event.target.value)>
-      <button [ngStyle]="{'background-color' : getBackgroundColor()}" (click) = "showPalette = !showPalette"></button>
+      <mat-form-field>
+        <input matInput type="string" [value] = 'getBackgroundColor()' (change) = 'setBackgroundColor($event.target.value)'>
+        <span matPrefix>#&nbsp;</span>
+      </mat-form-field>
+      <button [ngStyle]="{'background-color' : '#' + getBackgroundColor()}" (click) = "toggleShowPalette()"></button>
       <div *ngIf="showPalette">
-        <button *ngFor="let color of colorPalette" [ngStyle]="{'background-color' : '#' + color}" (click) = changeColorHex(color)></button>
+        <button *ngFor="let color of colorPalette" [ngStyle]="{'background-color' : '#' + color}" (click) = "setBackgroundColor(color)"></button>
       </div>
 
     </div>

@@ -1,78 +1,66 @@
 import { Component, OnInit } from '@angular/core';
+import { CreateNewService } from 'src/app/services/create-new.service';
 import { colorPalette } from './colors';
 
-enum Color {
-  R = 0,
-  G = 1,
-  B = 2,
-}
-
-const maxRGB = 0xFF;
-const minRGB = 0x00;
 
 @Component({
   selector: 'app-create-new',
   templateUrl: './create-new.component.html',
   styleUrls: ['./create-new.component.scss']
 })
+
 export class CreateNewComponent implements OnInit {
-  static readonly Color: Color;
+  /* hex color verif
+  ^          -> match beginning
+  [0-9A-F]   -> any integer from 0 to 9 and any letter from A to F
+  {6}        -> the previous group appears exactly 6 times
+  $          -> match end
+  i          -> ignore case
+  */
+  colorHexRegex = /^[0-9A-F]{6}$/i;
+
   colorPalette = colorPalette;
   showPalette = false;
   backgroundColor: number[];
+
   canvasSize: number[];
 
-  private numberToHexString(num: number) {
-    if (num < 16) { return `0${num.toString(16)}`} else {return num.toString(16)}
+  constructor(public createNewService: CreateNewService) { }
+
+  ngOnInit() {
+    this.backgroundColor = [0xff, 0xff, 0xff];
+    this.canvasSize = [0, 0];
   }
-//TODO : replace 99999 by workspace size
-  getcanvasSize(axis: number) {
+
+// TODO : replace 99999 by workspace size
+  getcanvasSize(axis: number): number {
     return (this.canvasSize[axis] || 99999);
   }
-  setCanvasSize(axis: number, num: number) {
-    if (num > 0) {
-      this.canvasSize[axis] = num;
+  setCanvasSize(axis: number, size: number) {
+    if (size > 0) {
+      this.canvasSize[axis] = size;
+    }
+  }
+
+  setBackgroundColor(color: string) {
+    if (this.colorHexRegex.test(color)) {
+      this.backgroundColor = this.createNewService.hexStringToColor(color);
     }
   }
 
   getBackgroundColor() {
-    return `#${this.numberToHexString(this.backgroundColor[Color.R])}${this.numberToHexString(this.backgroundColor[Color.G])}${this.numberToHexString(this.backgroundColor[Color.B])}`;
+    return this.createNewService.colorToHexString(this.backgroundColor);
   }
 
-  changeColor(color: number, num: number) {
-    if (num && minRGB <= num && num <= maxRGB) {
-      this.backgroundColor[color] = parseInt(`${num}`);
-    }
+  toggleShowPalette() {
+    this.showPalette = !this.showPalette;
+  }
+  mainMenu() {
+    // TODO
   }
 
-  changeColorHex(color: string){
-    if (color.length === 6){
-      const r = parseInt(`0x${color.substr(0, 2)}`);
-      const g = parseInt(`0x${color.substr(2, 2)}`);
-      const b = parseInt(`0x${color.substr(4, 2)}`);
-
-      if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
-        this.backgroundColor[Color.R] = r;
-        this.backgroundColor[Color.G] = g;
-        this.backgroundColor[Color.B] = b;
-      }
-      this.showPalette = false;
-    }
-  }
-
-  mainMenu(){
-    //TODO
-  }
-
-  createNewSheet(){
-    //TODO
-  }
-
-  constructor() { }
-
-  ngOnInit() {
-    this.backgroundColor = [maxRGB, maxRGB, maxRGB];
-    this.canvasSize = [0, 0];
+  createNewSheet() {
+    // TODO
   }
 
 }
