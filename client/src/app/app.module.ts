@@ -6,11 +6,11 @@ import { HomeComponent } from './components/home/home.component';
 import { UserGuideComponent } from './components/user-guide/user-guide.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
     declarations: [AppComponent, HomeComponent, UserGuideComponent],
-    imports: [BrowserModule, HttpClientModule, MatExpansionModule, BrowserAnimationsModule],
+    imports: [BrowserModule, HttpClientModule, MatExpansionModule, BrowserAnimationsModule, MatListModule],
     providers: [],
     bootstrap: [AppComponent],
 })

@@ -28,3 +28,38 @@
 .currentElementDescription{
   background-color: white;
 }
+
+ul{
+  margin-bottom: 0;
+}
+
+li {
+  list-style-type: none;
+  margin-top: auto;
+}
+
+.categorieStyle{
+  font-weight: bold;
+}
+
+::ng-deep .mat-expansion-panel-body{
+  padding-bottom: 0 !important;
+}
+
+.subCategoryStyle {
+  outline: none !important;
+  height: auto !important;
+}
+
+mat-action-list{
+  padding-top: 0;
+}
+
+mat-expansion-panel-header{
+  height: 45px !important;
+}
+
+.separateGuideElements{
+ border: black solid 2px;
+}
+
