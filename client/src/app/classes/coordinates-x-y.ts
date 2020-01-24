@@ -7,8 +7,8 @@ export class CoordinatesXY {
     this.y = y;
   }
 
-  get X(): number  { return this.x; }
-  get Y(): number  { return this.y; }
+  getX(): number  { return this.x; }
+  getY(): number  { return this.y; }
 
   setX(x: number): void { this.x = x; }
   setY(y: number): void { this.y = y; }
