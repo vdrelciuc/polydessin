@@ -6,7 +6,7 @@
 
 .headerComponent {
   background-color: #38364B;
-  text-align: center;
+  text-align: center ;
   color: azure;
   font-weight: bold;
 }
@@ -16,6 +16,7 @@
   background-color: #F1F1F1;
   float: left;
   height: 100%;
+  overflow-y: scroll;
 }
 
 .affichageGuide{
