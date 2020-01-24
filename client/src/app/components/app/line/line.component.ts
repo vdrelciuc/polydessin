@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
-// import { Stack } from 'src/app/classes/stack';
-// import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
+import { LineService } from 'src/app/services/index/drawable/line/line.service';
 import { HotkeysService } from 'src/app/services/index/shortcuts/hotkeys.service';
 
 @Component({
@@ -14,21 +13,14 @@ import { HotkeysService } from 'src/app/services/index/shortcuts/hotkeys.service
 export class LineComponent implements OnInit {
 
   readonly name: string = Tools.Line;
-  thickness: number;
-  diameter: number;
-  specificationForm: FormGroup;
-  typeSelected: string;
-  // currentStack: SVGStack
+  protected specificationForm: FormGroup;
+  protected typeSelected: string;
 
   constructor(
     private shortcuts: HotkeysService,
-    // private properties: DrawablePropertiesService
-  ) {
+    protected service: LineService
+    ) {
     this.setupShortcuts();
-    this.thickness = CONSTANT.THICKNESS_DEFAULT;
-    this.typeSelected = 'Aucune';
-    this.diameter = CONSTANT.DIAMETER_DEFAULT;
-
   }
 
   ngOnInit(): void {
@@ -51,22 +43,28 @@ export class LineComponent implements OnInit {
   }
 
   onThicknessChange(): void {
-    if (this.thickness < CONSTANT.THICKNESS_MINIMUM) {
-      this.thickness = CONSTANT.THICKNESS_MINIMUM;
+    if (this.service.thickness < CONSTANT.THICKNESS_MINIMUM) {
+      this.service.thickness = CONSTANT.THICKNESS_MINIMUM;
     } else {
-      if (this.thickness > CONSTANT.THICKNESS_MAXIMUM) {
-        this.thickness = CONSTANT.THICKNESS_MAXIMUM
+      if (this.service.thickness > CONSTANT.THICKNESS_MAXIMUM) {
+        this.service.thickness = CONSTANT.THICKNESS_MAXIMUM
       }
     }
   }
 
   onDiameterChange(): void {
-    if (this.diameter < CONSTANT.DIAMETER_MINIMUM) {
-      this.diameter = CONSTANT.DIAMETER_MINIMUM;
+    if (this.service.dotDiameter < CONSTANT.DIAMETER_MINIMUM) {
+      this.service.dotDiameter = CONSTANT.DIAMETER_MINIMUM;
     } else {
-      if (this.diameter > CONSTANT.DIAMETER_MAXIMUM) {
-        this.diameter = CONSTANT.DIAMETER_MAXIMUM
+      if (this.service.dotDiameter > CONSTANT.DIAMETER_MAXIMUM) {
+        this.service.dotDiameter = CONSTANT.DIAMETER_MAXIMUM
       }
+    }
+  }
+
+  onDotSelected(): void {
+    if (this.typeSelected === 'Points') {
+      this.service.jointIsDot = true;
     }
   }
 }

@@ -12,13 +12,13 @@
           step="1"
           thumbLabel="false"
           tickInterval="false"
-          [(ngModel)]="thickness"
+          [(ngModel)]="service.thickness"
           vertical="false">
         </mat-slider>
       </li>
       <li>
         <mat-form-field name="thickness-value">
-          <input matInput type="number" placeholder="Value" [(ngModel)]="thickness" (input)="onThicknessChange()" name="thickness-input">
+          <input matInput type="number" placeholder="Value" [(ngModel)]="service.thickness" (input)="onThicknessChange()" name="thickness-input">
         </mat-form-field>
       </li>
     </ul>
@@ -26,14 +26,14 @@
       <label class="title">Type de Jonction</label>
       <ul>
         <li>
-          <mat-select [(value)]="typeSelected">
+          <mat-select (selectionChange)="onDotSelected(this)" [(ngModel)]="typeSelected" name="type-select">
             <mat-option value="Aucune">Aucune</mat-option>
             <mat-option value="Points">Points</mat-option>
           </mat-select>
         </li>
       </ul>
     </mat-form-field>
-    <div *ngIf="typeSelected == 'Points'">
+    <div *ngIf="service.jointIsDot">
       <label class="title" id="diameter">Diametre</label>
       <ul>
         <li>
@@ -46,14 +46,14 @@
             step="1"
             thumbLabel="false"
             tickInterval="false"
-            [(ngModel)]="diameter"
+            [(ngModel)]="service.dotDiameter"
             vertical="false"
             >
           </mat-slider>
         </li>
         <li>
           <mat-form-field name="diameter-value">
-            <input matInput type="number" placeholder="Value" [(ngModel)]="diameter" (input)="onDiameterChange()" name="diameter-input">
+            <input matInput type="number" placeholder="Value" [(ngModel)]="service.dotDiameter" (input)="onDiameterChange()" name="diameter-input">
           </mat-form-field>
         </li>
       </ul>
