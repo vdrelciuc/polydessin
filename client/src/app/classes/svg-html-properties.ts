@@ -21,6 +21,7 @@ export enum SVGProperties {
 
   // Line
   pointsList = 'points',
+  polyLine = 'polyline',
 
   // Point
   x = 'x',

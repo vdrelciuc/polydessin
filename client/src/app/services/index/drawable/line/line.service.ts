@@ -1,7 +1,9 @@
-import { Injectable, Renderer2} from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
+// import { Shape } from 'src/app/classes/shape';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
-import { SVGProperties } from 'src/app/classes/svg-properties';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
+// import { SVGService } from '../../svg/svg.service';
 import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
 
@@ -48,7 +50,7 @@ export class LineService extends DrawableService {
     this.points.push_back(new CoordinatesXY(onScreenX, onScreenY));
     this.manipulator.setAttribute(
       this.line,
-      SVGProperties.points,
+      SVGProperties.pointsList,
       this.pointsToString()
     );
   }
