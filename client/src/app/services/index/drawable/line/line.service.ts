@@ -4,6 +4,7 @@ import { Stack } from 'src/app/classes/stack';
 import { SVGProperties } from 'src/app/classes/svg-properties';
 import { DrawableService } from '../drawable.service';
 import { stringify } from 'querystring';
+import { Tools } from 'src/app/enums/tools';
 
 @Injectable({
   providedIn: 'root'
@@ -29,9 +30,7 @@ export class LineService extends DrawableService {
     super();
   }
 
-  test(): void {
-    console.log('testing injectables');
-  }
+  static getName(): Tools { return Tools.Line; }
 
   initialize(): void {
     throw new Error('Method not implemented.');
