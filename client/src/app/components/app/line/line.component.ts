@@ -23,7 +23,7 @@ export class LineComponent implements OnInit {
     private toolSelector: ToolSelectorService
     ) {
     this.setupShortcuts();
-    this.service = <LineService>this.toolSelector.getTool(Tools.Line);
+    this.service = this.toolSelector.getLine();
   }
 
   ngOnInit(): void {

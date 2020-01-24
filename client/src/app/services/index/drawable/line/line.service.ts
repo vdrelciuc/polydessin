@@ -105,7 +105,7 @@ export class LineService extends DrawableService {
   private pointsToString({newPoints= this.points}: {newPoints?: Stack<CoordinatesXY>}= {}) {
     let pointsToString = '';
     for (const point of newPoints.getAll()) {
-      pointsToString += point.X + ',' + point.Y + ' ';
+      pointsToString += point.getX() + ',' + point.getY() + ' ';
     }
     return pointsToString;
   }

@@ -14,10 +14,12 @@ export class ToolSelectorService {
   isHidden: boolean;
   private tools: Map<Tools, DrawableService>;
   private currentTool: DrawableService;
+  private line: LineService;
 
   constructor() { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
-    this.tools.set(LineService.getName(), new LineService());
+    this.tools.set(Tools.Line, new LineService());
+    this.line = new LineService();
 
       // Initialize currentTool as the selector(mouse)
     this.initialize();
@@ -32,6 +34,8 @@ export class ToolSelectorService {
   }
 
   getCurrentTool(): DrawableService { return this.currentTool; }
+
+  getLine(): LineService { return this.line; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
