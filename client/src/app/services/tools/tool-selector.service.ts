@@ -11,7 +11,7 @@ export class ToolSelectorService {
   $currentTool: BehaviorSubject<Tools>;
 
   constructor() {
-    this.$currentTool = new BehaviorSubject<Tools>(Tools.Arrow);
+    this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
   }
 
   setCurrentTool(tool: Tools): void {
