@@ -14,6 +14,7 @@ export enum Tools {
   Polygon = 'polygon',
   Rectangle = 'rectangle',
   Selection = 'selection',
+  Settings = 'settings',
   Stamp = 'stamp',
   Text = 'text'
 }

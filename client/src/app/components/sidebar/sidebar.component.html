@@ -11,6 +11,13 @@
       </div>
     </div>
     <div class="right-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('settings')"
+        [ngClass]="{'clicked': currentTool === 'settings',
+        'not-clicked': currentTool !== 'settings'}">
+          <img src="../../../assets/icons/settings.svg">
+      </button>
+      </div>
     </div>
   </div>
   <hr noshade size="1">

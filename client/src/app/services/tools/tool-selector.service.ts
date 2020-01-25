@@ -36,6 +36,7 @@ export class ToolSelectorService {
       case Tools.Polygon: return 'Polygone';
       case Tools.Rectangle: return 'Rectangle';
       case Tools.Selection: return 'Sélection';
+      case Tools.Settings: return 'Réglages';
       case Tools.Stamp: return 'Étampe';
       case Tools.Text: return 'Texte';
       default : return Tools.None;
