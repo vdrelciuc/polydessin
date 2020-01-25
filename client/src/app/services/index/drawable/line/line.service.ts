@@ -19,12 +19,11 @@ export class LineService extends DrawableService {
   dotDiameter: number;
   color: string;
   opacity: string;
-  private isDrawing: boolean;
   private isDone: boolean;
   private isStarted: boolean;
   private points: Stack<CoordinatesXY>;
+  private circles: Stack<SVGCircleElement>;
   private line: SVGPolylineElement;
-  private connectionDot: SVGCircleElement;
   private manipulator: Renderer2;
   private image: ElementRef<SVGElement>;
   private subElement: SVGGElement;
@@ -51,9 +50,11 @@ export class LineService extends DrawableService {
     this.attributes.thickness.subscribe((element: number) => {
         this.thickness = element;
     });
-    this.attributes.junction.subscribe((element) => {
-        this.jointIsDot = element.toString() === 'Point';
+
+    this.attributes.junction.subscribe((element: boolean) => {
+        this.jointIsDot = element;
     });
+
     this.attributes.dotDiameter.subscribe((element: number) => {
         this.dotDiameter = element;
     });
@@ -84,12 +85,7 @@ export class LineService extends DrawableService {
 
   addPointToLine(onScreenX: number, onScreenY: number): void {
     this.points.push_back(new CoordinatesXY(this.effectiveX(onScreenX), this.effectiveY(onScreenY)));
-    this.manipulator.setAttribute(
-      this.line,
-      SVGProperties.pointsList,
-      this.pointsToString()
-    );
-    this.manipulator.setAttribute(this.line, SVGProperties.pointsList, this.pointsToString());
+    this.updateLine();
   }
 
   onMousePress(event: MouseEvent): void {
@@ -100,31 +96,66 @@ export class LineService extends DrawableService {
   }
 
   onDoubleClick(event: MouseEvent): void { // Should end line
-    console.log('Test: double clicked from line');
-    if (this.isDrawing) {
-        if (!this.isDone) {
-          this.addPointToLine(event.clientX, event.clientY);
-          this.isDone = true;
-        }
-        // Send the line to the whole image to be pushed
-        this.points.clear();
-        this.isDrawing = false;
+    if (this.isStarted && !this.isDone) {
+      this.addPointToLine(event.clientX, event.clientY);
+      // Send the line to the whole image to be pushed
+      this.points.clear();
+      this.isStarted = false;
+      this.isDone = true;
     }
   }
 
   onClick(event: MouseEvent): void {
-    console.log('clicked');
     if (this.isStarted) {
       this.addPointToLine(event.clientX, event.clientY);
     } else {
       this.updateProperties();
       this.points = new Stack<CoordinatesXY>();
+      this.circles = new Stack<SVGCircleElement>();
       this.addPointToLine(event.clientX, event.clientY);
       this.isStarted = true;
+      this.isDone = false;
+    }
+    if(this.jointIsDot) {
+      let circle: SVGCircleElement = this.manipulator.createElement('circle','http://www.w3.org/2000/svg');
+      this.manipulator.setAttribute(circle, SVGProperties.centerX, this.effectiveX(event.clientX).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerY, this.effectiveY(event.clientY).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.color, this.color);
+      this.manipulator.setAttribute(circle, SVGProperties.fill, this.color);
+      this.manipulator.setAttribute(circle, SVGProperties.opacity, this.opacity);
+      this.manipulator.appendChild(this.subElement, circle);
+      this.circles.push_back(circle);
     }
   }
 
-  updateProperties(): void {
+  deleteLine(): void {
+    this.isDone = true;
+    this.isStarted = false;
+    this.points.clear();
+    this.circles.clear();
+    this.manipulator.removeChild(this.image, this.subElement);
+  }
+
+  removeLastPoint(): void {
+    this.points.pop_back();
+    this.updateLine();
+    if(this.jointIsDot) {
+      const lastCircle = this.circles.pop_back();
+      this.manipulator.removeChild(this.subElement, lastCircle);
+    }
+  }
+
+  private updateLine(): void {
+    this.manipulator.setAttribute(
+      this.line,
+      SVGProperties.pointsList,
+      this.pointsToString()
+    );
+  }
+
+  private updateProperties(): void {
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Line);
     this.line = this.manipulator.createElement(SVGProperties.polyLine,'http://www.w3.org/2000/svg');
@@ -133,13 +164,6 @@ export class LineService extends DrawableService {
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color);
     this.manipulator.setAttribute(this.line, SVGProperties.opacity, this.opacity);
-
-    if (this.jointIsDot) {
-      this.manipulator.setAttribute(this.connectionDot, SVGProperties.radius, (this.dotDiameter / 2).toString());
-      this.manipulator.setAttribute(this.connectionDot, SVGProperties.color, this.color);
-      this.manipulator.setAttribute(this.connectionDot, SVGProperties.fill, this.color);
-      this.manipulator.setAttribute(this.connectionDot, SVGProperties.opacity, this.opacity);
-    }
 
     this.manipulator.appendChild(this.subElement, this.line);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);

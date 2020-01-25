@@ -35,20 +35,20 @@ export class LineComponent implements OnInit {
     this.thickness = this.attributes.thickness.value;
     this.dotDiameter = this.attributes.dotDiameter.value;
     this.service.initializeProperties(this.attributes);
+    this.typeSelected = "Aucune";
   }
 
   setupShortcuts(): void {
     this.shortcuts.addShortcut({ keys: 'backspace', description: 'Remove last point' }).subscribe(
       (event) => {
         console.log('Backspace pressed - Remove last point');
-        // this.currentStack.pop_back();
+        this.service.removeLastPoint();
       }
     );
 
     this.shortcuts.addShortcut({ keys: 'escape', description: 'Cancel current line' }).subscribe(
       (event) => {
-        console.log('Escape pressed - Cancel current line');
-        // this.currentStack.clear();
+        this.service.deleteLine();
       }
     );
   }
@@ -66,8 +66,12 @@ export class LineComponent implements OnInit {
   }
 
   onDotSelected(): void {
-    if (this.typeSelected === 'Points') {
+    if (this.typeSelected === "Points") {
       this.attributes.junction.next(true);
+      this.service.jointIsDot = true;
+    } else {
+      this.attributes.junction.next(false);
+      this.service.jointIsDot = false;
     }
   }
 
