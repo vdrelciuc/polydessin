@@ -1,0 +1,24 @@
+import { Injectable } from '@angular/core';
+
+import { Tools } from '../../enums/tools'
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DrawerService {
+
+  constructor() { }
+
+  navIsOpened: boolean;
+  lastTool: Tools;
+
+  updateDrawer(currentTool: Tools) {
+    if (!this.navIsOpened) {
+      this.navIsOpened = true;
+    } else if (this.lastTool === currentTool) {
+      this.navIsOpened = false;
+    }
+
+    this.lastTool = currentTool;
+  }
+}

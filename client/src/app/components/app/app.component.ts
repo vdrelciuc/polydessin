@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from '../../../../../common/communication/message';
 import { IndexService } from '../../services/index/index.service';
+import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 
 @Component({
     selector: 'app-root',
@@ -13,10 +14,14 @@ export class AppComponent {
     readonly title: string = 'LOG3900';
     message = new BehaviorSubject<string>('');
 
-    constructor(private basicService: IndexService) {
+    constructor(private basicService: IndexService, private drawerService: DrawerService) {
         this.basicService
             .basicGet()
             .pipe(map((message: Message) => `${message.title} ${message.body}`))
             .subscribe(this.message);
+    }
+
+    getDrawerStatus(): boolean {
+        return this.drawerService.navIsOpened;
     }
 }

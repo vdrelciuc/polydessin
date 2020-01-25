@@ -3,7 +3,7 @@
     <app-sidebar></app-sidebar>
   </div>
   <mat-drawer-container>
-    <mat-drawer #drawer mode="side">
+    <mat-drawer  mode="side" [opened]="getDrawerStatus()">
       <div class="pannel scrollable">
         <app-option-pannel></app-option-pannel>
       </div>
@@ -12,5 +12,4 @@
   <div class="workspace">
     <app-workspace></app-workspace>
   </div>
-  <button (click)="drawer.toggle()">Toggle test</button>
 </div>
