@@ -23,5 +23,6 @@ export abstract class DrawableService {
   abstract onMouseOutCanvas(event: MouseEvent): void;
   abstract onMousePress(event: MouseEvent): void;
   abstract onMouseRelease(event: MouseEvent): void;
-
+  abstract onMouseMove(event: MouseEvent): void;
+  abstract onDoubleClick(event: MouseEvent): void;
 }

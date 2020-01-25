@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
 import { LineService } from 'src/app/services/index/drawable/line/line.service';
-import { HotkeysService } from 'src/app/services/index/shortcuts/hotkeys.service';
+import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 
 @Component({

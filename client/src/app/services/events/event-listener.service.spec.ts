@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ToolService } from './tool.service';
+import { EventListenerService } from './event-listener.service';
 
-describe('ToolService', () => {
+describe('EventListenerService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ToolService = TestBed.get(ToolService);
+    const service: EventListenerService = TestBed.get(EventListenerService);
     expect(service).toBeTruthy();
   });
 });
