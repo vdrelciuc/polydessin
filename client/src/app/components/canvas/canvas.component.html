@@ -1,10 +1,8 @@
-<div [style.background-color]="'#'.concat(backgroundColorHex)"
-        [ngStyle]="{'width.px': width, 'height.px': height,
-        'border': this.workspaceService.checkIfSameBackgroundColor(backgroundColorHex) ? '1px dashed white' : none}">
-    <svg #drawing
-      [attr.width]="width + 'px'"
-      [attr.height]="height + 'px'"
-    >
+<svg
+    #drawing
+    [attr.width]="width + '%'"
+    [attr.height]="height + '%'"
+    [attr.backgroundColor]="'red'"
+>
+</svg>
 
-    </svg>
-</div>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords } from 'src/app/classes/coordinates';
 
 @Injectable({
@@ -6,7 +6,7 @@ import { Coords } from 'src/app/classes/coordinates';
 })
 export abstract class DrawableService {
 
-  abstract initialize(): void;
+  abstract initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void;
 
   getCoords(pointer: MouseEvent): Coords {
     return new Coords(pointer.clientX, pointer.clientY);

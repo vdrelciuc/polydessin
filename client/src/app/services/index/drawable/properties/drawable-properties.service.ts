@@ -32,6 +32,9 @@ export class DrawablePropertiesService {
   readonly JUNCTION_DIAMETER_MAXIMUM = 10;
 
   thickness: BehaviorSubject<number> = new BehaviorSubject(CONSTANT.THICKNESS_DEFAULT);
-  junction: BehaviorSubject<Junctions> = new BehaviorSubject(Junctions.None);
+  dotDiameter: BehaviorSubject<number> = new BehaviorSubject(CONSTANT.DIAMETER_DEFAULT);
+  color: BehaviorSubject<string> = new BehaviorSubject(CONSTANT.COLOR_DEFAULT);
+  opacity: BehaviorSubject<string> = new BehaviorSubject(CONSTANT.OPACITY_DEFAULT);
+  junction: BehaviorSubject<boolean> = new BehaviorSubject(false);
   junctionDiameter: BehaviorSubject<Junctions> = new BehaviorSubject(this.JUNCTION_DIAMETER_DEFAULT);
 }

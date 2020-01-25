@@ -14,6 +14,7 @@ import { OptionPannelComponent } from './components/option-pannel/option-pannel.
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
+import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
 
 @NgModule({
     declarations: [
@@ -35,7 +36,7 @@ import { AngularMaterialModule } from './modules/angular-material.module';
       MatSelectModule,
       MatSliderModule
     ],
-    providers: [],
+    providers: [DrawablePropertiesService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

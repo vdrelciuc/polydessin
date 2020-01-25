@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, Renderer2, ElementRef } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Tools } from '../../enums/tools'
 import { DrawableService } from '../index/drawable/drawable.service';
@@ -10,7 +10,9 @@ import { LineService } from '../index/drawable/line/line.service';
 })
 export class ToolSelectorService {
 
-  $currentTool: BehaviorSubject<Tools>;
+  private toolName: BehaviorSubject<Tools> = new BehaviorSubject(Tools.Arrow);
+  currentToolName: Observable<Tools> = this.toolName.asObservable();
+  $currentTool: DrawableService | undefined;
   isHidden: boolean;
   private tools: Map<Tools, DrawableService>;
   private currentTool: DrawableService;
@@ -18,18 +20,16 @@ export class ToolSelectorService {
 
   constructor() { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
-    this.tools.set(Tools.Line, new LineService());
     this.line = new LineService();
+    this.tools.set(Tools.Line, this.line);
 
       // Initialize currentTool as the selector(mouse)
-    this.initialize();
-    this.$currentTool = new BehaviorSubject<Tools>(Tools.Arrow);
     this.isHidden = true;
   }
 
-  initialize(): void {
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
     for (const element of this.tools) {
-      element[1].initialize();
+      element[1].initialize(manipulator, image);
     }
   }
 
@@ -40,7 +40,9 @@ export class ToolSelectorService {
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
     if (foundTool !== undefined) {
-      this.$currentTool.next(tool);
+      this.currentTool = foundTool;
+      this.toolName.next(tool);
+      console.log(tool + ' has been selected');
       this.isHidden = false;
     }
   }

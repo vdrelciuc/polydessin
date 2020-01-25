@@ -13,12 +13,13 @@ export class SidebarComponent implements OnInit {
   constructor(private toolSelectorService: ToolSelectorService) { }
 
   ngOnInit() {
-    this.toolSelectorService.$currentTool.subscribe((tool: Tools) => {
+    this.toolSelectorService.currentToolName.subscribe((tool: Tools) => {
       this.currentTool = tool;
     });
   }
 
   selectTool(tool: Tools): void {
+    console.log('Test: ' + tool + ' selected');
     this.toolSelectorService.setCurrentTool(tool);
   }
 

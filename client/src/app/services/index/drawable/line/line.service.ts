@@ -1,4 +1,4 @@
-import { Injectable, Renderer2 } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 // import { Shape } from 'src/app/classes/shape';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
@@ -6,12 +6,14 @@ import { SVGProperties } from 'src/app/classes/svg-html-properties';
 // import { SVGService } from '../../svg/svg.service';
 import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LineService extends DrawableService {
 
+  attributes: DrawablePropertiesService;
   thickness: number;
   jointIsDot: boolean;
   dotDiameter: number;
@@ -22,9 +24,9 @@ export class LineService extends DrawableService {
   private isStarted: boolean;
   private points: Stack<CoordinatesXY>;
   private line: SVGPolylineElement;
-  // private lineWrapper: SVGGElement;
   private connectionDot: SVGCircleElement;
   private manipulator: Renderer2;
+  private image: ElementRef<SVGElement>;
 
   constructor() {
     super();
@@ -32,22 +34,50 @@ export class LineService extends DrawableService {
 
   static getName(): Tools { return Tools.Line; }
 
-  initialize(): void {
-    console.log('Init line');
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
+    console.log('line init');
+    this.manipulator = manipulator;
+    this.image = image
+    this.line = this.manipulator.createElement(
+      SVGProperties.polyLine,
+      'http://www.w3.org/2000/svg'
+    );
   }
+
+  initializeProperties(attributes: DrawablePropertiesService) {
+    this.attributes = attributes;
+    this.attributes.thickness.subscribe((element: number) => {
+        console.log('Test: thickness changed');
+        this.thickness = element;
+    });
+    this.attributes.junction.subscribe((element) => {
+        this.jointIsDot = element.toString() === 'Point';
+    });
+    this.attributes.dotDiameter.subscribe((element: number) => {
+        this.dotDiameter = element;
+    });
+    console.log('Thickness is ' + this.thickness);
+  }
+
   onMouseInCanvas(event: MouseEvent): void {
-    throw new Error('Method not implemented.');
+    console.log('in canvas');
   }
   onMouseOutCanvas(event: MouseEvent): void {
-    throw new Error('Method not implemented.');
+    console.log('out of canvas');
+  }
+
+  onMouseMove(event: MouseEvent): void {
+    console.log('Mouse moved');
   }
 
   addPointToLine(onScreenX: number, onScreenY: number): void {
 
     // Should make modifications
-    // Screen's X and Y are not the same as the canvas'
 
-    this.points.push_back(new CoordinatesXY(onScreenX, onScreenY));
+    this.points.push_back(new CoordinatesXY(
+      onScreenX - this.image.nativeElement.getBoundingClientRect().left,
+      onScreenY - this.image.nativeElement.getBoundingClientRect().top
+     ));
     this.manipulator.setAttribute(
       this.line,
       SVGProperties.pointsList,
@@ -62,8 +92,8 @@ export class LineService extends DrawableService {
     throw new Error('Method not implemented.');
   }
 
-  onDblClick(event: MouseEvent): void { // Should end line
-    console.log('double clicked');
+  onDoubleClick(event: MouseEvent): void { // Should end line
+    console.log('Test: double clicked from line');
     if (this.isDrawing) {
         if (!this.isDone) {
           this.addPointToLine(event.clientX, event.clientY);
@@ -80,10 +110,7 @@ export class LineService extends DrawableService {
     if (this.isStarted) {
       this.addPointToLine(event.clientX, event.clientY);
     } else {
-      this.line = this.manipulator.createElement(
-        SVGProperties.polyLine,
-        'http://www.w3.org/2000/svg'
-      );
+      this.updateProperties();
       this.addPointToLine(event.clientX, event.clientY);
       this.updateProperties();
     }
@@ -91,7 +118,7 @@ export class LineService extends DrawableService {
 
   private updateProperties(): void {
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
-    this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
+    this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.attributes.thickness.value.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color);
     this.manipulator.setAttribute(this.line, SVGProperties.fill, this.color);
     this.manipulator.setAttribute(this.line, SVGProperties.opacity, this.opacity);

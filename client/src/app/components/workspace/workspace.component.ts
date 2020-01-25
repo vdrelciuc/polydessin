@@ -9,7 +9,7 @@ import { WorkspaceService } from 'src/app/services/workspace.service';
 export class WorkspaceComponent implements OnInit {
   backgroundColorHex: string;
 
-  constructor(private workspaceService: WorkspaceService) {
+  constructor(protected workspaceService: WorkspaceService) {
   }
 
   ngOnInit() {
