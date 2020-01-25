@@ -32,6 +32,9 @@ export class LineComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.thickness = this.attributes.thickness.value;
+    this.dotDiameter = this.attributes.dotDiameter.value;
+    this.service.initializeProperties(this.attributes);
   }
 
   setupShortcuts(): void {

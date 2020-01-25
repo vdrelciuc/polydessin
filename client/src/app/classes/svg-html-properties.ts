@@ -9,6 +9,7 @@ export enum SVGProperties {
   thickness = 'stroke-width',
   topLeftCornerCoordinates = 'viewBox',
   width = 'width',
+  title = 'title',
 
   // Circle
   centerX = 'cx',
