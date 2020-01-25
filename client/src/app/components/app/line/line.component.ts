@@ -27,7 +27,6 @@ export class LineComponent implements OnInit {
     private toolSelector: ToolSelectorService,
     protected attributes: DrawablePropertiesService
     ) {
-    this.service.initializeProperties(this.attributes);
     this.setupShortcuts();
     this.service = this.toolSelector.getLine();
   }

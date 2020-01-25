@@ -47,7 +47,6 @@ export class LineService extends DrawableService {
   initializeProperties(attributes: DrawablePropertiesService) {
     this.attributes = attributes;
     this.attributes.thickness.subscribe((element: number) => {
-        console.log('Test: thickness changed');
         this.thickness = element;
     });
     this.attributes.junction.subscribe((element) => {
@@ -56,7 +55,6 @@ export class LineService extends DrawableService {
     this.attributes.dotDiameter.subscribe((element: number) => {
         this.dotDiameter = element;
     });
-    console.log('Thickness is ' + this.thickness);
   }
 
   onMouseInCanvas(event: MouseEvent): void {
@@ -112,13 +110,12 @@ export class LineService extends DrawableService {
     } else {
       this.updateProperties();
       this.addPointToLine(event.clientX, event.clientY);
-      this.updateProperties();
     }
   }
 
-  private updateProperties(): void {
+  updateProperties(): void {
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
-    this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.attributes.thickness.value.toString());
+    this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color);
     this.manipulator.setAttribute(this.line, SVGProperties.fill, this.color);
     this.manipulator.setAttribute(this.line, SVGProperties.opacity, this.opacity);
