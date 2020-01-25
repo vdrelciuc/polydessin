@@ -19,4 +19,26 @@ export class ToolSelectorService {
     this.$currentTool.next(tool);
     this.drawerService.updateDrawer(this.$currentTool.getValue());
   }
+
+  getFrenchToolNameToPrint(): string {
+    switch (this.$currentTool.getValue()) {
+      case Tools.Aerosol: return 'Aérosol';
+      case Tools.Brush: return 'Pinceau';
+      case Tools.Bucket: return 'Sceau de peinture';
+      case Tools.ColorApplicator: return 'Applicateur de couleur';
+      case Tools.Ellipse: return 'Ellipse';
+      case Tools.Eraser: return 'Efface';
+      case Tools.Feather: return 'Plume';
+      case Tools.Grid: return 'Grille';
+      case Tools.Line: return 'Ligne';
+      case Tools.Pencil: return 'Crayon';
+      case Tools.Pipette: return 'Pipette';
+      case Tools.Polygon: return 'Polygone';
+      case Tools.Rectangle: return 'Rectangle';
+      case Tools.Selection: return 'Sélection';
+      case Tools.Stamp: return 'Étampe';
+      case Tools.Text: return 'Texte';
+      default : return Tools.None;
+    }
+  }
 }

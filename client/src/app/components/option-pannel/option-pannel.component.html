@@ -1,4 +1,5 @@
-<h3 id="title">Attributs</h3>
+<h3 id="title">Attributs de l'outil</h3>
+<p id="tool">{{ this.toolSelectorService.getFrenchToolNameToPrint() }}</p>
 <div class="option-pannel" [ngSwitch]="currentTool">
   <p *ngSwitchCase="'eraser'">Eraser is selected</p>
   <p *ngSwitchCase="'pencil'">Pencil is selected</p>
