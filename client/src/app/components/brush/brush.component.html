@@ -1,27 +1,26 @@
 <div id="container">
-    <form id="line-form">
+  <form id="line-form">
       <label class="title" id="thickness">Épaisseur</label>
       <ul>
-        <li>
-          <mat-slider
-            (input)="onThicknessChange()"
-            id="thickness-slider"
-            name="thickness-slider"
-            disabled="false"
-            max="THICKNESS_MINIMUM"
-            min="THICKNESS_MAXIMUM"
-            step="1"
-            thumbLabel="false"
-            tickInterval="false"
-            [(ngModel)]="service.thickness"
-            vertical="false">
-          </mat-slider>
-        </li>
-        <li>
-          <mat-form-field name="thickness-value">
-            <input matInput type="number" placeholder="Value" [(ngModel)]="service.thickness" (input)="onThicknessChange()" name="thickness-input">
-          </mat-form-field>
-        </li>
+          <li>
+              <mat-slider
+                  [(ngModel)]="thickness"
+                  id="thickness-slider"
+                  name="thickness-slider"
+                  disabled="false"
+                  max="THICKNESS_MINIMUM"
+                  min="THICKNESS_MAXIMUM"
+                  step="1"
+                  thumbLabel="false"
+                  tickInterval="false"
+                  vertical="false">
+              </mat-slider>
+          </li>
+          <li>
+              <mat-form-field name="thickness-value">
+                  <input matInput type="number" placeholder="Value" [value]="thickness" (change)="onThicknessChange($event.target.value)" name="thickness-input">
+              </mat-form-field>
+          </li>
       </ul>
-    </form>
+  </form>
 </div>

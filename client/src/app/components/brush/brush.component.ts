@@ -29,14 +29,14 @@ export class BrushComponent implements OnInit {
     this.service.initializeProperties(this.attributes);
   }
 
-  onThicknessChange(): void {
-    if (this.service.thickness < CONSTANT.THICKNESS_MINIMUM) {
-      this.attributes.thickness.next(CONSTANT.THICKNESS_MINIMUM);
+  onThicknessChange(input: number ): void {
+    if (input < CONSTANT.THICKNESS_MINIMUM) {
+      this.thickness = (CONSTANT.THICKNESS_MINIMUM);
     } else {
-      if (this.service.thickness > CONSTANT.THICKNESS_MAXIMUM) {
-        this.attributes.thickness.next(CONSTANT.THICKNESS_MAXIMUM);
+      if (input > CONSTANT.THICKNESS_MAXIMUM) {
+        this.thickness = (CONSTANT.THICKNESS_MAXIMUM);
       } else {
-        this.attributes.thickness.next(this.thickness);
+        this.thickness = (input);
       }
     }
   }
