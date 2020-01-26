@@ -44,5 +44,10 @@ export class Stack<T> {
 
   getAll(): T[] { return this.stack; }
 
-  getLast(): T { return this.stack[this.stack.length]; }
+  getLast(): T | undefined { 
+    if(this.stack.length > 0) {
+      return this.stack[this.stack.length]; 
+    }
+    return undefined;
+  }
 }

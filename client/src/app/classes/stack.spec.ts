@@ -79,4 +79,25 @@ describe('Stack', () => {
     stack.delete(9);
     expect(stack.getAll()).toBe([0, 1, 2, 3, 4]);
   });
+
+  it('should return undefined last element on empty array', () => {
+    expect(stack.getLast()).toBe(undefined);
+  });
+
+  it('should return last element', () => {
+    for (let i = 0; i < 5; ++i) {
+      stack.push_back(i);
+    }
+    expect(stack.getLast()).toBe(4);
+  });
+
+  it('should return undefined last element', () => {
+    for (let i = 0; i < 5; ++i) {
+      stack.push_back(i);
+    }
+    for(let i = 0; i < 5; i++) {
+      stack.pop_back();
+    }
+    expect(stack.getLast()).toBe(undefined);
+  });
 });
