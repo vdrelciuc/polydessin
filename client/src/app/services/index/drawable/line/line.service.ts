@@ -73,10 +73,13 @@ export class LineService extends DrawableService {
     if(this.isStarted) {
       let previewPoints = this.pointsToString();
       if (this.shiftPressed) {
-        const shiftPoint = this.points.getLast().getClosestPoint(
-          this.effectiveX(event.clientX), this.effectiveY(event.clientY)
-        );
-        previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
+        const lastPoint = this.points.getLast();
+        if(lastPoint !== undefined) {
+          const shiftPoint = lastPoint.getClosestPoint(
+            this.effectiveX(event.clientX), this.effectiveY(event.clientY)
+          );
+          previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
+        }
       } else {
       previewPoints += this.effectiveX(event.clientX).toString()
           + ',' + this.effectiveY(event.clientY).toString();
@@ -102,7 +105,10 @@ export class LineService extends DrawableService {
 
   addPointToLine(onScreenX: number, onScreenY: number): void {
     if(this.shiftPressed) {
-      this.points.push_back(this.points.getLast().getClosestPoint(this.effectiveX(onScreenX), this.effectiveY(onScreenY)));
+      const lastPoint = this.points.getLast();
+      if(lastPoint !== undefined) {
+        this.points.push_back(lastPoint.getClosestPoint(this.effectiveX(onScreenX), this.effectiveY(onScreenY)));
+      }
     } else {
       this.points.push_back(new CoordinatesXY(this.effectiveX(onScreenX), this.effectiveY(onScreenY)));
     }

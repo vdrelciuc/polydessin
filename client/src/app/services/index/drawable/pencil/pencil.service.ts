@@ -8,7 +8,7 @@ import { Tools } from 'src/app/enums/tools';
 @Injectable({
   providedIn: 'root'
 })
-export class PenService extends DrawableService {
+export class PencilService extends DrawableService {
 
   attributes: DrawablePropertiesService;
   thickness: number;
