@@ -16,6 +16,7 @@ import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
 import { PencilComponent } from './components/pencil/pencil.component';
+import { RectangleComponent } from './components/rectangle/rectangle.component';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { PencilComponent } from './components/pencil/pencil.component';
       SidebarComponent,
       LineComponent,
       WorkspaceComponent,
-      PencilComponent
+      PencilComponent,
+      RectangleComponent
     ],
     imports: [
       AngularMaterialModule,

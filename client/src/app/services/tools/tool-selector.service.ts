@@ -5,6 +5,7 @@ import { Tools } from '../../enums/tools'
 import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
+import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,14 +20,17 @@ export class ToolSelectorService {
   private currentTool: DrawableService;
   private line: LineService;
   private pencil: PencilService;
+  private rectangle: RectangleService;
 
   constructor() { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
     this.line = new LineService();
     this.pencil = new PencilService();
+    this.rectangle = new RectangleService();
     
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
+    this.tools.set(Tools.Rectangle, this.rectangle);
       // Initialize currentTool as the selector(mouse)
     this.isHidden = true;
   }
@@ -41,6 +45,7 @@ export class ToolSelectorService {
 
   getLine(): LineService { return this.line; }
   getPencil(): PencilService { return this.pencil; }
+  getRectangle(): RectangleService { return this.rectangle; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
