@@ -74,14 +74,8 @@ export class LineService extends DrawableService {
       let previewPoints = this.pointsToString();
       if (this.shiftPressed) {
         const lastPoint = this.points.getLast();
-        const x = (this.image.nativeElement.getBoundingClientRect().right - this.image.nativeElement.getBoundingClientRect().left) / 2;
-        const y = (this.image.nativeElement.getBoundingClientRect().top - this.image.nativeElement.getBoundingClientRect().bottom) / 2; 
-        const origin = new CoordinatesXY(x, y);
-        console.log('Quadrant' + origin.findQuadrant(event.clientX - origin.getX(), event.clientY - origin.getY()));
         if(lastPoint !== undefined) {
-          const shiftPoint = lastPoint.getClosestPoint(
-            this.effectiveX(event.clientX), this.effectiveY(event.clientY)
-          );
+          const shiftPoint = lastPoint.getClosestPoint(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
           previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
         }
       } else {
