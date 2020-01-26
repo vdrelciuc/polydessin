@@ -3,6 +3,7 @@ import { Tools } from 'src/app/enums/tools';
 import { BrushService } from 'src/app/services/index/drawable/brush/brush.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
+import * as CONSTANT from 'src/app/classes/constants';
 
 @Component({
   selector: 'app-brush',
@@ -25,6 +26,18 @@ export class BrushComponent implements OnInit {
   ngOnInit(): void {
     this.thickness = this.attributes.thickness.value;
     this.service.initializeProperties(this.attributes);
+  }
+
+  onThicknessChange(input: number ): void {
+    if (input < CONSTANT.THICKNESS_MINIMUM) {
+      this.thickness = (CONSTANT.THICKNESS_MINIMUM);
+    } else {
+      if (input > CONSTANT.THICKNESS_MAXIMUM) {
+        this.thickness = (CONSTANT.THICKNESS_MAXIMUM);
+      } else {
+        this.thickness = (input);
+      }
+    }
   }
 
 }
