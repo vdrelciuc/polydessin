@@ -3,6 +3,7 @@
 
 .top {
   display: flex;
+  border-bottom: 1px solid $dark;
 }
 
 .bottom {
@@ -67,5 +68,5 @@ hr {
 }
 
 .bumper {
-  padding: 75px 0;
+  padding-bottom: 195px;
 }
