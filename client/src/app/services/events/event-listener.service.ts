@@ -51,5 +51,17 @@ export class EventListenerService {
         this.currentTool.onClick(event);
       }
     });
+
+    this.manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
+      if (this.currentTool !== undefined) {
+        this.currentTool.onKeyPressed(event);
+      }
+    });
+
+    this.manipulator.listen(window, 'keyup', (event: KeyboardEvent) => {
+      if (this.currentTool !== undefined) {
+        this.currentTool.onKeyReleased(event);
+      }
+    });
   }
 }

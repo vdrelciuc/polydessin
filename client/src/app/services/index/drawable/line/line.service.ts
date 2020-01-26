@@ -27,6 +27,7 @@ export class LineService extends DrawableService {
   private manipulator: Renderer2;
   private image: ElementRef<SVGElement>;
   private subElement: SVGGElement;
+  private shiftPressed: boolean;
 
   constructor() {
     super();
@@ -39,6 +40,7 @@ export class LineService extends DrawableService {
     console.log('line init');
     this.manipulator = manipulator;
     this.image = image;
+    this.shiftPressed = false;
   }
 
   initializeProperties(attributes: DrawablePropertiesService) {
@@ -73,8 +75,16 @@ export class LineService extends DrawableService {
 
   onMouseMove(event: MouseEvent): void {
     if(this.isStarted) {
-      const previewPoints = this.pointsToString() + this.effectiveX(event.clientX).toString()
+      let previewPoints = this.pointsToString();
+      if (this.shiftPressed) {
+        const shiftPoint = this.points.getLast().getClosestPoint(
+          this.effectiveX(event.clientX), this.effectiveY(event.clientY)
+        );
+        previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
+      } else {
+      previewPoints += this.effectiveX(event.clientX).toString()
           + ',' + this.effectiveY(event.clientY).toString();
+      }
       this.manipulator.setAttribute(
           this.line,
           SVGProperties.pointsList,
@@ -83,8 +93,23 @@ export class LineService extends DrawableService {
     }
   }
 
+  onKeyPressed(event: KeyboardEvent): void {
+    if(event.shiftKey) {
+      this.shiftPressed = true;
+    }
+  }
+  onKeyReleased(event: KeyboardEvent): void {
+    if(event.shiftKey) {
+      this.shiftPressed = false;
+    }
+  }
+
   addPointToLine(onScreenX: number, onScreenY: number): void {
-    this.points.push_back(new CoordinatesXY(this.effectiveX(onScreenX), this.effectiveY(onScreenY)));
+    if(this.shiftPressed) {
+      this.points.push_back(this.points.getLast().getClosestPoint(this.effectiveX(onScreenX), this.effectiveY(onScreenY)));
+    } else {
+      this.points.push_back(new CoordinatesXY(this.effectiveX(onScreenX), this.effectiveY(onScreenY)));
+    }
     this.updateLine();
   }
 
@@ -146,6 +171,8 @@ export class LineService extends DrawableService {
       this.manipulator.removeChild(this.subElement, lastCircle);
     }
   }
+
+  getLineIsDone(): boolean { return this.isDone;}
 
   private updateLine(): void {
     this.manipulator.setAttribute(

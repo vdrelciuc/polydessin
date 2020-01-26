@@ -48,6 +48,7 @@ export class LineComponent implements OnInit {
 
     this.shortcuts.addShortcut({ keys: 'escape', description: 'Cancel current line' }).subscribe(
       (event) => {
+        if(!this.service.getLineIsDone())
         this.service.deleteLine();
       }
     );
