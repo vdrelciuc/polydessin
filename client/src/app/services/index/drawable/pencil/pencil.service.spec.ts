@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { PencilService } from './pencil.service';
 
-describe('PenService', () => {
+describe('PencilService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {

@@ -46,7 +46,7 @@ export class Stack<T> {
 
   getLast(): T | undefined { 
     if(this.stack.length > 0) {
-      return this.stack[this.stack.length]; 
+      return this.stack[this.stack.length - 1]; 
     }
     return undefined;
   }

@@ -40,7 +40,6 @@ export class PencilService extends DrawableService {
 
   onMouseInCanvas(event: MouseEvent): void {
     this.updateProperties();
-    this.onMouseMove(event);  
   }
 
   onMouseOutCanvas(event: MouseEvent): void {
@@ -51,6 +50,7 @@ export class PencilService extends DrawableService {
   }
 
   onMousePress(event: MouseEvent): void {
+    console.log('pressed');
     if(event.button === 0) { // 0 for the left mouse button
       this.updateProperties();
       this.isDrawing = true;
@@ -66,6 +66,7 @@ export class PencilService extends DrawableService {
 
   onMouseMove(event: MouseEvent): void {
     if(this.isDrawing) {
+      console.log('drawing');
       this.addCircle(event.clientX, event.clientY);
     } else {
       if(this.mousePointer !== undefined) {
