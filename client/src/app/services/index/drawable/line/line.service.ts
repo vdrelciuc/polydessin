@@ -24,8 +24,6 @@ export class LineService extends DrawableService {
   private points: Stack<CoordinatesXY>;
   private circles: Stack<SVGCircleElement>;
   private line: SVGPolylineElement;
-  private manipulator: Renderer2;
-  private image: ElementRef<SVGElement>;
   private subElement: SVGGElement;
   private shiftPressed: boolean;
 
@@ -37,9 +35,7 @@ export class LineService extends DrawableService {
   static getName(): Tools { return Tools.Line; }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
-    console.log('line init');
-    this.manipulator = manipulator;
-    this.image = image;
+    this.assignParams(manipulator, image);
     this.shiftPressed = false;
   }
 
@@ -113,12 +109,8 @@ export class LineService extends DrawableService {
     this.updateLine();
   }
 
-  onMousePress(event: MouseEvent): void {
-    this.addPointToLine(event.clientX, event.clientY);
-  }
-  onMouseRelease(event: MouseEvent): void {
-    throw new Error('Method not implemented.');
-  }
+  onMousePress(event: MouseEvent): void {}
+  onMouseRelease(event: MouseEvent): void {}
 
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
@@ -202,13 +194,5 @@ export class LineService extends DrawableService {
       pointsToString += point.getX() + ',' + point.getY() + ' ';
     }
     return pointsToString;
-  }
-
-  private effectiveX(onScreenX: number): number {
-    return onScreenX - this.image.nativeElement.getBoundingClientRect().left;
-  }
-
-  private effectiveY(onScreenY: number): number {
-    return onScreenY - this.image.nativeElement.getBoundingClientRect().top;
   }
 }

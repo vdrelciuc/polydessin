@@ -12,6 +12,7 @@ export enum SVGProperties {
   title = 'title',
 
   // Circle
+  circle = 'circle',
   centerX = 'cx',
   centerY = 'cy',
   radius = 'r',
@@ -21,8 +22,8 @@ export enum SVGProperties {
   radiusY = 'ry',
 
   // Line
-  pointsList = 'points',
   polyLine = 'polyline',
+  pointsList = 'points',
 
   // Point
   x = 'x',

@@ -8,13 +8,14 @@ import { MatSliderModule } from '@angular/material/slider';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './components/app/app.component';
-import { LineComponent } from './components/app/line/line.component';
+import { LineComponent } from './components/line/line.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
 import { OptionPannelComponent } from './components/option-pannel/option-pannel.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
+import { PenComponent } from './components/pencil/pencil.component';
 
 @NgModule({
     declarations: [
@@ -23,7 +24,8 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
       OptionPannelComponent,
       SidebarComponent,
       LineComponent,
-      WorkspaceComponent
+      WorkspaceComponent,
+      PenComponent
     ],
     imports: [
       AngularMaterialModule,

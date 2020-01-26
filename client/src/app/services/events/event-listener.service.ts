@@ -52,6 +52,18 @@ export class EventListenerService {
       }
     });
 
+    this.manipulator.listen(this.image.nativeElement, 'mousedown', (event: MouseEvent) => {
+      if (this.currentTool !== undefined) {
+        this.currentTool.onMousePress(event);
+      }
+    });
+
+    this.manipulator.listen(this.image.nativeElement, 'mouseup', (event: MouseEvent) => {
+      if (this.currentTool !== undefined) {
+        this.currentTool.onMouseRelease(event);
+      }
+    });
+
     this.manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
       if (this.currentTool !== undefined) {
         this.currentTool.onKeyPressed(event);

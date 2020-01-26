@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Tools } from '../../enums/tools'
 import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
+import { PenService } from '../index/drawable/pencil/pencil.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +18,15 @@ export class ToolSelectorService {
   private tools: Map<Tools, DrawableService>;
   private currentTool: DrawableService;
   private line: LineService;
+  private pencil: PenService;
 
   constructor() { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
     this.line = new LineService();
+    this.pencil = new PenService();
+    
     this.tools.set(Tools.Line, this.line);
-
+    this.tools.set(Tools.Pencil, this.pencil);
       // Initialize currentTool as the selector(mouse)
     this.isHidden = true;
   }
@@ -36,6 +40,7 @@ export class ToolSelectorService {
   getCurrentTool(): DrawableService { return this.currentTool; }
 
   getLine(): LineService { return this.line; }
+  getPencil(): PenService { return this.pencil; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
