@@ -27,5 +27,8 @@ export enum SVGProperties {
 
   // Point
   x = 'x',
-  y = 'y'
+  y = 'y',
+
+  // Rectangle
+  rectangle = 'rect'
 }

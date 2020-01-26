@@ -22,6 +22,10 @@ export abstract class DrawableService {
     return new Coords(pointer.clientX, pointer.clientY);
   }
 
+  getEffectiveCoords(pointer: MouseEvent): Coords {
+    return new Coords(this.effectiveX(pointer.clientX), this.effectiveY(pointer.clientY));
+  }
+
   canDraw(canvas: HTMLElement, pointer: MouseEvent): boolean {
     return (
         // To change depending on what is the canvas' type and how to get it's dimensions
