@@ -23,14 +23,15 @@
 }
 
 .affichageGuide{
-  width: 70%;
-  background-color: white;
-  float: right;
-  height: 100%;
+
 }
 
 .currentElementDescription{
   background-color: white;
+  width: 85%;
+  background-color: white;
+  float: right;
+  height: 100%;
 }
 
 ul{
@@ -79,3 +80,28 @@ mat-expansion-panel-header{
  border: black solid 2px;
 }
 
+.navigationLink{
+  color: blue;
+  text-decoration: underline;
+}
+
+.navigationLink:hover {
+  color: red;
+  text-decoration: underline;
+}
+
+.next{
+  text-align: right;
+}
+.previous{
+  text-align: left;
+}
+
+
+tr ,table{
+  width: 100%;
+}
+
+td{
+  width: 50%;
+}

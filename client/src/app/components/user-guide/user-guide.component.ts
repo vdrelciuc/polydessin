@@ -9,8 +9,12 @@ export class UserGuideComponent implements OnInit {
   /**
    * Getters
    **/
-  getCurrentDescription(): string {
-    return this._currentDescription;
+  getCurrentDescription() {
+    let indexes :any[] = this.findIndex(this._currentSubCategorie);
+    this._currentDescription = this.categories[indexes[0]].type.elements[indexes[1]].description
+    // @ts-ignore
+    document.getElementById("description").innerHTML= this._currentDescription;
+
   }
 
   getCurrentCategorie(): string {

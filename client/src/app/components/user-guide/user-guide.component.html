@@ -25,14 +25,22 @@
     </mat-expansion-panel>
 
   </div>
-  <div class="affichageGuide">
-    <div class="currentElementDescription">
+
+  <div class="currentElementDescription">
+    <div>
       {{getCurrentSubCategorie()}}
-      <div>
-        <button *ngIf="getCurrentSubCategorie()!=='Bienvenue' " (click)="getPreviousElement(getCurrentSubCategorie())"> Previous</button>
-        <button *ngIf="getCurrentSubCategorie()!=='last'" (click)="getNextElement(getCurrentSubCategorie())">next</button>
-      </div>
     </div>
+    <table>
+      <tr>
+        <td *ngIf="getCurrentSubCategorie()!=='Bienvenue' " class="navigationLink previous">
+          <a (click)="getPreviousElement(getCurrentSubCategorie())"> Previous</a>
+        </td>
+        <td *ngIf="getCurrentSubCategorie()!=='last'" class="navigationLink next">
+          <a (click)="getNextElement(getCurrentSubCategorie())">Next </a>
+        </td>
+      </tr>
+    </table>
   </div>
 </div>
+
 
