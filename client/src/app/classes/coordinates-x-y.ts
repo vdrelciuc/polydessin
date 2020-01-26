@@ -3,8 +3,8 @@ export class CoordinatesXY {
   private y: number;
 
   constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+    this.setX(x);
+    this.setY(y);
   }
 
   getX(): number  { return this.x; }
@@ -25,7 +25,7 @@ export class CoordinatesXY {
   getClosestPoint(pointerX: number, pointerY: number): CoordinatesXY {
     const distanceX = pointerX - this.x;
     const distanceY = pointerY - this.y;
-    const foundQuadrant = this.findQuadrant(distanceX, distanceY);
+    const foundQuadrant = CoordinatesXY.findQuadrant(distanceX, distanceY);
     if(foundQuadrant === 1  || foundQuadrant === 3) {
       const angle = (Math.atan(distanceY/distanceX) * 180) / Math.PI;console.log(angle);
       return this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX));
@@ -51,7 +51,7 @@ export class CoordinatesXY {
   }
 
 
-  private findQuadrant(distanceX: number, distanceY: number): number {
+  private static findQuadrant(distanceX: number, distanceY: number): number {
     if (distanceX >= 0 && distanceY >= 0) {
       return 1;
     } 
