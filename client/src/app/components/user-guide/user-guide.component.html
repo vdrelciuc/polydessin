@@ -29,7 +29,8 @@
     <div class="currentElementDescription">
       {{getCurrentSubCategorie()}}
       <div>
-        <button (click)="getNextElement(getCurrentSubCategorie())">next</button>
+        <button *ngIf="getCurrentSubCategorie()!=='Bienvenue' " (click)="getPreviousElement(getCurrentSubCategorie())"> Previous</button>
+        <button *ngIf="getCurrentSubCategorie()!=='last'" (click)="getNextElement(getCurrentSubCategorie())">next</button>
       </div>
     </div>
   </div>

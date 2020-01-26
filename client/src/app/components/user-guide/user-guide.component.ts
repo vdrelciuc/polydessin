@@ -71,7 +71,12 @@ export class UserGuideComponent implements OnInit {
     this.setCurrentSubCategorie(newElement);
   }
 
-  getPreviousElement(indexes : any[]){
+  getPreviousElement(currentElement : string){
+    let indexes : any[] = this.findIndex(currentElement);
+    if (currentElement === this.categories[0].type.elements[0].nom){
+      this.setCurrentSubCategorie('Bienvenue');
+      return ;
+    }
     if (indexes[1]==0){
       indexes[0]--;
       indexes[1]= (this.categories[indexes[0]].type.elements.length -1);
@@ -110,7 +115,8 @@ export class UserGuideComponent implements OnInit {
         nom: 'Fichier',
         elements: [
           { nom: 'Sauvegarde', description: 'nonDisponible' },
-          { nom: 'Une autre type de sauvegarde', description: 'nonDisponible' }
+          { nom: 'Une autre type de sauvegarde', description: 'nonDisponible' },
+          { nom: 'last', description: 'nonDisponible' }
         ]
       }
     }
