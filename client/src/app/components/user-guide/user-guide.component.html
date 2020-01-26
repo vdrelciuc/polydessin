@@ -17,7 +17,7 @@
       <mat-action-list>
         <button class="subCategoryStyle" mat-list-item (click)="setCurrentSubCategorie(element.nom)"
                 *ngFor="let element of  categories[i].type.elements">
-          {{element.nom }}
+          {{element.nom}}
         </button>
         <hr class="separateGuideElements">
       </mat-action-list>
@@ -28,6 +28,9 @@
   <div class="affichageGuide">
     <div class="currentElementDescription">
       {{getCurrentSubCategorie()}}
+      <div>
+        <button (click)="getNextElement(getCurrentSubCategorie())">next</button>
+      </div>
     </div>
   </div>
 </div>

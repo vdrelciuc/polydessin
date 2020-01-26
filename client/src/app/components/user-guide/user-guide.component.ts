@@ -43,13 +43,13 @@ export class UserGuideComponent implements OnInit {
     if(nom === 'Bienvenue' )
       return [0,0,true];
     for (let i : number = 0 ; i< this.categories.length ; ++i){
-      for (let j : number = 0 ; j < this.categories[j].type.elements.length ; ++j){
+      for (let j : number = 0 ; j < this.categories[i].type.elements.length ; ++j){
         if (nom === this.categories[i].type.elements[j].nom){
-          if (i=== (this.categories[i].type.elements.length -1)){
-            return [j,i,true];
+          if (j=== (this.categories[i].type.elements.length -1)){
+            return [i,j,true];
           }
           else{
-            return [j,i,false];
+            return [i,j,false];
           }
         }
       }
@@ -57,13 +57,16 @@ export class UserGuideComponent implements OnInit {
     return [0,0,true];
   }
 
-  getNextElement(indexes : any[]){
-    if (indexes[2]==true){
-      indexes[0]++;
-      indexes[1]=0;
+  getNextElement(currentElement : string){
+    let indexes : any[]= this.findIndex(currentElement);
+    if (currentElement !== 'Bienvenue'){
+      if (indexes[2]==true){
+        indexes[0]++;
+        indexes[1]=0;
+      }
+      else
+        indexes[1]++;
     }
-    else
-      indexes[1]++;
     let newElement : string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
   }
