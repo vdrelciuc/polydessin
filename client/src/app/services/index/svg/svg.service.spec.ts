@@ -16,14 +16,14 @@ describe('SVGService', () => {
     expect(service).toBeTruthy();
   });
 
-  // it('should return empty stack', () => {
-  //   expect(stack.getStack().getAll().length).toBe(0);
-  // })
+  it('should return empty stack', () => {
+    expect(stack.getStack().getAll().length).toBe(0);
+  })
 
-  // it('should return non empty stack', () => {
-  //   stack.addElement(new SVGGElement());
-  //   expect(stack.getStack().getAll().length).toBe(1);
-  // })
+  it('should return non empty stack', () => {
+    stack.addElement(new SVGGElement());
+    expect(stack.getStack().getAll().length).toBe(1);
+  })
 
   // it('should add element at the end', () => {
   //   const toAdd = new SVGGElement();
@@ -57,7 +57,7 @@ describe('SVGService', () => {
   //   expect(lastElement?.getAttribute(SVGProperties.title)).toBe('test2');
   // })
 
-  // it('should be get undefined last element', () => {
-  //   expect(stack.removeLastElement()).toBe(undefined);
-  // })
+  it('should be get undefined last element', () => {
+    expect(stack.removeLastElement()).toBe(undefined);
+  })
 });
