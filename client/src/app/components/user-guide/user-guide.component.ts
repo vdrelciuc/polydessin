@@ -123,11 +123,9 @@ export class UserGuideComponent implements OnInit {
 
     {
       type: {
-        nom: 'Fichier',
+        nom: 'Fonctionalites',
         elements: [
-          { nom: 'Sauvegarde', description: 'nonDisponible' },
-          { nom: 'Une autre type de sauvegarde', description: 'nonDisponible' },
-          { nom: 'last', description: 'nonDisponible' }
+          { nom: 'Nouveau Dessin', description: 'nonDisponible' }
         ]
       }
     }
