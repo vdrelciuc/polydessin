@@ -9,16 +9,22 @@ export class UserGuideComponent implements OnInit {
   /**
    * Getters
    **/
-  getCurrentDescription() {
-    let indexes :any[] = this.findIndex(this._currentSubCategorie);
-    this._currentDescription = this.categories[indexes[0]].type.elements[indexes[1]].description
+
+  getCurrentDescription(): string {
+
+    if (this._currentSubCategorie =='Bienvenue'){
+      // @ts-ignore
+      this._currentDescription = this.welcomeObject.description;
+      // @ts-ignore
+      document.getElementById("description").innerHTML= this._currentDescription;
+      return this._currentDescription
+    }
+    let indexes : any[] = this.findIndex(this._currentSubCategorie);
+
+    this._currentDescription = this.categories[indexes[0]].type.elements[indexes[1]].description;
     // @ts-ignore
     document.getElementById("description").innerHTML= this._currentDescription;
-
-  }
-
-  getCurrentCategorie(): string {
-    return this._currentCategorie;
+    return this._currentDescription;
   }
 
   getCurrentSubCategorie(): string {
@@ -27,17 +33,14 @@ export class UserGuideComponent implements OnInit {
   /**
    * Setters
    **/
-  setCurrentCategorie(value: string) {
-    this._currentCategorie = value;
-  }
+
 
   setCurrentSubCategorie(value: string) {
     this._currentSubCategorie = value;
+    this.getCurrentDescription();
   }
 
-  setCurrentDescription(value: string) {
-    this._currentDescription = value;
-  }
+
   /**
    * Functions
    **/
@@ -73,12 +76,14 @@ export class UserGuideComponent implements OnInit {
     }
     let newElement : string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
+    this.getCurrentDescription();
   }
 
   getPreviousElement(currentElement : string){
     let indexes : any[] = this.findIndex(currentElement);
     if (currentElement === this.categories[0].type.elements[0].nom){
       this.setCurrentSubCategorie('Bienvenue');
+      this.getCurrentDescription();
       return ;
     }
     if (indexes[1]==0){
@@ -89,24 +94,26 @@ export class UserGuideComponent implements OnInit {
       indexes[1]--;
     let newElement : string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
+    this.getCurrentDescription();
   }
 
   /**
    * Attributes
    **/
-  private _currentCategorie : string ;
+  currentCategorie : string ;
   private _currentSubCategorie : string = "Bienvenue";
   private _currentDescription : string ;
 
-  welcomeObject : object={ nom: 'Bienvenue', description: 'nonDisponible'};
+  welcomeObject : object={ nom: 'Bienvenue',
+    description: 'hello'};
 
   categories : any[] = [
     {
       type: {
         nom: 'Outils',
         elements: [
-          { nom: 'Pinceau', description: 'nonDisponible'},
-          { nom: 'Crayon', description: 'nonDisponible'},
+          { nom: 'Pinceau', description: 'red'},
+          { nom: 'Crayon', description: 'hiya'},
           { nom: 'Ligne', description: 'nonDisponible'},
           { nom: 'Rectangle', description: 'nonDisponible'},
           { nom: 'Couleur', description: 'nonDisponible'},

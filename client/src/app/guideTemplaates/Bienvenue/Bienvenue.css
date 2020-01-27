@@ -1,0 +1,15 @@
+.elementStyle{
+  margin-left: 5%;
+  margin-top: 2%;
+}
+
+h3.elementStyle{
+  color: darkgray;
+  font-size: 16px;
+}
+
+p.elementStyle{
+  padding-left: 10px;
+  margin-left: 0;
+
+}

@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
       {description :"Afficher le guide d'Utilisation ", optionPath:'userGuide', show : true} ,
       {description :'Continuer un dessin', show : false}
       ];
-  messageAccueil : string = "Bienvenue a SketchPad Clone";
+  messageAccueil : string = "Bienvenue a PolyDessin";
   messageDescriptif : string = "A tout dessin un artiste, et cet artiste, c'est vous!";
   constructor() { }
 
