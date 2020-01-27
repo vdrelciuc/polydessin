@@ -9,7 +9,10 @@ export class Stack<T> {
 
   delete(toDelete: T): void {
     if (this.stack.length > 0) {
-      this.stack.splice(this.stack.indexOf(toDelete), 1);
+      const indexToRemove = this.stack.indexOf(toDelete);
+      if(indexToRemove !== -1) {
+        this.stack.splice(indexToRemove, 1);
+      }
     }
   }
 
