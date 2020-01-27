@@ -7,7 +7,9 @@ import { Tools } from '../../enums/tools'
 })
 export class DrawerService {
 
-  constructor() { }
+  constructor() {
+    this.navIsOpened = true;
+   }
 
   navIsOpened: boolean;
   lastTool: Tools;

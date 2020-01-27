@@ -1,11 +1,7 @@
 <div class="wrapper">
 <div class="top">
   <div class="left-column">
-    <div class="icon">
-      <button mat-button>
-        <img src="../../../assets/icons/home.svg">
-      </button>
-    </div>
+
   </div>
   <div class="right-column">
   </div>
@@ -23,13 +19,6 @@
       </div>
     </div>
     <div class="right-column">
-      <div class="icon">
-        <button mat-button (click)="selectTool('settings')"
-        [ngClass]="{'clicked': currentTool === 'settings',
-        'not-clicked': currentTool !== 'settings'}">
-          <img src="../../../assets/icons/settings.svg">
-      </button>
-      </div>
     </div>
   </div>
   <hr noshade size="1">
@@ -175,6 +164,11 @@
 <div id="lower-icons">
   <div class="bottom">
     <div class="left-column">
+      <!--<div class="icon">
+        <button mat-button>
+          <img src="../../../assets/icons/home.svg">
+        </button>
+      </div> -->
       <div class="icon">
         <button mat-button>
           <img src="../../../assets/icons/undo1.svg">
