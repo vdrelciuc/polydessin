@@ -17,7 +17,7 @@ export class OptionPannelComponent implements OnInit {
   }
 
   setTool(): void {
-    this.toolSelectorService.currentToolName.subscribe((tool: Tools) => {
+    this.toolSelectorService.$currentTool.subscribe((tool: Tools) => {
       this.currentTool = tool;
     });
   }

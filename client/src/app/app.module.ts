@@ -36,7 +36,8 @@ import { PencilComponent } from './components/pencil/pencil.component';
       MatFormFieldModule,
       MatInputModule,
       MatSelectModule,
-      MatSliderModule
+      MatSliderModule,
+      AngularMaterialModule
     ],
     providers: [DrawablePropertiesService],
     bootstrap: [AppComponent],
