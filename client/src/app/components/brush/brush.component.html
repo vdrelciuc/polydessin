@@ -4,7 +4,7 @@
       <ul>
           <li>
               <mat-slider
-                  [(ngModel)]="thickness"
+                  [(ngModel)]="service.thickness"
                   id="thickness-slider"
                   name="thickness-slider"
                   disabled="false"
@@ -18,7 +18,7 @@
           </li>
           <li>
               <mat-form-field name="thickness-value">
-                  <input matInput type="number" placeholder="Value" [value]="thickness" (change)="onThicknessChange($event.target.value)" name="thickness-input">
+                  <input matInput type="number" placeholder="Value" [value]="service.thickness" (change)="onThicknessChange($event.target.value)" name="thickness-input">
               </mat-form-field>
           </li>
       </ul>

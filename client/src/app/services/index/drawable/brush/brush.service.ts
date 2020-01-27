@@ -9,13 +9,18 @@ import { Tools } from 'src/app/enums/tools';
 })
 export class BrushService extends DrawableService {
 
+  path: string;
+  previousX: number;
+  previousY: number;
   thickness: number;
   isDrawing: boolean;
   subElement: SVGGElement;
   attributes: DrawablePropertiesService;
 
   constructor() {
-    super(); 
+    super();
+    this.isDrawing = false;
+    this.path = '';
    }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
@@ -33,34 +38,49 @@ export class BrushService extends DrawableService {
     // Subscribe to that type (for changes and updates)
   }
 
+  getThickness() {
+    return `${Math.floor(this.thickness)}`;
+  }
   onMouseInCanvas(event: MouseEvent): void {
     this.updateProperties();
     this.onMouseMove(event);
   }
   onMouseOutCanvas(event: MouseEvent): void {
     console.log('Out of canvas');
-    this.isDrawing = false;
+    //this.isDrawing = false;
   }
   onMousePress(event: MouseEvent): void {
+    this.isDrawing = true;
+    this.beginPath(event.clientX, event.clientY);
     console.log('Mouse Pressed');
+
   }
   onMouseRelease(event: MouseEvent): void {
     if(event.button === 0) { // 0 for the left mouse button
-      this.isDrawing = false;
+      //this.isDrawing = false;
     }
   }
   onMouseMove(event: MouseEvent): void {
     console.log('Moving');
+    if(this.isDrawing){
+    this.addPath(event.clientX, event.clientY);
+    }
+    else{
+
+    }
   }
   onDoubleClick(event: MouseEvent): void {}
 
   onClick(event: MouseEvent): void {
     console.log('Mouse Clicked');
-    if(event.button === 0) { // 0 for the left mouse button
+    this.isDrawing = false;
+    this.updateProperties();
+    /*if(event.button === 0) { // 0 for the left mouse button
       this.isDrawing = true;
       this.updateProperties();
       // Ajouter le premier point
-    }
+    }*/
+    this.endPath();
   }
   onKeyPressed(event: KeyboardEvent): void {}
   onKeyReleased(event: KeyboardEvent): void {}
@@ -69,5 +89,28 @@ export class BrushService extends DrawableService {
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Pencil);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
+  }
+
+  private beginPath(clientX: number, clientY: number) {
+    this.previousX = clientX;
+    this.previousY = clientY;
+    this.path = `M ${this.effectiveX(clientX)},${this.effectiveY(clientY)}`;
+
+  }
+  private addPath(clientX: number, clientY: number) {
+    const pathToAdd = ` l ${clientX - this.previousX},${clientY - this.previousY}`;
+    this.previousX = clientX;
+    this.previousY = clientY;
+    this.path = this.path + (pathToAdd);
+  }
+  private endPath() {
+    let line: SVGPathElement;
+    line = this.manipulator.createElement(SVGProperties.path,'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(line, SVGProperties.fill, 'none');
+    this.manipulator.setAttribute(line, SVGProperties.color, 'red');
+    this.manipulator.setAttribute(line, SVGProperties.d, this.path);
+    this.manipulator.setAttribute(line, SVGProperties.thickness, this.getThickness());
+    this.manipulator.appendChild(this.image.nativeElement, line);
+
   }
 }

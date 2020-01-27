@@ -13,7 +13,6 @@ import * as CONSTANT from 'src/app/classes/constants';
 export class BrushComponent implements OnInit {
 
   readonly name: string = Tools.Brush;
-  protected thickness: number;
 
   constructor(
     protected service: BrushService,
@@ -21,22 +20,20 @@ export class BrushComponent implements OnInit {
     protected attributes: DrawablePropertiesService
     ) {
     this.service = this.toolSelector.getBrush();
-    this.service.thickness = this.thickness = CONSTANT.THICKNESS_DEFAULT;
   }
 
   ngOnInit(): void {
-    this.thickness = this.attributes.thickness.value;
     this.service.initializeProperties(this.attributes);
   }
 
   onThicknessChange(input: number ): void {
     if (input < CONSTANT.THICKNESS_MINIMUM) {
-      this.thickness = (CONSTANT.THICKNESS_MINIMUM);
+      this.service.thickness = (CONSTANT.THICKNESS_MINIMUM);
     } else {
       if (input > CONSTANT.THICKNESS_MAXIMUM) {
-        this.thickness = (CONSTANT.THICKNESS_MAXIMUM);
+        this.service.thickness = (CONSTANT.THICKNESS_MAXIMUM);
       } else {
-        this.thickness = (input);
+        this.service.thickness = (input);
       }
     }
   }
