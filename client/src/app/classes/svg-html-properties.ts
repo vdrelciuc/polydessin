@@ -32,4 +32,6 @@ export enum SVGProperties {
   // Path
   path = 'path',
   d = 'd',
+  typeOfLine = 'stroke-linejoin',
+  endOfLine = 'stroke-linecap',
 }
