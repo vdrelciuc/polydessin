@@ -64,10 +64,10 @@ export class RectangleService extends DrawableService{
     this.isChanging = false;
   }
   onMouseMove(event: MouseEvent): void {
-    if(!this.isChanging) return;  // Leaving directly if no rectangle is in progress
-
-    this.mousePosition = this.getEffectiveCoords(event); // Save mouse position for KeyPress Event
-    this.updateSize(this.mousePosition.x - this.shapeOrigin.x, this.mousePosition.y - this.shapeOrigin.y);
+    if(this.isChanging) {
+      this.mousePosition = this.getEffectiveCoords(event); // Save mouse position for KeyPress Event
+      this.updateSize(this.mousePosition.x - this.shapeOrigin.x, this.mousePosition.y - this.shapeOrigin.y);
+    }
   }
   onDoubleClick(event: MouseEvent): void {
     //throw new Error("Method not implemented.");
@@ -83,7 +83,9 @@ export class RectangleService extends DrawableService{
   }
   onKeyReleased(event: KeyboardEvent): void {
     this.shiftPressed = false;
-    this.updateSize(this.mousePosition.x - this.shapeOrigin.x, this.mousePosition.y - this.shapeOrigin.y);
+    if (this.isChanging) {
+      this.updateSize(this.mousePosition.x - this.shapeOrigin.x, this.mousePosition.y - this.shapeOrigin.y);
+    }
   }
 
   private updateSize(width: number = 0, height: number = 0): void {
