@@ -4,7 +4,7 @@ describe('Shape', () => {
 
   let shape: Shape;
 
-  beforeAll( () => { shape = new Shape(); } );
+  beforeEach( () => { shape = new Shape(); } );
 
   it('should create an instance', () => {
     expect(new Shape()).toBeTruthy();
@@ -16,6 +16,7 @@ describe('Shape', () => {
   });
 
   it('shouldn\'t change coordinates', () => {
+    shape.changeOrigin(0,0);
     shape.changeOrigin(-1, 1);
     expect(shape.getOriginX()).toBe(0);
     expect(shape.getOriginY()).toBe(0);

@@ -4,7 +4,7 @@ describe('Stack', () => {
 
   let stack: Stack<number>;
 
-  beforeAll( () => { stack = new Stack<number>(); } );
+  beforeEach( () => { stack = new Stack<number>(); } );
 
   it('should create an instance', () => {
     expect(new Stack<number>()).toBeTruthy();
@@ -98,6 +98,8 @@ describe('Stack', () => {
     for(let i = 0; i < 5; i++) {
       stack.pop_back();
     }
+    console.log(stack.getAll());
+    console.log('last is ' + stack.getLast());
     expect(stack.getLast()).toBe(undefined);
   });
 });

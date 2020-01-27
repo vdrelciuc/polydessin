@@ -6,7 +6,7 @@ describe('SVGService', () => {
 
   let stack: SVGService;
 
-  beforeAll( () => { stack = new SVGService(); } );
+  beforeEach( () => { stack = new SVGService(); } );
 
   beforeEach(() => TestBed.configureTestingModule({}));
 
