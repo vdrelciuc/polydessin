@@ -11,29 +11,27 @@ import { Tools } from 'src/app/enums/tools';
 export class RectangleService extends DrawableService{
 
   attributes: DrawablePropertiesService;
-  //height: number;
-  //width: number;
   thickness: number;
   borderColor: string;
   fillColor: string;
   opacity: string;
-  // private isDone: boolean;
-  // private isStarted: boolean;
   private isChanging: boolean;
   // private points: Stack<CoordinatesXY>;
   // private circles: Stack<SVGCircleElement>;
+  private mousePosition: Coords;
   private shapeOrigin: Coords;
   private rectangle: SVGRectElement;
   private subElement: SVGGElement;
-   //private shiftPressed: boolean;
+  private shiftPressed: boolean;
 
   constructor() { 
     super();
+
   }
 
   initialize(manipulator: Renderer2, image: ElementRef): void {
     this.assignParams(manipulator, image);
-    //this.shiftPressed = false;
+    this.shiftPressed = false;
   }
   initializeProperties(attributes: DrawablePropertiesService) {
     this.attributes = attributes;
@@ -66,11 +64,10 @@ export class RectangleService extends DrawableService{
     this.isChanging = false;
   }
   onMouseMove(event: MouseEvent): void {
-    if(!this.isChanging) return;
+    if(!this.isChanging) return;  // Leaving directly if no rectangle is in progress
 
-    let newWidth = this.effectiveX(event.clientX) - this.shapeOrigin.x;
-    let newHeight = this.effectiveY(event.clientY) - this.shapeOrigin.y;
-    this.updateSize(newWidth, newHeight);
+    this.mousePosition = this.getEffectiveCoords(event); // Save mouse position for KeyPress Event
+    this.updateSize(this.mousePosition.x - this.shapeOrigin.x, this.mousePosition.y - this.shapeOrigin.y);
   }
   onDoubleClick(event: MouseEvent): void {
     //throw new Error("Method not implemented.");
@@ -79,13 +76,25 @@ export class RectangleService extends DrawableService{
     // throw new Error("Method not implemented.");
   }
   onKeyPressed(event: KeyboardEvent): void {
-    //throw new Error("Method not implemented.");
+    if(event.shiftKey && !this.shiftPressed) {
+      this.shiftPressed = true;
+      this.updateSize(this.mousePosition.x - this.shapeOrigin.x, this.mousePosition.y - this.shapeOrigin.y);
+    }
   }
   onKeyReleased(event: KeyboardEvent): void {
-    //throw new Error("Method not implemented.");
+    this.shiftPressed = false;
+    this.updateSize(this.mousePosition.x - this.shapeOrigin.x, this.mousePosition.y - this.shapeOrigin.y);
   }
 
   private updateSize(width: number = 0, height: number = 0): void {
+    if (this.shiftPressed) {
+      if (width > height) {
+        width = height;
+      } else {
+        height = width;
+      }
+    }
+
     this.manipulator.setAttribute(this.rectangle, SVGProperties.width, width.toString());
     this.manipulator.setAttribute(this.rectangle, SVGProperties.height, height.toString());
   }
