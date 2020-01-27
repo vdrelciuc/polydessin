@@ -7,7 +7,8 @@ export class Shape {
 
   constructor() {
       this.shapeProperties = new ShapeProperties();
-      this.originX = this.originY = 0;
+      this.originX = 0;
+      this.originY = 0;
   }
 
   changeOrigin(newX: number, newY: number) {
