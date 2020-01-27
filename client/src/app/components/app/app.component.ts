@@ -11,7 +11,7 @@ import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-    readonly title: string = 'LOG3900';
+    readonly title: string = 'LOG2990';
     message = new BehaviorSubject<string>('');
 
     constructor(private basicService: IndexService, private drawerService: DrawerService) {

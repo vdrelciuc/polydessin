@@ -12,7 +12,7 @@ export class ToolSelectorService {
   $currentTool: BehaviorSubject<Tools>;
 
   constructor(private drawerService: DrawerService) {
-    this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
+    this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
   }
 
   setCurrentTool(tool: Tools): void {
