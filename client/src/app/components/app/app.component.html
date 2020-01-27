@@ -2,9 +2,13 @@
   <div class="sidebar scrollable">
     <app-sidebar></app-sidebar>
   </div>
-  <div class="pannel scrollable">
-    <app-option-pannel></app-option-pannel>
-  </div>
+  <mat-drawer-container>
+    <mat-drawer  mode="side" [opened]="getDrawerStatus()">
+      <div class="pannel scrollable">
+        <app-option-pannel></app-option-pannel>
+      </div>
+    </mat-drawer>
+  </mat-drawer-container>
   <div class="workspace">
     <app-workspace></app-workspace>
   </div>

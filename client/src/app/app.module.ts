@@ -38,7 +38,8 @@ import { RectangleComponent } from './components/rectangle/rectangle.component';
       MatFormFieldModule,
       MatInputModule,
       MatSelectModule,
-      MatSliderModule
+      MatSliderModule,
+      AngularMaterialModule
     ],
     providers: [DrawablePropertiesService],
     bootstrap: [AppComponent],

@@ -3,80 +3,64 @@ export class CoordinatesXY {
   private y: number;
 
   constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+    this.setX(x);
+    this.setY(y);
   }
 
   getX(): number  { return this.x; }
   getY(): number  { return this.y; }
 
-  setX(x: number): void { this.x = x; }
-  setY(y: number): void { this.y = y; }
+  setX(x: number): void { 
+    if(x >= 0) {
+      this.x = x; 
+    }
+  }
+  
+  setY(y: number): void { 
+    if(y >= 0) {
+      this.y = y; 
+    }
+  }
 
   getClosestPoint(pointerX: number, pointerY: number): CoordinatesXY {
     const distanceX = pointerX - this.x;
     const distanceY = pointerY - this.y;
-
-    const angle = Math.atan(distanceX/distanceY);
-
-    switch(this.findQuadrant(distanceX, distanceY))
-    {
-      case 1: {
-        if (angle < (Math.PI / 4) / 2) {
-          return new CoordinatesXY(pointerX, this.y);
-        } else {
-          if(angle < (Math.PI / 2) / 2) {
-            return new CoordinatesXY(pointerY, pointerY);
-          }
-          return new CoordinatesXY(this.x, pointerY);
-        }
-      }
-      case 2: {
-        if (angle < ( (3 * Math.PI) / 4) / 2) {
-          return new CoordinatesXY(this.x, pointerY);
-        } else {
-          if(angle < Math.PI / 2) {
-            return new CoordinatesXY(pointerY, pointerY);
-          }
-          return new CoordinatesXY(pointerX, this.y);
-        }
-      }
-      case 3: {
-        if (angle < ( (5 * Math.PI) / 4) / 2) {
-          return new CoordinatesXY(pointerX, this.y);
-        } else {
-          if(angle < ( (3 * Math.PI) / 2) / 2) {
-            return new CoordinatesXY(pointerY, pointerY);
-          }
-          return new CoordinatesXY(this.x, pointerY);
-        }
-      }
-
-      default: {
-        if (angle < ( (7 * Math.PI) / 4) / 2) {
-          return new CoordinatesXY(this.x, pointerY);
-        } else {
-          if(angle < (2 * Math.PI) / 2) {
-            return new CoordinatesXY(pointerY, pointerY);
-          }
-          return new CoordinatesXY(pointerX, this.x);
-        }
-      }
+    const foundQuadrant = CoordinatesXY.findQuadrant(distanceX, distanceY);
+    if(foundQuadrant === 1  || foundQuadrant === 3) {
+      const angle = (Math.atan(distanceY/distanceX) * 180) / Math.PI;console.log(angle);
+      return this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX));
+    } else {
+      const angle = -(Math.atan(distanceY/distanceX) * 180) / Math.PI;console.log(angle);
+      return this.getShiftedPoint(angle, pointerX, pointerY, this.y - this.findYDifferenceForBisectrix(pointerX));
     }
   }
 
+  private getShiftedPoint(angle: number, pointerX: number, pointerY: number, bisectrixY: number): CoordinatesXY {
+    if (angle < 45 / 2) {
+      return new CoordinatesXY(pointerX, this.y);
+    } else {
+      if(angle <  3* (90 / 4)) {
+        return new CoordinatesXY(pointerX, bisectrixY);
+      }
+      return new CoordinatesXY(this.x, pointerY);
+    }
+  }
+
+  private findYDifferenceForBisectrix(pointerX: number): number {
+    return pointerX - this.x;
+  }
 
 
-  private findQuadrant(distanceX: number, distanceY: number): number {
+  private static findQuadrant(distanceX: number, distanceY: number): number {
     if (distanceX >= 0 && distanceY >= 0) {
       return 1;
     } 
-    if (distanceX >= 0 && distanceY < 0) {
-      return 4;
+    if (distanceX < 0 && distanceY > 0) {
+      return 2;
     }
-    if (distanceX < 0 && distanceY < 0) {
+    if (distanceX <= 0 && distanceY <= 0) {
       return 3;
     }
-    return 2;
+    return 4;
   }
 }

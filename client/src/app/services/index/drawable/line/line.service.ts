@@ -40,6 +40,7 @@ export class LineService extends DrawableService {
   }
 
   initializeProperties(attributes: DrawablePropertiesService) {
+    console.log('init prop ');
     this.attributes = attributes;
     this.thickness = this.attributes.thickness.value;
     this.dotDiameter = this.attributes.dotDiameter.value;
@@ -70,14 +71,13 @@ export class LineService extends DrawableService {
   }
 
   onMouseMove(event: MouseEvent): void {
+    console.log('moving - line');
     if(this.isStarted) {
       let previewPoints = this.pointsToString();
       if (this.shiftPressed) {
         const lastPoint = this.points.getLast();
         if(lastPoint !== undefined) {
-          const shiftPoint = lastPoint.getClosestPoint(
-            this.effectiveX(event.clientX), this.effectiveY(event.clientY)
-          );
+          const shiftPoint = lastPoint.getClosestPoint(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
           previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
         }
       } else {
@@ -97,8 +97,9 @@ export class LineService extends DrawableService {
       this.shiftPressed = true;
     }
   }
+
   onKeyReleased(event: KeyboardEvent): void {
-    if(event.shiftKey) {
+    if(!event.shiftKey) {
       this.shiftPressed = false;
     }
   }

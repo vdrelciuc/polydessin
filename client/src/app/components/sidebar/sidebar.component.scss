@@ -1,7 +1,9 @@
 @import "../../../global-style/colors.scss";
+@import "../../../global-style/dimensions.scss";
 
 .top {
   display: flex;
+  border-bottom: 1px solid $dark;
 }
 
 .bottom {
@@ -17,8 +19,15 @@
 }
 
 .mat-button {
-  height: 50px;
-  width: 50px;
+  min-width: 48px;
+  min-height: 48px;
+  max-width: 48px;
+  max-height: 48px;
+
+  .img {
+    max-width: 48px;
+    max-height: 48px;
+  }
 }
 
 .tool-group {
@@ -29,7 +38,7 @@
 .group-name {
   margin: 5px;
   color: white;
-  font-weight: 100;
+  font-weight: 70;
 }
 
 hr {
@@ -39,6 +48,7 @@ hr {
 
 .wrapper {
   height: 100%;
+  width: 96px;
 }
 
 #upper-icons {
@@ -54,9 +64,9 @@ hr {
   position: absolute;
   bottom: 1px;
   background-color: $medium;
-  border-top: 1px solid black;
+  border-top: 1px solid $dark;
 }
 
 .bumper {
-  padding: 75px 0;
+  padding-bottom: 195px;
 }
