@@ -56,4 +56,11 @@ export class Stack<T> {
     }
     return undefined;
   }
+
+  getRoot(): T | undefined {
+    if(this.stack.length > 0) {
+      return this.stack[0];
+    } 
+    return undefined;
+  }
 }
