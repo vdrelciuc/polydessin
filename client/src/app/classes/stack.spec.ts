@@ -100,4 +100,15 @@ describe('Stack', () => {
     }
     expect(stack.getLast()).toBe(undefined);
   });
+
+  it('should return first element', () => {
+    for (let i = 0; i < 5; ++i) {
+      stack.push_back(i);
+    }
+    expect(stack.getRoot()).toBe(0);
+  })
+
+  it('should return undefined first element', () => {
+    expect(stack.getRoot()).toBe(undefined);
+  })
 });
