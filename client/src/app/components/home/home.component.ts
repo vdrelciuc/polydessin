@@ -10,7 +10,7 @@ export class HomeComponent implements OnInit {
     [
       {description :'Creer un nouveau dessin', optionPath :'/' ,show : true},
       {description :'Ouvrir la Galerie de dessins', optionPath:'/', show : true} ,
-      {description :"Afficher le guide d'Utilisation ", optionPath:'userGuide', show : true} ,
+      {description :"Afficher le guide d'Utilisation ", optionPath:'userGuide/Bienvenue', show : true} ,
       {description :'Continuer un dessin', show : false}
       ];
   messageAccueil : string = "Bienvenue a PolyDessin";

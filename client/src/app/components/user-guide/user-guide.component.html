@@ -29,7 +29,7 @@
   </div>
 
   <div class="currentElementDescription">
-    <router-outlet>
+    <router-outlet *ngIf="this.router.url !== '/userGuide'">
 
     </router-outlet>
 

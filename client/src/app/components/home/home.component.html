@@ -15,7 +15,7 @@
 
 
         <div *ngFor="let option of options ">
-          <a *ngIf="option.show " class="btn btn-warning btn-center " href="{{option.optionPath}}" role="button">
+          <a *ngIf="option.show " class="btn btn-warning btn-center " [routerLink] = [option.optionPath] role="button">
             {{option.description}}
           </a>
           <a *ngIf="option.show ===false" class="btn btn-warning btn-center disabled " href="#" role="button">
