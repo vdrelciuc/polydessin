@@ -12,9 +12,10 @@ import { CrayonGuideComponent } from './components/guideTemplaates/crayon-guide/
 import { LigneGuideComponent } from './components/guideTemplaates/ligne-guide/ligne-guide.component';
 import { RectangleGuideComponent } from './components/guideTemplaates/rectangle-guide/rectangle-guide.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
+import { NouveauDessinComponent } from './components/guideTemplaates/nouveau-dessin/nouveau-dessin.component';
 
 @NgModule({
-    declarations: [AppComponent, HomeComponent, routingComponents, PinceauGuideComponent, CrayonGuideComponent, LigneGuideComponent, RectangleGuideComponent, CouleurGuideComponent],
+    declarations: [AppComponent, HomeComponent, routingComponents, PinceauGuideComponent, CrayonGuideComponent, LigneGuideComponent, RectangleGuideComponent, CouleurGuideComponent, NouveauDessinComponent],
     imports: [BrowserModule, HttpClientModule, MatExpansionModule, BrowserAnimationsModule, MatListModule
     , AppRoutingModule],
     providers: [],

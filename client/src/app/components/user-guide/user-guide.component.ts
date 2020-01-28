@@ -10,17 +10,12 @@ export class UserGuideComponent implements OnInit {
   /**
    * Getters
    **/
-
-
-
   getCurrentSubCategorie(): string {
     return this._currentSubCategorie;
   }
   /**
    * Setters
    **/
-
-
   setCurrentSubCategorie(value: string) {
     this._currentSubCategorie = value;
     this.router.navigate([ '/userGuide', this.getPath() ]);
@@ -30,7 +25,6 @@ export class UserGuideComponent implements OnInit {
   /**
    * Functions
    **/
-
 
   findIndex(nom :string) : any[] {
     for (let i : number = 0 ; i< this.categories.length ; ++i){
@@ -126,7 +120,7 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'Fonctionalites',
         elements: [
-          { nom: 'Nouveau Dessin', path: 'NouveauDessin' }
+          { nom: 'Nouveau Dessin', path: 'nouveauDessin' }
         ]
       }
     }
