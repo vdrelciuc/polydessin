@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-guide',
@@ -22,6 +23,7 @@ export class UserGuideComponent implements OnInit {
 
   setCurrentSubCategorie(value: string) {
     this._currentSubCategorie = value;
+    this.router.navigate([ '/userGuide', this.getPath() ]);
   }
 
 
@@ -58,6 +60,7 @@ export class UserGuideComponent implements OnInit {
 
     let newElement : string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
+    this.router.navigate([ '/userGuide', this.getPath() ]);
     return this._currentSubCategorie;
   }
 
@@ -72,7 +75,14 @@ export class UserGuideComponent implements OnInit {
       indexes[1]--;
     let newElement : string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
+    this.router.navigate([ '/userGuide', this.getPath() ]);
     return this._currentSubCategorie;
+
+  }
+
+  getPath() : string {
+    let indexes : any[] = this.findIndex(this._currentSubCategorie);
+    return this.categories[indexes[0]].type.elements[indexes[1]].path;
   }
 
   /**
@@ -95,9 +105,9 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'Outils',
         elements: [
-          { nom: 'Pinceau', path: 'red'},
-          { nom: 'Crayon', path: 'hiya'},
-          { nom: 'Couleur', path: 'nonDisponible'},
+          { nom: 'Pinceau', path: 'Pinceau'},
+          { nom: 'Crayon', path: 'Crayon'},
+          { nom: 'Couleur', path: 'Couleur'},
         ]
       }
     },
@@ -106,8 +116,8 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'Formes',
         elements: [
-          { nom: 'Ligne', path: 'nonDisponible'},
-          { nom: 'Rectangle', path: 'nonDisponible'}
+          { nom: 'Ligne', path: 'Ligne'},
+          { nom: 'Rectangle', path: 'Rectangle'}
         ]
       }
     },
@@ -116,13 +126,13 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'Fonctionalites',
         elements: [
-          { nom: 'Nouveau Dessin', path: 'nonDisponible' }
+          { nom: 'Nouveau Dessin', path: 'NouveauDessin' }
         ]
       }
     }
   ];
 
-  constructor() { }
+  constructor(public router: Router) { }
 
   ngOnInit() {
   }
