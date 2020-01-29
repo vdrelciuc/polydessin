@@ -21,6 +21,7 @@ export class RectangleService extends DrawableService{
 
   private isChanging: boolean;
   private shiftPressed: boolean;
+  private mousePositionOnShiftPress: Coords;
 
   private rectangle: SVGRectElement;
   private text: SVGTextElement;
@@ -83,6 +84,7 @@ export class RectangleService extends DrawableService{
     if(event.shiftKey && !this.shiftPressed && this.isChanging) {
       console.log("Shift pressed");
       this.shiftPressed = true;
+      this.mousePositionOnShiftPress = new Coords(this.mousePosition.x, this.mousePosition.y);
       this.updateSize();
     }
   }
@@ -90,6 +92,7 @@ export class RectangleService extends DrawableService{
     if(!event.shiftKey) {
       console.log("Shift released");
       this.shiftPressed = false;
+      this.mousePosition = new Coords(this.mousePositionOnShiftPress.x, this.mousePositionOnShiftPress.y);
       if (this.isChanging)
       this.updateSize();
     }
@@ -100,9 +103,12 @@ export class RectangleService extends DrawableService{
     let height = Math.abs(this.mousePosition.y - this.shapeOrigin.y);
 
     if (this.shiftPressed) {
+      let quadrant = this.getQuadrant();
       if (width > height) {
+        if (quadrant === 2 || quadrant === 3) this.mousePosition.x = this.mousePosition.x + (width - height); // Faking mouse position
         width = height;
       } else {
+        if (quadrant === 1 || quadrant === 2) this.mousePosition.y = this.mousePosition.y + (height - width); // Faking mouse position
         height = width;
       }
     }
@@ -110,16 +116,6 @@ export class RectangleService extends DrawableService{
     this.manipulator.setAttribute(this.rectangle, SVGProperties.width, width.toString());
     this.manipulator.setAttribute(this.rectangle, SVGProperties.height, height.toString());
     this.alignRectangleOrigin(width, height);
-  }
-
-  private updateTextSize(width: number, height: number) {
-    if(width > 40 && height > 15) {
-      this.text.innerHTML = '[Rectangle]';
-    } else {
-      this.text.innerHTML = '';
-    }
-    
-    this.manipulator.setAttribute(this.text, 'font-size', (Math.min(height, width) / 6).toString());
   }
 
   private updateProperties(): void {
@@ -179,5 +175,15 @@ export class RectangleService extends DrawableService{
     }
 
     this.updateTextSize(width, height);
+  }
+
+  private updateTextSize(width: number, height: number) {
+    if(width > 40 && height > 15) {
+      this.text.innerHTML = '[Rectangle]';
+    } else {
+      this.text.innerHTML = '';
+    }
+    
+    this.manipulator.setAttribute(this.text, 'font-size', (Math.min(height, width) / 6).toString());
   }
 }
