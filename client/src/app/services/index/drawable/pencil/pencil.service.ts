@@ -1,28 +1,26 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { Stack } from 'src/app/classes/stack';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { Tools } from 'src/app/enums/tools';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PencilService extends DrawableService {
 
-  attributes: DrawablePropertiesService;
+  private path: string;
+  private previousX: number;
+  private previousY: number;
   thickness: number;
-  color: string;
-  opacity: string;
   isDrawing: boolean;
-  private subElement: SVGGElement;
-  private circles: Stack<SVGCircleElement>;
+  private line: SVGPathElement;
   private mousePointer: SVGCircleElement;
+  attributes: DrawablePropertiesService;
 
   constructor() {
     super();
     this.isDrawing = false;
-    this.circles = new Stack<SVGCircleElement>();
+    this.path = '';
    }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
@@ -32,76 +30,103 @@ export class PencilService extends DrawableService {
   initializeProperties(attributes: DrawablePropertiesService): void {
     this.attributes = attributes;
     this.thickness = this.attributes.thickness.value;
-
     this.attributes.thickness.subscribe((element: number) => {
       this.thickness = element;
     });
   }
 
   onMouseInCanvas(event: MouseEvent): void {
-    this.updateProperties();
-  }
-
-  onMouseOutCanvas(event: MouseEvent): void {
-    this.isDrawing = false;
-    if(this.mousePointer !== undefined) {
-      this.manipulator.removeChild(this.subElement, this.mousePointer);
+    if (this.isDrawing) {
+      this.newPath(event.clientX, event.clientY);
+    } else {
+      if (this.mousePointer === undefined) {
+        this.createCircle(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
+      }
+      this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
+      this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
     }
+  }
+  onMouseOutCanvas(event: MouseEvent): void {
+    this.manipulator.removeChild(this.image.nativeElement, this.mousePointer)
   }
 
   onMousePress(event: MouseEvent): void {
-    console.log('pressed');
-    if(event.button === 0) { // 0 for the left mouse button
-      this.updateProperties();
-      this.isDrawing = true;
-      this.addCircle(event.clientX, event.clientY);
-    }
+    this.isDrawing = true;
+    this.beginDraw(event.clientX, event.clientY);
+    this.line = this.manipulator.createElement('path', 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
+    this.manipulator.setAttribute(this.line, SVGProperties.color, this.attributes.color.value);
+    this.manipulator.setAttribute(this.line, 'stroke-linecap', 'round');
+    // this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
+    this.manipulator.setAttribute(this.line, 'd', this.path);
+    this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
+    this.manipulator.appendChild(this.image.nativeElement, this.line);
+    this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+    this.addPath(event.clientX, event.clientY);
   }
 
   onMouseRelease(event: MouseEvent): void {
-    if(event.button === 0) { // 0 for the left mouse button
+    if (event.button === 0) { // 0 for the left mouse button
       this.isDrawing = false;
+      this.endPath();
     }
   }
 
   onMouseMove(event: MouseEvent): void {
-    if(this.isDrawing) {
-      console.log('drawing');
-      this.addCircle(event.clientX, event.clientY);
+    if (this.isDrawing) {
+    this.addPath(event.clientX, event.clientY);
     } else {
-      if(this.mousePointer !== undefined) {
-        this.manipulator.removeChild(this.subElement, this.mousePointer);
-      }
-      this.mousePointer = this.createCircle(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
-      this.manipulator.appendChild(this.subElement, this.mousePointer);
-    }
+	    this.updateCursor(event.clientX, event.clientY); 
+	  }
   }
 
-  onDoubleClick(event: MouseEvent): void {}
   onClick(event: MouseEvent): void {}
-  onKeyPressed(event: KeyboardEvent): void { }
-  onKeyReleased(event: KeyboardEvent): void { }
+  onDoubleClick(event: MouseEvent): void {}
+  onKeyPressed(event: KeyboardEvent): void {}
+  onKeyReleased(event: KeyboardEvent): void {}
 
-  private updateProperties(): void {
-    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Pencil);
-    this.manipulator.appendChild(this.image.nativeElement, this.subElement);
+  private beginDraw(clientX: number, clientY: number) {
+    this.previousX = clientX;
+    this.previousY = clientY;
+    this.path = `M ${this.effectiveX(clientX)},${this.effectiveY(clientY)}`;
   }
 
-  private addCircle(clientX: number, clientY: number): void {
-    const circleToAdd = this.createCircle(this.effectiveX(clientX), this.effectiveY(clientY));
-    this.circles.push_back(circleToAdd);
-    this.manipulator.appendChild(this.subElement, circleToAdd);
+  private newPath(clientX: number, clientY: number) {
+    const moveToPath = ` m ${clientX - this.previousX},${clientY - this.previousY}`;
+    this.previousX = clientX;
+    this.previousY = clientY;
+    this.path = this.path + (moveToPath);
   }
 
-  private createCircle(x: number, y: number): SVGCircleElement {
-    let circle: SVGCircleElement;
-    circle = this.manipulator.createElement(SVGProperties.circle,'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(circle, SVGProperties.fill, this.color);
-    this.manipulator.setAttribute(circle, SVGProperties.opacity, this.opacity);
-    this.manipulator.setAttribute(circle, SVGProperties.radius, (this.thickness/2).toString());
-    this.manipulator.setAttribute(circle, SVGProperties.centerX, x.toString());
-    this.manipulator.setAttribute(circle, SVGProperties.centerY, y.toString());
-    return circle;
+  private addPath(clientX: number, clientY: number) {
+    const pathToAdd = ` l ${clientX - this.previousX},${clientY - this.previousY}`;
+    this.previousX = clientX;
+    this.previousY = clientY;
+    this.path = this.path + (pathToAdd);
+    this.manipulator.setAttribute(this.line, 'd', this.path);
+  }
+
+  private endPath() {
+    if (this.path.indexOf('l') === -1) {
+      this.manipulator.removeChild(this.image.nativeElement, this.line);
+      const circle = this.createCircle(this.effectiveX(this.previousX), this.effectiveY(this.previousY));
+      this.manipulator.appendChild(this.image.nativeElement, circle);
+    }
+    this.manipulator.setAttribute(this.line, 'd', this.path);
+
+    this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
+  }
+
+  private updateCursor(clientX: number, clientY: number) {
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, this.effectiveX(clientX).toString());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, this.effectiveY(clientY).toString());
+  }
+
+  private createCircle(x: number, y: number): void {
+    this.mousePointer = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, this.attributes.color.value);
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, x.toString());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, y.toString());
   }
 }
