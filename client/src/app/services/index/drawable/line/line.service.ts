@@ -40,7 +40,6 @@ export class LineService extends DrawableService {
   }
 
   initializeProperties(attributes: DrawablePropertiesService) {
-    console.log('init prop ');
     this.attributes = attributes;
     this.thickness = this.attributes.thickness.value;
     this.dotDiameter = this.attributes.dotDiameter.value;
@@ -63,15 +62,10 @@ export class LineService extends DrawableService {
     })
   }
 
-  onMouseInCanvas(event: MouseEvent): void {
-    console.log('in canvas');
-  }
-  onMouseOutCanvas(event: MouseEvent): void {
-    console.log('out of canvas');
-  }
+  onMouseInCanvas(event: MouseEvent): void {}
+  onMouseOutCanvas(event: MouseEvent): void {}
 
   onMouseMove(event: MouseEvent): void {
-    console.log('moving - line');
     if(this.isStarted) {
       let previewPoints = this.pointsToString();
       if (this.shiftPressed) {
