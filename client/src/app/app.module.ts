@@ -16,30 +16,54 @@ import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
 import { PencilComponent } from './components/pencil/pencil.component';
+import { HomeComponent } from './components/home/home.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatListModule} from '@angular/material/list';
+import {AppRoutingModule, RoutingComponents} from './components/app/app-routing.module';
+import { PinceauGuideComponent } from './components/guideTemplaates/pinceau-guide/pinceau-guide.component';
+import { CrayonGuideComponent } from './components/guideTemplaates/crayon-guide/crayon-guide.component';
+import { LigneGuideComponent } from './components/guideTemplaates/ligne-guide/ligne-guide.component';
+import { RectangleGuideComponent } from './components/guideTemplaates/rectangle-guide/rectangle-guide.component';
+import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
+import { NouveauDessinComponent } from './components/guideTemplaates/nouveau-dessin/nouveau-dessin.component';
+import { UserGuideComponent } from './components/user-guide/user-guide.component';
 
 @NgModule({
-    declarations: [
-      AppComponent,
-      CanvasComponent,
-      OptionPannelComponent,
-      SidebarComponent,
-      LineComponent,
-      WorkspaceComponent,
-      PencilComponent
-    ],
-    imports: [
-      AngularMaterialModule,
-      BrowserModule,
-      BrowserAnimationsModule,
-      FormsModule,
-      HttpClientModule,
-      MatFormFieldModule,
-      MatInputModule,
-      MatSelectModule,
-      MatSliderModule,
-      AngularMaterialModule
-    ],
-    providers: [DrawablePropertiesService],
-    bootstrap: [AppComponent],
+  declarations: [
+    AppComponent,
+    CanvasComponent,
+    OptionPannelComponent,
+    SidebarComponent,
+    LineComponent,
+    WorkspaceComponent,
+    PencilComponent,
+    HomeComponent,
+    PinceauGuideComponent,
+    CrayonGuideComponent,
+    LigneGuideComponent,
+    RectangleGuideComponent,
+    CouleurGuideComponent,
+    NouveauDessinComponent,
+    UserGuideComponent,
+    RoutingComponents
+  ],
+  imports: [
+    AngularMaterialModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    HttpClientModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatSliderModule,
+    AngularMaterialModule,
+    AppRoutingModule,
+    MatListModule,
+    MatExpansionModule
+
+  ],
+  providers: [DrawablePropertiesService],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

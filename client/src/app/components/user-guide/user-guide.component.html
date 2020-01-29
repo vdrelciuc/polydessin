@@ -1,0 +1,51 @@
+<div class="optionFrame">
+  <div class="headerComponent">Guide d'utilisation <img id="logoGuide" src="../../../assets/guideIcon.svg" alt="icone guide"></div>
+
+  <div class="navigationGuide">
+    <div *ngFor="let categorie of categories, index as i">
+      <mat-action-list *ngIf=" categorie === categories[0]">
+        <button class="subCategoryStyleAlone" mat-list-item (click)="setCurrentSubCategorie(categorie.type.elements[0].nom)">
+          {{categorie.type.elements[0].nom}}
+        </button>
+      </mat-action-list>
+
+      <mat-expansion-panel *ngIf="categorie != categories[0]">
+        <mat-expansion-panel-header class="navigationGuideDropableHeader">
+          <mat-panel-description class="categorieStyle">{{categorie.type.nom}}</mat-panel-description>
+        </mat-expansion-panel-header>
+        <hr class="separateGuideElements">
+
+        <mat-action-list>
+          <button class="subCategoryStyle" mat-list-item (click)="setCurrentSubCategorie(element.nom)"
+                  *ngFor="let element of  categories[i].type.elements">
+            {{element.nom}}
+          </button>
+          <hr class="separateGuideElements">
+        </mat-action-list>
+
+      </mat-expansion-panel>
+    </div>
+
+  </div>
+
+  <div class="currentElementDescription">
+    <router-outlet *ngIf="this.router.url !== '/userGuide'">
+
+    </router-outlet>
+
+
+
+    <table>
+      <tr>
+        <td *ngIf="getCurrentSubCategorie()!== 'Bienvenue'" class="navigationLink previous">
+          <a (click)="getPreviousElement()"> Previous</a>
+        </td>
+        <td *ngIf="getCurrentSubCategorie()!== 'Nouveau Dessin' "class="navigationLink next">
+          <a (click)="getNextElement()">Next </a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
