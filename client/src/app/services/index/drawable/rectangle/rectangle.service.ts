@@ -59,6 +59,7 @@ export class RectangleService extends DrawableService{
   }
   onMousePress(event: MouseEvent): void {
     this.shapeOrigin = this.getEffectiveCoords(event);
+    this.mousePosition = this.getEffectiveCoords(event);
     this.updateProperties();
     this.isChanging = true;
   }
@@ -69,7 +70,7 @@ export class RectangleService extends DrawableService{
   onMouseMove(event: MouseEvent): void {
     if(this.isChanging) {
       this.mousePosition = this.getEffectiveCoords(event); // Save mouse position for KeyPress Event
-      this.updateSize(this.mousePosition.x - this.shapeOrigin.x, this.mousePosition.y - this.shapeOrigin.y);
+      this.updateSize();
     }
   }
   onDoubleClick(event: MouseEvent): void {
@@ -82,7 +83,7 @@ export class RectangleService extends DrawableService{
     if(event.shiftKey && !this.shiftPressed && this.isChanging) {
       console.log("Shift pressed");
       this.shiftPressed = true;
-      this.updateSize(this.mousePosition.x - this.shapeOrigin.x, this.mousePosition.y - this.shapeOrigin.y);
+      this.updateSize();
     }
   }
   onKeyReleased(event: KeyboardEvent): void {
@@ -90,11 +91,14 @@ export class RectangleService extends DrawableService{
       console.log("Shift released");
       this.shiftPressed = false;
       if (this.isChanging)
-      this.updateSize(this.mousePosition.x - this.shapeOrigin.x, this.mousePosition.y - this.shapeOrigin.y);
+      this.updateSize();
     }
   }
 
-  private updateSize(width: number = 0, height: number = 0): void {
+  private updateSize(): void {
+    let width = Math.abs(this.mousePosition.x - this.shapeOrigin.x);
+    let height = Math.abs(this.mousePosition.y - this.shapeOrigin.y);
+
     if (this.shiftPressed) {
       if (width > height) {
         width = height;
@@ -105,8 +109,7 @@ export class RectangleService extends DrawableService{
 
     this.manipulator.setAttribute(this.rectangle, SVGProperties.width, width.toString());
     this.manipulator.setAttribute(this.rectangle, SVGProperties.height, height.toString());
-
-    this.updateTextSize(width, height);
+    this.alignRectangleOrigin(width, height);
   }
 
   private updateTextSize(width: number, height: number) {
@@ -117,8 +120,6 @@ export class RectangleService extends DrawableService{
     }
     
     this.manipulator.setAttribute(this.text, 'font-size', (Math.min(height, width) / 6).toString());
-    this.manipulator.setAttribute(this.text, SVGProperties.x, (this.shapeOrigin.x + width / 2).toString());
-    this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.y + height / 2).toString());
   }
 
   private updateProperties(): void {
@@ -129,16 +130,17 @@ export class RectangleService extends DrawableService{
     this.text = this.manipulator.createElement('text','http://www.w3.org/2000/svg');
 
     // Adding rectangle and text properties
-    this.updateSize(); // Width and height can't be tempered with in attribute
     this.manipulator.setAttribute(this.rectangle, SVGProperties.x, this.shapeOrigin.x.toString());
     this.manipulator.setAttribute(this.rectangle, SVGProperties.y, this.shapeOrigin.y.toString());
     this.manipulator.setAttribute(this.rectangle, SVGProperties.fill, this.fillColor);
     this.manipulator.setAttribute(this.rectangle, SVGProperties.thickness, this.thickness.toString());
     this.manipulator.setAttribute(this.rectangle, SVGProperties.color, this.borderColor);
     this.manipulator.setAttribute(this.rectangle, SVGProperties.opacity, this.opacity);
-
+    
     this.manipulator.setAttribute(this.text, SVGProperties.fill, 'white');
     this.manipulator.setAttribute(this.text, 'text-anchor', 'middle');
+    
+    this.updateSize(); // Width and height can't be tempered with in attribute
 
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.rectangle);
@@ -157,19 +159,25 @@ export class RectangleService extends DrawableService{
     return isTop? (isLeft ? 2 : 1) : (isLeft ? 3 : 4);
   }
 
-  private updateOrigin() {
+  private alignRectangleOrigin(width: number, height: number) {
     let quadrant = this.getQuadrant();
 
     if (quadrant === 1 || quadrant === 4) {
       this.manipulator.setAttribute(this.rectangle, SVGProperties.x, this.shapeOrigin.x.toString());
+      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.shapeOrigin.x + width / 2).toString());
     } else {
       this.manipulator.setAttribute(this.rectangle, SVGProperties.x, this.mousePosition.x.toString());
+      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.mousePosition.x + width / 2).toString());
     }
     
     if(quadrant === 3 || quadrant === 4) {
-      this.manipulator.setAttribute(this.rectangle, SVGProperties.y, this.shapeOrigin.x.toString());
+      this.manipulator.setAttribute(this.rectangle, SVGProperties.y, this.shapeOrigin.y.toString());
+      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.y + height / 2).toString());
     } else {
-      this.manipulator.setAttribute(this.rectangle, SVGProperties.y, this.mousePosition.x.toString());
+      this.manipulator.setAttribute(this.rectangle, SVGProperties.y, this.mousePosition.y.toString());
+      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.mousePosition.y + height / 2).toString());
     }
+
+    this.updateTextSize(width, height);
   }
 }
