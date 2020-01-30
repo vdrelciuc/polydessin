@@ -10,15 +10,15 @@ export class CoordinatesXY {
   getX(): number  { return this.x; }
   getY(): number  { return this.y; }
 
-  setX(x: number): void { 
+  setX(x: number): void {
     if(x >= 0) {
-      this.x = x; 
+      this.x = x;
     }
   }
-  
-  setY(y: number): void { 
+
+  setY(y: number): void {
     if(y >= 0) {
-      this.y = y; 
+      this.y = y;
     }
   }
 
@@ -51,10 +51,10 @@ export class CoordinatesXY {
   }
 
 
-  private static findQuadrant(distanceX: number, distanceY: number): number {
+  private static findQuadrant(distanceX: number, distanceY: number): 1 | 2 | 3 | 4 {
     if (distanceX >= 0 && distanceY >= 0) {
       return 1;
-    } 
+    }
     if (distanceX < 0 && distanceY > 0) {
       return 2;
     }
