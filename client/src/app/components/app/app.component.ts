@@ -22,7 +22,7 @@ export class AppComponent implements OnInit{
     private basicService: IndexService,
     private drawerService: DrawerService,
     private dialog: MatDialog,
-    public route : Router
+    public route: Router
     ) {
     this.basicService
       .basicGet()
