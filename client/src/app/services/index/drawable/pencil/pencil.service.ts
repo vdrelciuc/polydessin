@@ -80,11 +80,6 @@ export class PencilService extends DrawableService {
 	  }
   }
 
-  onClick(event: MouseEvent): void {}
-  onDoubleClick(event: MouseEvent): void {}
-  onKeyPressed(event: KeyboardEvent): void {}
-  onKeyReleased(event: KeyboardEvent): void {}
-
   private beginDraw(clientX: number, clientY: number) {
     this.previousX = clientX;
     this.previousY = clientY;

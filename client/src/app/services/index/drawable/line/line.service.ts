@@ -29,7 +29,7 @@ export class LineService extends DrawableService {
 
   constructor() {
     super();
-    
+    this.frenchName = 'Ligne';
   }
 
   static getName(): Tools { return Tools.Line; }
@@ -41,9 +41,9 @@ export class LineService extends DrawableService {
 
   initializeProperties(attributes: DrawablePropertiesService) {
     this.attributes = attributes;
-    this.thickness = this.attributes.thickness.value;
-    this.dotDiameter = this.attributes.dotDiameter.value;
-    this.jointIsDot = this.attributes.junction.value;
+    // this.thickness = this.attributes.thickness.value;
+    // this.dotDiameter = this.attributes.dotDiameter.value;
+    // this.jointIsDot = this.attributes.junction.value;
 
     this.attributes.thickness.subscribe((element: number) => {
         this.thickness = element;
@@ -59,7 +59,7 @@ export class LineService extends DrawableService {
 
     this.attributes.color.subscribe((element: string) => {
       this.color = element;
-    })
+    });
   }
 
   onMouseInCanvas(event: MouseEvent): void {}
@@ -110,20 +110,17 @@ export class LineService extends DrawableService {
     this.updateLine();
   }
 
-  onMousePress(event: MouseEvent): void {}
-  onMouseRelease(event: MouseEvent): void {}
-
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
       const lastPoint = new CoordinatesXY(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
       const firstPoint = this.points.getRoot();
-      if(firstPoint != undefined) {
-        let differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
-        let differenceOfCoordinatesY = firstPoint.getY() - lastPoint.getY();
-        let isWithin3Px: boolean = 
-          differenceOfCoordinatesX <= 3 && 
+      if(firstPoint !== undefined) {
+        const differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
+        const differenceOfCoordinatesY = firstPoint.getY() - lastPoint.getY();
+        const isWithin3Px: boolean =
+          differenceOfCoordinatesX <= 3 &&
           differenceOfCoordinatesX >= -3 &&
-          differenceOfCoordinatesY <= 3 && 
+          differenceOfCoordinatesY <= 3 &&
           differenceOfCoordinatesY >= -3;
         if(isWithin3Px) {
           this.addPointToLine(firstPoint.getX(), firstPoint.getY());
@@ -142,7 +139,7 @@ export class LineService extends DrawableService {
     if (this.isStarted) {
       this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
     } else {
-      this.updateProperties();
+      this.updateSVGProperties();
       this.points = new Stack<CoordinatesXY>();
       this.circles = new Stack<SVGCircleElement>();
       this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
@@ -189,7 +186,7 @@ export class LineService extends DrawableService {
     );
   }
 
-  private updateProperties(): void {
+  private updateSVGProperties(): void {
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Line);
     this.line = this.manipulator.createElement(SVGProperties.polyLine,'http://www.w3.org/2000/svg');

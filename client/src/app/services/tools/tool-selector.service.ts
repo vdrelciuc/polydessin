@@ -15,7 +15,7 @@ export class ToolSelectorService {
   $currentTool: BehaviorSubject<Tools>;
   // currentToolName: Observable<Tools> = this.toolName.asObservable();
   // currentTool: DrawableService | undefined;
-  isHidden: boolean;
+  // private isHidden: boolean;
   private tools: Map<Tools, DrawableService>;
   private tool: DrawableService | undefined;
   private line: LineService;
@@ -27,12 +27,12 @@ export class ToolSelectorService {
     this.line = new LineService();
     this.pencil = new PencilService();
     this.rectangle = new RectangleService();
-    
+
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
     this.tools.set(Tools.Rectangle, this.rectangle);
       // Initialize currentTool as the selector(mouse)
-    this.isHidden = true;
+    // this.isHidden = true;
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
   }
 
@@ -52,7 +52,7 @@ export class ToolSelectorService {
     const foundTool = this.getTool(tool);
     if (foundTool !== undefined) {
       this.tool = foundTool;
-      this.isHidden = false;
+      // this.isHidden = false;
       this.$currentTool.next(tool);
       this.drawerService.updateDrawer(this.$currentTool.getValue());
     }
