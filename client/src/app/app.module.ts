@@ -30,9 +30,9 @@ import { RectangleComponent } from './components/rectangle/rectangle.component';
       RectangleComponent
     ],
     imports: [
+      BrowserAnimationsModule,
       AngularMaterialModule,
       BrowserModule,
-      BrowserAnimationsModule,
       FormsModule,
       HttpClientModule,
       MatFormFieldModule,

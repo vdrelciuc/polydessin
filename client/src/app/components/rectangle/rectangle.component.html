@@ -1,1 +1,35 @@
-<p>rectangle works!</p>
+<div id="container">
+    <form id="rectangle-form">
+        <label class="title" id="tracing-type">Type de tracé</label>
+        <ul>
+            <li>
+                <mat-checkbox id="borderCheckbox" (change)="updateContour()">Contour</mat-checkbox>
+                <mat-checkbox id="fillCheckbox" (change)="updateFill()">Plein</mat-checkbox>
+                <p *ngIf="!service.hasContour && !service.hasFill">*Sélectionnez au moins une option</p>
+            </li>
+            <li>
+                <label class="title" id="thickness">Épaisseur contour</label>
+                <mat-slider
+                    id="thickness-slider"
+                    name="thickness-slider"
+                    [disabled]="!service.hasContour"
+                    min="THICKNESS_MAXIMUM"
+                    max="THICKNESS_MINIMUM"
+                    step="1"
+                    thumbLabel="false"
+                    tickInterval="false"
+                    [(ngModel)]="service.thickness"
+                    vertical="false">
+                </mat-slider>
+            <mat-form-field name="thickness-value">
+                <input matInput
+                    type="number"
+                    [(ngModel)]="service.thickness"
+                    [disabled]="!service.hasContour"
+                    name="thickness-input">
+            </mat-form-field>
+            </li>
+        </ul>
+    </form>
+  </div>
+  

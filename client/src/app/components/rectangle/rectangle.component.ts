@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+//import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
 //import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
@@ -26,5 +27,12 @@ export class RectangleComponent implements OnInit {
   ngOnInit(): void {
     this.service.initializeProperties(this.attributes);
   }
+  
+  updateContour() {
+    this.service.hasContour = !this.service.hasContour;
+  }
 
+  updateFill() {
+    this.service.hasFill = !this.service.hasFill;
+  }
 }
