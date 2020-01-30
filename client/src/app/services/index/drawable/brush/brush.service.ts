@@ -55,7 +55,8 @@ export class BrushService extends DrawableService {
   onMouseOutCanvas(event: MouseEvent): void {
     console.log('Out of canvas');
     this.manipulator.removeChild(this.image.nativeElement, this.previewCricle)
-
+    this.isDrawing = false;
+    this.endPath();
   }
   onMousePress(event: MouseEvent): void {
     this.isDrawing = true;
