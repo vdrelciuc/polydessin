@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ColorManipService } from 'src/app/services/colorManip/colorManip.service';
 import { CreateNewService } from 'src/app/services/create-new/create-new.service';
 import { colorPalette } from './colors';
@@ -31,15 +31,6 @@ export class CreateNewComponent implements OnInit {
     this.createNewService.canvasSize = [0, 0];
   }
 
-// TODO : replace 99999 by workspace size
-  getcanvasSize(axis: number): number {
-    return (this.createNewService.canvasSize[axis] || 99999);
-  }
-  setCanvasSize(axis: number, size: number) {
-    if (size > 0) {
-      this.createNewService.canvasSize[axis] = size;
-    }
-  }
 
   setBackgroundColor(color: string) {
     if (this.colorHexRegex.test(color)) {
@@ -54,12 +45,4 @@ export class CreateNewComponent implements OnInit {
   toggleShowPalette() {
     this.showPalette = !this.showPalette;
   }
-  mainMenu() {
-    // TODO
-  }
-
-  createNewSheet() {
-    // TODO
-  }
-
 }
