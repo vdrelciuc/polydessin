@@ -110,9 +110,6 @@ export class LineService extends DrawableService {
     this.updateLine();
   }
 
-  onMousePress(event: MouseEvent): void {}
-  onMouseRelease(event: MouseEvent): void {}
-
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
       const lastPoint = new CoordinatesXY(this.effectiveX(event.clientX), this.effectiveY(event.clientY));

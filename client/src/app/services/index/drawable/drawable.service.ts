@@ -33,15 +33,15 @@ export abstract class DrawableService {
     );
   }
 
-  abstract onMouseInCanvas(event: MouseEvent): void;
-  abstract onMouseOutCanvas(event: MouseEvent): void;
-  abstract onMousePress(event: MouseEvent): void;
-  abstract onMouseRelease(event: MouseEvent): void;
-  abstract onMouseMove(event: MouseEvent): void;
-  abstract onDoubleClick(event: MouseEvent): void;
-  abstract onClick(event: MouseEvent): void;
-  abstract onKeyPressed(event: KeyboardEvent): void;
-  abstract onKeyReleased(event: KeyboardEvent): void;
+  onMouseInCanvas(event: MouseEvent): void { /*To Override if needed*/}
+  onMouseOutCanvas(event: MouseEvent): void { /*To Override if needed*/}
+  onMousePress(event: MouseEvent): void { /*To Override if needed*/}
+  onMouseRelease(event: MouseEvent): void { /*To Override if needed*/}
+  onMouseMove(event: MouseEvent): void { /*To Override if needed*/}
+  onDoubleClick(event: MouseEvent): void { /*To Override if needed*/}
+  onClick(event: MouseEvent): void { /*To Override if needed*/}
+  onKeyPressed(event: KeyboardEvent): void { /*To Override if needed*/}
+  onKeyReleased(event: KeyboardEvent): void { /*To Override if needed*/}
 
   protected effectiveX(onScreenX: number): number {
     return onScreenX - this.image.nativeElement.getBoundingClientRect().left;
