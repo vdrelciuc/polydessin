@@ -1,6 +1,5 @@
 export enum Tools {
   Aerosol = 'aerosol',
-  Arrow = 'arrow',
   Brush = 'brush',
   Bucket = 'bucket',
   ColorApplicator = 'colorApplicator',
@@ -15,6 +14,7 @@ export enum Tools {
   Polygon = 'polygon',
   Rectangle = 'rectangle',
   Selection = 'selection',
+  Settings = 'settings',
   Stamp = 'stamp',
   Text = 'text'
 }

@@ -15,7 +15,7 @@ export class EventListenerService {
     private toolSelector: ToolSelectorService,
     private manipulator: Renderer2
   ) {
-    this.toolSelector.currentToolName.subscribe ( (tool) => {
+    this.toolSelector.$currentTool.subscribe ( (tool) => {
       this.currentToolName = tool;
       this.currentTool = this.toolSelector.getCurrentTool();
     });

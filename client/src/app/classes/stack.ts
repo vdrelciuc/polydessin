@@ -17,8 +17,11 @@ export class Stack<T> {
     this.stack.push(toAdd);
   }
 
-  pop_back(): T {
-    return this.stack.splice(this.stack.length - 1, 1)[0];
+  pop_back(): T | undefined {
+    if(this.stack.length > 1) {
+      return this.stack.splice(this.stack.length - 1, 1)[0];
+    }
+    return undefined;
   }
 
   clear(): void {
@@ -36,17 +39,20 @@ export class Stack<T> {
     }
   }
 
-  pop_front(): T {
-    const toReturn: T = this.stack[0];
-    this.stack = this.stack.splice(1, this.stack.length);
-    return toReturn;
+  pop_front(): T | undefined {
+    if(this.stack.length > 1) {
+      const toReturn: T = this.stack[0];
+      this.stack = this.stack.splice(1, this.stack.length);
+      return toReturn;
+    }
+    return undefined;
   }
 
   getAll(): T[] { return this.stack; }
 
   getLast(): T | undefined { 
     if(this.stack.length > 0) {
-      return this.stack[this.stack.length]; 
+      return this.stack[this.stack.length - 1]; 
     }
     return undefined;
   }

@@ -1,10 +1,10 @@
 import { Injectable, Renderer2, ElementRef } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-
+import { BehaviorSubject } from 'rxjs';
+import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { Tools } from '../../enums/tools'
 import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
-import { PenService } from '../index/drawable/pencil/pencil.service';
+import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { BrushService } from '../index/drawable/brush/brush.service';
 
 @Injectable({
@@ -12,28 +12,29 @@ import { BrushService } from '../index/drawable/brush/brush.service';
 })
 export class ToolSelectorService {
 
-  private toolName: BehaviorSubject<Tools> = new BehaviorSubject(Tools.Arrow);
-  currentToolName: Observable<Tools> = this.toolName.asObservable();
-  $currentTool: DrawableService | undefined;
+  $currentTool: BehaviorSubject<Tools>;
+  // currentToolName: Observable<Tools> = this.toolName.asObservable();
+  // currentTool: DrawableService | undefined;
   isHidden: boolean;
   private tools: Map<Tools, DrawableService>;
-  private currentTool: DrawableService;
+  private tool: DrawableService | undefined;
   private line: LineService;
-  private pencil: PenService;
+  private pencil: PencilService;
   private brush: BrushService;
 
 
-  constructor() { // Add every tool that is going to be used with it's name format (name, toolService)
+  constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
     this.line = new LineService();
-    this.pencil = new PenService();
+    this.pencil = new PencilService();
     this.brush = new BrushService();
-    
+
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
     this.tools.set(Tools.Brush, this.brush);
       // Initialize currentTool as the selector(mouse)
     this.isHidden = true;
+    this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
   }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
@@ -42,19 +43,19 @@ export class ToolSelectorService {
     }
   }
 
-  getCurrentTool(): DrawableService { return this.currentTool; }
+  getCurrentTool(): DrawableService | undefined { return this.tool; }
 
   getLine(): LineService { return this.line; }
-  getPencil(): PenService { return this.pencil; }
+  getPencil(): PencilService { return this.pencil; }
   getBrush(): BrushService { return this.brush; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
     if (foundTool !== undefined) {
-      this.currentTool = foundTool;
-      this.toolName.next(tool);
-      console.log(tool + ' has been selected');
+      this.tool = foundTool;
       this.isHidden = false;
+      this.$currentTool.next(tool);
+      this.drawerService.updateDrawer(this.$currentTool.getValue());
     }
   }
 
@@ -63,5 +64,28 @@ export class ToolSelectorService {
       return this.tools.get(toFind);
     }
     return undefined;
+  }
+
+  getFrenchToolNameToPrint(): string {
+    switch (this.$currentTool.getValue()) {
+      case Tools.Aerosol: return 'Aérosol';
+      case Tools.Brush: return 'Pinceau';
+      case Tools.Bucket: return 'Sceau de peinture';
+      case Tools.ColorApplicator: return 'Applicateur de couleur';
+      case Tools.Ellipse: return 'Ellipse';
+      case Tools.Eraser: return 'Efface';
+      case Tools.Feather: return 'Plume';
+      case Tools.Grid: return 'Grille';
+      case Tools.Line: return 'Ligne';
+      case Tools.Pencil: return 'Crayon';
+      case Tools.Pipette: return 'Pipette';
+      case Tools.Polygon: return 'Polygone';
+      case Tools.Rectangle: return 'Rectangle';
+      case Tools.Selection: return 'Sélection';
+      case Tools.Settings: return 'Réglages';
+      case Tools.Stamp: return 'Étampe';
+      case Tools.Text: return 'Texte';
+      default : return Tools.None;
+    }
   }
 }

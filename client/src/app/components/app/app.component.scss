@@ -15,6 +15,7 @@
 .pannel {
   background-color: $option-pannel-color;
   width: 250px;
+  height: 100%;
 }
 
 .workspace {
@@ -28,4 +29,8 @@
 .scrollable::-webkit-scrollbar {
   background-color: transparent;
   width: 0px;
+}
+
+.mat-drawer-side {
+  border-right: none;
 }
