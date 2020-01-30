@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CreateNewService } from 'src/app/services/create-new.service';
+import { ColorManipService } from 'src/app/services/colorManip/colorManip.service';
+import { CreateNewService } from 'src/app/services/create-new/create-new.service';
 import { colorPalette } from './colors';
-
 
 @Component({
   selector: 'app-create-new',
@@ -21,35 +21,34 @@ export class CreateNewComponent implements OnInit {
 
   colorPalette = colorPalette;
   showPalette = false;
-  backgroundColor: number[];
 
-  canvasSize: number[];
-
-  constructor(public createNewService: CreateNewService) { }
+  constructor(
+    public createNewService: CreateNewService,
+    public colorManipService: ColorManipService) { }
 
   ngOnInit() {
-    this.backgroundColor = [0xff, 0xff, 0xff];
-    this.canvasSize = [0, 0];
+    this.createNewService.backgroundColor = [0xff, 0xff, 0xff];
+    this.createNewService.canvasSize = [0, 0];
   }
 
 // TODO : replace 99999 by workspace size
   getcanvasSize(axis: number): number {
-    return (this.canvasSize[axis] || 99999);
+    return (this.createNewService.canvasSize[axis] || 99999);
   }
   setCanvasSize(axis: number, size: number) {
     if (size > 0) {
-      this.canvasSize[axis] = size;
+      this.createNewService.canvasSize[axis] = size;
     }
   }
 
   setBackgroundColor(color: string) {
     if (this.colorHexRegex.test(color)) {
-      this.backgroundColor = this.createNewService.hexStringToColor(color);
+      this.createNewService.backgroundColor = this.colorManipService.hexStringToColor(color);
     }
   }
 
   getBackgroundColor() {
-    return this.createNewService.colorToHexString(this.backgroundColor);
+    return this.colorManipService.colorToHexString(this.createNewService.backgroundColor);
   }
 
   toggleShowPalette() {
