@@ -1,1 +1,24 @@
-<app-create-new></app-create-new>
+<div class="wrapper">
+
+  <!-- <div class="entryPoint">
+    <app-home *ngIf="this.route.url === '/'"></app-home>
+    <app-user-guide></app-user-guide>
+  </div>
+  -->
+
+
+  <div class="sidebar scrollable">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <mat-drawer-container>
+    <mat-drawer  mode="side" [opened]="getDrawerStatus()">
+      <div class="pannel scrollable">
+        <app-option-pannel></app-option-pannel>
+      </div>
+    </mat-drawer>
+  </mat-drawer-container>
+  <div class="workspace">
+    <app-workspace></app-workspace>
+  </div>
+</div>

@@ -1,0 +1,110 @@
+.optionFrame{
+  width: 95%;
+  float: right;
+  height: 100vh;
+}
+
+.headerComponent {
+  background-color: #38364B;
+  text-align: center ;
+  color: azure;
+  font-weight: bold;
+}
+#logoGuide{
+  margin-left: 10px;
+}
+
+.navigationGuide{
+  width: 15%;
+  background-color: #F1F1F1;
+  float: left;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+
+
+.currentElementDescription{
+  background-color: white;
+  width: 85%;
+  background-color: white;
+  float: right;
+  height: 100%;
+}
+
+ul{
+  margin-bottom: 0;
+}
+
+li {
+  list-style-type: none;
+  margin-top: auto;
+}
+
+.categorieStyle{
+  font-weight: bold;
+}
+
+//please note that important is used since we want
+//to modify external css sheets from angular material
+//and that ng-deep deprecated
+
+
+::ng-deep .mat-expansion-panel-body{
+  padding-bottom: 0 !important;
+}
+
+.subCategoryStyle {
+  outline: none !important;
+  height: auto !important;
+}
+subCategoryStyleAlone{
+  margin: auto;
+}
+
+.mat-action-list :hover{
+  outline: none !important;
+  background-color: #dbdbdb !important;
+}
+
+mat-action-list{
+  padding-top: 0;
+}
+
+mat-expansion-panel-header{
+  height: 45px !important;
+}
+
+.separateGuideElements{
+ border: black solid 2px;
+}
+
+.navigationLink{
+  color: blue;
+  text-decoration: underline;
+}
+
+.navigationLink:hover {
+  color: red;
+  text-decoration: underline;
+}
+
+.next{
+  text-align: right;
+  padding-right: 2%;
+}
+.previous{
+  text-align: left;
+  padding-left: 2%;
+}
+
+
+tr ,table{
+  width: 100%;
+}
+
+td{
+  width: 50%;
+}
+
+

@@ -1,0 +1,72 @@
+@import "../../../global-style/colors.scss";
+@import "../../../global-style/dimensions.scss";
+
+.top {
+  display: flex;
+  border-bottom: 1px solid $dark;
+}
+
+.bottom {
+  display: flex;
+}
+
+.clicked {
+  background-color: $clicked-sidebar-option;
+}
+
+.not-clicked {
+  filter: invert(1);
+}
+
+.mat-button {
+  min-width: 48px;
+  min-height: 48px;
+  max-width: 48px;
+  max-height: 48px;
+
+  .img {
+    max-width: 48px;
+    max-height: 48px;
+  }
+}
+
+.tool-group {
+  display: flex;
+  width: 100%;
+}
+
+.group-name {
+  margin: 5px;
+  color: white;
+  font-weight: 70;
+}
+
+hr {
+  margin: 0;
+  border-color: gray;
+}
+
+.wrapper {
+  height: 100%;
+  width: 96px;
+}
+
+#upper-icons {
+  overflow-y: auto;
+  height: 100%;
+}
+
+#upper-icons::-webkit-scrollbar {
+  display: none;
+}
+
+#lower-icons {
+  position: absolute;
+  bottom: 1px;
+  background-color: $medium;
+  border-top: 1px solid $dark;
+}
+
+.bumper {
+  padding-bottom: 195px;
+}

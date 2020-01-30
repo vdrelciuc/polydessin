@@ -1,22 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from '../../../../../common/communication/message';
 import { IndexService } from '../../services/index/index.service';
+import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
+import { HomeComponent } from '../home/home.component';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-    readonly title: string = 'LOG3900';
-    message = new BehaviorSubject<string>('');
+export class AppComponent implements OnInit{
 
-    constructor(private basicService: IndexService) {
-        this.basicService
-            .basicGet()
-            .pipe(map((message: Message) => `${message.title} ${message.body}`))
-            .subscribe(this.message);
-    }
+  readonly title: string = 'LOG2990';
+  message = new BehaviorSubject<string>('');
+
+  constructor(
+    private basicService: IndexService,
+    private drawerService: DrawerService,
+    // public route : Router,
+    private dialog: MatDialog
+    ) {
+    this.basicService
+      .basicGet()
+      .pipe(map((message: Message) => `${message.title} ${message.body}`))
+      .subscribe(this.message);
+  }
+
+  getDrawerStatus(): boolean {
+    return this.drawerService.navIsOpened;
+  }
+
+  ngOnInit(): void {
+    this.openDialog();
+  }
+
+  openDialog(): void {
+    this.dialog.open(HomeComponent, {});
+  }
+
 }

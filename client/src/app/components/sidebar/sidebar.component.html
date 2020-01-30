@@ -1,0 +1,209 @@
+<div class="wrapper">
+<div class="top">
+  <div class="left-column">
+
+  </div>
+  <div class="right-column">
+  </div>
+</div>
+
+<div id="upper-icons">
+  <div class="tool-group">
+    <div class="left-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('selection')"
+        [ngClass]="{'clicked': currentTool === 'selection',
+        'not-clicked': currentTool !== 'selection'}">
+          <img src="../../../assets/icons/arrow.svg">
+      </button>
+      </div>
+    </div>
+    <div class="right-column">
+    </div>
+  </div>
+  <hr noshade size="1">
+
+  <div class="tool-group">
+    <div class="left-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('pencil')"
+        [ngClass]="{'clicked': currentTool === 'pencil',
+        'not-clicked': currentTool !== 'pencil'}"
+        >
+        <img src="../../../assets/icons/pencil.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button (click)="selectTool('feather')"
+        [ngClass]="{'clicked': currentTool === 'feather',
+        'not-clicked': currentTool !== 'feather'}">
+        <img src="../../../assets/icons/feather.svg">
+        </button>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('brush')"
+        [ngClass]="{'clicked': currentTool === 'brush',
+        'not-clicked': currentTool !== 'brush'}">
+        <img src="../../../assets/icons/brush.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button (click)="selectTool('aerosol')"
+        [ngClass]="{'clicked': currentTool === 'aerosol',
+        'not-clicked': currentTool !== 'aerosol'}">
+        <img src="../../../assets/icons/aerosol.svg">
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr noshade size="1">
+
+  <div class="tool-group">
+    <div class="left-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('rectangle')"
+        [ngClass]="{'clicked': currentTool === 'rectangle',
+        'not-clicked': currentTool !== 'rectangle'}">
+        <img src="../../../assets/icons/rectangle.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button (click)="selectTool('polygon')"
+        [ngClass]="{'clicked': currentTool === 'polygon',
+        'not-clicked': currentTool !== 'polygon'}">
+        <img src="../../../assets/icons/polygon.svg">
+        </button>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('ellipse')"
+        [ngClass]="{'clicked': currentTool === 'ellipse',
+        'not-clicked': currentTool !== 'ellipse'}">
+        <img src="../../../assets/icons/ellipse.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button (click)="selectTool('line')"
+        [ngClass]="{'clicked': currentTool === 'line',
+        'not-clicked': currentTool !== 'line'}">
+        <img src="../../../assets/icons/line.svg">
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr noshade size="1">
+
+  <div class="tool-group">
+    <div class="left-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('text')"
+        [ngClass]="{'clicked': currentTool === 'text',
+        'not-clicked': currentTool !== 'text'}">
+        <img src="../../../assets/icons/text.svg">
+        </button>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('stamp')"
+        [ngClass]="{'clicked': currentTool === 'stamp',
+        'not-clicked': currentTool !== 'stamp'}">
+        <img src="../../../assets/icons/stamp (2).svg">
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr noshade size="1">
+
+  <div class="tool-group">
+    <div class="left-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('colorApplicator')"
+        [ngClass]="{'clicked': currentTool === 'colorApplicator',
+        'not-clicked': currentTool !== 'colorApplicator'}">
+        <img src="../../../assets/icons/color-applicator.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button (click)="selectTool('pipette')"
+        [ngClass]="{'clicked': currentTool === 'pipette',
+        'not-clicked': currentTool !== 'pipette'}">
+        <img src="../../../assets/icons/pipette.svg">
+        </button>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="icon">
+        <button mat-button (click)="selectTool('bucket')"
+        [ngClass]="{'clicked': currentTool === 'bucket',
+        'not-clicked': currentTool !== 'bucket'}">
+        <img src="../../../assets/icons/bucket.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button (click)="selectTool('eraser')"
+        [ngClass]="{'clicked': currentTool === 'eraser',
+        'not-clicked': currentTool !== 'eraser'}">
+        <img src="../../../assets/icons/eraser.svg">
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr noshade size="1">
+
+  <svg width="auto" height="70px">
+    <rect id="secondary-color" width="30" height="30" x="41" y="30" fill="gray" stroke="#302E40" stroke-width="1"></rect>
+    <rect id="primary-color" width="30" height="30" x="26" y="15" fill="lightgray" stroke="#302E40" stroke-width="1"></rect>
+  </svg>
+
+  <div class="bumper"></div>
+</div>
+
+<div id="lower-icons">
+  <div class="bottom">
+    <div class="left-column">
+      <!--<div class="icon">
+        <button mat-button>
+          <img src="../../../assets/icons/home.svg">
+        </button>
+      </div> -->
+      <div class="icon">
+        <button mat-button>
+          <img src="../../../assets/icons/undo1.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button>
+          <img src="../../../assets/icons/new-project.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button>
+          <img src="../../../assets/icons/load-project.svg">
+        </button>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="icon">
+        <button mat-button>
+          <img src="../../../assets/icons/redo.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button>
+          <img src="../../../assets/icons/save-project.svg">
+        </button>
+      </div>
+      <div class="icon">
+        <button mat-button>
+          <img src="../../../assets/icons/guide.svg">
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
