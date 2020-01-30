@@ -9,6 +9,7 @@ export abstract class DrawableService {
 
   protected manipulator: Renderer2;
   protected image: ElementRef<SVGElement>;
+  frenchName: string;
 
   protected assignParams(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
     this.manipulator = manipulator;

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-//import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
-//import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
-import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
+import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 
 @Component({
@@ -14,9 +12,8 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 export class RectangleComponent implements OnInit {
 
   readonly name: string = Tools.Rectangle;
-  
+
   constructor(
-    //private shortcuts: HotkeysService,
     protected service: RectangleService,
     private toolSelector: ToolSelectorService,
     protected attributes: DrawablePropertiesService
@@ -27,7 +24,7 @@ export class RectangleComponent implements OnInit {
   ngOnInit(): void {
     this.service.initializeProperties(this.attributes);
   }
-  
+
   updateContour() {
     this.service.hasContour = !this.service.hasContour;
   }
