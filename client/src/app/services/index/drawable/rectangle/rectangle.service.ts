@@ -190,7 +190,7 @@ export class RectangleService extends DrawableService{
 
   private updateTextSize(width: number, height: number) {
     if(width > 40 && height > 15) {
-      this.text.innerHTML = '[Rectangle]';
+      this.text.innerHTML = this.shiftPressed ? '[Carré]' : '[Rectangle]';
     } else {
       this.text.innerHTML = '';
     }
