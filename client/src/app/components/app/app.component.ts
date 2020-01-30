@@ -6,6 +6,7 @@ import { Message } from '../../../../../common/communication/message';
 import { IndexService } from '../../services/index/index.service';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { HomeComponent } from '../home/home.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -20,8 +21,8 @@ export class AppComponent implements OnInit{
   constructor(
     private basicService: IndexService,
     private drawerService: DrawerService,
-    // public route : Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public route : Router
     ) {
     this.basicService
       .basicGet()

@@ -1,11 +1,10 @@
-<div class="wrapper">
+<div class="wrapper" *ngIf="this.route.url === '/' ">
 
   <!-- <div class="entryPoint">
     <app-home *ngIf="this.route.url === '/'"></app-home>
     <app-user-guide></app-user-guide>
   </div>
   -->
-
 
   <div class="sidebar scrollable">
     <app-sidebar></app-sidebar>
@@ -22,3 +21,5 @@
     <app-workspace></app-workspace>
   </div>
 </div>
+
+<app-user-guide *ngIf="this.route.url === '/userGuide/' " ></app-user-guide>
