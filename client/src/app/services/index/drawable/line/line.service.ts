@@ -40,7 +40,6 @@ export class LineService extends DrawableService {
   }
 
   initializeProperties(attributes: DrawablePropertiesService) {
-    console.log('init prop ');
     this.attributes = attributes;
     this.thickness = this.attributes.thickness.value;
     this.dotDiameter = this.attributes.dotDiameter.value;
@@ -63,15 +62,10 @@ export class LineService extends DrawableService {
     })
   }
 
-  onMouseInCanvas(event: MouseEvent): void {
-    console.log('in canvas');
-  }
-  onMouseOutCanvas(event: MouseEvent): void {
-    console.log('out of canvas');
-  }
+  onMouseInCanvas(event: MouseEvent): void {}
+  onMouseOutCanvas(event: MouseEvent): void {}
 
   onMouseMove(event: MouseEvent): void {
-    console.log('moving - line');
     if(this.isStarted) {
       let previewPoints = this.pointsToString();
       if (this.shiftPressed) {
@@ -108,10 +102,10 @@ export class LineService extends DrawableService {
     if(this.shiftPressed) {
       const lastPoint = this.points.getLast();
       if(lastPoint !== undefined) {
-        this.points.push_back(lastPoint.getClosestPoint(this.effectiveX(onScreenX), this.effectiveY(onScreenY)));
+        this.points.push_back(lastPoint.getClosestPoint(onScreenX,onScreenY));
       }
     } else {
-      this.points.push_back(new CoordinatesXY(this.effectiveX(onScreenX), this.effectiveY(onScreenY)));
+      this.points.push_back(new CoordinatesXY(onScreenX, onScreenY));
     }
     this.updateLine();
   }
@@ -121,7 +115,22 @@ export class LineService extends DrawableService {
 
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
-      this.addPointToLine(event.clientX, event.clientY);
+      const lastPoint = new CoordinatesXY(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
+      const firstPoint = this.points.getRoot();
+      if(firstPoint != undefined) {
+        let differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
+        let differenceOfCoordinatesY = firstPoint.getY() - lastPoint.getY();
+        let isWithin3Px: boolean = 
+          differenceOfCoordinatesX <= 3 && 
+          differenceOfCoordinatesX >= -3 &&
+          differenceOfCoordinatesY <= 3 && 
+          differenceOfCoordinatesY >= -3;
+        if(isWithin3Px) {
+          this.addPointToLine(firstPoint.getX(), firstPoint.getY());
+        } else {
+          this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
+        }
+      }
       // Send the line to the whole image to be pushed
       this.points.clear();
       this.isStarted = false;
@@ -131,12 +140,12 @@ export class LineService extends DrawableService {
 
   onClick(event: MouseEvent): void {
     if (this.isStarted) {
-      this.addPointToLine(event.clientX, event.clientY);
+      this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
     } else {
       this.updateProperties();
       this.points = new Stack<CoordinatesXY>();
       this.circles = new Stack<SVGCircleElement>();
-      this.addPointToLine(event.clientX, event.clientY);
+      this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
       this.isStarted = true;
       this.isDone = false;
     }
@@ -144,7 +153,6 @@ export class LineService extends DrawableService {
       let circle: SVGCircleElement = this.manipulator.createElement('circle','http://www.w3.org/2000/svg');
       this.manipulator.setAttribute(circle, SVGProperties.centerX, this.effectiveX(event.clientX).toString());
       this.manipulator.setAttribute(circle, SVGProperties.centerY, this.effectiveY(event.clientY).toString());
-      this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
       this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
       this.manipulator.setAttribute(circle, SVGProperties.color, this.color);
       this.manipulator.setAttribute(circle, SVGProperties.fill, this.color);
