@@ -64,6 +64,6 @@ import { UserGuideComponent } from './components/user-guide/user-guide.component
 
   ],
   providers: [DrawablePropertiesService],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent, HomeComponent],
 })
 export class AppModule {}
