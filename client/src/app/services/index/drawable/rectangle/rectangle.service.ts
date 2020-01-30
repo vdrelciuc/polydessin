@@ -141,7 +141,7 @@ export class RectangleService extends DrawableService{
     this.manipulator.setAttribute(this.rectangle, SVGProperties.y, this.shapeOrigin.y.toString());
     this.manipulator.setAttribute(this.rectangle, SVGProperties.fill, this.hasFill ? this.fillColor : 'none');
     this.manipulator.setAttribute(this.rectangle, SVGProperties.thickness, this.hasContour ? this.thickness.toString() : '0');
-    this.manipulator.setAttribute(this.rectangle, SVGProperties.color, this.borderColor);
+    this.manipulator.setAttribute(this.rectangle, SVGProperties.color, 'red');
     this.manipulator.setAttribute(this.rectangle, SVGProperties.opacity, this.opacity);
     
     this.manipulator.setAttribute(this.text, SVGProperties.fill, invertColor(this.fillColor, true));
