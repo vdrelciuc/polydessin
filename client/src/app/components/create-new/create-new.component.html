@@ -1,0 +1,41 @@
+<div class="head">
+  <button (click) = "mainMenu()">Annuler</button>
+  <button (click) = "createNewSheet()">Confirmer</button>
+</div>
+<div>
+  <div>
+    <p>Dimensions:</p>
+  </div>
+  <div>
+    <input type="number" min="1" [value]="getcanvasSize(0)" (change) = setCanvasSize(0,$event.target.value)> px X
+    <input type="number" min="1" [value]="getcanvasSize(1)" (change) = setCanvasSize(1,$event.target.value)> px
+  </div>
+</div>
+<div>
+
+  <div>
+    <p>Couleur:</p>
+  </div>
+  <div class="col6">
+      <mat-slider min="0" max="255" step="1" thumbLabel="true" [(ngModel)]="createNewService.backgroundColor[0]"></mat-slider> <br/>
+      R <br/>
+      <mat-slider min="0" max="255" step="1" thumbLabel="true" [(ngModel)] = 'createNewService.backgroundColor[1]'></mat-slider> <br/>
+      G <br/>
+      <mat-slider min="0" max="255" step="1" thumbLabel="true" [(ngModel)] = 'createNewService.backgroundColor[2]'></mat-slider> <br/>
+      B
+  </div>
+  <div class="verticalLine"></div>
+  <div class="col6">
+    <div class="col9 hexColor">
+      <mat-form-field>
+        <input matInput type="string" [value] = 'getBackgroundColor()' (change) = 'setBackgroundColor($event.target.value)'>
+        <span matPrefix>#&nbsp;</span>
+      </mat-form-field>
+      <button [ngStyle]="{'background-color' : '#' + getBackgroundColor()}" (click) = "toggleShowPalette()"></button>
+      <div *ngIf="showPalette">
+        <button *ngFor="let color of colorPalette" [ngStyle]="{'background-color' : '#' + color}" (click) = "setBackgroundColor(color)"></button>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -8,6 +8,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './components/app/app.component';
+import { CreateNewComponent } from './components/create-new/create-new.component';
 import { LineComponent } from './components/line/line.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
 import { OptionPannelComponent } from './components/option-pannel/option-pannel.component';
@@ -45,7 +46,8 @@ import { UserGuideComponent } from './components/user-guide/user-guide.component
     CouleurGuideComponent,
     NouveauDessinComponent,
     UserGuideComponent,
-    RoutingComponents
+    RoutingComponents,
+    CreateNewComponent
   ],
   imports: [
     AngularMaterialModule,
