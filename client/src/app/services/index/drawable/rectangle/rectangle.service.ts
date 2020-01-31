@@ -19,7 +19,7 @@ export class RectangleService extends DrawableService{
   private fillColor: string;
   private opacity: string;
 
-  hasContour: boolean;
+  hasBorder: boolean;
   hasFill: boolean;
 
   private mousePosition: Coords;
@@ -41,8 +41,10 @@ export class RectangleService extends DrawableService{
   initialize(manipulator: Renderer2, image: ElementRef): void {
     this.assignParams(manipulator, image);
     this.shiftPressed = false;
-    this.hasContour = false;
-    this.hasFill = false;
+
+    // Set Checkbox defaults
+    this.hasBorder = true;
+    this.hasFill = true;
   }
 
   initializeProperties(attributes: DrawablePropertiesService) {
@@ -62,7 +64,7 @@ export class RectangleService extends DrawableService{
   onMouseOutCanvas(event: MouseEvent): void {}
 
   onMousePress(event: MouseEvent): void {
-    if ((this.hasContour || this.hasFill) && this.thickness !== 0) {
+    if ((this.hasBorder || this.hasFill) && this.thickness !== 0) {
       this.shapeOrigin = this.getEffectiveCoords(event);
       this.mousePosition = this.getEffectiveCoords(event);
       this.updateProperties();
@@ -136,7 +138,7 @@ export class RectangleService extends DrawableService{
     this.manipulator.setAttribute(this.rectangle, SVGProperties.x, this.shapeOrigin.x.toString());
     this.manipulator.setAttribute(this.rectangle, SVGProperties.y, this.shapeOrigin.y.toString());
     this.manipulator.setAttribute(this.rectangle, SVGProperties.fill, this.hasFill ? this.fillColor : 'none');
-    this.manipulator.setAttribute(this.rectangle, SVGProperties.thickness, this.hasContour ? this.thickness.toString() : '0');
+    this.manipulator.setAttribute(this.rectangle, SVGProperties.thickness, this.hasBorder ? this.thickness.toString() : '0');
     this.manipulator.setAttribute(this.rectangle, SVGProperties.color, this.borderColor);
     this.manipulator.setAttribute(this.rectangle, SVGProperties.opacity, this.opacity);
 

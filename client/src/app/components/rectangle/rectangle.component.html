@@ -2,17 +2,16 @@
     <form id="rectangle-form">
         <label class="title" id="tracing-type">Type de tracé</label>
         <div class="group">
-            <mat-checkbox id="borderCheckbox" (change)="updateContour()">Contour</mat-checkbox>
-            <mat-checkbox id="fillCheckbox" (change)="updateFill()">Plein</mat-checkbox>
-            <p *ngIf="!service.hasContour && !service.hasFill">*Sélectionnez au moins une option</p>
+            <mat-checkbox id="borderCheckbox" [checked]="service.hasBorder" (change)="updateBorder()">Contour</mat-checkbox>
+            <mat-checkbox id="fillCheckbox" [checked]="service.hasFill" (change)="updateFill()">Plein</mat-checkbox>
+            <p *ngIf="!service.hasBorder && !service.hasFill">*Sélectionnez au moins une option</p>
         </div>
-        <div class="group">
+        <div class="group" *ngIf="service.hasBorder">
             <label class="title" id="thickness">Épaisseur contour</label>
             <div class="slider-container">
             <mat-slider
                 id="thickness-slider"
                 name="thickness-slider"
-                [disabled]="!service.hasContour"
                 [min]="SLIDER_MINIMUM"
                 [max]="SLIDER_MAXIMUM"
                 step="1"

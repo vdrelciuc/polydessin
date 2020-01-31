@@ -28,8 +28,8 @@ export class RectangleComponent implements OnInit {
     this.service.initializeProperties(this.attributes);
   }
 
-  updateContour() {
-    this.service.hasContour = !this.service.hasContour;
+  updateBorder() {
+    this.service.hasBorder = !this.service.hasBorder;
   }
 
   updateFill() {
