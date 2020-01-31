@@ -1,64 +1,41 @@
 <div id="container">
   <form id="line-form">
-    <label class="title" id="thickness">Épaisseur</label>
-    <ul>
-      <li>
-        <mat-slider
-          (input)="onThicknessChange()"
-          id="thickness-slider"
-          name="thickness-slider"
-          disabled="false"
-          max="THICKNESS_MINIMUM"
-          min="THICKNESS_MAXIMUM"
-          step="1"
-          thumbLabel="false"
-          tickInterval="false"
-          [(ngModel)]="service.thickness"
-          vertical="false">
-        </mat-slider>
-      </li>
-      <li>
-        <mat-form-field name="thickness-value">
-          <input matInput type="number" placeholder="Value" [(ngModel)]="service.thickness" (input)="onThicknessChange()" name="thickness-input">
-        </mat-form-field>
-      </li>
-    </ul>
-    <mat-form-field>
-      <label class="title">Type de Jonction</label>
-      <ul>
-        <li>
-          <mat-select (selectionChange)="onDotSelected()" [(ngModel)]="typeSelected" name="type-select" class="dot">
-            <mat-option value="Aucune">Aucune</mat-option>
-            <mat-option value="Points">Points</mat-option>
-          </mat-select>
-        </li>
-      </ul>
-    </mat-form-field>
-    <div *ngIf="service.jointIsDot">
-      <label class="title" id="diameter">Diametre</label>
-      <ul>
-        <li>
-          <mat-slider
-            (input)="onDiameterChange()"
-            id="diameter-slider"
-            name="diameter-slider"
-            disabled="false"
-            max="DIAMETER_MINIMUM"
-            min="DIAMETER_MAXIMUM"
-            step="1"
-            thumbLabel="false"
-            tickInterval="false"
-            [(ngModel)]="service.dotDiameter"
-            vertical="false"
-            >
-          </mat-slider>
-        </li>
-        <li>
-          <mat-form-field name="diameter-value">
-            <input matInput type="number" placeholder="Value" [(ngModel)]="service.dotDiameter" (input)="onDiameterChange()" name="diameter-input">
-          </mat-form-field>
-        </li>
-      </ul>
+    <div class="head-group">
+      <label class="title" id="thickness">Épaisseur</label>
+      <mat-slider
+        id="thickness-slider"
+        name="thickness-slider"
+        disabled="false"
+        [min]="THICKNESS_SLIDER_MINIMUM"
+        [max]="THICKNESS_SLIDER_MAXIMUM"
+        step="1"
+        thumbLabel="true"
+        tickInterval="false"
+        [(ngModel)]="service.thickness"
+        vertical="false">
+      </mat-slider>
+    </div>
+    <div class="group">
+      <label class="title">Type de jonction</label>
+      <mat-select (selectionChange)="onDotSelected()" [(ngModel)]="typeSelected" name="type-select" class="dot">
+        <mat-option value="Aucune">Aucune</mat-option>
+        <mat-option value="Points">Points</mat-option>
+      </mat-select>
+    </div>
+    <div *ngIf="service.jointIsDot" class="group">
+      <label class="title" id="diameter">Diamètre</label>
+      <mat-slider
+        id="diameter-slider"
+        name="diameter-slider"
+        disabled="false"
+        [min]="DIAMETER_SLIDER_MINIMUM"
+        [max]="DIAMETER_SLIDER_MAXIMUM"
+        step="1"
+        thumbLabel="true"
+        tickInterval="false"
+        [(ngModel)]="service.dotDiameter"
+        vertical="false">
+      </mat-slider>
     </div>
   </form>
 </div>

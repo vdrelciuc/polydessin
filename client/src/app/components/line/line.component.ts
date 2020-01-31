@@ -16,6 +16,10 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 export class LineComponent implements OnInit {
 
   readonly name: string = Tools.Line;
+  readonly THICKNESS_SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
+  readonly THICKNESS_SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
+  readonly DIAMETER_SLIDER_MINIMUM = CONSTANT.DIAMETER_MINIMUM;
+  readonly DIAMETER_SLIDER_MAXIMUM = CONSTANT.DIAMETER_MAXIMUM;
   protected specificationForm: FormGroup;
   protected typeSelected: string;
   protected thickness: number;
@@ -54,18 +58,6 @@ export class LineComponent implements OnInit {
     );
   }
 
-  onThicknessChange(): void {
-    if (this.service.thickness < CONSTANT.THICKNESS_MINIMUM) {
-      this.attributes.thickness.next(CONSTANT.THICKNESS_MINIMUM);
-    } else {
-      if (this.service.thickness > CONSTANT.THICKNESS_MAXIMUM) {
-        this.attributes.thickness.next(CONSTANT.THICKNESS_MAXIMUM);
-      } else {
-        this.attributes.thickness.next(this.thickness);
-      }
-    }
-  }
-
   onDotSelected(): void {
     if (this.typeSelected === "Points") {
       this.attributes.junction.next(true);
@@ -73,18 +65,6 @@ export class LineComponent implements OnInit {
     } else {
       this.attributes.junction.next(false);
       this.service.jointIsDot = false;
-    }
-  }
-
-  onDiameterChange(): void {
-    if (this.service.dotDiameter < CONSTANT.DIAMETER_MINIMUM) {
-      this.attributes.dotDiameter.next(CONSTANT.DIAMETER_MINIMUM)
-    } else {
-      if (this.service.dotDiameter > CONSTANT.DIAMETER_MAXIMUM) {
-        this.attributes.dotDiameter.next(CONSTANT.DIAMETER_MAXIMUM)
-      } else {
-        this.attributes.dotDiameter.next(this.dotDiameter);
-      }
     }
   }
 }

@@ -8,7 +8,6 @@
         </div>
         <div class="group" *ngIf="service.hasBorder">
             <label class="title" id="thickness">Épaisseur contour</label>
-            <div class="slider-container">
             <mat-slider
                 id="thickness-slider"
                 name="thickness-slider"
@@ -20,7 +19,6 @@
                 [(ngModel)]="service.thickness"
                 vertical="false">
             </mat-slider>
-            </div>
         </div>
     </form>
   </div>

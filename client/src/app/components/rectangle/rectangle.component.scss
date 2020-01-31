@@ -5,23 +5,23 @@
     color: white;
     padding: 30px 40px;
     padding-bottom: 0px;
-  
+
     .title {
-      text-align: center;
-      font-weight: bold;
+        text-align: center;
+        font-weight: bold;
     }
-  
+
     ul {
-      list-style: none;
-      display: inline;
+        list-style: none;
+        display: inline;
     }
 
     li {
         padding-bottom: 50px;
     }
-  
+
     mat-form-field {
-      margin-bottom: 50px;
+        margin-bottom: 50px;
     }
 
     #borderCheckbox {
@@ -35,16 +35,11 @@
 
     .mat-slider {
         margin-top: $slider-bubble-margin;
-        width: 100%;
+        width: $slider-width;
     }
 
     .group {
         padding: 10px 0 40px 0;
-    }
-
-    .slider-container {
-        display: flex;
-        text-align: center;
     }
 }
 
