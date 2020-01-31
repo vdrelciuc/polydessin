@@ -13,6 +13,8 @@ import * as CONSTANT from 'src/app/classes/constants';
 export class PencilComponent implements OnInit {
 
   readonly name: string = Tools.Pencil;
+  readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
+  readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
   protected thickness: number;
 
   constructor(
@@ -28,17 +30,4 @@ export class PencilComponent implements OnInit {
     this.thickness = this.attributes.thickness.value;
     this.service.initializeProperties(this.attributes);
   }
-
-  onThicknessChange(): void {
-    if (this.service.thickness < CONSTANT.THICKNESS_MINIMUM) {
-      this.attributes.thickness.next(CONSTANT.THICKNESS_MINIMUM);
-    } else {
-      if (this.service.thickness > CONSTANT.THICKNESS_MAXIMUM) {
-        this.attributes.thickness.next(CONSTANT.THICKNESS_MAXIMUM);
-      } else {
-        this.attributes.thickness.next(this.thickness);
-      }
-    }
-  }
-
 }
