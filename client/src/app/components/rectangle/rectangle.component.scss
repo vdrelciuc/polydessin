@@ -1,4 +1,5 @@
 @import '../../../global-style/colors.scss';
+@import '../../../global-style/dimensions.scss';
 
 #container {
     color: white;
@@ -30,6 +31,20 @@
     p {
         color: #cc3300;
         font-size: 8pt;
+    }
+
+    .mat-slider {
+        margin-top: $slider-bubble-margin;
+        width: 100%;
+    }
+
+    .group {
+        padding: 10px 0;
+    }
+
+    .slider-container {
+        display: flex;
+        text-align: center;
     }
 }
 
