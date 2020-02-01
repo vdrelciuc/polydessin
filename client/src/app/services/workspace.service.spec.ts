@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+ import { TestBed } from '@angular/core/testing';
 
 import { WorkspaceService } from './workspace.service';
 
@@ -32,6 +32,11 @@ describe('WorkspaceService', () => {
     expect(service.checkIfSameBackgroundColor('i am here')).toBe(false);
   });
 
+  it('should not be same color/ undefined color', () => {
+    const service: WorkspaceService = TestBed.get(WorkspaceService);
+    expect(service.checkIfSameBackgroundColor(undefined as unknown as string)).toBe(false);
+  });
+
   it('should assign color', () => {
     const service: WorkspaceService = TestBed.get(WorkspaceService);
     service.setBackgroundColorHex('898989');
@@ -41,6 +46,12 @@ describe('WorkspaceService', () => {
   it('should not assign color (not valid)', () => {
     const service: WorkspaceService = TestBed.get(WorkspaceService);
     service.setBackgroundColorHex('i am here');
+    expect(service.checkIfSameBackgroundColor('808080')).toBe(true);
+  });
+
+  it('should not assign undefined color', () => {
+    const service: WorkspaceService = TestBed.get(WorkspaceService);
+    service.setBackgroundColorHex(undefined as unknown as string);
     expect(service.checkIfSameBackgroundColor('808080')).toBe(true);
   });
 });

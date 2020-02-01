@@ -5,15 +5,20 @@ import { Injectable } from '@angular/core';
 })
 export class WorkspaceService {
 
-  constructor() { }
-
-  backgroundColorHex = '808080';
+  backgroundColorHex: string;
+  constructor() { 
+    this.backgroundColorHex = '808080';
+  }
 
   getBackgroundColorHex(): string {
     return '#'.concat(this.backgroundColorHex);
   }
   setBackgroundColorHex(colorHex: string): void {
-    this.backgroundColorHex = colorHex;
+    if(colorHex !== undefined) {
+      if(colorHex.length === 6 && Number(colorHex) !== NaN) {
+        this.backgroundColorHex = colorHex;
+      }
+    }
   }
   checkIfSameBackgroundColor(colorHex: string): boolean {
     return colorHex === this.backgroundColorHex;
