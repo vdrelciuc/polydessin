@@ -10,11 +10,6 @@ import {ViewChild} from '@angular/core';
 })
 
 
-
-
-
-
-
 export class UserGuideComponent implements OnInit {
 
   @ViewChild('myaccordion', {static:true}) myPanels: MatAccordion;
@@ -28,6 +23,8 @@ export class UserGuideComponent implements OnInit {
   getCurrentSubCategorie(): string {
     return this._currentSubCategorie;
   }
+
+
   /**
    * Setters
    **/
@@ -103,6 +100,7 @@ export class UserGuideComponent implements OnInit {
    **/
 
   private _currentSubCategorie : string = "Bienvenue";
+  previousModuleRoute : string = '';
 
   categories : any[] = [
     {
@@ -139,15 +137,30 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'Fonctionalites',
         elements: [
+          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
+          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
+          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },{ nom: 'Nouveau Dessin', path: 'nouveauDessin' },
+          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
+          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },{ nom: 'Nouveau Dessin', path: 'nouveauDessin' },
+          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
+          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
           { nom: 'Nouveau Dessin', path: 'nouveauDessin' }
+
+
         ]
       }
     }
   ];
 
-  constructor(public router: Router) { }
+  constructor(public router: Router) {
+
+  }
 
   ngOnInit() {
+    if (history.state !== null){
+      this.previousModuleRoute = history.state.previousPath;
+      console.log(history.state.previousPath);
+    }
   }
 
 }
