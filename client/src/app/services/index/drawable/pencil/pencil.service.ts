@@ -19,6 +19,7 @@ export class PencilService extends DrawableService {
 
   constructor() {
     super();
+    this.frenchName = 'Crayon';
     this.isDrawing = false;
     this.path = '';
    }

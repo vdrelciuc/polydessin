@@ -35,7 +35,7 @@ export class RectangleService extends DrawableService{
 
   constructor() {
     super();
-
+    this.frenchName = 'Rectangle';
   }
 
   initialize(manipulator: Renderer2, image: ElementRef): void {
