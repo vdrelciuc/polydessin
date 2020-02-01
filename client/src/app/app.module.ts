@@ -28,6 +28,7 @@ import { RectangleGuideComponent } from './components/guideTemplaates/rectangle-
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
 import { NouveauDessinComponent } from './components/guideTemplaates/nouveau-dessin/nouveau-dessin.component';
 import { UserGuideComponent } from './components/user-guide/user-guide.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -59,10 +60,10 @@ import { UserGuideComponent } from './components/user-guide/user-guide.component
     MatInputModule,
     MatSelectModule,
     MatSliderModule,
-    AngularMaterialModule,
     AppRoutingModule,
     MatListModule,
-    MatExpansionModule
+    MatExpansionModule,
+    RouterModule,
 
   ],
   providers: [DrawablePropertiesService],

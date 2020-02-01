@@ -9,7 +9,6 @@ import {ViewChild} from '@angular/core';
   styleUrls: ['./user-guide.component.scss']
 })
 
-
 export class UserGuideComponent implements OnInit {
 
   @ViewChild('myaccordion', {static:true}) myPanels: MatAccordion;
@@ -17,17 +16,26 @@ export class UserGuideComponent implements OnInit {
     this.myPanels.openAll();
   }
 
+  private _currentSubCategorie : string = "Bienvenue";
+  previousModuleRoute : string = '';
+
+  constructor(public router: Router) {
+
+  }
+
+  ngOnInit() {
+    console.log(history.state);
+  }
+
   /**
-   * Getters
-   **/
+   *
+   *
+   */
   getCurrentSubCategorie(): string {
     return this._currentSubCategorie;
   }
 
 
-  /**
-   * Setters
-   **/
   setCurrentSubCategorie(value: string) {
     this._currentSubCategorie = value;
     this.router.navigate([ '/userGuide', this.getPath() ])
@@ -35,9 +43,9 @@ export class UserGuideComponent implements OnInit {
 
 
   /**
-   * Functions
-   **/
-
+   *
+   *
+   */
   findIndex(nom :string) : any[] {
     for (let i : number = 0 ; i< this.categories.length ; ++i){
       for (let j : number = 0 ; j < this.categories[i].type.elements.length ; ++j){
@@ -95,13 +103,6 @@ export class UserGuideComponent implements OnInit {
 
 
 
-  /**
-   * Attributes
-   **/
-
-  private _currentSubCategorie : string = "Bienvenue";
-  previousModuleRoute : string = '';
-
   categories : any[] = [
     {
       type: {
@@ -139,28 +140,18 @@ export class UserGuideComponent implements OnInit {
         elements: [
           { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
           { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
-          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },{ nom: 'Nouveau Dessin', path: 'nouveauDessin' },
           { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
-          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },{ nom: 'Nouveau Dessin', path: 'nouveauDessin' },
+          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
+          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
           { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
           { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
           { nom: 'Nouveau Dessin', path: 'nouveauDessin' }
-
 
         ]
       }
     }
   ];
 
-  constructor(public router: Router) {
 
-  }
-
-  ngOnInit() {
-    if (history.state !== null){
-      this.previousModuleRoute = history.state.previousPath;
-      console.log(history.state.previousPath);
-    }
-  }
 
 }

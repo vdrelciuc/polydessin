@@ -11,7 +11,7 @@
       <p >Veuillez choisir une option :</p>
       <div *ngFor="let option of options ">
         <a *ngIf="option.show " class="btn btn-warning btn-center " (click)=this.dialog.closeAll()
-         [routerLink] = [option.optionPath] role="button">
+         [routerLink] = [option.optionPath] role="button" [state]="{path : '/'}">
           {{option.description}}
         </a>
         <a *ngIf="option.show ===false" class="btn btn-warning btn-center disabled "  role="button">
