@@ -1,5 +1,7 @@
+@import "src/global-style/colors";
+
 .optionFrame{
-  width: 95%;
+  width: 100%;
   float: right;
   height: 100vh;
 }
@@ -60,11 +62,24 @@ li {
 }
 subCategoryStyleAlone{
   margin: auto;
+  outline: none !important;
+  height: auto !important;
+}
+
+.navigationGuideDropableHeader{
+background-color: #F1F1F1;
+}
+
+.navigationGuideDropableHeader:hover{
+  background-color: #dbdbdb !important;
 }
 
 .mat-action-list :hover{
   outline: none !important;
   background-color: #dbdbdb !important;
+}
+mat-expansion-panel{
+  background-color: #F1F1F1 !important;
 }
 
 mat-action-list{

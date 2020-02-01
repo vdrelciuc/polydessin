@@ -3,7 +3,7 @@
 
   <div class="navigationGuide">
     <div *ngFor="let categorie of categories, index as i">
-      <mat-action-list *ngIf=" categorie === categories[0]">
+      <mat-action-list  *ngIf=" categorie === categories[0]">
         <button class="subCategoryStyleAlone" mat-list-item (click)="setCurrentSubCategorie(categorie.type.elements[0].nom)">
           {{categorie.type.elements[0].nom}}
         </button>
