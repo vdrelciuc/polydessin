@@ -9,21 +9,26 @@ import { RectangleGuideComponent } from '../guideTemplaates/rectangle-guide/rect
 import { CouleurGuideComponent } from '../guideTemplaates/couleur-guide/couleur-guide.component';
 import { NouveauDessinComponent } from '../guideTemplaates/nouveau-dessin/nouveau-dessin.component';
 
+
+
 const routes: Routes = [
-  {path : 'userGuide', component : UserGuideComponent},
-  {path : 'userGuide/Bienvenue', component : BienvenueGuideComponent}
+  {path : 'userGuide', component : UserGuideComponent,
+    children : [
+      {path : 'bienvenue', component : BienvenueGuideComponent},
+      {path : 'ligne' , component : LigneGuideComponent},
+      {path : 'pinceau' , component : PinceauGuideComponent },
+      {path : 'crayon',  component : CrayonGuideComponent},
+      {path : 'rectangle',  component : RectangleGuideComponent},
+      {path : 'couleur',  component : CouleurGuideComponent},
+      {path : 'nouveauDessin', component : NouveauDessinComponent}
+
+    ]
+
+  }
   ];
 
-const secondaryRoutes: Routes = [
-  {path : 'userGuide/Ligne' , component : LigneGuideComponent, outlet : 'guideElement'},
-  {path : 'userGuide/Pinceau' , component : PinceauGuideComponent, outlet : 'guideElement' },
-  {path : 'userGuide/Crayon', component : CrayonGuideComponent, outlet : 'guideElement'},
-  {path : 'userGuide/Rectangle', component : RectangleGuideComponent, outlet : 'guideElement'},
-  {path : 'userGuide/Couleur', component : CouleurGuideComponent, outlet : 'guideElement'},
-  {path : 'userGuide/nouveauDessin', component : NouveauDessinComponent, outlet : 'guideElement'}
-]
 @NgModule({
-  imports : [RouterModule.forRoot(routes),RouterModule.forChild(secondaryRoutes)],
+  imports : [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 

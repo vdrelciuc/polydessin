@@ -7,6 +7,12 @@ import { Router } from '@angular/router';
   templateUrl: './user-guide.component.html',
   styleUrls: ['./user-guide.component.scss']
 })
+
+
+
+
+
+
 export class UserGuideComponent implements OnInit {
   /**
    * Getters
@@ -19,6 +25,7 @@ export class UserGuideComponent implements OnInit {
    **/
   setCurrentSubCategorie(value: string) {
     this._currentSubCategorie = value;
+    this.router.navigate([ '/userGuide', this.getPath() ])
   }
 
 
@@ -90,7 +97,7 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'nonReproductible',
         elements: [
-          { nom: 'Bienvenue', path: 'Bienvenue'}
+          { nom: 'Bienvenue', path: 'bienvenue'}
         ]
       }
     },
@@ -99,9 +106,9 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'Outils',
         elements: [
-          { nom: 'Pinceau', path: 'Pinceau'},
-          { nom: 'Crayon', path: 'Crayon'},
-          { nom: 'Couleur', path: 'Couleur'},
+          { nom: 'Pinceau', path: 'pinceau'},
+          { nom: 'Crayon', path: 'crayon'},
+          { nom: 'Couleur', path: 'couleur'},
         ]
       }
     },
@@ -110,8 +117,8 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'Formes',
         elements: [
-          { nom: 'Ligne', path: 'Ligne'},
-          { nom: 'Rectangle', path: 'Rectangle'}
+          { nom: 'Ligne', path: 'ligne'},
+          { nom: 'Rectangle', path: 'rectangle'}
         ]
       }
     },
