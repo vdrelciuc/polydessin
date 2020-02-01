@@ -49,9 +49,9 @@ export class UserGuideComponent implements OnInit {
     if (indexes[2]==true){
       indexes[0]++;
       indexes[1]=0;
-    }
-    else
+    } else {
       indexes[1]++;
+    }
 
     let newElement : string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
