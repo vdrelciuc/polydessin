@@ -1,17 +1,28 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 
 import { OptionPannelComponent } from './option-pannel.component';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
+import { BehaviorSubject } from 'rxjs';
+import { Tools } from 'src/app/enums/tools';
 
 describe('OptionPannelComponent', () => {
   let component: OptionPannelComponent;
   let fixture: ComponentFixture<OptionPannelComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ OptionPannelComponent ]
-    })
-    .compileComponents();
-  }));
+      providers: [ OptionPannelComponent,
+      {
+        provide: ToolSelectorService,
+        useValue: {
+          drawerService: () => new DrawerService(),
+          $currentTool: () => new BehaviorSubject<Tools>(Tools.Line),
+        },
+      }]
+    });
+    component = getTestBed().get(OptionPannelComponent);
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(OptionPannelComponent);
@@ -20,6 +31,10 @@ describe('OptionPannelComponent', () => {
   });
 
   it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should subscribe to tool', () => {
     expect(component).toBeTruthy();
   });
 });

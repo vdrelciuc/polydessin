@@ -29,7 +29,8 @@ export class LineService extends DrawableService {
 
   constructor() {
     super();
-    
+    this.points = new Stack<CoordinatesXY>();
+    this.circles = new Stack<SVGCircleElement>();
   }
 
   static getName(): Tools { return Tools.Line; }
@@ -143,8 +144,6 @@ export class LineService extends DrawableService {
       this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
     } else {
       this.updateProperties();
-      this.points = new Stack<CoordinatesXY>();
-      this.circles = new Stack<SVGCircleElement>();
       this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
       this.isStarted = true;
       this.isDone = false;

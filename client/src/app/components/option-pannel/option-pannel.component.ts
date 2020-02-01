@@ -10,7 +10,7 @@ import { ToolSelectorService } from '../../services/tools/tool-selector.service'
 export class OptionPannelComponent implements OnInit {
   currentTool: Tools;
 
-  constructor(private toolSelectorService: ToolSelectorService) { }
+  constructor(public toolSelectorService: ToolSelectorService) { }
 
   ngOnInit() {
     this.setTool();
