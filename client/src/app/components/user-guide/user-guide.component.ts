@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { MatAccordion} from '@angular/material/expansion';
+import {ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-user-guide',
@@ -13,7 +14,14 @@ import { Router } from '@angular/router';
 
 
 
+
 export class UserGuideComponent implements OnInit {
+
+  @ViewChild('myaccordion', {static:true}) myPanels: MatAccordion;
+  openAll(){
+    this.myPanels.openAll();
+  }
+
   /**
    * Getters
    **/
@@ -61,6 +69,7 @@ export class UserGuideComponent implements OnInit {
 
     let newElement : string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
+    this.openAll();
     this.router.navigate([ '/userGuide', this.getPath() ]);
     return this._currentSubCategorie;
   }
@@ -76,6 +85,7 @@ export class UserGuideComponent implements OnInit {
       indexes[1]--;
     let newElement : string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
+    this.openAll();
     this.router.navigate([ '/userGuide', this.getPath() ]);
     return this._currentSubCategorie;
 
@@ -85,6 +95,8 @@ export class UserGuideComponent implements OnInit {
     let indexes : any[] = this.findIndex(this._currentSubCategorie);
     return this.categories[indexes[0]].type.elements[indexes[1]].path;
   }
+
+
 
   /**
    * Attributes

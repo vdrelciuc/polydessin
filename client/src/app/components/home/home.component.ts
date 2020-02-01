@@ -11,7 +11,7 @@ export class HomeComponent {
     [
       {description : 'Creer un nouveau dessin', optionPath : '/' , show : true},
       {description : 'Ouvrir la Galerie de dessins', optionPath: '/', show : true} ,
-      {description : 'Afficher le guide d\'Utilisation', optionPath: '/userGuide', show : true} ,
+      {description : 'Afficher le guide d\'Utilisation', optionPath: '/userGuide/bienvenue', show : true} ,
       {description : 'Continuer un dessin', show : false}
     ];
   messageAccueil = 'Bienvenue a PolyDessin';
