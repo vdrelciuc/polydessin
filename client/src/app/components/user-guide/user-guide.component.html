@@ -1,5 +1,5 @@
-<div class="optionFrame">
-  <div class="headerComponent">Guide d'utilisation <img id="logoGuide" src="../../../assets/guideIcon.svg" alt="icone guide"></div>
+<div class="option">
+  <div class="header">Guide d'utilisation <img id="logoGuide" src="../../../assets/guideIcon.svg" alt="icone guide"></div>
 
   <div class="navigationGuide">
     <div *ngFor="let categorie of categories, index as i">
@@ -29,11 +29,7 @@
   </div>
 
   <div class="currentElementDescription">
-    <router-outlet *ngIf="this.router.url !== '/userGuide'">
-
-    </router-outlet>
-
-
+    <router-outlet  name="guideElement"></router-outlet>
 
     <table>
       <tr>

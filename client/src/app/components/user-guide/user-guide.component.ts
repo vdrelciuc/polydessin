@@ -19,7 +19,6 @@ export class UserGuideComponent implements OnInit {
    **/
   setCurrentSubCategorie(value: string) {
     this._currentSubCategorie = value;
-    this.router.navigate([ '/userGuide', this.getPath() ]);
   }
 
 
