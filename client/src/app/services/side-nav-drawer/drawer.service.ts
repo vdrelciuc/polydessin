@@ -20,7 +20,6 @@ export class DrawerService {
     } else if (this.lastTool === currentTool) {
       this.navIsOpened = false;
     }
-
     this.lastTool = currentTool;
   }
 }
