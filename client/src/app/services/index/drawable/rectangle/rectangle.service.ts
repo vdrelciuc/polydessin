@@ -187,12 +187,16 @@ export class RectangleService extends DrawableService{
   }
 
   private updateTextSize(width: number, height: number) {
-    if(width > 40 && height > 15) {
+    const minTextWidth = 40;
+    const minTextHeight = 15;
+
+    if(width > minTextWidth && height > minTextHeight) {
       this.text.innerHTML = this.shiftPressed ? '[Carré]' : '[Rectangle]';
     } else {
       this.text.innerHTML = '';
     }
 
-    this.manipulator.setAttribute(this.text, 'font-size', (Math.min(height, width) / 6).toString());
+    const fontSizeReductionFactor = 6;
+    this.manipulator.setAttribute(this.text, 'font-size', (Math.min(height, width) / fontSizeReductionFactor).toString());
   }
 }

@@ -8,13 +8,13 @@ export class Color {
 
     private hex: string;
 
-    constructor(hex?: string, rgb?: number[]) {
-        if(hex) {
-            this.setHex(hex);
-        } else if (rgb) {
-            this.setRGB(rgb);
-        } else {
+    constructor(color?: string | number[]) {
+        if (color === undefined) {
             this.hex = CONSTANT.COLOR_DEFAULT;
+        } else if (typeof color === "string") {
+            this.setHex(color);
+        } else {
+            this.setRGB(color);
         }
     }
 

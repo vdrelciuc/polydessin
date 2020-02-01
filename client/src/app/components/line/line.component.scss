@@ -1,3 +1,4 @@
+@import '../../../global-style/colors.scss';
 @import '../../../global-style/dimensions.scss';
 
 #container {
@@ -49,4 +50,9 @@
 
 .mat-select {
   padding-top: 20px;
+  border-bottom-color: $medium;
+}
+
+::ng-deep .mat-select-arrow {
+  color: $vivid;
 }
