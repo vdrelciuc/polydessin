@@ -5,8 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class ColorManipService {
 
-  constructor() { }
-
   readonly maxRGB = 0xFF;
   readonly minRGB = 0x00;
 

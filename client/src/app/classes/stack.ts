@@ -18,7 +18,7 @@ export class Stack<T> {
   }
 
   pop_back(): T | undefined {
-    if(this.stack.length > 1) {
+    if (this.stack.length > 1) {
       return this.stack.splice(this.stack.length - 1, 1)[0];
     }
     return undefined;
@@ -34,13 +34,13 @@ export class Stack<T> {
   push_front(toAdd: T): void {
     const slicedArray: T[] = this.stack.splice(0, this.stack.length);
     this.stack[0] = toAdd;
-    for(const element of slicedArray) {
+    for (const element of slicedArray) {
       this.stack.push(element);
     }
   }
 
   pop_front(): T | undefined {
-    if(this.stack.length > 1) {
+    if (this.stack.length > 1) {
       const toReturn: T = this.stack[0];
       this.stack = this.stack.splice(1, this.stack.length);
       return toReturn;
@@ -50,9 +50,9 @@ export class Stack<T> {
 
   getAll(): T[] { return this.stack; }
 
-  getLast(): T | undefined { 
-    if(this.stack.length > 0) {
-      return this.stack[this.stack.length - 1]; 
+  getLast(): T | undefined {
+    if (this.stack.length > 0) {
+      return this.stack[this.stack.length - 1];
     }
     return undefined;
   }

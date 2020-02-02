@@ -8,7 +8,7 @@ import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 })
 export class WorkingAreaComponent implements OnInit {
 
-  constructor(private drawerService: DrawerService,) { }
+  constructor(private drawerService: DrawerService, ) { }
 
   ngOnInit() {}
 

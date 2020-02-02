@@ -10,8 +10,6 @@ export class CreateNewService {
   backgroundColor: number[];
   canvasSize: number[];
 
-  constructor() { }
-
   getcanvasSize(axis: number): number {
     return (this.canvasSize[axis] || ((axis) ? window.innerHeight :  window.innerWidth - toolBoxWidth));
   }

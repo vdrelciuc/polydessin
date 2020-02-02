@@ -25,6 +25,6 @@ export class AppComponent implements OnInit {
       .subscribe(this.message);
   }
 
-  ngOnInit(): void {}
+  ngOnInit() {}
 
 }

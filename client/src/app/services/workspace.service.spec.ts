@@ -21,7 +21,6 @@ describe('WorkspaceService', () => {
     expect(service.checkIfSameBackgroundColor('808080')).toBe(true);
   });
 
-
   it('should not be same color/ valid color', () => {
     const service: WorkspaceService = TestBed.get(WorkspaceService);
     expect(service.checkIfSameBackgroundColor('809980')).toBe(false);

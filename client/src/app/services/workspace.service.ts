@@ -5,8 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class WorkspaceService {
 
-  constructor() { }
-
   backgroundColorHex = '808080';
 
   getBackgroundColorHex(): string {

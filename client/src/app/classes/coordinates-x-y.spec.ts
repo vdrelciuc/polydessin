@@ -4,10 +4,10 @@ describe('CoordinatedXY', () => {
 
   let point: CoordinatesXY;
 
-  beforeAll( () => { point = new CoordinatesXY(0,0); } );
+  beforeAll( () => { point = new CoordinatesXY(0, 0); } );
 
   it('should create an instance', () => {
-    expect(new CoordinatesXY(0,0)).toBeTruthy();
+    expect(new CoordinatesXY(0, 0)).toBeTruthy();
   });
 
   it('should not change coordinates', () => {

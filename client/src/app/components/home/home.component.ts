@@ -15,7 +15,5 @@ export class HomeComponent {
     ];
   messageAccueil = 'Bienvenue a PolyDessin';
   messageDescriptif = "A tout dessin un artiste, et cet artiste, c'est vous!";
-  constructor() {
-  }
 
 }
