@@ -35,6 +35,4 @@ export class RectangleComponent implements OnInit {
   updateFill() {
     this.service.shapeStyle.hasFill = !this.service.shapeStyle.hasFill;
   }
-
-  getMin() {return "1"}
 }

@@ -8,4 +8,7 @@ export interface ShapeStyle {
 
   hasBorder: boolean;
   hasFill: boolean;
+
+  nameDisplayDefault: string;
+  nameDisplayOnShift: string;
 }

@@ -11,13 +11,14 @@ export enum SVGProperties {
   width = 'width',
   title = 'title',
 
-  // Circle
-  circle = 'circle',
+  // Circle and Ellipse
   centerX = 'cx',
   centerY = 'cy',
+  
+  circle = 'circle',
   radius = 'r',
 
-  // Ellipse
+  ellipse = 'ellipse',
   radiusX = 'rx',
   radiusY = 'ry',
 
