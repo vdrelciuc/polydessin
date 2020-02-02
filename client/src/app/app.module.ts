@@ -30,6 +30,7 @@ import { WorkingAreaComponent } from './components/working-area/working-area.com
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
+import { ColorPanelComponent } from './components/color-panel/color-panel.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     UserGuideComponent,
     RoutingComponents,
     CreateNewComponent,
-    WorkingAreaComponent
+    WorkingAreaComponent,
+    ColorPanelComponent
   ],
   imports: [
     AngularMaterialModule,
