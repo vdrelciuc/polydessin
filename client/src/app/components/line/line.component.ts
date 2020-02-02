@@ -16,32 +16,30 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 export class LineComponent implements OnInit {
 
   readonly name: string = Tools.Line;
-  protected specificationForm: FormGroup;
-  protected typeSelected: string;
-  protected thickness: number;
-  protected dotDiameter: number;
-
+  specificationForm: FormGroup;
+  jointType: string;
+  
   constructor(
     private shortcuts: HotkeysService,
-    protected service: LineService,
+    public service: LineService,
     private toolSelector: ToolSelectorService,
-    protected attributes: DrawablePropertiesService
+    private attributes: DrawablePropertiesService
     ) {
     this.setupShortcuts();
     this.service = this.toolSelector.getLine();
   }
 
   ngOnInit(): void {
-    this.thickness = this.attributes.thickness.value;
-    this.dotDiameter = this.attributes.dotDiameter.value;
+    this.service.thickness = this.attributes.thickness.value;
+    this.service.dotDiameter = this.attributes.dotDiameter.value;
+    this.service.jointIsDot = this.attributes.junction.value;
+    this.jointType = 'Aucune';
     this.service.initializeProperties(this.attributes);
-    this.typeSelected = 'Aucune';
   }
 
   setupShortcuts(): void {
     this.shortcuts.addShortcut({ keys: 'backspace', description: 'Remove last point' }).subscribe(
       (event) => {
-        console.log('Backspace pressed - Remove last point');
         this.service.removeLastPoint();
       }
     );
@@ -62,18 +60,16 @@ export class LineComponent implements OnInit {
       if (this.service.thickness > CONSTANT.THICKNESS_MAXIMUM) {
         this.attributes.thickness.next(CONSTANT.THICKNESS_MAXIMUM);
       } else {
-        this.attributes.thickness.next(this.thickness);
+        this.attributes.thickness.next(this.service.thickness);
       }
     }
   }
 
   onDotSelected(): void {
-    if (this.typeSelected === "Points") {
+    if (this.jointType !== 'Aucune') {
       this.attributes.junction.next(true);
-      this.service.jointIsDot = true;
     } else {
       this.attributes.junction.next(false);
-      this.service.jointIsDot = false;
     }
   }
 
@@ -84,7 +80,7 @@ export class LineComponent implements OnInit {
       if (this.service.dotDiameter > CONSTANT.DIAMETER_MAXIMUM) {
         this.attributes.dotDiameter.next(CONSTANT.DIAMETER_MAXIMUM)
       } else {
-        this.attributes.dotDiameter.next(this.dotDiameter);
+        this.attributes.dotDiameter.next(this.service.dotDiameter);
       }
     }
   }
