@@ -25,7 +25,6 @@ export class UserGuideComponent implements OnInit {
 
   ngOnInit() {
     if (history.state.path !== null && history.state.path !== undefined){
-      console.log(history.state);
       this.previousModuleRoute = history.state.path;
     }
   }

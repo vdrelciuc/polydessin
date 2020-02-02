@@ -8,6 +8,7 @@ import { CrayonGuideComponent } from '../guideTemplaates/crayon-guide/crayon-gui
 import { RectangleGuideComponent } from '../guideTemplaates/rectangle-guide/rectangle-guide.component';
 import { CouleurGuideComponent } from '../guideTemplaates/couleur-guide/couleur-guide.component';
 import { NouveauDessinComponent } from '../guideTemplaates/nouveau-dessin/nouveau-dessin.component';
+import { HomeComponent } from '../home/home.component';
 
 
 
@@ -24,7 +25,8 @@ const routes: Routes = [
 
     ]
 
-  }
+  },
+  {path : 'entrypoint', component : HomeComponent}
   ];
 
 @NgModule({

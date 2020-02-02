@@ -1,26 +1,29 @@
-<div class="container">
-  <div  id="themeColor" class="jumbotron">
-    <h1 class="display-4">
-      <img  src="../../../assets/appLogo.jpg" alt="Logo de l'application" width="85" height=auto>
-      {{messageAccueil}}
-    </h1>
-    <p id="messageDescriptif" class="lead">{{messageDescriptif}}</p>
-    <hr class="hrSeparation">
+<div class="background">
+  <div class="container">
+    <div  id="themeColor" class="jumbotron">
+      <h1 class="display-4">
+        <img  src="../../../assets/appLogo.jpg" alt="Logo de l'application" width="85" height=auto>
+        {{messageAccueil}}
+      </h1>
+      <p id="messageDescriptif" class="lead">{{messageDescriptif}}</p>
+      <hr class="hrSeparation">
 
-    <div class="choiceContent">
-      <p >Veuillez choisir une option :</p>
-      <div *ngFor="let option of options ">
-        <a *ngIf="option.show " class="btn btn-warning btn-center " (click)=this.dialog.closeAll()
-         [routerLink] = [option.optionPath] role="button" [state]="{path : '/entrypoint'}">
-          {{option.description}}
-        </a>
-        <a *ngIf="option.show ===false" class="btn btn-warning btn-center disabled "  role="button">
-          {{option.description}}
-        </a>
+      <div class="choiceContent">
+        <p >Veuillez choisir une option :</p>
+        <div *ngFor="let option of options ">
+          <a *ngIf="option.show " class="btn btn-warning btn-center "
+             [routerLink] = [option.optionPath] role="button" [state]="{path : '/entrypoint'}">
+            {{option.description}}
+          </a>
+          <!--<a *ngIf="option.show ===false" class="btn btn-warning btn-center disabled "  role="button">
+            {{option.description}}
+          </a>-->
+        </div>
+
       </div>
-
     </div>
   </div>
 </div>
+
 
 

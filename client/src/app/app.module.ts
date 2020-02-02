@@ -67,6 +67,6 @@ import { RouterModule } from '@angular/router';
 
   ],
   providers: [DrawablePropertiesService],
-  bootstrap: [AppComponent, HomeComponent, CreateNewComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from '../../../../../common/communication/message';
 import { IndexService } from '../../services/index/index.service';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
-import { HomeComponent } from '../home/home.component';
 import { Router } from '@angular/router';
 
 @Component({
@@ -21,7 +19,6 @@ export class AppComponent implements OnInit{
   constructor(
     private basicService: IndexService,
     private drawerService: DrawerService,
-    private dialog: MatDialog,
     public route: Router
     ) {
     this.basicService
@@ -35,11 +32,9 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.openDialog();
+
   }
 
-  openDialog(): void {
-    this.dialog.open(HomeComponent, {});
-  }
+
 
 }
