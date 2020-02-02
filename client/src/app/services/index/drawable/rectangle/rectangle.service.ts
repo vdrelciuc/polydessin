@@ -5,27 +5,20 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { Coords } from 'src/app/classes/coordinates';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
-import { DrawableService } from '../drawable.service';
+//import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { ShapeStyle } from 'src/app/classes/shape-style';
+import { ShapeService } from '../shapes/shape.service';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class RectangleService extends DrawableService {
+export class RectangleService extends ShapeService {
 
   attributes: DrawablePropertiesService;
-
   shapeStyle: ShapeStyle;
-  //private thickness: number;
-  //private borderColor: string;
-  //private fillColor: string;
-  //private opacity: string;
-
-  //hasBorder: boolean;
-  //hasFill: boolean;
 
   private mousePosition: Coords;
   private shapeOrigin: Coords;
