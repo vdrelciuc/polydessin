@@ -29,6 +29,7 @@ import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guid
 import { NouveauDessinComponent } from './components/guideTemplaates/nouveau-dessin/nouveau-dessin.component';
 import { UserGuideComponent } from './components/user-guide/user-guide.component';
 import { RouterModule } from '@angular/router';
+import { WorkingAreaComponent } from './components/working-area/working-area.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { RouterModule } from '@angular/router';
     NouveauDessinComponent,
     UserGuideComponent,
     RoutingComponents,
-    CreateNewComponent
+    CreateNewComponent,
+    WorkingAreaComponent
   ],
   imports: [
     AngularMaterialModule,
