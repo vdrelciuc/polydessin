@@ -34,4 +34,7 @@ export enum SVGProperties {
   d = 'd',
   typeOfLine = 'stroke-linejoin',
   endOfLine = 'stroke-linecap',
+
+  // Patern
+  pattern= 'pattern',
 }

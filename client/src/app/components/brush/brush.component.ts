@@ -4,6 +4,7 @@ import { BrushService } from 'src/app/services/index/drawable/brush/brush.servic
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import * as CONSTANT from 'src/app/classes/constants';
+import { Patterns } from 'src/app/components/brush/patterns';
 
 @Component({
   selector: 'app-brush',
@@ -11,8 +12,9 @@ import * as CONSTANT from 'src/app/classes/constants';
   styleUrls: ['./brush.component.scss']
 })
 export class BrushComponent implements OnInit {
-
+  patterns = Patterns;
   readonly name: string = Tools.Brush;
+  showPatterns: boolean;
 
   constructor(
     protected service: BrushService,
@@ -20,6 +22,7 @@ export class BrushComponent implements OnInit {
     protected attributes: DrawablePropertiesService
     ) {
     this.service = this.toolSelector.getBrush();
+    this.showPatterns = false;
   }
 
   ngOnInit(): void {
@@ -38,4 +41,11 @@ export class BrushComponent implements OnInit {
     }
   }
 
+  togglePatterns(): void {
+    this.showPatterns = !this.showPatterns;
+  }
+
+  changePattern(pattern: string): void {
+    this.service.selectedPattern = pattern;
+  }
 }

@@ -50,9 +50,9 @@ import { UserGuideComponent } from './components/user-guide/user-guide.component
     RoutingComponents
   ],
   imports: [
+    BrowserAnimationsModule,
     AngularMaterialModule,
     BrowserModule,
-    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     MatFormFieldModule,

@@ -7,7 +7,7 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
   providedIn: 'root'
 })
 export class BrushService extends DrawableService {
-
+  selectedPattern: string;
   path: string;
   previousX: number;
   previousY: number;
@@ -21,6 +21,7 @@ export class BrushService extends DrawableService {
     super();
     this.isDrawing = false;
     this.path = '';
+    this.selectedPattern = 'VerticalLines';
    }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
@@ -42,21 +43,20 @@ export class BrushService extends DrawableService {
     return Math.floor(this.thickness);
   }
   onMouseInCanvas(event: MouseEvent): void {
-    if (this.isDrawing) {
-      this.newPath(event.clientX, event.clientY);
-    } else {
-      if (this.previewCricle === undefined) {
-        this.previewCricle = this.createCircle(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
-      }
-      this.manipulator.setAttribute(this.previewCricle, SVGProperties.radius, (this.getThickness() / 2).toString());
-      this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);
+    if (this.previewCricle === undefined) {
+      this.previewCricle = this.createCircle(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
     }
+    this.manipulator.setAttribute(this.previewCricle, SVGProperties.radius, (this.getThickness() / 2).toString());
+    this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);
   }
   onMouseOutCanvas(event: MouseEvent): void {
     console.log('Out of canvas');
-    this.manipulator.removeChild(this.image.nativeElement, this.previewCricle)
-    this.isDrawing = false;
-    this.endPath();
+    if (this.isDrawing) {
+      this.addPath(event.clientX, event.clientY);
+      this.endPath();
+      this.isDrawing = false;
+    }
+    this.manipulator.removeChild(this.image.nativeElement, this.previewCricle);
   }
   onMousePress(event: MouseEvent): void {
     this.isDrawing = true;
@@ -69,15 +69,20 @@ export class BrushService extends DrawableService {
     this.manipulator.setAttribute(this.previewLine, SVGProperties.endOfLine, 'round');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
     this.manipulator.setAttribute(this.previewLine, SVGProperties.thickness, `${this.getThickness()}`);
+    this.manipulator.setAttribute(this.previewLine, 'mask', `url(#mask${this.selectedPattern})`);
+
     this.manipulator.appendChild(this.image.nativeElement, this.previewLine);
 
     this.manipulator.removeChild(this.image.nativeElement, this.previewCricle);
   }
   onMouseRelease(event: MouseEvent): void {
     if (event.button === 0) { // 0 for the left mouse button
-      this.isDrawing = false;
       console.log('mouse release');
-      this.endPath();
+      if (this.isDrawing) {
+        this.isDrawing = false;
+        this.addPath(event.clientX, event.clientY);
+        this.endPath();
+      }
     }
   }
   onMouseMove(event: MouseEvent): void {
@@ -111,13 +116,6 @@ export class BrushService extends DrawableService {
     this.path = `M ${this.effectiveX(clientX)},${this.effectiveY(clientY)}`;
   }
 
-  private newPath(clientX: number, clientY: number) {
-    const moveToPath = ` m ${clientX - this.previousX},${clientY - this.previousY}`;
-    this.previousX = clientX;
-    this.previousY = clientY;
-    this.path = this.path + (moveToPath);
-  }
-
   private addPath(clientX: number, clientY: number) {
     const pathToAdd = ` l ${clientX - this.previousX},${clientY - this.previousY}`;
     this.previousX = clientX;
@@ -146,6 +144,7 @@ export class BrushService extends DrawableService {
     this.manipulator.setAttribute(circle, SVGProperties.radius, (this.getThickness() / 2).toString());
     this.manipulator.setAttribute(circle, SVGProperties.centerX, x.toString());
     this.manipulator.setAttribute(circle, SVGProperties.centerY, y.toString());
+    this.manipulator.setAttribute(circle, 'mask', `url(#mask${this.selectedPattern})`);
     return circle;
   }
 

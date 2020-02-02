@@ -27,3 +27,18 @@
   color: white;
   font-size: 20px;
 }
+
+.pattern{
+  background-repeat: repeat;
+  width: 100px;
+  height: 25px;
+  position: relative;
+  display: block;
+}
+
+#patternSelect{
+  position: absolute;
+  left: 0;
+  top: 25px;
+  display: inline-block;
+}
