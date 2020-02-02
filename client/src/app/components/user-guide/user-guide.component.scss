@@ -1,0 +1,159 @@
+@import "src/global-style/colors";
+
+.option{
+  width: 100%;
+  float: right;
+  height: 95vh;
+}
+
+.header {
+  background-color: #38364B;
+  text-align: center ;
+  color: azure;
+  font-weight: bold;
+}
+#logoGuide{
+  margin-left: 10px;
+}
+
+.navigationGuide{
+  width: 15%;
+  background-color: #F1F1F1;
+  float: left;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.navigationGuide::-webkit-scrollbar , .currentElementDescription::-webkit-scrollbar {
+  width: 1em;
+}
+
+.navigationGuide::-webkit-scrollbar-track , .currentElementDescription::-webkit-scrollbar-track{
+  box-shadow: inset 0 0 6px #38364B;
+}
+
+.navigationGuide::-webkit-scrollbar-thumb , .currentElementDescription::-webkit-scrollbar-thumb  {
+  background-color: #38364B;
+}
+
+
+.backButton{
+  background-color: #FFC107;
+  position: absolute;
+  left: 1%;
+  top: 0.5%;
+  border-radius: 8px;
+  font-size: 1em;
+  color: black;
+  outline: none;
+  border: solid 1px black;
+}
+
+.currentElementDescription{
+  background-color: white;
+  width: 85%;
+  background-color: white;
+  float: right;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+ul{
+  margin-bottom: 0;
+}
+
+li {
+  list-style-type: none;
+  margin-top: auto;
+}
+
+.categorieStyle{
+  font-weight: bold;
+}
+
+//please note that important is used since we want
+//to modify external css sheets from angular material
+//and that ng-deep deprecated
+
+
+::ng-deep .mat-expansion-panel-body{
+  padding-bottom: 0 !important;
+}
+
+.subCategoryStyle {
+  outline: none !important;
+  height: auto !important;
+}
+subCategoryStyleAlone{
+  margin: auto;
+  outline: none !important;
+  height: auto !important;
+}
+
+.navigationGuideDropableHeader{
+  background-color: #F1F1F1;
+}
+
+.navigationGuideDropableHeader:hover{
+  background-color: #dbdbdb !important;
+}
+
+.mat-action-list :hover{
+  outline: none !important;
+  background-color: #dbdbdb !important;
+}
+mat-expansion-panel{
+  background-color: #F1F1F1 !important;
+}
+
+mat-action-list{
+  padding-top: 0;
+}
+
+mat-expansion-panel-header{
+  height: 45px !important;
+}
+
+.separateGuideElements{
+  border: black solid 2px;
+}
+
+.navigationLink{
+  color: blue;
+  text-decoration: underline;
+}
+
+.navigationLink:hover {
+  color: red;
+  text-decoration: underline;
+}
+
+.next{
+  text-align: right;
+  padding-right: 2%;
+}
+.previous{
+  text-align: left;
+  padding-left: 2%;
+}
+
+
+tr ,table{
+  width: 85%;
+  background-color: #FFC107;
+
+}
+
+table{
+  position: fixed;
+  bottom: 0;
+  left: 15%;
+  right: 0;
+}
+
+td{
+  width: 50%;
+  background-color: #FFC107;
+}
+
+

@@ -1,0 +1,20 @@
+<div class="wrapper">
+
+  <div class="sidebar scrollable">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <mat-drawer-container>
+    <mat-drawer  mode="side" [opened]="getDrawerStatus()">
+      <div class="pannel scrollable">
+        <app-option-pannel></app-option-pannel>
+      </div>
+    </mat-drawer>
+  </mat-drawer-container>
+
+  <div class="workspace">
+    <app-workspace id='workspace'></app-workspace>
+  </div>
+
+</div>
+

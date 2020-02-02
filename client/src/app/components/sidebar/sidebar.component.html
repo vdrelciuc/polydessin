@@ -176,7 +176,7 @@
         </button>
       </div>
       <div class="icon">
-        <button mat-button>
+        <button mat-button (click)="createNewProject()">
           <img src="../../../assets/icons/new-project.svg">
         </button>
       </div>
@@ -197,10 +197,12 @@
           <img src="../../../assets/icons/save-project.svg">
         </button>
       </div>
-      <div class="icon">
-        <button mat-button>
-          <img src="../../../assets/icons/guide.svg">
-        </button>
+      <div class="icon" [routerLink]="['/userGuide/bienvenue']"  >
+        <a [routerLink]="['/userGuide/bienvenue']" [state]="{path:'/'}">
+          <button mat-button>
+            <img src="../../../assets/icons/guide.svg">
+          </button>
+        </a>
       </div>
     </div>
   </div>

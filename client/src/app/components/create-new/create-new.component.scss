@@ -1,0 +1,47 @@
+.col6{
+  width: 50%;
+  float: left;
+}
+.col9{
+  width: 75%;
+  float: left;
+}
+.hexColor{
+  float: none;
+  margin: 0 auto;
+  position: relative;
+}
+.verticalLine{
+  border: 1px solid #000000;
+  width: 1px;
+  height: 100%;
+  position: fixed;
+  left: 50%;
+  box-sizing: border-box;
+}
+
+
+.hexColor span{
+  float: left;
+}
+
+.hexColor input{
+  width: 40%;
+}
+
+.hexColor button{
+  width: 30%;
+  height: 21px;
+}
+
+.colors{
+  height: auto;
+  width: 100%;
+  position: absolute;
+}
+
+
+mat-slider {
+  float: none;
+}
+
