@@ -3,6 +3,7 @@ import * as CONSTANT from 'src/app/classes/constants';
 export class Color {
     private readonly MIN_VALUE = 0;
     private readonly MAX_VALUE = 255;
+    private readonly HEX_RADIX = 16;
     private readonly REGEX_WITH_HASHTAG = /^#([0-9A-F]{3}){1,2}$/i;
     private readonly REGEX_WITHOUT_HASHTAG = /([0-9A-F]{3}){1,2}$/i;
 
@@ -23,7 +24,7 @@ export class Color {
     }
 
     getRGB(): number[] {
-        return [parseInt(this.hex.slice(1,2)), parseInt(this.hex.slice(3,4)), parseInt(this.hex.slice(5,6))];
+        return [parseInt(this.hex.slice(1,2), this.HEX_RADIX), parseInt(this.hex.slice(3,4), this.HEX_RADIX), parseInt(this.hex.slice(5,6), this.HEX_RADIX)];
     }
 
     setHex(hex: string): void {
@@ -40,7 +41,7 @@ export class Color {
             rgb[1] = this.clamp(rgb[1]);
             rgb[2] = this.clamp(rgb[2]);
 
-            this.hex = '#'.concat(rgb[0].toString()).concat(rgb[1].toString()).concat(rgb[2].toString());
+            this.hex = '#'.concat(rgb[0].toString(this.HEX_RADIX)).concat(rgb[1].toString(this.HEX_RADIX)).concat(rgb[2].toString(this.HEX_RADIX));
         }
     }
 

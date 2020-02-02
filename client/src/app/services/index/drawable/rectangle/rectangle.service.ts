@@ -5,15 +5,15 @@ import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-// import { ShapeProperties } from 'src/app/classes/shape-properties';
+// import { ShapeStyle } from 'src/app/classes/shape-properties';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RectangleService extends DrawableService{
+export class RectangleService extends DrawableService {
 
   attributes: DrawablePropertiesService;
-  //shapeProperties: ShapeProperties;
+  //shapeStyle: ShapeStyle;
   private thickness: number;
   private borderColor: string;
   private fillColor: string;
@@ -65,8 +65,8 @@ export class RectangleService extends DrawableService{
 
   onMousePress(event: MouseEvent): void {
     if ((this.hasBorder || this.hasFill) && this.thickness !== 0) {
-      this.shapeOrigin = this.getEffectiveCoords(event);
-      this.mousePosition = this.getEffectiveCoords(event);
+      this.shapeOrigin = Coords.getEffectiveCoords(this.image, event);
+      this.mousePosition = Coords.getEffectiveCoords(this.image, event);
       this.updateProperties();
       this.isChanging = true;
     }
@@ -78,7 +78,7 @@ export class RectangleService extends DrawableService{
   }
   onMouseMove(event: MouseEvent): void {
     if (this.isChanging) {
-      this.mousePosition = this.getEffectiveCoords(event); // Save mouse position for KeyPress Event
+      this.mousePosition = Coords.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
       this.updateSize();
     }
   }
@@ -108,7 +108,7 @@ export class RectangleService extends DrawableService{
 
     if (this.shiftPressed) {
       this.mousePositionOnShiftPress = new Coords(this.mousePosition.x, this.mousePosition.y);
-      const quadrant = this.getQuadrant();
+      const quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
       if (width > height) {
         if (quadrant === 2 || quadrant === 3) {
           this.mousePosition.x = this.mousePosition.x + (width - height); // Faking mouse position
@@ -152,7 +152,7 @@ export class RectangleService extends DrawableService{
     this.manipulator.appendChild(this.subElement, this.text);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
   }
-
+/*
   private getQuadrant(): 1 | 2 | 3 | 4 {
     //    2 | 1
     //   ---|---
@@ -163,9 +163,9 @@ export class RectangleService extends DrawableService{
 
     return isTop ? (isLeft ? 2 : 1) : (isLeft ? 3 : 4);
   }
-
+*/
   private alignRectangleOrigin(width: number, height: number) {
-    let quadrant = this.getQuadrant();
+    let quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
 
     if (quadrant === 1 || quadrant === 4) {
       this.manipulator.setAttribute(this.rectangle, SVGProperties.x, this.shapeOrigin.x.toString());

@@ -1,3 +1,4 @@
+import { Coords } from 'src/app/classes/coordinates'
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 // import { Shape } from 'src/app/classes/shape';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
@@ -7,6 +8,7 @@ import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+//import { from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -71,12 +73,12 @@ export class LineService extends DrawableService {
       if (this.shiftPressed) {
         const lastPoint = this.points.getLast();
         if(lastPoint !== undefined) {
-          const shiftPoint = lastPoint.getClosestPoint(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
+          const shiftPoint = lastPoint.getClosestPoint(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
           previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
         }
       } else {
-      previewPoints += this.effectiveX(event.clientX).toString()
-          + ',' + this.effectiveY(event.clientY).toString();
+      previewPoints += Coords.effectiveX(this.image, event.clientX).toString()
+          + ',' + Coords.effectiveY(this.image, event.clientY).toString();
       }
       this.manipulator.setAttribute(
           this.line,
@@ -112,7 +114,7 @@ export class LineService extends DrawableService {
 
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
-      const lastPoint = new CoordinatesXY(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
+      const lastPoint = new CoordinatesXY(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
       const firstPoint = this.points.getRoot();
       if(firstPoint !== undefined) {
         const differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
@@ -125,7 +127,7 @@ export class LineService extends DrawableService {
         if(isWithin3Px) {
           this.addPointToLine(firstPoint.getX(), firstPoint.getY());
         } else {
-          this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
+          this.addPointToLine(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
         }
       }
       // Send the line to the whole image to be pushed
@@ -137,19 +139,19 @@ export class LineService extends DrawableService {
 
   onClick(event: MouseEvent): void {
     if (this.isStarted) {
-      this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
+      this.addPointToLine(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
     } else {
       this.updateSVGProperties();
       this.points = new Stack<CoordinatesXY>();
       this.circles = new Stack<SVGCircleElement>();
-      this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
+      this.addPointToLine(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
       this.isStarted = true;
       this.isDone = false;
     }
     if(this.jointIsDot) {
       let circle: SVGCircleElement = this.manipulator.createElement('circle','http://www.w3.org/2000/svg');
-      this.manipulator.setAttribute(circle, SVGProperties.centerX, this.effectiveX(event.clientX).toString());
-      this.manipulator.setAttribute(circle, SVGProperties.centerY, this.effectiveY(event.clientY).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerX, Coords.effectiveX(this.image, event.clientX).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerY, Coords.effectiveY(this.image, event.clientY).toString());
       this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
       this.manipulator.setAttribute(circle, SVGProperties.color, this.color);
       this.manipulator.setAttribute(circle, SVGProperties.fill, this.color);

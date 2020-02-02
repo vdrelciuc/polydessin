@@ -1,12 +1,11 @@
-import { ShapeProperties } from './shape-properties';
+import { ShapeStyle } from './shape-style';
 
 export class Shape {
-  shapeProperties: ShapeProperties;
+  shapeProperties: ShapeStyle;
   private originX: number;
   private originY: number;
 
   constructor() {
-      this.shapeProperties = new ShapeProperties();
       this.originX = 0;
       this.originY = 0;
   }
