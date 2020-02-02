@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from '../../../../../common/communication/message';
@@ -16,8 +16,7 @@ export class AppComponent implements OnInit {
   message = new BehaviorSubject<string>('');
 
   constructor(
-    private basicService: IndexService,
-    public route: Router
+    private basicService: IndexService
     ) {
     this.basicService
       .basicGet()
