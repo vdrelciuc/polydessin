@@ -11,7 +11,7 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
   selector: 'app-line',
   templateUrl: './line.component.html',
   styleUrls: ['./line.component.scss'],
-  providers: [DrawablePropertiesService]
+  // providers: [DrawablePropertiesService]
 })
 export class LineComponent implements OnInit {
 
@@ -66,7 +66,7 @@ export class LineComponent implements OnInit {
   }
 
   onDotSelected(): void {
-    if (this.jointType !== 'Aucune') {
+    if (this.jointType === 'Points') {
       this.attributes.junction.next(true);
     } else {
       this.attributes.junction.next(false);
