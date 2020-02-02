@@ -24,15 +24,15 @@
   overflow-y: scroll;
 }
 
-.navigationGuide::-webkit-scrollbar {
+.navigationGuide::-webkit-scrollbar , .currentElementDescription::-webkit-scrollbar {
   width: 1em;
 }
 
-.navigationGuide::-webkit-scrollbar-track {
+.navigationGuide::-webkit-scrollbar-track , .currentElementDescription::-webkit-scrollbar-track{
   box-shadow: inset 0 0 6px #38364B;
 }
 
-.navigationGuide::-webkit-scrollbar-thumb {
+.navigationGuide::-webkit-scrollbar-thumb , .currentElementDescription::-webkit-scrollbar-thumb  {
   background-color: #38364B;
 }
 
@@ -40,7 +40,7 @@
 .backButton{
   background-color: #FFC107;
   position: absolute;
-  right: 1%;
+  left: 1%;
   top: 0.5%;
   border-radius: 8px;
   font-size: 1em;
@@ -55,6 +55,7 @@
   background-color: white;
   float: right;
   height: 100%;
+  overflow-y: scroll;
 }
 
 ul{
