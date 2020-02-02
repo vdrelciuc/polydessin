@@ -1,18 +1,18 @@
 import * as CONSTANT from 'src/app/classes/constants';
 
 export class Color {
-    private readonly MIN_VALUE = 0;
-    private readonly MAX_VALUE = 255;
-    private readonly REGEX_WITH_HASHTAG = /^#([0-9A-F]{3}){1,2}$/i;
-    private readonly REGEX_WITHOUT_HASHTAG = /([0-9A-F]{3}){1,2}$/i;
+    private readonly MIN_VALUE: number = 0;
+    private readonly MAX_VALUE: number = 255;
+    private readonly REGEX_WITH_HASHTAG: RegExp = /^#([0-9A-F]{3}){1,2}$/i;
+    private readonly REGEX_WITHOUT_HASHTAG: RegExp = /([0-9A-F]{3}){1,2}$/i;
 
     private hex: string;
 
-    constructor(hex?: string, rgb?: number[]) {
-        if(hex) {
-            this.setHex(hex);
-        } else if (rgb) {
-            this.setRGB(rgb);
+    constructor(color?: string | number[]) {
+        if (typeof color === 'string') {
+            this.setHex(color);
+        } else if (color instanceof Array) {
+            this.setRGB(color);
         } else {
             this.hex = CONSTANT.COLOR_DEFAULT;
         }
@@ -23,7 +23,10 @@ export class Color {
     }
 
     getRGB(): number[] {
-        return [parseInt(this.hex.slice(1,2)), parseInt(this.hex.slice(3,4)), parseInt(this.hex.slice(5,6))];
+        const red: string = this.hex.slice(1, 3);
+        const green: string = this.hex.slice(3, 5);
+        const blue: string = this.hex.slice(5);
+        return [parseInt(red, CONSTANT.HEX_BASE), parseInt(green, CONSTANT.HEX_BASE), parseInt(blue, CONSTANT.HEX_BASE)];
     }
 
     setHex(hex: string): void {
@@ -40,7 +43,7 @@ export class Color {
             rgb[1] = this.clamp(rgb[1]);
             rgb[2] = this.clamp(rgb[2]);
 
-            this.hex = '#'.concat(rgb[0].toString()).concat(rgb[1].toString()).concat(rgb[2].toString());
+            this.hex = '#'.concat(rgb[0].toString(16)).concat(rgb[1].toString(16)).concat(rgb[2].toString(16));
         }
     }
 
