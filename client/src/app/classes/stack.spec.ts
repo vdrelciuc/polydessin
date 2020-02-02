@@ -92,13 +92,7 @@ describe('Stack', () => {
   });
 
   it('should return undefined last element', () => {
-    for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
-    }
-    for(let i = 0; i < 5; i++) {
-      stack.pop_back();
-    }
-    expect(stack.getLast()).toBe(undefined);
+    expect(stack.getLast()).toEqual(undefined);
   });
 
   it('should return first element', () => {

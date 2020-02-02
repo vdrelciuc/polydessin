@@ -63,7 +63,6 @@ describe('ToolSelectorService', () => {
     for(const element of mapOfTools) {
       service.setCurrentTool(element[0]);
       if(service.getFrenchToolNameToPrint() !== element[1]) {
-        console.log(element[1]);
         isOk = false;
         break;
       }
