@@ -29,11 +29,11 @@ export class RectangleComponent implements OnInit {
   }
 
   updateBorder() {
-    this.service.hasBorder = !this.service.hasBorder;
+    this.service.shapeStyle.hasBorder = !this.service.shapeStyle.hasBorder;
   }
 
   updateFill() {
-    this.service.hasFill = !this.service.hasFill;
+    this.service.shapeStyle.hasFill = !this.service.shapeStyle.hasFill;
   }
 
   getMin() {return "1"}

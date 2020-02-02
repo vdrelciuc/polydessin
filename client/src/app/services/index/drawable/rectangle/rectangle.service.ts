@@ -1,11 +1,15 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import {invertColor} from 'src/app/classes/color-inverter';
+import { invertColor } from 'src/app/classes/color-inverter';
+import { Color } from 'src/app/classes/color';
+import * as CONSTANT from 'src/app/classes/constants';
 import { Coords } from 'src/app/classes/coordinates';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-// import { ShapeStyle } from 'src/app/classes/shape-properties';
+import { ShapeStyle } from 'src/app/classes/shape-style';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +17,15 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
 export class RectangleService extends DrawableService {
 
   attributes: DrawablePropertiesService;
-  //shapeStyle: ShapeStyle;
-  private thickness: number;
-  private borderColor: string;
-  private fillColor: string;
-  private opacity: string;
 
-  hasBorder: boolean;
-  hasFill: boolean;
+  shapeStyle: ShapeStyle;
+  //private thickness: number;
+  //private borderColor: string;
+  //private fillColor: string;
+  //private opacity: string;
+
+  //hasBorder: boolean;
+  //hasFill: boolean;
 
   private mousePosition: Coords;
   private shapeOrigin: Coords;
@@ -36,35 +41,35 @@ export class RectangleService extends DrawableService {
   constructor() {
     super();
     this.frenchName = 'Rectangle';
+    this.shapeStyle = {
+      thickness: CONSTANT.THICKNESS_DEFAULT,
+      borderColor: new Color(),
+      fillColor: new Color(),
+      opacity: CONSTANT.OPACITY_DEFAULT,
+      hasBorder: true,
+      hasFill: true
+    };
   }
 
   initialize(manipulator: Renderer2, image: ElementRef): void {
     this.assignParams(manipulator, image);
     this.shiftPressed = false;
-
-    // Set Checkbox defaults
-    this.hasBorder = true;
-    this.hasFill = true;
   }
 
   initializeProperties(attributes: DrawablePropertiesService) {
     this.attributes = attributes;
-    this.thickness = this.attributes.thickness.value;
 
     this.attributes.color.subscribe((element: string) => {
-      this.borderColor = element;
+      this.shapeStyle.borderColor = new Color(element);
     });
 
     this.attributes.fillColor.subscribe((element: string) => {
-      this.fillColor = element;
+      this.shapeStyle.fillColor = new Color(element);
     });
   }
-  onMouseInCanvas(event: MouseEvent): void {}
-
-  onMouseOutCanvas(event: MouseEvent): void {}
 
   onMousePress(event: MouseEvent): void {
-    if ((this.hasBorder || this.hasFill) && this.thickness !== 0) {
+    if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
       this.shapeOrigin = Coords.getEffectiveCoords(this.image, event);
       this.mousePosition = Coords.getEffectiveCoords(this.image, event);
       this.updateProperties();
@@ -72,19 +77,18 @@ export class RectangleService extends DrawableService {
     }
 
   }
+
   onMouseRelease(event: MouseEvent): void {
     this.isChanging = false;
-    this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically
+    this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
   }
+
   onMouseMove(event: MouseEvent): void {
     if (this.isChanging) {
       this.mousePosition = Coords.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
       this.updateSize();
     }
   }
-  onDoubleClick(event: MouseEvent): void {}
-
-  onClick(event: MouseEvent): void {}
 
   onKeyPressed(event: KeyboardEvent): void {
     if(event.shiftKey && !this.shiftPressed && this.isChanging) {
@@ -137,12 +141,12 @@ export class RectangleService extends DrawableService {
     // Adding rectangle and text properties
     this.manipulator.setAttribute(this.rectangle, SVGProperties.x, this.shapeOrigin.x.toString());
     this.manipulator.setAttribute(this.rectangle, SVGProperties.y, this.shapeOrigin.y.toString());
-    this.manipulator.setAttribute(this.rectangle, SVGProperties.fill, this.hasFill ? this.fillColor : 'none');
-    this.manipulator.setAttribute(this.rectangle, SVGProperties.thickness, this.hasBorder ? this.thickness.toString() : '0');
-    this.manipulator.setAttribute(this.rectangle, SVGProperties.color, this.borderColor);
-    this.manipulator.setAttribute(this.rectangle, SVGProperties.opacity, this.opacity);
+    this.manipulator.setAttribute(this.rectangle, SVGProperties.fill, this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getHex() : 'none');
+    this.manipulator.setAttribute(this.rectangle, SVGProperties.thickness, this.shapeStyle.hasBorder ? this.shapeStyle.thickness.toString() : '0');
+    this.manipulator.setAttribute(this.rectangle, SVGProperties.color, this.shapeStyle.borderColor.getHex());
+    this.manipulator.setAttribute(this.rectangle, SVGProperties.opacity, this.shapeStyle.opacity);
 
-    this.manipulator.setAttribute(this.text, SVGProperties.fill, invertColor(this.fillColor, true));
+    this.manipulator.setAttribute(this.text, SVGProperties.fill, invertColor(this.shapeStyle.fillColor.getHex(), true));
     this.manipulator.setAttribute(this.text, 'text-anchor', 'middle');
 
     this.updateSize(); // Width and height can't be tempered with in attribute
