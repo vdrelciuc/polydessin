@@ -13,19 +13,17 @@ import * as CONSTANT from 'src/app/classes/constants';
 export class PencilComponent implements OnInit {
 
   readonly name: string = Tools.Pencil;
-  protected thickness: number;
 
   constructor(
-    protected service: PencilService,
+    public service: PencilService,
     private toolSelector: ToolSelectorService,
-    protected attributes: DrawablePropertiesService
+    private attributes: DrawablePropertiesService
     ) {
-    this.service = this.toolSelector.getPencil();
+      this.service = this.toolSelector.getPencil();
   }
 
   ngOnInit(): void {
-    console.log('component pencil init');
-    this.thickness = this.attributes.thickness.value;
+    // this.thickness = this.attributes.thickness.value;
     this.service.initializeProperties(this.attributes);
   }
 
@@ -36,7 +34,7 @@ export class PencilComponent implements OnInit {
       if (this.service.thickness > CONSTANT.THICKNESS_MAXIMUM) {
         this.attributes.thickness.next(CONSTANT.THICKNESS_MAXIMUM);
       } else {
-        this.attributes.thickness.next(this.thickness);
+        this.attributes.thickness.next(this.service.thickness);
       }
     }
   }
