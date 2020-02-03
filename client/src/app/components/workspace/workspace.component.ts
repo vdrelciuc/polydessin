@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WorkspaceService } from 'src/app/services/workspace.service';
+import { Color } from 'src/app/classes/color';
 
 @Component({
   selector: 'app-workspace',
@@ -7,13 +8,14 @@ import { WorkspaceService } from 'src/app/services/workspace.service';
   styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-  backgroundColorHex: string;
+
+  backgroundColor: Color;
 
   constructor(protected workspaceService: WorkspaceService) {
   }
 
   ngOnInit() {
-    this.backgroundColorHex = this.workspaceService.backgroundColorHex;
+    this.backgroundColor = this.workspaceService.backgroundColor;
   }
 
 }

@@ -1,21 +1,18 @@
 import { Injectable } from '@angular/core';
+import { Color } from '../classes/color';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WorkspaceService {
 
-  constructor() { }
+  backgroundColor: Color;
 
-  backgroundColorHex = '808080';
+  constructor() {
+    this.backgroundColor = new Color('#808080');
+  }
 
-  getBackgroundColorHex(): string {
-    return '#'.concat(this.backgroundColorHex);
-  }
-  setBackgroundColorHex(colorHex: string): void {
-    this.backgroundColorHex = colorHex;
-  }
-  checkIfSameBackgroundColor(colorHex: string): boolean {
-    return colorHex === this.backgroundColorHex;
+  checkIfSameBackgroundColor(color: Color): boolean {
+    return color.getHex() === this.backgroundColor.getHex();
   }
 }
