@@ -1,5 +1,5 @@
 // import { HttpClientModule } from '@angular/common/http';
-import { async, TestBed } from '@angular/core/testing';
+import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 // import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { IndexService } from '../../services/index/index.service';
@@ -20,6 +20,8 @@ import { WorkingAreaComponent } from '../working-area/working-area.component';
 
 describe('AppComponent', () => {
     let indexServiceSpy: SpyObj<IndexService>;
+    let component: AppComponent;
+    let fixture: ComponentFixture<AppComponent>;
 
     beforeEach(() => {
         indexServiceSpy = jasmine.createSpyObj('IndexService', ['basicGet']);
@@ -61,17 +63,16 @@ describe('AppComponent', () => {
                 MatSelectModule
               ]
         });
+
+        fixture = TestBed.createComponent(AppComponent);
+        component = fixture.componentInstance;
     }));
 
     it('should create the app', () => {
-        const fixture = TestBed.createComponent(AppComponent);
-        const app = fixture.componentInstance;
-        expect(app).toBeTruthy();
+        expect(component).toBeTruthy();
     });
 
     it("should have as title 'LOG2990'", () => {
-        const fixture = TestBed.createComponent(AppComponent);
-        const app = fixture.componentInstance;
-        expect(app.title).toEqual('LOG2990');
+        expect(component.title).toEqual('LOG2990');
     });
 });
