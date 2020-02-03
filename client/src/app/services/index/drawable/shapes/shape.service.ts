@@ -128,7 +128,9 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.shape, SVGProperties.opacity, this.shapeStyle.opacity);
 
     // Adding text properties
-    this.manipulator.setAttribute(this.text, SVGProperties.fill, invertColor(this.shapeStyle.fillColor, true).getHex());
+    this.manipulator.setAttribute(this.text, SVGProperties.fill, this.shapeStyle.hasFill ? invertColor(this.shapeStyle.fillColor, true).getHex() : 'black');
+    this.manipulator.setAttribute(this.text, SVGProperties.thickness, '1');
+    this.manipulator.setAttribute(this.text, SVGProperties.color, this.shapeStyle.hasFill ? 'none' : 'grey');
     this.manipulator.setAttribute(this.text, 'text-anchor', 'middle');
 
     // Adding elements to DOM
