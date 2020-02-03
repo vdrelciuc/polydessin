@@ -1,10 +1,8 @@
 <div class="section">
   <h6 class="title">Couleur primaire</h6>
   <div class="color-preview">
-    <svg width="55" height="55">
-      <rect width="55" height="55"
-      style="fill:rgb(0,0,255);stroke-width:3px; stroke:whitesmoke;" />
-    </svg>
+    <button id="primary-color-button"
+    [style.background-color]="primaryColor.getHex()"></button>
   </div>
   <div class="transparency">
     <p class="sub-title">Transparence</p>
@@ -15,10 +13,8 @@
 <div class="section">
   <h6 class="title">Couleur secondaire</h6>
   <div class="color-preview">
-    <svg width="55" height="55">
-      <rect width="55" height="55"
-      style="fill:rgb(255,0,255);stroke-width:3px; stroke:whitesmoke;" />
-    </svg>
+    <button id="secondary-color-button"
+    [style.background-color]="secondaryColor.getHex()"></button>
   </div>
   <div class="transparency">
     <p class="sub-title">Transparence</p>
@@ -32,19 +28,17 @@
 
 <div class="section">
   <h6 class="title">Dernières couleurs utilisées</h6>
-  <div class="row">
-    <button mat-mini-fab class="last-colors"></button>
-    <button mat-mini-fab class="last-colors"></button>
-    <button mat-mini-fab class="last-colors"></button>
-    <button mat-mini-fab class="last-colors"></button>
-    <button mat-mini-fab class="last-colors"></button>
-  </div>
-  <div class="row">
-    <button mat-mini-fab class="last-colors"></button>
-    <button mat-mini-fab class="last-colors"></button>
-    <button mat-mini-fab class="last-colors"></button>
-    <button mat-mini-fab class="last-colors"></button>
-    <button mat-mini-fab class="last-colors"></button>
+  <div class="recent">
+    <ul *ngFor="let color of recentColors;let i = index">
+      <li *ngIf= "i < recentColors.length/2">
+        <button mat-mini-fab class="last-colors" [style.background-color]="color.getHex()"></button>
+      </li>
+    </ul>
+    <ul *ngFor="let color of recentColors;let i = index">
+      <li *ngIf= "i >= recentColors.length/2">
+        <button mat-mini-fab class="last-colors" [style.background-color]="color.getHex()"></button>
+      </li>
+    </ul>
   </div>
 </div>
 

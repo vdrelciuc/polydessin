@@ -14,7 +14,7 @@ export class Color {
         } else if (color instanceof Array) {
             this.setRGB(color);
         } else {
-            this.hex = CONSTANT.COLOR_DEFAULT;
+            this.hex = CONSTANT.DEFAULT_PRIMARY_COLOR;
         }
     }
 
@@ -43,7 +43,10 @@ export class Color {
             rgb[1] = this.clamp(rgb[1]);
             rgb[2] = this.clamp(rgb[2]);
 
-            this.hex = '#'.concat(rgb[0].toString(16)).concat(rgb[1].toString(16)).concat(rgb[2].toString(16));
+            this.hex = '#'
+            .concat(rgb[0].toString(CONSTANT.HEX_BASE))
+            .concat(rgb[1].toString(CONSTANT.HEX_BASE))
+            .concat(rgb[2].toString(CONSTANT.HEX_BASE));
         }
     }
 
