@@ -1,10 +1,12 @@
 import * as CONSTANT from 'src/app/classes/constants';
 
 export class Color {
-    private readonly MIN_VALUE: number = 0;
-    private readonly MAX_VALUE: number = 255;
-    private readonly REGEX_WITH_HASHTAG: RegExp = /^#([0-9A-F]{3}){1,2}$/i;
-    private readonly REGEX_WITHOUT_HASHTAG: RegExp = /([0-9A-F]{3}){1,2}$/i;
+    private static readonly MIN_VALUE: number = 0;
+    private static readonly MAX_VALUE: number = 255;
+    private static readonly BYTES_IN_HEX: number = 3;
+    private readonly REGEX_WITH_HASHTAG: RegExp = /^#[0-9A-F]{6}$/i;
+    private readonly REGEX_WITHOUT_HASHTAG: RegExp = /[0-9A-F]{6}$/i;
+    // /^#[0-9A-F]{6}$/i.test('#AABBCC')
 
     private hex: string;
 
@@ -30,24 +32,41 @@ export class Color {
     }
 
     setHex(hex: string): void {
-        if (this.REGEX_WITH_HASHTAG.test(hex)) {
-            this.hex = hex;
-        } else if (this.REGEX_WITHOUT_HASHTAG.test(hex)) {
-            this.hex = '#'.concat(hex);
+        let padding = 0;
+        if(hex.indexOf('#') !== -1) {
+            padding =  1;
+        }
+        if(hex.length === (CONSTANT.HEX_LENGTH + padding)) {
+            if (this.REGEX_WITH_HASHTAG.test(hex)) {
+                this.hex = hex;
+            } else if (this.REGEX_WITHOUT_HASHTAG.test(hex)) {
+                this.hex = '#'.concat(hex);
+            }
         }
     }
 
     setRGB(rgb: number[]): void {
         if (rgb.length === 3) {
-            rgb[0] = this.clamp(rgb[0]);
-            rgb[1] = this.clamp(rgb[1]);
-            rgb[2] = this.clamp(rgb[2]);
+            rgb[0] = Color.clamp(rgb[0]);
+            rgb[1] = Color.clamp(rgb[1]);
+            rgb[2] = Color.clamp(rgb[2]);
 
-            this.hex = '#'.concat(rgb[0].toString(16)).concat(rgb[1].toString(16)).concat(rgb[2].toString(16));
+            this.hex = '#';
+            for(let i = 0; i < Color.BYTES_IN_HEX; i++) {
+                this.hex += Color.rgbToHex(rgb[i]);
+            }
         }
     }
 
-    private clamp(value: number): number {
-        return Math.min(Math.max(value, this.MIN_VALUE), this.MAX_VALUE);
+    private static rgbToHex(value: number): string { 
+        let hex = Number(value).toString(CONSTANT.HEX_BASE);
+        if (hex.length < 2) {
+            hex = '0' + hex;
+        }
+        return hex;
+      };
+
+    private static clamp(value: number): number {
+        return Math.min(Math.max(value, Color.MIN_VALUE), Color.MAX_VALUE);
     };
 }
