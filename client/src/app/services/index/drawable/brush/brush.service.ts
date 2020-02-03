@@ -69,7 +69,7 @@ export class BrushService extends DrawableService {
     this.manipulator.setAttribute(this.previewLine, SVGProperties.endOfLine, 'round');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
     this.manipulator.setAttribute(this.previewLine, SVGProperties.thickness, `${this.getThickness()}`);
-    this.manipulator.setAttribute(this.previewLine, 'mask', `url(#mask${this.selectedPattern})`);
+    this.manipulator.setAttribute(this.previewLine, 'filter', 'url(#filter0)');
 
     this.manipulator.appendChild(this.image.nativeElement, this.previewLine);
 
@@ -144,7 +144,7 @@ export class BrushService extends DrawableService {
     this.manipulator.setAttribute(circle, SVGProperties.radius, (this.getThickness() / 2).toString());
     this.manipulator.setAttribute(circle, SVGProperties.centerX, x.toString());
     this.manipulator.setAttribute(circle, SVGProperties.centerY, y.toString());
-    this.manipulator.setAttribute(circle, 'mask', `url(#mask${this.selectedPattern})`);
+    this.manipulator.setAttribute(circle, 'filter', `url(#filter${this.selectedPattern})`);
     return circle;
   }
 
