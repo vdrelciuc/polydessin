@@ -1,5 +1,9 @@
 @import "../../../global-style/colors.scss";
 
+button:focus {
+  outline:0;
+}
+
 .title {
   color: whitesmoke;
   margin-bottom: 1rem;

@@ -12,6 +12,9 @@ export const DIAMETER_MAXIMUM = 100;
 export const DEFAULT_PRIMARY_COLOR = '#000000';
 export const DEFAULT_SECONDARY_COLOR = '#FFFFFF';
 export const DEFAULT_TRANSPARENCY = 1;
+export const MAX_TRANSPARENCY = 1;
+export const MIN_TRANSPARENCY = 0.01;
+
 export const MAX_RECENT_COLORS = 10;
 
 export const OPACITY_DEFAULT = '0';

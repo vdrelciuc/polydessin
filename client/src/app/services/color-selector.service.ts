@@ -11,18 +11,18 @@ export class ColorSelectorService {
   primaryColor: BehaviorSubject<Color>;
   secondaryColor: BehaviorSubject<Color>;
   recentColorsObservable: BehaviorSubject<Color[]>;
+  primaryTransparency: BehaviorSubject<number>;
+  secondaryTransparency: BehaviorSubject<number>;
 
   private recentColors: Color[];
-  private primaryTransparency: number;
-  private secondaryTransparency: number;
 
   constructor() {
     this.primaryColor = new BehaviorSubject<Color>(new Color(CONSTANT.DEFAULT_PRIMARY_COLOR));
     this.secondaryColor = new BehaviorSubject<Color>(new Color(CONSTANT.DEFAULT_SECONDARY_COLOR));
     this.recentColors = [];
     this.recentColorsObservable = new BehaviorSubject<Color[]>(this.recentColors);
-    this.primaryTransparency = CONSTANT.DEFAULT_TRANSPARENCY;
-    this.secondaryTransparency = CONSTANT.DEFAULT_TRANSPARENCY;
+    this.primaryTransparency = new BehaviorSubject<number>(CONSTANT.DEFAULT_TRANSPARENCY);
+    this.secondaryTransparency = new BehaviorSubject<number>(CONSTANT.DEFAULT_TRANSPARENCY);
     this.initializeDefaultRecentColors();
   }
 
