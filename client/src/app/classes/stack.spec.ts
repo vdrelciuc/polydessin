@@ -99,10 +99,9 @@ describe('Stack', () => {
     for (let i = 0; i < 5; ++i) {
       stack.push_back(i);
     }
-    expect(stack.getRoot()).toBe(0);
-  })
-
-  it('should return undefined first element', () => {
-    expect(stack.getRoot()).toBe(undefined);
-  })
+    for (let i = 0; i < 5; i++) {
+      stack.pop_back();
+    }
+    expect(stack.getLast()).toBe(undefined);
+  });
 });

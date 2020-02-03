@@ -7,8 +7,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CouleurGuideComponent implements OnInit {
 
-  constructor() { }
-
   ngOnInit() {
   }
 

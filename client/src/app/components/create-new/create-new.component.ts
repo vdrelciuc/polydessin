@@ -31,7 +31,6 @@ export class CreateNewComponent implements OnInit {
     this.createNewService.canvasSize = [0, 0];
   }
 
-
   setBackgroundColor(color: string) {
     if (this.colorHexRegex.test(color)) {
       this.createNewService.backgroundColor = this.colorManipService.hexStringToColor(color);

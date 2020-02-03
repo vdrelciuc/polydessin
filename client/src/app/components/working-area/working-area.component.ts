@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 
 @Component({
@@ -8,7 +9,9 @@ import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 })
 export class WorkingAreaComponent {
 
-  constructor(private drawerService: DrawerService) { }
+  constructor(private drawerService: DrawerService, public route: Router) { }
+
+  ngOnInit() {}
 
   getDrawerStatus(): boolean {
     return this.drawerService.navIsOpened;

@@ -1,7 +1,7 @@
-import { Injectable, Renderer2, ElementRef } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { Tools } from '../../enums/tools'
+import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
@@ -24,7 +24,7 @@ export class ToolSelectorService {
     this.tools = new Map<Tools, DrawableService>();
     this.line = new LineService();
     this.pencil = new PencilService();
-    
+
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
       // Initialize currentTool as the selector(mouse)

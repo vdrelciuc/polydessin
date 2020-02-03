@@ -74,10 +74,10 @@ export class PencilService extends DrawableService {
 
   onMouseMove(event: MouseEvent): void {
     if (this.isDrawing) {
-    this.addPath(event.clientX, event.clientY);
+      this.addPath(event.clientX, event.clientY);
     } else {
-	    this.updateCursor(event.clientX, event.clientY); 
-	  }
+      this.updateCursor(event.clientX, event.clientY);
+    }
   }
 
   onClick(event: MouseEvent): void {}

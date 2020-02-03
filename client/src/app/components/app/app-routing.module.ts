@@ -1,16 +1,14 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule } from '@angular/router';
-import {UserGuideComponent} from '../user-guide/user-guide.component';
+import {RouterModule, Routes } from '@angular/router';
 import { BienvenueGuideComponent } from '../guideTemplaates/bienvenue-guide/bienvenue-guide.component';
-import { LigneGuideComponent } from '../guideTemplaates/ligne-guide/ligne-guide.component';
-import { PinceauGuideComponent } from '../guideTemplaates/pinceau-guide/pinceau-guide.component';
-import { CrayonGuideComponent } from '../guideTemplaates/crayon-guide/crayon-guide.component';
-import { RectangleGuideComponent } from '../guideTemplaates/rectangle-guide/rectangle-guide.component';
 import { CouleurGuideComponent } from '../guideTemplaates/couleur-guide/couleur-guide.component';
+import { CrayonGuideComponent } from '../guideTemplaates/crayon-guide/crayon-guide.component';
+import { LigneGuideComponent } from '../guideTemplaates/ligne-guide/ligne-guide.component';
 import { NouveauDessinComponent } from '../guideTemplaates/nouveau-dessin/nouveau-dessin.component';
+import { PinceauGuideComponent } from '../guideTemplaates/pinceau-guide/pinceau-guide.component';
+import { RectangleGuideComponent } from '../guideTemplaates/rectangle-guide/rectangle-guide.component';
 import { HomeComponent } from '../home/home.component';
-
-
+import {UserGuideComponent} from '../user-guide/user-guide.component';
 
 const routes: Routes = [
   {path : 'userGuide', component : UserGuideComponent,
@@ -34,7 +32,7 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 
-export class AppRoutingModule{}
-export const RoutingComponents = [UserGuideComponent,BienvenueGuideComponent,
+export class AppRoutingModule {}
+export const RoutingComponents = [UserGuideComponent, BienvenueGuideComponent,
   LigneGuideComponent, PinceauGuideComponent, CrayonGuideComponent,
-  RectangleGuideComponent,CouleurGuideComponent, NouveauDessinComponent]
+  RectangleGuideComponent, CouleurGuideComponent, NouveauDessinComponent]

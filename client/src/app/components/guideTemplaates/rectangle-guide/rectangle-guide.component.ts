@@ -7,8 +7,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RectangleGuideComponent implements OnInit {
 
-  constructor() { }
-
   ngOnInit() {
   }
 

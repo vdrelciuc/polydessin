@@ -7,8 +7,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NouveauDessinComponent implements OnInit {
 
-  constructor() { }
-
   ngOnInit() {
   }
 

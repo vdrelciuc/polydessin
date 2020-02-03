@@ -1,5 +1,4 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
-//import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { SVGService } from './svg.service';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Renderer2, Type, ElementRef } from '@angular/core';
@@ -28,7 +27,6 @@ describe('SVGService', () => {
 
     stack = getTestBed().get(SVGService)
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    // manipulator.createComment(SVGElement)
   });
 
   it('should be created', () => {
