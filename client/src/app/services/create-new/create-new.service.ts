@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 
-const toolBoxWidth = 250 + 96;
-
 @Injectable({
   providedIn: 'root'
 })
 export class CreateNewService {
 
+  static toolBoxWidth = 250 + 96;
   backgroundColor: number[];
   canvasSize: number[];
 
@@ -15,7 +14,8 @@ export class CreateNewService {
   }
 
   getcanvasSize(axis: number): number {
-    return (this.canvasSize[axis] || ((axis) ? window.innerHeight :  window.innerWidth - toolBoxWidth));
+    return (this.canvasSize[axis] || 
+      ((axis) ? window.innerHeight :  window.innerWidth - CreateNewService.toolBoxWidth));
   }
   
   setCanvasSize(axis: number, size: number) {
