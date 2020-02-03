@@ -54,7 +54,6 @@ export class SidebarComponent implements OnInit {
   
 
   selectTool(tool: Tools): void {
-    console.log('Test: ' + tool + ' selected');
     this.toolSelectorService.setCurrentTool(tool);
   }
 
