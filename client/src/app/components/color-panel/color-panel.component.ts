@@ -27,4 +27,8 @@ export class ColorPanelComponent implements OnInit {
     });
   }
 
+  onColorInversion() {
+    this.colorSelectorService.swapColors(this.primaryColor, this.secondaryColor);
+  }
+
 }

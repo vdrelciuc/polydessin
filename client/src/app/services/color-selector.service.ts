@@ -46,4 +46,9 @@ export class ColorSelectorService {
     this.recentColors.push(color);
     this.recentColorsObservable.next(this.recentColors);
   }
+
+  swapColors(currentPrimary: Color, currentSecondary: Color): void {
+    this.primaryColor.next(currentSecondary);
+    this.secondaryColor.next(currentPrimary);
+  }
 }
