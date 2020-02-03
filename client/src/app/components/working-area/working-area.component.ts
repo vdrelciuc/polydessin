@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 
 @Component({
@@ -6,11 +6,9 @@ import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
   templateUrl: './working-area.component.html',
   styleUrls: ['./working-area.component.scss']
 })
-export class WorkingAreaComponent implements OnInit {
+export class WorkingAreaComponent {
 
-  constructor(private drawerService: DrawerService,) { }
-
-  ngOnInit() {}
+  constructor(private drawerService: DrawerService) { }
 
   getDrawerStatus(): boolean {
     return this.drawerService.navIsOpened;
