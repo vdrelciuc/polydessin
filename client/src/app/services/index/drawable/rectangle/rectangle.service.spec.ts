@@ -60,7 +60,7 @@ describe('RectangleService', () => {
     expect(rectangleService.shapeStyle.hasBorder).toBe(true);
     expect(rectangleService.shapeStyle.nameDisplayDefault).toBe('[Rectangle]');
     expect(rectangleService.shapeStyle.nameDisplayOnShift).toBe('[Carré]');
-  })
+  });
 
   it('#initializeProperties should set default properties', () => {
     const properties = new DrawablePropertiesService();
