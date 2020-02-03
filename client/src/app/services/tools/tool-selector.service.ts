@@ -12,8 +12,6 @@ import { PencilService } from '../index/drawable/pencil/pencil.service';
 export class ToolSelectorService {
 
   $currentTool: BehaviorSubject<Tools>;
-  // currentToolName: Observable<Tools> = this.toolName.asObservable();
-  // currentTool: DrawableService | undefined;
   isHidden: boolean;
   private tools: Map<Tools, DrawableService>;
   private tool: DrawableService | undefined;
