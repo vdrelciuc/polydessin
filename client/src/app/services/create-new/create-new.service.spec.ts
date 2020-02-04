@@ -23,7 +23,7 @@ describe('CreateNewService', () => {
     expect(service.getcanvasSize(0)).toEqual(1);
   });
 
-  it('shouldb\'t set canvas new negative width', () => {
+  it('shouldn\'t set canvas new negative width', () => {
     service.setCanvasSize(0, 1);
     service.setCanvasSize(0, -1);
     expect(service.getcanvasSize(0)).toEqual(1);
