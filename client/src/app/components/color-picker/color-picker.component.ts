@@ -35,4 +35,5 @@ export class ColorPickerComponent implements AfterViewInit, OnInit {
     this.colorSelectorService.updateColor(this.selectedColor);
     this.onDialogClose();
   }
+
 }

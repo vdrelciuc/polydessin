@@ -1,21 +1,35 @@
 <div class="color-wrapper">
 
-  <div class="color-section">
+  <div class="section">
     <app-color-palette [initialColor]="selectedHue" (newColor)="selectedColor = $event"></app-color-palette>
   </div>
-  <div class="color-slider">
+  <div class="section">
     <app-color-slider (newHue)="selectedHue = $event"></app-color-slider>
   </div>
-  <div class="manual-input-section">
+  <div class="input-area section">
+    <h6>Couleur</h6>
     <div id="preview" [style.background-color]="selectedColor.getHex()"></div>
-    <div id="input-fields"></div>
+    <div id="input-fields">
+      <div class="input-row">
+        <label for="red">R : </label>
+        <input [value]="selectedColor.getRedHex()" id="red" maxlength="2">
+      </div>
+      <div class="input-row">
+        <label for="green">V : </label>
+        <input [value]="selectedColor.getGreenHex()"id="green" maxlength="2">
+      </div>
+      <div class="input-row">
+        <label for="blue">B : </label>
+        <input [value]="selectedColor.getBlueHex()" id="blue" maxlength="2">
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="button-section">
   <button mat-button id="cancel-button" (click)="onDialogClose()">Annuler</button>
   <button mat-button id="confirm-button" (click)="onConfirm()">Confirmer</button>
- </div>
+</div>
 
   <!--<div class="input-section">
     <div class="row">
