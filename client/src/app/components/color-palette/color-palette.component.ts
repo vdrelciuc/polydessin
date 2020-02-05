@@ -1,10 +1,12 @@
 /**
- * Copyright notice: Component inspired from Lukas Marx's work
+ * Copyright notice: Component adapted from Lukas Marx's work
  * https://malcoded.com/posts/angular-color-picker/
  */
 
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener,
+  Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Color } from 'src/app/classes/color';
+import * as CONSTANTS from 'src/app/classes/constants';
 
 const CANVAS_CONTEXT = '2d';
 const OPAQUE_WHITE_RGBA = 'rgba(255,255,255,1)';
@@ -27,8 +29,8 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
   @Output()
   newColor: EventEmitter<Color>;
 
-  @ViewChild('canvas', {static: false})
-  canvas: any;
+  @ViewChild('canvas', {static: true})
+  canvasValue: ElementRef;
 
   private ctx: CanvasRenderingContext2D;
   private currentSelectedPosition: {x: number, y: number};
@@ -52,19 +54,18 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  private display() {
+  private display(): void {
     // Initialize ctx
     if (!this.ctx) {
-      this.ctx = this.canvas.nativeElement.getContext(CANVAS_CONTEXT);
+      this.ctx = this.canvasValue.nativeElement.getContext(CANVAS_CONTEXT);
     }
 
     // Set palette dimensions to canvas size
-    const width = this.canvas.nativeElement.width;
-    const height = this.canvas.nativeElement.height;
+    const width = this.canvasValue.nativeElement.width;
+    const height = this.canvasValue.nativeElement.height;
 
     // Fill the background color inside the rectangle
-    this.ctx.fillStyle = 'red';
-    // TODO: replace this.initialColor.getHex() ||
+    this.ctx.fillStyle = this.initialColor.getHex() || 'red';
     this.ctx.fillRect(0, 0, width, height);
 
     // Create the white gradient from opaque to transparent white
@@ -113,23 +114,30 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
 
   }
 
-  getColorAtPosition(x: number, y: number): Color {
+  private getColorAtPosition(x: number, y: number): Color {
     const imageData = this.ctx.getImageData(x, y, 1, 1).data;
-    const hexValue = '#' + imageData[0] + imageData[1] + imageData[2];
+    const hexValue = '#'
+    + this.correctDigits(imageData[0].toString(CONSTANTS.HEX_BASE))
+    + this.correctDigits(imageData[1].toString(CONSTANTS.HEX_BASE))
+    + this.correctDigits(imageData[2].toString(CONSTANTS.HEX_BASE));
     return new Color(hexValue);
   }
 
-  emitColor(x: number, y: number) {
+  private correctDigits(n: string): string {
+    return n.length > 1 ? n : '0' + n;
+  }
+
+  emitColor(x: number, y: number): void {
     const colorToEmit = this.getColorAtPosition(x, y);
     this.newColor.emit(colorToEmit);
   }
 
   @HostListener('window:mouseup', ['$event'])
-  onMouseUp(evt: MouseEvent) {
+  onMouseUp(evt: MouseEvent): void {
     this.isMouseDown = false;
   }
 
-  onMouseMove(evt: MouseEvent) {
+  onMouseMove(evt: MouseEvent): void {
     if (this.isMouseDown) {
       this.currentSelectedPosition = { x: evt.offsetX, y: evt.offsetY };
       this.display();
@@ -137,7 +145,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  onMouseDown(evt: MouseEvent) {
+  onMouseDown(evt: MouseEvent): void {
     this.isMouseDown = true;
     this.currentSelectedPosition = { x: evt.offsetX, y: evt.offsetY };
     this.display();

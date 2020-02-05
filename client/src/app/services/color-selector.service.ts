@@ -56,6 +56,24 @@ export class ColorSelectorService {
     this.secondaryColor.next(currentPrimary);
   }
 
+  getCurrentlySelectedColor(): Color {
+    let currentlySelectedColor;
+    switch (this.colorToChange) {
+      case ColorType.Primary: {
+        currentlySelectedColor = this.primaryColor.getValue();
+        break;
+      }
+      case ColorType.Secondary: {
+        currentlySelectedColor = this.secondaryColor.getValue();
+        break;
+      }
+      default: {
+        currentlySelectedColor = this.backgroundColor.getValue();
+      }
+    }
+    return currentlySelectedColor;
+  }
+
   updateColor(newColor: Color): void {
     switch (this.colorToChange) {
       case ColorType.Primary: {
