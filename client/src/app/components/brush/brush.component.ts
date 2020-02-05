@@ -12,9 +12,13 @@ import { Filters } from 'src/app/components/brush/patterns';
   styleUrls: ['./brush.component.scss']
 })
 export class BrushComponent implements OnInit {
+  
   filters = Filters;
   readonly name: string = Tools.Brush;
   showFilters: boolean;
+
+  readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
+  readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
 
   constructor(
     protected service: BrushService,
