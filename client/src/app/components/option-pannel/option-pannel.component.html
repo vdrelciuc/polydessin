@@ -1,7 +1,24 @@
-<h3 id="title">Attributs de l'outil</h3>
-<p id="tool">{{ this.toolSelectorService.getFrenchToolNameToPrint() }}</p>
-<div class="option-pannel" [ngSwitch]="currentTool">
-  <p *ngSwitchCase="'eraser'">Eraser is selected</p>
-  <app-line *ngSwitchCase="'line'">Line Selected</app-line>
-  <app-pencil *ngSwitchCase="'pencil'">Pencil Selected</app-pencil>
+<div class="wrapper">
+
+  <div class="tool-header">
+    <h4 id="title">Attributs de l'outil</h4>
+    <!--<p id="tool">{{ this.currentTool.getFrenchToolNameToPrint() }}</p>-->
+    <mat-divider></mat-divider>
+  </div>
+
+
+  <div class="tool-options scrollable" [ngSwitch]="currentTool">
+    <p *ngSwitchCase="'eraser'"></p>
+    <app-line *ngSwitchCase="'line'"></app-line>
+    <app-pencil *ngSwitchCase="'pencil'"></app-pencil>
+  </div>
+
+  <div class="color-panel">
+    <div id="bottom-divider">
+      <mat-divider></mat-divider>
+    </div>
+    <app-color-panel></app-color-panel>
+  </div>
+
 </div>
+
