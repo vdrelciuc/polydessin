@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import * as CONSTANT from 'src/app/classes/constants';
+import { Filter, FilterList } from 'src/app/components/brush/patterns';
 import { Tools } from 'src/app/enums/tools';
 import { BrushService } from 'src/app/services/index/drawable/brush/brush.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import * as CONSTANT from 'src/app/classes/constants';
-import { Filter } from 'src/app/components/brush/patterns';
-import { FilterList } from 'src/app/components/brush/patterns';
-//import { filter } from 'rxjs/operators';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 
 @Component({
   selector: 'app-brush',
@@ -52,7 +50,7 @@ export class BrushComponent implements OnInit {
     this.showFilters = !this.showFilters;
   }
 
-  changePattern(filter: string): void {
+  changeFilter(filter: string): void {
     this.service.selectedFilter = filter;
   }
 }

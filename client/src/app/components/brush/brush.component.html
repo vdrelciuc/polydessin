@@ -15,19 +15,10 @@
         vertical="false">
       </mat-slider>
     </div>
-    <!--
-    <div class="group">
-      <label class="title" id="texture">Texture</label>
-      <button class="pattern" (click)="toggleFilters()" [ngStyle]="{background: 'url(../../../assets/patterns/' + service.selectedPattern + '.svg)'}">
-        <div id="patternSelect" *ngIf="showFilters">
-          <button class="pattern" *ngFor="let pattern of this.filters" [ngStyle]="{background: 'url(../../../assets/patterns/' + pattern + '.svg)'}" (click)= changePattern(pattern.referenceID)></button>
-        </div>
-      </button>
-    </div>-->
     <div class="group">
       <label class="title" id="texture">Texture</label>
       <mat-select name="filter-select" [value]="filters[0].name">
-        <mat-option *ngFor="let pattern of this.filters" (click)="changePattern(pattern.referenceID)" [value]="pattern.name"> {{ pattern.name }} </mat-option>
+        <mat-option *ngFor="let filter of this.filters" (click)="changeFilter(filter.referenceID)" [value]="filter.name"> {{ filter.name }} </mat-option>
       </mat-select>
     </div>
   </form>
