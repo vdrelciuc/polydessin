@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Color } from 'src/app/classes/color';
 
@@ -13,7 +13,8 @@ export class ColorPickerComponent implements AfterViewInit, OnInit {
   selectedHue: Color;
 
   constructor(private dialogRef: MatDialogRef<ColorPickerComponent>) {
-    this.selectedColor = new Color();
+    this.selectedColor = new Color([255, 0, 0]);
+    this.selectedHue = new Color([255, 0, 0]);
   }
 
   ngOnInit() {

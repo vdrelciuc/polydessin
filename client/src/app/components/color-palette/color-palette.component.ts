@@ -1,5 +1,5 @@
 /**
- * Copyright notice: Component inspired from Lukas Marx's work
+ * Copyright notice: Component adapted from Lukas Marx's work
  * https://malcoded.com/posts/angular-color-picker/
  */
 
@@ -52,7 +52,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  private display() {
+  private display(): void {
     // Initialize ctx
     if (!this.ctx) {
       this.ctx = this.canvas.nativeElement.getContext(CANVAS_CONTEXT);
@@ -63,8 +63,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
     const height = this.canvas.nativeElement.height;
 
     // Fill the background color inside the rectangle
-    this.ctx.fillStyle = 'red';
-    // TODO: replace this.initialColor.getHex() ||
+    this.ctx.fillStyle = this.initialColor.getHex() || 'red';
     this.ctx.fillRect(0, 0, width, height);
 
     // Create the white gradient from opaque to transparent white
@@ -113,23 +112,23 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
 
   }
 
-  getColorAtPosition(x: number, y: number): Color {
+  private getColorAtPosition(x: number, y: number): Color {
     const imageData = this.ctx.getImageData(x, y, 1, 1).data;
     const hexValue = '#' + imageData[0] + imageData[1] + imageData[2];
     return new Color(hexValue);
   }
 
-  emitColor(x: number, y: number) {
+  emitColor(x: number, y: number): void {
     const colorToEmit = this.getColorAtPosition(x, y);
     this.newColor.emit(colorToEmit);
   }
 
   @HostListener('window:mouseup', ['$event'])
-  onMouseUp(evt: MouseEvent) {
+  onMouseUp(evt: MouseEvent): void {
     this.isMouseDown = false;
   }
 
-  onMouseMove(evt: MouseEvent) {
+  onMouseMove(evt: MouseEvent): void {
     if (this.isMouseDown) {
       this.currentSelectedPosition = { x: evt.offsetX, y: evt.offsetY };
       this.display();
@@ -137,7 +136,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  onMouseDown(evt: MouseEvent) {
+  onMouseDown(evt: MouseEvent): void {
     this.isMouseDown = true;
     this.currentSelectedPosition = { x: evt.offsetX, y: evt.offsetY };
     this.display();
