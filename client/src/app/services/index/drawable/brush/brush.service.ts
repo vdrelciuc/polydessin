@@ -7,7 +7,7 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
   providedIn: 'root'
 })
 export class BrushService extends DrawableService {
-  selectedPattern: string;
+  selectedFilter: string;
   path: string;
   previousX: number;
   previousY: number;
@@ -21,7 +21,7 @@ export class BrushService extends DrawableService {
     super();
     this.isDrawing = false;
     this.path = '';
-    this.selectedPattern = 'VerticalLines';
+    this.selectedFilter = 'filter0';
    }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
@@ -57,6 +57,7 @@ export class BrushService extends DrawableService {
       this.isDrawing = false;
     }
     this.manipulator.removeChild(this.image.nativeElement, this.previewCricle);
+    delete(this.previewCricle);
   }
   onMousePress(event: MouseEvent): void {
     this.isDrawing = true;
@@ -69,7 +70,7 @@ export class BrushService extends DrawableService {
     this.manipulator.setAttribute(this.previewLine, SVGProperties.endOfLine, 'round');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
     this.manipulator.setAttribute(this.previewLine, SVGProperties.thickness, `${this.getThickness()}`);
-    this.manipulator.setAttribute(this.previewLine, 'filter', 'url(#filter0)');
+    this.manipulator.setAttribute(this.previewLine, 'filter', `url(#${this.selectedFilter})`);
 
     this.manipulator.appendChild(this.image.nativeElement, this.previewLine);
 
@@ -128,7 +129,7 @@ export class BrushService extends DrawableService {
       const circle = this.createCircle(this.effectiveX(this.previousX), this.effectiveY(this.previousY));
       this.manipulator.appendChild(this.image.nativeElement, circle);
     }
-    this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
+    // this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
 
     this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);
   }
@@ -144,7 +145,7 @@ export class BrushService extends DrawableService {
     this.manipulator.setAttribute(circle, SVGProperties.radius, (this.getThickness() / 2).toString());
     this.manipulator.setAttribute(circle, SVGProperties.centerX, x.toString());
     this.manipulator.setAttribute(circle, SVGProperties.centerY, y.toString());
-    this.manipulator.setAttribute(circle, 'filter', `url(#filter${this.selectedPattern})`);
+    this.manipulator.setAttribute(circle, 'filter', `url(#${this.selectedFilter})`);
     return circle;
   }
 

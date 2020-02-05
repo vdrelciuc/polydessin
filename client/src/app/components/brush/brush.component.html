@@ -25,9 +25,9 @@
         <label class="title" id="thickness">Texture</label>
         <ul>
           <li>
-            <button class="pattern" (click)="togglePatterns()" [ngStyle]="{background: 'url(../../../assets/patterns/' + service.selectedPattern + '.svg)'}">
-              <div id="patternSelect" *ngIf="showPatterns">
-                <button class="pattern" *ngFor="let pattern of this.patterns" [ngStyle]="{background: 'url(../../../assets/patterns/' + pattern + '.svg)'}" (click)= changePattern(pattern)></button>
+            <button class="pattern" (click)="toggleFilters()" [ngStyle]="{background: 'url(../../../assets/patterns/' + service.selectedPattern + '.svg)'}">
+              <div id="patternSelect" *ngIf="showFilters">
+                <button class="pattern" *ngFor="let pattern of this.filters" [ngStyle]="{background: 'url(../../../assets/patterns/' + pattern + '.svg)'}" (click)= changePattern(pattern)></button>
               </div>
             </button>
           </li>
