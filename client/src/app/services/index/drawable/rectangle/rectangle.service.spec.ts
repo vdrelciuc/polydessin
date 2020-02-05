@@ -11,6 +11,44 @@ describe('RectangleService', () => {
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
 
+  // Faking a MouseEvent
+  let e = {
+    type: 'click',
+    bubbles: true,
+    cancelable: true,
+    view: window,
+    detail: 0,
+    screenX: 1,
+    screenY: 1,
+    clientX: 1,
+    clientY: 1,
+    ctrlKey: false,
+    altKey: false,
+    shiftKey: false,
+    metaKey: false,
+    button: 0,
+    relatedTarget: undefined,
+  };
+
+  let evt = document.createEvent('MouseEvents');
+  evt.initMouseEvent(
+    e.type,
+    e.bubbles,
+    e.cancelable,
+    e.view,
+    e.detail,
+    e.screenX,
+    e.screenY,
+    e.clientX,
+    e.clientY,
+    e.ctrlKey,
+    e.altKey,
+    e.shiftKey,
+    e.metaKey,
+    e.button,
+    document.body.parentNode
+  );
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
