@@ -116,11 +116,15 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
 
   private getColorAtPosition(x: number, y: number): Color {
     const imageData = this.ctx.getImageData(x, y, 1, 1).data;
-    const color = new Color();
-    color.setRedHex(imageData[0].toString(CONSTANTS.HEX_BASE));
-    color.setBlueHex(imageData[1].toString(CONSTANTS.HEX_BASE))
-    color.setGreenHex(imageData[2].toString(CONSTANTS.HEX_BASE))
-    return color;
+    const hexValue = '#'
+    + this.correctDigits(imageData[0].toString(CONSTANTS.HEX_BASE))
+    + this.correctDigits(imageData[1].toString(CONSTANTS.HEX_BASE))
+    + this.correctDigits(imageData[2].toString(CONSTANTS.HEX_BASE));
+    return new Color(hexValue);
+  }
+
+  private correctDigits(n: string): string {
+    return n.length > 1 ? n : '0' + n;
   }
 
   emitColor(x: number, y: number): void {
