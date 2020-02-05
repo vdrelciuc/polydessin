@@ -1,7 +1,7 @@
 export interface Filter {
   name: string;
   referenceID: string;
-  imagePath: string;
+  imagePath?: string;
 }
 /*
 export const Filters: string[] = [
@@ -13,9 +13,9 @@ export const Filters: string[] = [
 ]*/
 
 export const FilterList: Filter[] = [
-  {name: 'Filtre 1', referenceID: 'filter0', imagePath: 'none'},
-  {name: 'Filtre 2', referenceID: 'filter2', imagePath: 'none'},
-  {name: 'Filtre 3', referenceID: 'displacementFilter', imagePath: 'none'},
-  {name: 'Filtre 4', referenceID: 'filter5', imagePath: 'none'},
-  {name: 'Filtre 5', referenceID: 'filter3', imagePath: 'none'},
+  {name: 'Filtre 1', referenceID: 'filter0'},
+  {name: 'Filtre 2', referenceID: 'filter2'},
+  {name: 'Filtre 3', referenceID: 'displacementFilter'},
+  {name: 'Filtre 4', referenceID: 'filter5'},
+  {name: 'Filtre 5', referenceID: 'filter3'}
 ]
