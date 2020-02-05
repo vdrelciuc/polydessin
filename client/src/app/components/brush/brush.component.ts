@@ -4,7 +4,9 @@ import { BrushService } from 'src/app/services/index/drawable/brush/brush.servic
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import * as CONSTANT from 'src/app/classes/constants';
-import { Filters } from 'src/app/components/brush/patterns';
+import { Filter } from 'src/app/components/brush/patterns';
+import { FilterList } from 'src/app/components/brush/patterns';
+//import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-brush',
@@ -12,8 +14,8 @@ import { Filters } from 'src/app/components/brush/patterns';
   styleUrls: ['./brush.component.scss']
 })
 export class BrushComponent implements OnInit {
-  
-  filters = Filters;
+
+  filters: Filter[];
   readonly name: string = Tools.Brush;
   showFilters: boolean;
 
@@ -27,6 +29,7 @@ export class BrushComponent implements OnInit {
     ) {
     this.service = this.toolSelector.getBrush();
     this.showFilters = false;
+    this.filters = FilterList;
   }
 
   ngOnInit(): void {

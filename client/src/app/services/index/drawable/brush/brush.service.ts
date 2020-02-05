@@ -2,6 +2,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { FilterList } from 'src/app/components/brush/patterns';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class BrushService extends DrawableService {
     super();
     this.isDrawing = false;
     this.path = '';
-    this.selectedFilter = 'filter0';
+    this.selectedFilter = FilterList[0].referenceID;
    }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {

@@ -44,6 +44,10 @@
   font-size: 20px;
 }
 
+::ng-deep .mat-select-value {
+  color: whitesmoke!important;
+}
+
 .pattern{
   background-repeat: repeat;
   width: 100px;
