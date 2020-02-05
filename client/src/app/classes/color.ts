@@ -98,4 +98,14 @@ export class Color {
       this.hex = this.hex.substr(0, 5) + blue;
     }
   }
+
+  private correctHexDigit(n: string): string {
+    if (n.length === 0) {
+      return '00';
+    } else if (n.length === 1) {
+      return '0' + n;
+    } else {
+      return n;
+    }
+  }
 }
