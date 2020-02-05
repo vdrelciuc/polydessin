@@ -74,13 +74,22 @@ describe('LineService', () => {
     expect(line.dotDiameter).toEqual(randomTestValue);
   });
 
-  it('should add point to line', () => {
+  it('should add point to line with shift pressed', () => {
     const point = new CoordinatesXY(1,1);
     const spy = spyOn<CoordinatesXY>(point, "getClosestPoint");
     line.addPointToLine(point.getX(), point.getY());
     line.onKeyPressed(new KeyboardEvent('keydown', {shiftKey: true}));
     line.addPointToLine(2,2);
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should add point to line without shift pressed', () => {
+    const point = new CoordinatesXY(1,1);
+    const spy = spyOn<CoordinatesXY>(point, "getClosestPoint");
+    line.addPointToLine(point.getX(), point.getY());
+    line.onKeyReleased(new KeyboardEvent('keyup', {shiftKey: false}));
+    line.addPointToLine(2,2);
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   it('should remove last point', () => {

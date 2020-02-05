@@ -94,7 +94,9 @@ export class LineService extends DrawableService {
   }
 
   onKeyReleased(event: KeyboardEvent): void {
+    console.log('out');
     if (!event.shiftKey) {
+      console.log('innn');
       this.shiftPressed = false;
     }
   }

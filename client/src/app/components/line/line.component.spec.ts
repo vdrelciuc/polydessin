@@ -47,10 +47,15 @@ describe('LineComponent', () => {
   });
 
   it('should setup shortcuts', () => {
-    component.service.addPointToLine(1,1);
-    component.service.addPointToLine(2,2);
-    let spy = spyOn(TestBed.get<LineService>(LineService), 'getLineIsDone');
+    // component.service.addPointToLine(1,1);
+    // component.service.addPointToLine(2,2);
     component.setupShortcuts();
+    let spy = spyOn(TestBed.get<LineService>(LineService), 'removeLastPoint');
+    document.dispatchEvent(new KeyboardEvent('backspace', {}))
+    const shortcut: HotkeysService = TestBed.get<HotkeysService>(HotkeysService);
+    console.log('hereeee')
+    console.log(shortcut.eventManager);
+    document.dispatchEvent(new Event('keydown.backspace'));
     expect(spy).toHaveBeenCalled();
   });
 
