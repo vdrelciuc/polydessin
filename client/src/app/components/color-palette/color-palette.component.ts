@@ -3,7 +3,7 @@
  * https://malcoded.com/posts/angular-color-picker/
  */
 
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Color } from 'src/app/classes/color';
 
 const CANVAS_CONTEXT = '2d';
@@ -27,8 +27,8 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
   @Output()
   newColor: EventEmitter<Color>;
 
-  @ViewChild('canvas', {static: false})
-  canvas: any;
+  @ViewChild('canvas', {static: true})
+  canvasValue: ElementRef;
 
   private ctx: CanvasRenderingContext2D;
   private currentSelectedPosition: {x: number, y: number};
@@ -55,12 +55,12 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
   private display(): void {
     // Initialize ctx
     if (!this.ctx) {
-      this.ctx = this.canvas.nativeElement.getContext(CANVAS_CONTEXT);
+      this.ctx = this.canvasValue.nativeElement.getContext(CANVAS_CONTEXT);
     }
 
     // Set palette dimensions to canvas size
-    const width = this.canvas.nativeElement.width;
-    const height = this.canvas.nativeElement.height;
+    const width = this.canvasValue.nativeElement.width;
+    const height = this.canvasValue.nativeElement.height;
 
     // Fill the background color inside the rectangle
     this.ctx.fillStyle = this.initialColor.getHex() || 'red';
@@ -114,8 +114,15 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
 
   private getColorAtPosition(x: number, y: number): Color {
     const imageData = this.ctx.getImageData(x, y, 1, 1).data;
-    const hexValue = '#' + imageData[0] + imageData[1] + imageData[2];
+    const hexValue = '#'
+    + this.correctDigits(imageData[0].toString(16))
+    + this.correctDigits(imageData[1].toString(16))
+    + this.correctDigits(imageData[2].toString(16));
     return new Color(hexValue);
+  }
+
+  private correctDigits(n: string): string {
+    return n.length > 1 ? n : '0' + n;
   }
 
   emitColor(x: number, y: number): void {

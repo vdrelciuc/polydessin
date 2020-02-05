@@ -3,7 +3,7 @@
  * https://malcoded.com/posts/angular-color-picker/
  */
 
-import { Component, Output, EventEmitter, ViewChild, AfterViewInit, HostListener } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
 import { Color } from 'src/app/classes/color';
 
 const CANVAS_CONTEXT = '2d';
@@ -19,7 +19,7 @@ export class ColorSliderComponent implements AfterViewInit {
   @Output()
   newHue: EventEmitter<Color>;
 
-  @ViewChild('canvas', {static: false})
+  @ViewChild('canvas', {static: true})
   canvas: any;
 
   private ctx: CanvasRenderingContext2D;
@@ -27,7 +27,8 @@ export class ColorSliderComponent implements AfterViewInit {
   private isMouseDown: boolean;
 
   constructor() {
-    this.newHue = new EventEmitter(true);
+    this.newHue = new EventEmitter();
+    this.isMouseDown = false;
    }
 
   ngAfterViewInit(): void {
@@ -81,10 +82,16 @@ export class ColorSliderComponent implements AfterViewInit {
   }
 
   private getColorAtPosition(y: number): Color {
-    const width = this.canvas.nativeElement.width;
-    const imageData = this.ctx.getImageData(width / 2, y, 1, 1).data;
-    const hexValue = '#' + imageData[0] + imageData[1] + imageData[2];
+    const imageData = this.ctx.getImageData(20, y, 1, 1).data;
+    const hexValue = '#'
+    + this.correctDigits(imageData[0].toString(16))
+    + this.correctDigits(imageData[1].toString(16))
+    + this.correctDigits(imageData[2].toString(16));
     return new Color(hexValue);
+  }
+
+  private correctDigits(n: string): string {
+    return n.length > 1 ? n : '0' + n;
   }
 
   emitHue(y: number): void {
