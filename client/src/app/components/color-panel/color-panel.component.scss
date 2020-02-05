@@ -50,11 +50,16 @@ ul li {
   float: left;
 }
 
-.invert-colors {
+.centered-section {
   text-align: center;
 }
 
 #invert-button {
+  background-color: $vivid;
+  margin-bottom: 10px;
+}
+
+#change-background {
   background-color: $vivid;
 }
 

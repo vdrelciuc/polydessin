@@ -2,6 +2,7 @@
   <h6 class="title">Couleur primaire</h6>
   <div class="color-preview">
     <button id="primary-color-button"
+    (click)="onPrimaryColorChange()"
     [style.background-color]="primaryColor.getHex()"></button>
   </div>
   <div class="transparency">
@@ -20,6 +21,7 @@
   <h6 class="title">Couleur secondaire</h6>
   <div class="color-preview">
     <button id="secondary-color-button"
+    (click)="onSecondaryColorChange()"
     [style.background-color]="secondaryColor.getHex()"></button>
   </div>
   <div class="transparency">
@@ -32,9 +34,11 @@
       [(ngModel)]="secondaryTransparency">>
       </mat-slider>
   </div>
-  <div class="invert-colors">
+  <div class="centered-section">
     <button mat-raised-button id="invert-button" (click)="onColorInversion()">Inverser les couleurs</button>
+    <button mat-raised-button id="change-background" (click)="onBackgroundChange()">Changer l'arrière-plan</button>
   </div>
+
 </div>
 
 

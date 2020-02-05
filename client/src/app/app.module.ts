@@ -14,6 +14,7 @@ import {AppRoutingModule, RoutingComponents} from './components/app/app-routing.
 import { AppComponent } from './components/app/app.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
 import { ColorPanelComponent } from './components/color-panel/color-panel.component';
+import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 import { CreateNewComponent } from './components/create-new/create-new.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
 import { CrayonGuideComponent } from './components/guideTemplaates/crayon-guide/crayon-guide.component';
@@ -31,6 +32,8 @@ import { WorkingAreaComponent } from './components/working-area/working-area.com
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
+import { ColorPaletteComponent } from './components/color-palette/color-palette.component';
+import { ColorSliderComponent } from './components/color-slider/color-slider.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,13 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     RoutingComponents,
     CreateNewComponent,
     WorkingAreaComponent,
-    ColorPanelComponent
+    ColorPanelComponent,
+    ColorPickerComponent,
+    ColorPaletteComponent,
+    ColorSliderComponent
+  ],
+  entryComponents: [
+    ColorPickerComponent
   ],
   imports: [
     BrowserAnimationsModule,

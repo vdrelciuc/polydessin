@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ColorType } from 'src/app/enums/color-types';
 import { Color } from '../classes/color';
 import * as CONSTANT from '../classes/constants';
 
@@ -10,41 +11,44 @@ export class ColorSelectorService {
 
   primaryColor: BehaviorSubject<Color>;
   secondaryColor: BehaviorSubject<Color>;
-  recentColorsObservable: BehaviorSubject<Color[]>;
+  backgroundColor: BehaviorSubject<Color>;
+  recentColors: BehaviorSubject<Color[]>;
   primaryTransparency: BehaviorSubject<number>;
   secondaryTransparency: BehaviorSubject<number>;
-
-  private recentColors: Color[];
+  colorToChange: ColorType;
 
   constructor() {
     this.primaryColor = new BehaviorSubject<Color>(new Color(CONSTANT.DEFAULT_PRIMARY_COLOR));
     this.secondaryColor = new BehaviorSubject<Color>(new Color(CONSTANT.DEFAULT_SECONDARY_COLOR));
-    this.recentColors = [];
-    this.recentColorsObservable = new BehaviorSubject<Color[]>(this.recentColors);
+    this.backgroundColor = new BehaviorSubject<Color>(new Color(CONSTANT.DEFAULT_SECONDARY_COLOR));
+    this.recentColors = new BehaviorSubject<Color[]>(this.initializeDefaultColors());
     this.primaryTransparency = new BehaviorSubject<number>(CONSTANT.DEFAULT_TRANSPARENCY);
     this.secondaryTransparency = new BehaviorSubject<number>(CONSTANT.DEFAULT_TRANSPARENCY);
-    this.initializeDefaultRecentColors();
+    this.colorToChange = ColorType.Primary;
   }
 
-  private initializeDefaultRecentColors(): void {
-    this.addRecentColor(new Color('#FF0000')); // red
-    this.addRecentColor(new Color('#FFFF00')); // yellow
-    this.addRecentColor(new Color('#008000')); // green
-    this.addRecentColor(new Color('#00FF00')); // lime
-    this.addRecentColor(new Color('#0000FF')); // blue
-    this.addRecentColor(new Color('#00FFFF')); // aqua
-    this.addRecentColor(new Color('#800080')); // purple
-    this.addRecentColor(new Color('#FF00FF')); // fuschia
-    this.addRecentColor(new Color('#000000')); // black
-    this.addRecentColor(new Color('#FFFFFF')); // white
+  private initializeDefaultColors(): Color[] {
+    const colors = [];
+    colors.push(new Color('#FF0000')); // red
+    colors.push(new Color('#FFFF00')); // yellow
+    colors.push(new Color('#008000')); // green
+    colors.push(new Color('#00FF00')); // lime
+    colors.push(new Color('#0000FF')); // blue
+    colors.push(new Color('#00FFFF')); // aqua
+    colors.push(new Color('#800080')); // purple
+    colors.push(new Color('#FF00FF')); // fuschia
+    colors.push(new Color('#000000')); // black
+    colors.push(new Color('#FFFFFF')); // white
+    return colors;
   }
 
   addRecentColor(color: Color): void {
-    if (this.recentColors.length === CONSTANT.MAX_RECENT_COLORS) {
-      this.recentColors.shift();
+    const colors = this.recentColors.getValue();
+    if (colors.length === CONSTANT.MAX_RECENT_COLORS) {
+      colors.shift();
     }
-    this.recentColors.push(color);
-    this.recentColorsObservable.next(this.recentColors);
+    colors.push(color);
+    this.recentColors.next(colors);
   }
 
   swapColors(currentPrimary: Color, currentSecondary: Color): void {

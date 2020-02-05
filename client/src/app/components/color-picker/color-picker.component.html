@@ -1,0 +1,39 @@
+<div class="color-wrapper">
+
+  <div class="color-section">
+    <app-color-palette></app-color-palette>
+  </div>
+  <div class="color-slider">
+    <app-color-slider></app-color-slider>
+  </div>
+  <div class="manual-input-section">
+    <div id="preview"></div>
+    <div id="input-fields"></div>
+  </div>
+</div>
+
+<div class="button-section">
+  <button mat-button id="cancel-button" (click)="onDialogClose()">Annuler</button>
+  <button mat-button id="confirm-button" (click)="onConfirm()">Confirmer</button>
+ </div>
+
+  <!--<div class="input-section">
+    <div class="row">
+      <mat-form-field floatLabel="never">
+        <label for="red">R : </label>
+        <input matInput id="red">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field floatLabel="never">
+        <label for="green">G : </label>
+        <input matInput id="green">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field floatLabel="never">
+        <label for="blue">B : </label>
+        <input matInput id="blue">
+      </mat-form-field>
+    </div>
+  </div>-->

@@ -1,0 +1,16 @@
+@import "../../../global-style/colors.scss";
+
+:host {
+  display: block;
+  padding: 16px;
+  background-color: $dark-gray;
+}
+
+.color-wrapper {
+  display: flex;
+  height: 300px;
+}
+
+.button-section {
+  text-align: right;
+}

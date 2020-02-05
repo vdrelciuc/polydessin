@@ -5,6 +5,8 @@ export class Color {
     private readonly MAX_VALUE: number = 255;
     private readonly REGEX_WITH_HASHTAG: RegExp = /^#([0-9A-F]{3}){1,2}$/i;
     private readonly REGEX_WITHOUT_HASHTAG: RegExp = /([0-9A-F]{3}){1,2}$/i;
+    private readonly RGB_LENGTH = 3;
+    private readonly RGBA_LENGTH = 4;
 
     private hex: string;
 
@@ -38,10 +40,11 @@ export class Color {
     }
 
     setRGB(rgb: number[]): void {
-        if (rgb.length === 3) {
+        if (rgb.length === this.RGB_LENGTH || rgb.length === this.RGBA_LENGTH) {
             rgb[0] = this.clamp(rgb[0]);
             rgb[1] = this.clamp(rgb[1]);
             rgb[2] = this.clamp(rgb[2]);
+            // Ignore rgb[3] if input was RGBA
 
             this.hex = '#'
             .concat(rgb[0].toString(CONSTANT.HEX_BASE))
