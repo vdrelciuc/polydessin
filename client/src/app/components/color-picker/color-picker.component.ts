@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
@@ -8,7 +8,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
   templateUrl: './color-picker.component.html',
   styleUrls: ['./color-picker.component.scss']
 })
-export class ColorPickerComponent implements AfterViewInit, OnInit {
+export class ColorPickerComponent {
 
   selectedColor: Color;
   selectedHue: Color;
@@ -21,10 +21,16 @@ export class ColorPickerComponent implements AfterViewInit, OnInit {
     this.selectedHue = this.colorSelectorService.getCurrentlySelectedColor();
   }
 
-  ngOnInit() {
+  updateRed(event: any): void {
+    this.selectedColor.setRedHex(event.target.value);
   }
 
-  ngAfterViewInit(): void {
+  updateGreen(event: any): void {
+    this.selectedColor.setGreenHex(event.target.value);
+  }
+
+  updateBlue(event: any): void {
+    this.selectedColor.setBlueHex(event.target.value);
   }
 
   onDialogClose() {

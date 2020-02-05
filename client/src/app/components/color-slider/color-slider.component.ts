@@ -5,6 +5,7 @@
 
 import { AfterViewInit, Component, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
 import { Color } from 'src/app/classes/color';
+import * as CONSTANTS from 'src/app/classes/constants';
 
 const CANVAS_CONTEXT = '2d';
 const INDICATOR_LENGTH = 5;
@@ -83,15 +84,11 @@ export class ColorSliderComponent implements AfterViewInit {
 
   private getColorAtPosition(y: number): Color {
     const imageData = this.ctx.getImageData(20, y, 1, 1).data;
-    const hexValue = '#'
-    + this.correctDigits(imageData[0].toString(16))
-    + this.correctDigits(imageData[1].toString(16))
-    + this.correctDigits(imageData[2].toString(16));
-    return new Color(hexValue);
-  }
-
-  private correctDigits(n: string): string {
-    return n.length > 1 ? n : '0' + n;
+    const color = new Color();
+    color.setRedHex(imageData[0].toString(CONSTANTS.HEX_BASE));
+    color.setBlueHex(imageData[1].toString(CONSTANTS.HEX_BASE))
+    color.setGreenHex(imageData[2].toString(CONSTANTS.HEX_BASE))
+    return color;
   }
 
   emitHue(y: number): void {

@@ -7,6 +7,7 @@ export class Color {
   private static readonly BYTES_IN_HEX: number = 3;
   private readonly REGEX_WITH_HASHTAG: RegExp = /^#[0-9A-F]{6}$/i;
   private readonly REGEX_WITHOUT_HASHTAG: RegExp = /[0-9A-F]{6}$/i;
+  private readonly REGEX_RGB_VALUE_IN_HEX: RegExp = /[0-9A-F]{2}$/i;
 
   private hex: string;
 
@@ -78,5 +79,23 @@ export class Color {
 
   getBlueHex(): string {
     return this.hex.slice(5).toUpperCase();
+  }
+
+  setRedHex(red: string): void {
+    if (this.REGEX_RGB_VALUE_IN_HEX.test(red)) {
+      this.hex = this.hex.charAt(0) + red + this.hex.substr(3);
+    }
+  }
+
+  setGreenHex(green: string): void {
+    if (this.REGEX_RGB_VALUE_IN_HEX.test(green)) {
+      this.hex = this.hex.substr(0, 3) + green + this.hex.substr(5);
+    }
+  }
+
+  setBlueHex(blue: string): void {
+    if (this.REGEX_RGB_VALUE_IN_HEX.test(blue)) {
+      this.hex = this.hex.substr(0, 5) + blue;
+    }
   }
 }

@@ -3,8 +3,10 @@
  * https://malcoded.com/posts/angular-color-picker/
  */
 
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener,
+  Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Color } from 'src/app/classes/color';
+import * as CONSTANTS from 'src/app/classes/constants';
 
 const CANVAS_CONTEXT = '2d';
 const OPAQUE_WHITE_RGBA = 'rgba(255,255,255,1)';
@@ -114,15 +116,11 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
 
   private getColorAtPosition(x: number, y: number): Color {
     const imageData = this.ctx.getImageData(x, y, 1, 1).data;
-    const hexValue = '#'
-    + this.correctDigits(imageData[0].toString(16))
-    + this.correctDigits(imageData[1].toString(16))
-    + this.correctDigits(imageData[2].toString(16));
-    return new Color(hexValue);
-  }
-
-  private correctDigits(n: string): string {
-    return n.length > 1 ? n : '0' + n;
+    const color = new Color();
+    color.setRedHex(imageData[0].toString(CONSTANTS.HEX_BASE));
+    color.setBlueHex(imageData[1].toString(CONSTANTS.HEX_BASE))
+    color.setGreenHex(imageData[2].toString(CONSTANTS.HEX_BASE))
+    return color;
   }
 
   emitColor(x: number, y: number): void {

@@ -12,15 +12,15 @@
     <div id="input-fields">
       <div class="input-row">
         <label for="red">R : </label>
-        <input [value]="selectedColor.getRedHex()" id="red" maxlength="2">
+        <input [value]="selectedColor.getRedHex()" (blur)="updateRed($event)" id="red" maxlength="2">
       </div>
       <div class="input-row">
         <label for="green">V : </label>
-        <input [value]="selectedColor.getGreenHex()"id="green" maxlength="2">
+        <input [value]="selectedColor.getGreenHex()" (blur)="updateGreen($event)" id="green" maxlength="2">
       </div>
       <div class="input-row">
         <label for="blue">B : </label>
-        <input [value]="selectedColor.getBlueHex()" id="blue" maxlength="2">
+        <input [value]="selectedColor.getBlueHex()" (blur)="updateBlue($event)" id="blue" maxlength="2">
       </div>
     </div>
   </div>
