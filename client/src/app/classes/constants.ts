@@ -21,3 +21,4 @@ export const OPACITY_DEFAULT = '0';
 
 // Math
 export const HEX_BASE = 16;
+export const HEX_LENGTH = 6;
