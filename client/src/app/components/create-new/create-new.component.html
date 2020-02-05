@@ -17,22 +17,22 @@
     <p>Couleur:</p>
   </div>
   <div class="col6">
-      <mat-slider min="0" max="255" step="1" thumbLabel="true" [(ngModel)]="createNewService.backgroundColor[0]"></mat-slider> <br/>
+      <mat-slider min="0" max="255" step="1" thumbLabel="true" [value] = 'createNewService.backgroundColor.getRGB()[0]' (change) = 'setBackgroundColor(0, $event.value)'></mat-slider> <br/>
       R <br/>
-      <mat-slider min="0" max="255" step="1" thumbLabel="true" [(ngModel)] = 'createNewService.backgroundColor[1]'></mat-slider> <br/>
+      <mat-slider min="0" max="255" step="1" thumbLabel="true" [value] = 'createNewService.backgroundColor.getRGB()[1]' (change) = 'setBackgroundColor(1, $event.value)'></mat-slider> <br/>
       G <br/>
-      <mat-slider min="0" max="255" step="1" thumbLabel="true" [(ngModel)] = 'createNewService.backgroundColor[2]'></mat-slider> <br/>
+      <mat-slider min="0" max="255" step="1" thumbLabel="true" [value] = 'createNewService.backgroundColor.getRGB()[2]' (change) = 'setBackgroundColor(2, $event.value)'></mat-slider> <br/>
       B
   </div>
   <div class="col6">
     <div class="col9 hexColor">
       <mat-form-field>
-        <input matInput type="string" [value] = 'getBackgroundColor()' (change) = 'setBackgroundColor($event.target.value)'>
+        <input matInput type="string" [value] = 'getBackgroundColor().substr(1)' (change) = 'createNewService.backgroundColor.setHex($event.target.value)'>
         <span matPrefix>#&nbsp;</span>
       </mat-form-field>
-      <button [ngStyle]="{'background-color' : '#' + getBackgroundColor()}" (click) = "toggleShowPalette()"></button>
+      <button [ngStyle]="{'background-color' : getBackgroundColor()}" (click) = "toggleShowPalette()"></button>
       <div *ngIf="showPalette">
-        <button *ngFor="let color of colorPalette" [ngStyle]="{'background-color' : '#' + color}" (click) = "setBackgroundColor(color)"></button>
+        <button *ngFor="let color of colorPalette" [ngStyle]="{'background-color' : '#' + color}" (click) = "createNewService.backgroundColor.setHex(color)"></button>
       </div>
 
     </div>
