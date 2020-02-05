@@ -37,13 +37,21 @@ export class Color {
         }
     }
 
+    numberToHexString(num: number) {
+      num = Math.floor(num);
+      if (num < 16) { return `0${num.toString(16)}`} else {
+        return num.toString(16)}
+    }
+
     setRGB(rgb: number[]): void {
         if (rgb.length === 3) {
             rgb[0] = this.clamp(rgb[0]);
             rgb[1] = this.clamp(rgb[1]);
             rgb[2] = this.clamp(rgb[2]);
 
-            this.hex = '#'.concat(rgb[0].toString(16)).concat(rgb[1].toString(16)).concat(rgb[2].toString(16));
+            this.hex = '#'.concat(this.numberToHexString(rgb[0]))
+              .concat(this.numberToHexString(rgb[1]))
+              .concat(this.numberToHexString(rgb[2]));
         }
     }
 

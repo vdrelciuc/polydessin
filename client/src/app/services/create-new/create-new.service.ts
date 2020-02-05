@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Color } from 'src/app/classes/color'
 
 const toolBoxWidth = 250 + 96;
 
@@ -7,7 +8,7 @@ const toolBoxWidth = 250 + 96;
 })
 export class CreateNewService {
 
-  backgroundColor: number[];
+  backgroundColor: Color;
   canvasSize: number[];
 
   getcanvasSize(axis: number): number {

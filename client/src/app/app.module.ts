@@ -69,6 +69,6 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
 
   ],
   providers: [DrawablePropertiesService],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent, CreateNewComponent],
 })
 export class AppModule {}
