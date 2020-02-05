@@ -41,7 +41,7 @@ export abstract class ShapeService extends DrawableService {
     this.shiftPressed = false;
   }
 
-  initializeProperties(attributes: DrawablePropertiesService) {
+  initializeProperties(attributes: DrawablePropertiesService): void {
     this.attributes = attributes;
 
     this.attributes.color.subscribe((element: string) => {
@@ -150,7 +150,7 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
   }
 
-  protected alignShapeOrigin(width: number, height: number) {
+  protected alignShapeOrigin(width: number, height: number): void {
     let quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
 
     if (quadrant === 1 || quadrant === 4) {
@@ -172,7 +172,7 @@ export abstract class ShapeService extends DrawableService {
     this.updateTextSize(width, height);
   }
 
-  protected updateTextSize(width: number, height: number) {
+  protected updateTextSize(width: number, height: number): void {
     const minTextWidth = 40;
     const minTextHeight = 15;
 

@@ -28,11 +28,11 @@ export class RectangleComponent implements OnInit {
     this.service.initializeProperties(this.attributes);
   }
 
-  updateBorder() {
+  updateBorder(): void {
     this.service.shapeStyle.hasBorder = !this.service.shapeStyle.hasBorder;
   }
 
-  updateFill() {
+  updateFill(): void {
     this.service.shapeStyle.hasFill = !this.service.shapeStyle.hasFill;
   }
 }
