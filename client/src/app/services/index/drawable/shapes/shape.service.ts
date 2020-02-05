@@ -20,6 +20,7 @@ export abstract class ShapeService extends DrawableService {
   protected mousePosition: Coords;
   protected shapeOrigin: Coords;
 
+  protected drawOnNextMove: boolean;
   protected isChanging: boolean;
   protected shiftPressed: boolean;
   protected mousePositionOnShiftPress: Coords;
@@ -34,7 +35,6 @@ export abstract class ShapeService extends DrawableService {
   constructor() {
     super();
   }
-
   
   initialize(manipulator: Renderer2, image: ElementRef): void {
     this.assignParams(manipulator, image);
@@ -53,32 +53,35 @@ export abstract class ShapeService extends DrawableService {
     });
   }
 
-  onMouseInCanvas(event: MouseEvent): void {
-
-  }
-  onMouseOutCanvas(event: MouseEvent): void { /*To Override if needed*/}
-
   onMousePress(event: MouseEvent): void {
     if(this.isChanging) {
       // This case happens if the mouse button was released out of canvas: the shaped is confirmed on next mouse click
       this.onMouseRelease();
     } else if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
       this.shapeOrigin = Coords.getEffectiveCoords(this.image, event);
-      this.setupProperties();
-      this.isChanging = true;
+      this.drawOnNextMove = true;
     }
 
   }
 
   onMouseRelease(event?: MouseEvent): void {
     this.isChanging = false;
-    this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
+    if (this.drawOnNextMove){
+      // Only a click was registered and no rectangle has been created after the mouse press
+      this.drawOnNextMove = false;
+    } else {
+      this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
+    }
   }
 
   onMouseMove(event: MouseEvent): void {
     if (this.isChanging) {
       this.mousePosition = Coords.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
       this.updateSize();
+    } else if (this.drawOnNextMove) {
+      this.setupProperties();
+      this.drawOnNextMove = false;
+      this.isChanging = true;
     }
   }
 
