@@ -55,4 +55,20 @@ export class ColorSelectorService {
     this.primaryColor.next(currentSecondary);
     this.secondaryColor.next(currentPrimary);
   }
+
+  updateColor(newColor: Color): void {
+    switch (this.colorToChange) {
+      case ColorType.Primary: {
+        this.primaryColor.next(newColor);
+        break;
+      }
+      case ColorType.Secondary: {
+        this.secondaryColor.next(newColor);
+        break;
+      }
+      default: {
+        this.backgroundColor.next(newColor);
+      }
+    }
+  }
 }
