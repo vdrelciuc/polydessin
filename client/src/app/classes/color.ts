@@ -1,12 +1,6 @@
 import * as CONSTANT from 'src/app/classes/constants';
 
 export class Color {
-    private readonly MIN_VALUE: number = 0;
-    private readonly MAX_VALUE: number = 255;
-    private readonly REGEX_WITH_HASHTAG: RegExp = /^#([0-9A-F]{3}){1,2}$/i;
-    private readonly REGEX_WITHOUT_HASHTAG: RegExp = /([0-9A-F]{3}){1,2}$/i;
-    private readonly RGB_LENGTH = 3;
-    private readonly RGBA_LENGTH = 4;
 
   private static readonly MIN_VALUE: number = 0;
   private static readonly MAX_VALUE: number = 255;
@@ -88,18 +82,21 @@ export class Color {
   }
 
   setRedHex(red: string): void {
+    this.correctHexDigit(red);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(red)) {
       this.hex = this.hex.charAt(0) + red + this.hex.substr(3);
     }
   }
 
   setGreenHex(green: string): void {
+    this.correctHexDigit(green);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(green)) {
       this.hex = this.hex.substr(0, 3) + green + this.hex.substr(5);
     }
   }
 
   setBlueHex(blue: string): void {
+    this.correctHexDigit(blue);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(blue)) {
       this.hex = this.hex.substr(0, 5) + blue;
     }
