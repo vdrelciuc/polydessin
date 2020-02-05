@@ -53,8 +53,16 @@ export abstract class ShapeService extends DrawableService {
     });
   }
 
+  onMouseInCanvas(event: MouseEvent): void {
+
+  }
+  onMouseOutCanvas(event: MouseEvent): void { /*To Override if needed*/}
+
   onMousePress(event: MouseEvent): void {
-    if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
+    if(this.isChanging) {
+      // This case happens if the mouse button was released out of canvas: the shaped is confirmed on next mouse click
+      this.onMouseRelease();
+    } else if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
       this.shapeOrigin = Coords.getEffectiveCoords(this.image, event);
       this.setupProperties();
       this.isChanging = true;
@@ -62,7 +70,7 @@ export abstract class ShapeService extends DrawableService {
 
   }
 
-  onMouseRelease(event: MouseEvent): void {
+  onMouseRelease(event?: MouseEvent): void {
     this.isChanging = false;
     this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
   }
