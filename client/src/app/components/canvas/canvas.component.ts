@@ -3,6 +3,8 @@ import { EventListenerService } from 'src/app/services/events/event-listener.ser
 import { SVGService } from 'src/app/services/index/svg/svg.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
+import { Color } from 'src/app/classes/color';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 // import { WorkspaceService } from 'src/app/services/workspace.service';
 
 @Component({
@@ -15,7 +17,6 @@ export class CanvasComponent implements OnInit {
 
   width: number;
   height: number;
-  backgroundColorHex: string;
   stack: SVGService;
   private eventListener: EventListenerService;
 
@@ -23,15 +24,19 @@ export class CanvasComponent implements OnInit {
     protected workspaceService: WorkspaceService,
     private manipulator: Renderer2,
     private toolSelector: ToolSelectorService,
+    private colorSelectorService: ColorSelectorService
     ) { }
 
-  ngOnInit(width: number = 100, height: number = 100, backgroundColorHex: string = 'FFFFFF') {
+  ngOnInit(width: number = 100, height: number = 100) {
     this.width = width;
     this.height = height;
-    this.backgroundColorHex = backgroundColorHex;
     this.toolSelector.initialize(this.manipulator, this.image);
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
     this.eventListener.initializeEvents();
+
+    this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
+      this.manipulator.setAttribute(this.image.nativeElement, 'style', `background-color: ${color.getHex()}`);
+    });
   }
 
 }
