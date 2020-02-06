@@ -3,6 +3,8 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { Color } from 'src/app/classes/color';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,9 @@ export class PencilService extends DrawableService {
   isDrawing: boolean;
   private line: SVGPathElement;
   private mousePointer: SVGCircleElement;
+  private color: Color;
   attributes: DrawablePropertiesService;
+  colorSelectorService: ColorSelectorService;
 
   constructor() {
     super();
@@ -29,8 +33,14 @@ export class PencilService extends DrawableService {
     this.assignParams(manipulator, image);
   }
 
-  initializeProperties(attributes: DrawablePropertiesService): void {
+  initializeProperties(attributes: DrawablePropertiesService, colorSelectorService: ColorSelectorService): void {
     this.attributes = attributes;
+    this.colorSelectorService = colorSelectorService;
+
+    this.colorSelectorService.primaryColor.subscribe((color: Color) => {
+      this.color = color;
+    });
+
     this.thickness = this.attributes.thickness.value;
     this.attributes.thickness.subscribe((element: number) => {
       this.thickness = element;
@@ -38,18 +48,15 @@ export class PencilService extends DrawableService {
   }
 
   onMouseInCanvas(event: MouseEvent): void {
-    if (this.isDrawing) {
-      this.newPath(event.clientX, event.clientY);
-    } else {
-      if (this.mousePointer === undefined) {
-        this.createCircle(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
-      }
-      this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
-      this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
+    if (this.mousePointer === undefined) {
+      this.createCircle(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
     }
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
+    this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
   }
   onMouseOutCanvas(event: MouseEvent): void {
-    this.manipulator.removeChild(this.image.nativeElement, this.mousePointer)
+    this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+    delete(this.mousePointer);
   }
 
   onMousePress(event: MouseEvent): void {
@@ -57,7 +64,7 @@ export class PencilService extends DrawableService {
     this.beginDraw(event.clientX, event.clientY);
     this.line = this.manipulator.createElement('path', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
-    this.manipulator.setAttribute(this.line, SVGProperties.color, this.attributes.color.value);
+    this.manipulator.setAttribute(this.line, SVGProperties.color, this.color.getHex());
     this.manipulator.setAttribute(this.line, SVGProperties.typeOfLine, 'round');
     this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
     //this.manipulator.setAttribute(this.line, 'stroke-linecap', 'round');
@@ -90,13 +97,6 @@ export class PencilService extends DrawableService {
     this.path = `M ${Coords.effectiveX(this.image, clientX)},${Coords.effectiveY(this.image, clientY)}`;
   }
 
-  private newPath(clientX: number, clientY: number) {
-    const moveToPath = ` m ${clientX - this.previousX},${clientY - this.previousY}`;
-    this.previousX = clientX;
-    this.previousY = clientY;
-    this.path = this.path + (moveToPath);
-  }
-
   private addPath(clientX: number, clientY: number) {
     const pathToAdd = ` l ${clientX - this.previousX},${clientY - this.previousY}`;
     this.previousX = clientX;
@@ -123,7 +123,7 @@ export class PencilService extends DrawableService {
 
   private createCircle(x: number, y: number): void {
     this.mousePointer = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, this.attributes.color.value);
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, this.color.getHex());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, x.toString());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, y.toString());

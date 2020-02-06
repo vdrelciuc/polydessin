@@ -5,6 +5,7 @@ import { Tools } from 'src/app/enums/tools';
 import { BrushService } from 'src/app/services/index/drawable/brush/brush.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Component({
   selector: 'app-brush',
@@ -23,7 +24,8 @@ export class BrushComponent implements OnInit {
   constructor(
     protected service: BrushService,
     private toolSelector: ToolSelectorService,
-    protected attributes: DrawablePropertiesService
+    protected attributes: DrawablePropertiesService,
+    protected colorSelectorService: ColorSelectorService
     ) {
     this.service = this.toolSelector.getBrush();
     this.showFilters = false;
@@ -31,7 +33,7 @@ export class BrushComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.initializeProperties(this.attributes);
+    this.service.initializeProperties(this.attributes, this.colorSelectorService);
   }
 
   onThicknessChange(input: number ): void {

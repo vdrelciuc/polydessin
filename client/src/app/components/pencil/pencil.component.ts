@@ -4,6 +4,7 @@ import { Tools } from 'src/app/enums/tools';
 import { PencilService } from 'src/app/services/index/drawable/pencil/pencil.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Component({
   selector: 'app-pencil',
@@ -20,7 +21,8 @@ export class PencilComponent implements OnInit {
   constructor(
     protected service: PencilService,
     private toolSelector: ToolSelectorService,
-    protected attributes: DrawablePropertiesService
+    protected attributes: DrawablePropertiesService,
+    protected colorSelectorService: ColorSelectorService
     ) {
     this.service = this.toolSelector.getPencil();
   }
@@ -28,6 +30,6 @@ export class PencilComponent implements OnInit {
   ngOnInit(): void {
     console.log('component pencil init');
     this.thickness = this.attributes.thickness.value;
-    this.service.initializeProperties(this.attributes);
+    this.service.initializeProperties(this.attributes, this.colorSelectorService);
   }
 }

@@ -4,6 +4,8 @@ import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { FilterList } from 'src/app/components/brush/patterns';
 import { Coords } from 'src/app/classes/coordinates';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { Color } from 'src/app/classes/color';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,7 @@ import { Coords } from 'src/app/classes/coordinates';
 export class BrushService extends DrawableService {
   selectedFilter: string;
   path: string;
+  private color: Color;
   previousX: number;
   previousY: number;
   thickness: number;
@@ -18,6 +21,7 @@ export class BrushService extends DrawableService {
   previewLine: SVGPathElement;
   previewCricle: SVGCircleElement;
   attributes: DrawablePropertiesService;
+  colorSelectorService: ColorSelectorService;
 
   constructor() {
     super();
@@ -29,9 +33,14 @@ export class BrushService extends DrawableService {
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
     this.assignParams(manipulator, image);
   }
-  initializeProperties(attributes: DrawablePropertiesService): void {
+  initializeProperties(attributes: DrawablePropertiesService, colorSelectorService: ColorSelectorService): void {
     this.attributes = attributes;
+    this.colorSelectorService = colorSelectorService;
     this.thickness = this.attributes.thickness.value;
+
+    this.colorSelectorService.primaryColor.subscribe((color: Color) => {
+      this.color = color;
+    });
 
     this.attributes.thickness.subscribe((element: number) => {
       this.thickness = element;
@@ -52,7 +61,6 @@ export class BrushService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);
   }
   onMouseOutCanvas(event: MouseEvent): void {
-    console.log('Out of canvas');
     if (this.isDrawing) {
       this.addPath(event.clientX, event.clientY);
       this.endPath();
@@ -64,10 +72,9 @@ export class BrushService extends DrawableService {
   onMousePress(event: MouseEvent): void {
     this.isDrawing = true;
     this.beginDraw(event.clientX, event.clientY);
-    console.log('Mouse Pressed');
     this.previewLine = this.manipulator.createElement(SVGProperties.path, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.fill, 'none');
-    this.manipulator.setAttribute(this.previewLine, SVGProperties.color, 'red');
+    this.manipulator.setAttribute(this.previewLine, SVGProperties.color, this.color.getHex());
     this.manipulator.setAttribute(this.previewLine, SVGProperties.typeOfLine, 'round');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.endOfLine, 'round');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
@@ -80,16 +87,14 @@ export class BrushService extends DrawableService {
   }
   onMouseRelease(event: MouseEvent): void {
     if (event.button === 0) { // 0 for the left mouse button
-      console.log('mouse release');
       if (this.isDrawing) {
         this.isDrawing = false;
-        this.addPath(event.clientX, event.clientY);
+        //this.addPath(event.clientX, event.clientY);
         this.endPath();
       }
     }
   }
   onMouseMove(event: MouseEvent): void {
-    console.log('Moving');
     if (this.isDrawing) {
     this.addPath(event.clientX, event.clientY);
 
@@ -98,19 +103,7 @@ export class BrushService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    console.log('Mouse Clicked');
     this.isDrawing = false;
-  }
-
-  onDoubleClick(event: MouseEvent): void {
-    throw new Error('Method not implemented.');
-  }
-
-  onKeyPressed(event: KeyboardEvent): void {
-    throw new Error('Method not implemented.');
-  }
-  onKeyReleased(event: KeyboardEvent): void {
-    throw new Error('Method not implemented.');
   }
 
   private beginDraw(clientX: number, clientY: number) {
@@ -143,7 +136,7 @@ export class BrushService extends DrawableService {
   private createCircle(x: number, y: number): SVGCircleElement {
     let circle: SVGCircleElement;
     circle = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(circle, SVGProperties.fill, 'red');
+    this.manipulator.setAttribute(circle, SVGProperties.fill, this.color.getHex());
     this.manipulator.setAttribute(circle, SVGProperties.radius, (this.getThickness() / 2).toString());
     this.manipulator.setAttribute(circle, SVGProperties.centerX, x.toString());
     this.manipulator.setAttribute(circle, SVGProperties.centerY, y.toString());
