@@ -59,21 +59,11 @@ export abstract class ShapeService extends DrawableService {
 
     this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
       this.shapeStyle.fillOpacity = opacity;
-      console.log("Opacity: " + this.shapeStyle.fillOpacity);
     });
 
     this.colorSelectorService.secondaryTransparency.subscribe((opacity: number) => {
       this.shapeStyle.borderOpacity = opacity;
     });
-/*
-
-    this.attributes.color.subscribe((element: string) => {
-      this.shapeStyle.borderColor = new Color(element);
-    });
-
-    this.attributes.fillColor.subscribe((element: string) => {
-      this.shapeStyle.fillColor = new Color(element);
-    });*/
   }
 
   onMousePress(event: MouseEvent): void {
