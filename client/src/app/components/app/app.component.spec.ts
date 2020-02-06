@@ -1,11 +1,9 @@
-// import { HttpClientModule } from '@angular/common/http';
 import { async, TestBed, ComponentFixture } from '@angular/core/testing';
-// import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { IndexService } from '../../services/index/index.service';
 import { AppComponent } from './app.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { MatSidenavModule, MatSliderModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatDialogModule } from '@angular/material';
+import { MatSidenavModule, MatSliderModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatDialogModule, MatDividerModule, MatCheckboxModule, MatTooltipModule } from '@angular/material';
 import { OptionPannelComponent } from '../option-pannel/option-pannel.component';
 import { LineComponent } from '../line/line.component';
 import { PencilComponent } from '../pencil/pencil.component';
@@ -17,6 +15,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import SpyObj = jasmine.SpyObj;
 import { WorkingAreaComponent } from '../working-area/working-area.component';
+import { RectangleComponent } from '../rectangle/rectangle.component';
+import { BrushComponent } from '../brush/brush.component';
+import { ColorPaletteComponent } from '../color-palette/color-palette.component';
+import { ColorPanelComponent } from '../color-panel/color-panel.component';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { ColorSliderComponent } from '../color-slider/color-slider.component';
 
 describe('AppComponent', () => {
     let indexServiceSpy: SpyObj<IndexService>;
@@ -38,15 +42,20 @@ describe('AppComponent', () => {
             ],
             declarations: [ 
                 AppComponent,
-                // RouterTestingModule, 
-                // HttpClientModule,
                 CanvasComponent,
+                ColorPaletteComponent,
+                ColorPanelComponent,
+                ColorPickerComponent,
+                ColorSliderComponent,
+                RectangleComponent,
+                BrushComponent,
                 OptionPannelComponent,
                 WorkingAreaComponent, 
                 SidebarComponent,
                 LineComponent,
                 PencilComponent,
-                WorkspaceComponent ],
+                WorkspaceComponent 
+            ],
               imports: [
                 BrowserAnimationsModule,
                 MatDialogModule,
@@ -60,7 +69,10 @@ describe('AppComponent', () => {
                 MatSliderModule,
                 MatFormFieldModule,
                 MatOptionModule,
-                MatSelectModule
+                MatSelectModule,
+                MatDividerModule,
+                MatCheckboxModule,
+                MatTooltipModule
               ]
         });
 
