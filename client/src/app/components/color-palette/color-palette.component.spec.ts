@@ -11,13 +11,10 @@ describe('ColorPaletteComponent', () => {
       declarations: [ ColorPaletteComponent ]
     })
     .compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ColorPaletteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
