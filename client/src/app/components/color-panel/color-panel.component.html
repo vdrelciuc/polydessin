@@ -1,0 +1,67 @@
+<div class="section">
+  <h6 class="title">Couleur primaire</h6>
+  <div class="color-preview">
+    <button id="primary-color-button"
+    (click)="onPrimaryColorChange()"
+    [style.background-color]="primaryColor.getHex()"></button>
+  </div>
+  <div class="transparency">
+    <p class="sub-title">Transparence : {{ primaryTransparency }}</p>
+    <mat-slider
+      (input)="onTransparencyChange(true)"
+      [min]="0.01"
+      [max]="1.00"
+      [step]="0.01"
+      [(ngModel)]="primaryTransparency">
+    </mat-slider>
+  </div>
+</div>
+
+<div class="section">
+  <h6 class="title">Couleur secondaire</h6>
+  <div class="color-preview">
+    <button id="secondary-color-button"
+    (click)="onSecondaryColorChange()"
+    [style.background-color]="secondaryColor.getHex()"></button>
+  </div>
+  <div class="transparency">
+    <p class="sub-title">Transparence : {{ secondaryTransparency }}</p>
+    <mat-slider
+      (input)="onTransparencyChange(false)"
+      [min]="0.01"
+      [max]="1.00"
+      [step]="0.01"
+      [(ngModel)]="secondaryTransparency">>
+      </mat-slider>
+  </div>
+  <div class="centered-section">
+    <button mat-raised-button id="invert-button" (click)="onColorInversion()">Inverser les couleurs</button>
+    <button mat-raised-button id="change-background" (click)="onBackgroundChange()">Changer l'arrière-plan</button>
+  </div>
+
+</div>
+
+
+<div class="section">
+  <h6 class="title">Dernières couleurs utilisées</h6>
+  <div class="recent">
+    <ul *ngFor="let color of recentColors;let i = index">
+      <li *ngIf= "i < recentColors.length/2">
+        <button mat-mini-fab class="last-colors"
+        (click)="onLeftClick(color)"
+        (contextmenu)="onRightClick(color)"
+        [style.background-color]="color.getHex()"></button>
+      </li>
+    </ul>
+    <ul *ngFor="let color of recentColors;let i = index">
+      <li *ngIf= "i >= recentColors.length/2">
+        <button mat-mini-fab class="last-colors"
+        (click)="onLeftClick(color)"
+        (contextmenu)="onRightClick(color)"
+        [style.background-color]="color.getHex()"></button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+

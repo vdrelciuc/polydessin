@@ -1,0 +1,78 @@
+@import "../../../global-style/colors.scss";
+
+button:focus {
+  outline:0;
+}
+
+.title {
+  color: whitesmoke;
+  margin-bottom: 1rem;
+}
+
+.sub-title {
+  margin-bottom: 0rem;
+  color: whitesmoke;
+}
+
+.section {
+  margin-bottom: 10px;
+  width: 100%;
+  min-height: 100px;
+}
+
+.recent {
+  min-height: 100px;
+}
+
+.color-preview {
+  float: left;
+  width: 30%;
+}
+
+.mat-slider {
+  padding-top: 0;
+  padding-bottom: 0;
+  width: 100%;
+}
+
+.transparency {
+  float: right;
+  width: 70%;;
+}
+
+ul li {
+  display: inline;
+}
+
+.last-colors {
+  margin: 2px;
+  text-align: center;
+  float: left;
+}
+
+.centered-section {
+  text-align: center;
+}
+
+#invert-button {
+  background-color: $vivid;
+  margin-bottom: 10px;
+}
+
+#change-background {
+  background-color: $vivid;
+}
+
+#primary-color-button {
+  width: 55px;
+  height: 55px;
+  font-size: 12px;
+  padding: 0;
+}
+
+#secondary-color-button {
+  width: 55px;
+  height: 55px;
+  font-size: 12px;
+  padding: 0;
+}

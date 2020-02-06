@@ -1,0 +1,78 @@
+@import "../../../global-style/colors.scss";
+
+:host {
+  display: block;
+  padding: 16px;
+  background-color: $dark-gray;
+}
+
+h6 {
+  color: whitesmoke;
+  font-size: 1em;
+}
+
+.input-area {
+  text-align: center;
+}
+
+.input-row {
+  display: flex;
+  width: 60px;
+  padding-top: 10px;
+}
+
+label {
+  display: flex;
+  width: 50%;
+  color: whitesmoke;
+}
+
+input {
+  display: flex;
+  width: 50%;
+  background-color: $dark-gray;
+  color: whitesmoke;
+  outline: none;
+  border-style: solid;
+  border-width: 2px;
+  border-color: $gray;
+  text-align: center;
+}
+
+.section {
+  margin: 8px;
+}
+
+.color-wrapper {
+  display: flex;
+  height: 316px;
+}
+
+.button-section {
+  margin-top: 10px;
+  text-align: right;
+}
+
+button {
+  margin-left: 20px;
+}
+
+#cancel-button {
+  color: whitesmoke;
+  outline: none;
+
+}
+
+#confirm-button {
+  background-color: $vivid;
+  outline: none;
+}
+
+#preview {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: whitesmoke;
+}

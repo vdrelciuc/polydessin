@@ -13,6 +13,10 @@ import { RouterModule } from '@angular/router';
 import {AppRoutingModule, RoutingComponents} from './components/app/app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
+import { ColorPaletteComponent } from './components/color-palette/color-palette.component';
+import { ColorPanelComponent } from './components/color-panel/color-panel.component';
+import { ColorPickerComponent } from './components/color-picker/color-picker.component';
+import { ColorSliderComponent } from './components/color-slider/color-slider.component';
 import { CreateNewComponent } from './components/create-new/create-new.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
 import { CrayonGuideComponent } from './components/guideTemplaates/crayon-guide/crayon-guide.component';
@@ -30,6 +34,8 @@ import { WorkingAreaComponent } from './components/working-area/working-area.com
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
+import { RectangleComponent } from './components/rectangle/rectangle.component';
+import { BrushComponent } from './components/brush/brush.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +46,8 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     LineComponent,
     WorkspaceComponent,
     PencilComponent,
+    RectangleComponent,
+    BrushComponent,
     HomeComponent,
     PinceauGuideComponent,
     CrayonGuideComponent,
@@ -50,12 +58,20 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     UserGuideComponent,
     RoutingComponents,
     CreateNewComponent,
-    WorkingAreaComponent
+    WorkingAreaComponent,
+    ColorPanelComponent,
+    ColorPickerComponent,
+    ColorPaletteComponent,
+    ColorSliderComponent
+  ],
+  entryComponents: [
+    ColorPickerComponent,
+    CreateNewComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     AngularMaterialModule,
     BrowserModule,
-    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     MatFormFieldModule,

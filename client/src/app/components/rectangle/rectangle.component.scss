@@ -1,0 +1,89 @@
+@import '../../../global-style/colors.scss';
+@import '../../../global-style/dimensions.scss';
+
+#container {
+    color: white;
+    padding: 30px 40px;
+    padding-bottom: 0px;
+
+    .title {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    ul {
+        list-style: none;
+        display: inline;
+    }
+
+    li {
+        padding-bottom: 50px;
+    }
+
+    mat-form-field {
+        margin-bottom: 50px;
+    }
+
+    #borderCheckbox {
+        padding-right: 30px;
+    }
+
+    p {
+        color: #cc3300;
+        font-size: 8pt;
+    }
+
+    .mat-slider {
+        margin-top: $slider-bubble-margin;
+        width: $slider-width;
+    }
+
+    .group {
+        padding: 10px 0 40px 0;
+    }
+}
+
+::ng-deep .mat-slider-ticks-container {
+    background-color: grey;
+}
+
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
+    color: white;
+    font-size: 20px;
+}
+
+::ng-deep .mat-select-value {
+    color: white;
+}
+
+::ng-deep .mat-form-field {
+    .mat-input-element {
+        color: whitesmoke;
+    }
+    .mat-form-field-underline {
+        background-color: $medium;
+    }
+}
+
+::ng-deep .mat-form-field.mat-focused {
+    .mat-form-field-label {
+        color: $vivid;
+    }
+    .mat-form-field-ripple {
+        background-color: $vivid;
+    }
+    .mat-form-field-required-marker {
+        color: $vivid;
+    }
+    .mat-input-element {
+        color: whitesmoke;
+    }
+}
+
+.mat-select {
+    padding-top: 20px;
+}
+
+::ng-deep .mat-checkbox .mat-checkbox-frame {
+    border-color: $medium;
+}

@@ -18,25 +18,26 @@ describe('DrawerService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be opened by default', () => { 
+  it('should have navIsOpened to true by default', () => {
     expect(service.navIsOpened).toBe(true);
   });
 
-  it('should be able to change status', () => { 
+  it('#updateDrawer should change navIsOpened to true if it was false', () => {
     service.navIsOpened = false;
+    service.updateDrawer(Tools.Rectangle);
+    expect(service.navIsOpened).toBe(true);
+  });
+
+  it('#updateDrawer should not change navIsOpened it was true and the currentTool is diffenrent from lastTool', () => {
+    service.lastTool = Tools.Rectangle;
     service.updateDrawer(Tools.Line);
     expect(service.navIsOpened).toBe(true);
   });
 
-  it('should be able to close', () => { 
-    service.lastTool = Tools.Line;
-    service.updateDrawer(Tools.Line);
+  it('#updateDrawer should close the drawer if it was opened and currentTool is the same as lastTool', () => {
+    service.lastTool = Tools.Rectangle;
+    service.updateDrawer(Tools.Rectangle);
     expect(service.navIsOpened).toBe(false);
   });
-
-  it('should change last tool', () => { 
-    service.lastTool = Tools.Line;
-    service.updateDrawer(Tools.Pencil);
-    expect(service.lastTool).toEqual(Tools.Pencil);
-  });
+  
 });

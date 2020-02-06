@@ -1,6 +1,10 @@
 @import "../../../global-style/colors.scss";
 @import "../../../global-style/dimensions.scss";
 
+button:focus {
+  outline:0;
+}
+
 .top {
   display: flex;
   border-bottom: 1px solid $dark;
@@ -64,9 +68,13 @@ hr {
   position: absolute;
   bottom: 1px;
   background-color: $medium;
-  border-top: 1px solid $dark;
 }
 
 .bumper {
   padding-bottom: 195px;
+}
+
+::ng-deep .mat-tooltip {
+  background-color: $light;
+  font-size: 10px;
 }

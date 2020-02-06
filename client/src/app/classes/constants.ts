@@ -12,8 +12,17 @@ export const DIAMETER_MAXIMUM = 100;
 export const MAX_DIFFERENCE_OF_PIXEL = 3;
 
 // Colors
-export const COLOR_DEFAULT = '#000000';
-export const OPACITY_DEFAULT = '0';
+export const DEFAULT_PRIMARY_COLOR = '#000000';
+export const DEFAULT_SECONDARY_COLOR = '#FFFFFF';
+export const DEFAULT_TRANSPARENCY = 1;
+export const MAX_TRANSPARENCY = 1;
+export const MIN_TRANSPARENCY = 0.01;
+
+export const COLOR_DEFAULT: string = '#000000';
+export const OPACITY_DEFAULT: string = '1';
+export const MAX_RECENT_COLORS = 10;
+
+//export const OPACITY_DEFAULT = '0';
 
 // Math
 export const HEX_BASE = 16;

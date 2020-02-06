@@ -5,6 +5,9 @@ import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
+import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
+import { BrushService } from '../index/drawable/brush/brush.service';
+import { ColorSelectorService } from '../color-selector.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,27 +15,33 @@ import { PencilService } from '../index/drawable/pencil/pencil.service';
 export class ToolSelectorService {
 
   $currentTool: BehaviorSubject<Tools>;
-  isHidden: boolean;
   private tools: Map<Tools, DrawableService>;
   private tool: DrawableService | undefined;
   private line: LineService;
   private pencil: PencilService;
+  private rectangle: RectangleService;
+  private brush: BrushService;
+
 
   constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
     this.line = new LineService();
     this.pencil = new PencilService();
+    this.rectangle = new RectangleService();
+    this.brush = new BrushService();
 
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
+    this.tools.set(Tools.Rectangle, this.rectangle);
+    this.tools.set(Tools.Brush, this.brush);
       // Initialize currentTool as the selector(mouse)
-    this.isHidden = true;
+    // this.isHidden = true;
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
   }
 
-  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService): void {
     for (const element of this.tools) {
-      element[1].initialize(manipulator, image);
+      element[1].initialize(manipulator, image, colorSelectorService);
     }
   }
 
@@ -40,12 +49,14 @@ export class ToolSelectorService {
 
   getLine(): LineService { return this.line; }
   getPencil(): PencilService { return this.pencil; }
+  getRectangle(): RectangleService { return this.rectangle; }
+  getBrush(): BrushService { return this.brush; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
     if (foundTool !== undefined) {
       this.tool = foundTool;
-      this.isHidden = false;
+      // this.isHidden = false;
       this.$currentTool.next(tool);
       this.drawerService.updateDrawer(this.$currentTool.getValue());
     }
@@ -56,28 +67,5 @@ export class ToolSelectorService {
       return this.tools.get(toFind);
     }
     return undefined;
-  }
-
-  getFrenchToolNameToPrint(): string {
-    switch (this.$currentTool.getValue()) {
-      case Tools.Aerosol: return 'Aérosol';
-      case Tools.Brush: return 'Pinceau';
-      case Tools.Bucket: return 'Sceau de peinture';
-      case Tools.ColorApplicator: return 'Applicateur de couleur';
-      case Tools.Ellipse: return 'Ellipse';
-      case Tools.Eraser: return 'Efface';
-      case Tools.Feather: return 'Plume';
-      case Tools.Grid: return 'Grille';
-      case Tools.Line: return 'Ligne';
-      case Tools.Pencil: return 'Crayon';
-      case Tools.Pipette: return 'Pipette';
-      case Tools.Polygon: return 'Polygone';
-      case Tools.Rectangle: return 'Rectangle';
-      case Tools.Selection: return 'Sélection';
-      case Tools.Settings: return 'Réglages';
-      case Tools.Stamp: return 'Étampe';
-      case Tools.Text: return 'Texte';
-      default : return Tools.None;
-    }
   }
 }

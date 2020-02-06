@@ -11,13 +11,14 @@ export enum SVGProperties {
   width = 'width',
   title = 'title',
 
-  // Circle
-  circle = 'circle',
+  // Circle and Ellipse
   centerX = 'cx',
   centerY = 'cy',
+  
+  circle = 'circle',
   radius = 'r',
 
-  // Ellipse
+  ellipse = 'ellipse',
   radiusX = 'rx',
   radiusY = 'ry',
 
@@ -27,5 +28,17 @@ export enum SVGProperties {
 
   // Point
   x = 'x',
-  y = 'y'
+  y = 'y',
+
+  // Rectangle
+  rectangle = 'rect',
+  
+  // Path
+  path = 'path',
+  d = 'd',
+  typeOfLine = 'stroke-linejoin',
+  endOfLine = 'stroke-linecap',
+
+  // Patern
+  pattern= 'pattern',
 }

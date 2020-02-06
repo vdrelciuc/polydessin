@@ -5,6 +5,7 @@ import { Renderer2, Type, ElementRef } from '@angular/core';
 
 describe('SVGService', () => {
 
+ 
   let stack: SVGService;
   let manipulator: Renderer2;
 
@@ -89,3 +90,4 @@ describe('SVGService', () => {
     expect(stack.removeLastElement()).toBe(undefined);
   })
 });
+*/

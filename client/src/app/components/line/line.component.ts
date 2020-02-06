@@ -6,6 +6,7 @@ import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.servic
 import { LineService } from 'src/app/services/index/drawable/line/line.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Component({
   selector: 'app-line',
@@ -15,14 +16,22 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 export class LineComponent implements OnInit {
 
   readonly name: string = Tools.Line;
-  specificationForm: FormGroup;
-  jointType: string;
-  
+  readonly THICKNESS_SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
+  readonly THICKNESS_SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
+  readonly DIAMETER_SLIDER_MINIMUM = CONSTANT.DIAMETER_MINIMUM;
+  readonly DIAMETER_SLIDER_MAXIMUM = CONSTANT.DIAMETER_MAXIMUM;
+  protected specificationForm: FormGroup;
+  protected typeSelected: string;
+  protected thickness: number;
+  protected dotDiameter: number;
+  protected jointType: string;
+
   constructor(
     private shortcuts: HotkeysService,
     public service: LineService,
     private toolSelector: ToolSelectorService,
-    private attributes: DrawablePropertiesService
+    protected attributes: DrawablePropertiesService,
+    protected colorSelectorService: ColorSelectorService
     ) {
     this.setupShortcuts();
     this.service = this.toolSelector.getLine();

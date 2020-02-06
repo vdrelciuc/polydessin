@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { Coords } from 'src/app/classes/coordinates';
 import { DrawablePropertiesService } from './properties/drawable-properties.service';
+import { ColorSelectorService } from '../../color-selector.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,19 +10,20 @@ export abstract class DrawableService {
   protected manipulator: Renderer2;
   protected image: ElementRef<SVGElement>;
   protected attributes: DrawablePropertiesService;
+  protected colorSelectorService: ColorSelectorService;
+  frenchName: string;
 
-  protected assignParams(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
+  protected assignParams(manipulator: Renderer2, image: ElementRef<SVGElement>,
+      colorSelectorService: ColorSelectorService): void {
     this.manipulator = manipulator;
     this.image = image;
+    this.colorSelectorService = colorSelectorService;
     this.attributes = new DrawablePropertiesService();
   }
 
-  abstract initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void;
-  abstract initializeProperties(attributes: DrawablePropertiesService): void;
-
-  getCoords(pointer: MouseEvent): Coords {
-    return new Coords(pointer.clientX, pointer.clientY);
-  }
+  abstract initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, 
+    colorSelectorService: ColorSelectorService): void;
+  abstract initializeProperties(colorSelectorService: ColorSelectorService): void;
 
   canDraw(canvas: HTMLElement, pointer: MouseEvent): boolean {
     return (
@@ -31,21 +32,13 @@ export abstract class DrawableService {
     );
   }
 
-  abstract onMouseInCanvas(event: MouseEvent): void;
-  abstract onMouseOutCanvas(event: MouseEvent): void;
-  abstract onMousePress(event: MouseEvent): void;
-  abstract onMouseRelease(event: MouseEvent): void;
-  abstract onMouseMove(event: MouseEvent): void;
-  abstract onDoubleClick(event: MouseEvent): void;
-  abstract onClick(event: MouseEvent): void;
-  abstract onKeyPressed(event: KeyboardEvent): void;
-  abstract onKeyReleased(event: KeyboardEvent): void;
-
-  protected effectiveX(onScreenX: number): number {
-    return onScreenX - this.image.nativeElement.getBoundingClientRect().left;
-  }
-
-  protected effectiveY(onScreenY: number): number {
-    return onScreenY - this.image.nativeElement.getBoundingClientRect().top;
-  }
+  onMouseInCanvas(event: MouseEvent): void { /*To Override if needed*/}
+  onMouseOutCanvas(event: MouseEvent): void { /*To Override if needed*/}
+  onMousePress(event: MouseEvent): void { /*To Override if needed*/}
+  onMouseRelease(event: MouseEvent): void { /*To Override if needed*/}
+  onMouseMove(event: MouseEvent): void { /*To Override if needed*/}
+  onDoubleClick(event: MouseEvent): void { /*To Override if needed*/}
+  onClick(event: MouseEvent): void { /*To Override if needed*/}
+  onKeyPressed(event: KeyboardEvent): void { /*To Override if needed*/}
+  onKeyReleased(event: KeyboardEvent): void { /*To Override if needed*/}
 }
