@@ -9,7 +9,7 @@ export class DrawerService {
 
   constructor() {
     this.navIsOpened = true;
-  }
+   }
 
   navIsOpened: boolean;
   lastTool: Tools;

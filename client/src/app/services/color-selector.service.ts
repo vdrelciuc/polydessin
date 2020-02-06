@@ -45,9 +45,9 @@ export class ColorSelectorService {
   addRecentColor(color: Color): void {
     const colors = this.recentColors.getValue();
     if (colors.length === CONSTANT.MAX_RECENT_COLORS) {
-      colors.shift();
+      colors.pop();
     }
-    colors.push(color);
+    colors.unshift(color);
     this.recentColors.next(colors);
   }
 
@@ -87,6 +87,9 @@ export class ColorSelectorService {
       default: {
         this.backgroundColor.next(newColor);
       }
+    }
+    if (!this.recentColors.getValue().includes(newColor)) {
+      this.addRecentColor(newColor);
     }
   }
 }

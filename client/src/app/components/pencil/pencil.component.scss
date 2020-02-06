@@ -1,5 +1,3 @@
-@import '../../../global-style/dimensions.scss';
-
 #container {
     color: white;
     padding: 30px 40px;
@@ -17,11 +15,6 @@
   
     mat-form-field {
       margin-bottom: 50px;
-    }
-
-    .mat-slider {
-      margin-top: $slider-bubble-margin;
-      width: $slider-width;
     }
   
   }

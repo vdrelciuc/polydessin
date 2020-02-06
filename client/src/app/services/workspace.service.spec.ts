@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
 import { WorkspaceService } from './workspace.service';
-import { Color } from '../classes/color';
 
 describe('WorkspaceService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
@@ -11,21 +10,36 @@ describe('WorkspaceService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should the color #808080 (grey) by default', () => {
+  it('should set new color', () => {
     const service: WorkspaceService = TestBed.get(WorkspaceService);
-    expect(service.backgroundColor.getHex()).toBe('#808080');
-    expect(service.checkIfSameBackgroundColor(new Color('#808080'))).toBe(true);
+    service.setBackgroundColorHex('898989');
+    expect(service.checkIfSameBackgroundColor('898989')).toBe(true);
   });
 
-  it('checkIfSameBackgroundColor should return false if the color is different', () => {
+  it('should be same color', () => {
     const service: WorkspaceService = TestBed.get(WorkspaceService);
-    expect(service.checkIfSameBackgroundColor(new Color('#809980'))).toBe(false);
+    expect(service.checkIfSameBackgroundColor('808080')).toBe(true);
   });
 
-  it('#checkIfSameBackgroundColor should return true if the color is the same', () => {
+  it('should not be same color/ valid color', () => {
     const service: WorkspaceService = TestBed.get(WorkspaceService);
-    service.backgroundColor.setHex('898989');
-    expect(service.checkIfSameBackgroundColor(new Color('#898989'))).toBe(true);
+    expect(service.checkIfSameBackgroundColor('809980')).toBe(false);
   });
 
+  it('should not be same color/ not valid color', () => {
+    const service: WorkspaceService = TestBed.get(WorkspaceService);
+    expect(service.checkIfSameBackgroundColor('i am here')).toBe(false);
+  });
+
+  it('should assign color', () => {
+    const service: WorkspaceService = TestBed.get(WorkspaceService);
+    service.setBackgroundColorHex('898989');
+    expect(service.checkIfSameBackgroundColor('898989')).toBe(true);
+  });
+
+  it('should not assign color (not valid)', () => {
+    const service: WorkspaceService = TestBed.get(WorkspaceService);
+    service.setBackgroundColorHex('i am here');
+    expect(service.checkIfSameBackgroundColor('808080')).toBe(true);
+  });
 });

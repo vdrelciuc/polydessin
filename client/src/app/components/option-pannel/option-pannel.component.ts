@@ -21,4 +21,5 @@ export class OptionPannelComponent implements OnInit {
       this.currentTool = tool;
     });
   }
+
 }

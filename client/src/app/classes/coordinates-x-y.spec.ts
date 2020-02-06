@@ -10,11 +10,6 @@ describe('CoordinatedXY', () => {
     expect(new CoordinatesXY(0, 0)).toBeTruthy();
   });
 
-  it('should get coordinates', () => {
-    expect(point.getX()).toBe(0);
-    expect(point.getY()).toBe(0);
-  });
-
   it('should not change coordinates', () => {
     point.setX(-1);
     point.setY(-1);
@@ -27,8 +22,6 @@ describe('CoordinatedXY', () => {
     point.setY(1);
     expect(point.getX()).toBe(1);
     expect(point.getY()).toBe(1);
-  });
-
-
+  })
 
 });

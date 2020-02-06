@@ -15,11 +15,9 @@ export const DEFAULT_TRANSPARENCY = 1;
 export const MAX_TRANSPARENCY = 1;
 export const MIN_TRANSPARENCY = 0.01;
 
-export const COLOR_DEFAULT: string = '#000000';
-export const OPACITY_DEFAULT: string = '1';
 export const MAX_RECENT_COLORS = 10;
 
-//export const OPACITY_DEFAULT = '0';
+export const OPACITY_DEFAULT = '0';
 
 // Math
 export const HEX_BASE = 16;
