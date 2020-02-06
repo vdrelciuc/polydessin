@@ -51,7 +51,7 @@ export class SidebarComponent implements OnInit {
       }
     );
   }
-  
+
 
   selectTool(tool: Tools): void {
     console.log('Test: ' + tool + ' selected');
@@ -59,6 +59,6 @@ export class SidebarComponent implements OnInit {
   }
 
   createNewProject(): void {
-    this.dialog.open(CreateNewComponent, {});
+    this.dialog.open(CreateNewComponent, { disableClose: true });
   }
 }
