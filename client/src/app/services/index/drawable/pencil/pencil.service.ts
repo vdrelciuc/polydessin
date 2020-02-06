@@ -29,14 +29,13 @@ export class PencilService extends DrawableService {
     this.path = '';
    }
 
-  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
-    this.assignParams(manipulator, image);
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
+    colorSelectorService: ColorSelectorService): void {
+    this.assignParams(manipulator, image, colorSelectorService);
+    this.initializeProperties();
   }
 
-  initializeProperties(attributes: DrawablePropertiesService, colorSelectorService: ColorSelectorService): void {
-    this.attributes = attributes;
-    this.colorSelectorService = colorSelectorService;
-
+  initializeProperties(): void {
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.color = color;
     });
@@ -56,6 +55,7 @@ export class PencilService extends DrawableService {
   }
   onMouseOutCanvas(event: MouseEvent): void {
     this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+    this.isDrawing = false;
     delete(this.mousePointer);
   }
 

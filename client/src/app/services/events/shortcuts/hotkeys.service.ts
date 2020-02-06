@@ -28,7 +28,7 @@ export class HotkeysService {
     }
 
     constructor(
-      private eventManager: EventManager,
+      public eventManager: EventManager,
       @Inject(DOCUMENT) private document: Document) {
     }
 

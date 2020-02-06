@@ -27,7 +27,7 @@ export class RectangleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.initializeProperties(this.attributes, this.colorSelectorService);
+    this.service.initializeProperties();
   }
 
   updateBorder(): void {

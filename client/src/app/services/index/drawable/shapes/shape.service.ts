@@ -40,14 +40,12 @@ export abstract class ShapeService extends DrawableService {
     super();
   }
   
-  initialize(manipulator: Renderer2, image: ElementRef): void {
-    this.assignParams(manipulator, image);
+  initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService): void {
+    this.assignParams(manipulator, image, colorSelectorService);
     this.shiftPressed = false;
   }
 
-  initializeProperties(attributes: DrawablePropertiesService, colorSelectorService: ColorSelectorService): void {
-    this.attributes = attributes;
-    this.colorSelectorService = colorSelectorService;
+  initializeProperties(): void {
     
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.shapeStyle.fillColor = color;

@@ -30,12 +30,13 @@ export class BrushService extends DrawableService {
     this.selectedFilter = FilterList[0].referenceID;
    }
 
-  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
-    this.assignParams(manipulator, image);
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
+      colorSelectorService: ColorSelectorService): void {
+    this.assignParams(manipulator, image, colorSelectorService);
+    this.initializeProperties();
   }
-  initializeProperties(attributes: DrawablePropertiesService, colorSelectorService: ColorSelectorService): void {
-    this.attributes = attributes;
-    this.colorSelectorService = colorSelectorService;
+  
+  initializeProperties(): void {
     this.thickness = this.attributes.thickness.value;
 
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {

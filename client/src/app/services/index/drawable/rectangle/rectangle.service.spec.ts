@@ -4,6 +4,7 @@ import { RectangleService } from './rectangle.service';
 import { Renderer2, ElementRef, Type } from '@angular/core';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import * as CONSTANT from 'src/app/classes/constants';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 describe('RectangleService', () => {
 
@@ -77,12 +78,18 @@ describe('RectangleService', () => {
             },
           },
         },
+        {
+          provide: ColorSelectorService,
+          useValue: {
+            },
+        },
       ],
     });
     rectangleService = getTestBed().get(RectangleService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
-    rectangleService.initialize(manipulator, image);
+    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
+    rectangleService.initialize(manipulator, image, 
+        getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
 
   it('should be created', () => {
@@ -102,7 +109,7 @@ describe('RectangleService', () => {
 
   it('#initializeProperties should set default properties', () => {
     const properties = new DrawablePropertiesService();
-    rectangleService.initializeProperties(properties);
+    rectangleService.initializeProperties();
     expect(rectangleService.shapeStyle.fillColor.getHex()).toBe(properties.fillColor.value);
     expect(rectangleService.shapeStyle.borderColor.getHex()).toBe(properties.color.value);
   });
@@ -110,7 +117,7 @@ describe('RectangleService', () => {
   it('#initializeProperties should define subscriptions', () => {
     const properties = new DrawablePropertiesService();
     const newColor = "#ABCDEF";
-    rectangleService.initializeProperties(properties);
+    rectangleService.initializeProperties();
     properties.fillColor.next(newColor);
     properties.color.next(newColor);
     expect(rectangleService.shapeStyle.fillColor.getHex()).toBe(newColor);

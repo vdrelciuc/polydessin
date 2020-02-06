@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+ import { TestBed } from '@angular/core/testing';
 
 import { WorkspaceService } from './workspace.service';
 import { Color } from '../classes/color';

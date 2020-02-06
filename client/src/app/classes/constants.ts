@@ -8,6 +8,9 @@ export const DIAMETER_MINIMUM = 1;
 export const DIAMETER_DEFAULT = 5;
 export const DIAMETER_MAXIMUM = 100;
 
+// Line pixel detection
+export const MAX_DIFFERENCE_OF_PIXEL = 3;
+
 // Colors
 export const DEFAULT_PRIMARY_COLOR = '#000000';
 export const DEFAULT_SECONDARY_COLOR = '#FFFFFF';

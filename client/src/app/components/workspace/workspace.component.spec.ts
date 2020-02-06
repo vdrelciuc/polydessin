@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WorkspaceComponent } from './workspace.component';
+import { CanvasComponent } from '../canvas/canvas.component';
 
 describe('WorkspaceComponent', () => {
   let component: WorkspaceComponent;
@@ -8,16 +9,14 @@ describe('WorkspaceComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WorkspaceComponent ]
+      declarations: [ WorkspaceComponent, CanvasComponent ]
     })
     .compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(WorkspaceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+    component.ngOnInit();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
