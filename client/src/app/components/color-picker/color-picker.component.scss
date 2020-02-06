@@ -59,10 +59,13 @@ button {
 
 #cancel-button {
   color: whitesmoke;
+  outline: none;
+
 }
 
 #confirm-button {
   background-color: $vivid;
+  outline: none;
 }
 
 #preview {
