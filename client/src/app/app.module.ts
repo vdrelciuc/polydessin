@@ -61,7 +61,8 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     ColorSliderComponent
   ],
   entryComponents: [
-    ColorPickerComponent
+    ColorPickerComponent,
+    CreateNewComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -80,6 +81,6 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
 
   ],
   providers: [DrawablePropertiesService],
-  bootstrap: [AppComponent, CreateNewComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
