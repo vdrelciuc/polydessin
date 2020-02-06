@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { Tools } from '../../enums/tools';
 import { ToolSelectorService } from '../../services/tools/tool-selector.service';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
+import { CreateNewComponent } from '../create-new/create-new.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,7 +15,8 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     private toolSelectorService: ToolSelectorService,
-    private shortcut: HotkeysService) {
+    private shortcut: HotkeysService,
+    protected dialog: MatDialog) {
       this.setupShortcuts();
     }
 
@@ -55,4 +58,7 @@ export class SidebarComponent implements OnInit {
     this.toolSelectorService.setCurrentTool(tool);
   }
 
+  createNewProject(): void {
+    this.dialog.open(CreateNewComponent, {});
+  }
 }

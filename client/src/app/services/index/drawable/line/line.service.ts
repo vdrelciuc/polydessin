@@ -89,22 +89,22 @@ export class LineService extends DrawableService {
   }
 
   onKeyPressed(event: KeyboardEvent): void {
-    if(event.shiftKey) {
+    if (event.shiftKey) {
       this.shiftPressed = true;
     }
   }
 
   onKeyReleased(event: KeyboardEvent): void {
-    if(!event.shiftKey) {
+    if (!event.shiftKey) {
       this.shiftPressed = false;
     }
   }
 
   addPointToLine(onScreenX: number, onScreenY: number): void {
-    if(this.shiftPressed) {
+    if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
-      if(lastPoint !== undefined) {
-        this.points.push_back(lastPoint.getClosestPoint(onScreenX,onScreenY));
+      if (lastPoint !== undefined) {
+        this.points.push_back(lastPoint.getClosestPoint(Coords.effectiveX(this.image, onScreenX), Coords.effectiveY(this.image, onScreenY)));
       }
     } else {
       this.points.push_back(new CoordinatesXY(onScreenX, onScreenY));
@@ -148,10 +148,12 @@ export class LineService extends DrawableService {
       this.isStarted = true;
       this.isDone = false;
     }
-    if(this.jointIsDot) {
-      let circle: SVGCircleElement = this.manipulator.createElement('circle','http://www.w3.org/2000/svg');
+
+    if (this.jointIsDot) {
+      const circle: SVGCircleElement = this.manipulator.createElement('circle', 'http://www.w3.org/2000/svg');
       this.manipulator.setAttribute(circle, SVGProperties.centerX, Coords.effectiveX(this.image, event.clientX).toString());
       this.manipulator.setAttribute(circle, SVGProperties.centerY, Coords.effectiveY(this.image, event.clientY).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
       this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
       this.manipulator.setAttribute(circle, SVGProperties.color, this.color);
       this.manipulator.setAttribute(circle, SVGProperties.fill, this.color);
@@ -172,13 +174,13 @@ export class LineService extends DrawableService {
   removeLastPoint(): void {
     this.points.pop_back();
     this.updateLine();
-    if(this.jointIsDot) {
+    if (this.jointIsDot) {
       const lastCircle = this.circles.pop_back();
       this.manipulator.removeChild(this.subElement, lastCircle);
     }
   }
 
-  getLineIsDone(): boolean { return this.isDone;}
+  getLineIsDone(): boolean { return this.isDone; }
 
   private updateLine(): void {
     this.manipulator.setAttribute(
@@ -191,7 +193,7 @@ export class LineService extends DrawableService {
   private updateSVGProperties(): void {
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Line);
-    this.line = this.manipulator.createElement(SVGProperties.polyLine,'http://www.w3.org/2000/svg');
+    this.line = this.manipulator.createElement(SVGProperties.polyLine, 'http://www.w3.org/2000/svg');
 
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());

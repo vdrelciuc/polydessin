@@ -95,7 +95,7 @@ describe('Stack', () => {
     for (let i = 0; i < 5; ++i) {
       stack.push_back(i);
     }
-    for(let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) {
       stack.pop_back();
     }
     expect(stack.getLast()).toBe(undefined);

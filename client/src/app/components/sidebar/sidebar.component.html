@@ -165,15 +165,8 @@
   </div>
   <hr noshade size="1">
 
-  <svg width="auto" height="70px">
-    <rect id="secondary-color" width="30" height="30" x="41" y="30" fill="gray" stroke="#302E40" stroke-width="1"></rect>
-    <rect id="primary-color" width="30" height="30" x="26" y="15" fill="lightgray" stroke="#302E40" stroke-width="1"></rect>
-  </svg>
-
-  <div class="bumper"></div>
-</div>
-
 <div id="lower-icons">
+  <hr noshade size="1">
   <div class="bottom">
     <div class="left-column">
       <!--<div class="icon">
@@ -187,7 +180,7 @@
         </button>
       </div>
       <div class="icon">
-        <button mat-button>
+        <button mat-button (click)="createNewProject()">
           <img src="../../../assets/icons/new-project.svg">
         </button>
       </div>
@@ -208,10 +201,12 @@
           <img src="../../../assets/icons/save-project.svg">
         </button>
       </div>
-      <div class="icon">
-        <button mat-button>
-          <img src="../../../assets/icons/guide.svg">
-        </button>
+      <div class="icon" [routerLink]="['/userGuide/bienvenue']"  >
+        <a [routerLink]="['/userGuide/bienvenue']" [state]="{path:'/'}">
+          <button mat-button>
+            <img src="../../../assets/icons/guide.svg">
+          </button>
+        </a>
       </div>
     </div>
   </div>

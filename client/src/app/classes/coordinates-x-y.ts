@@ -1,23 +1,23 @@
 export class CoordinatesXY {
-  private x: number;
-  private y: number;
 
   constructor(x: number, y: number) {
     this.setX(x);
     this.setY(y);
   }
+  private x: number;
+  private y: number;
 
   getX(): number  { return this.x; }
   getY(): number  { return this.y; }
 
   setX(x: number): void {
-    if(x >= 0) {
+    if (x >= 0) {
       this.x = x;
     }
   }
 
   setY(y: number): void {
-    if(y >= 0) {
+    if (y >= 0) {
       this.y = y;
     }
   }
@@ -26,11 +26,11 @@ export class CoordinatesXY {
     const distanceX = pointerX - this.x;
     const distanceY = pointerY - this.y;
     const foundQuadrant = CoordinatesXY.findQuadrantFromDelta(distanceX, distanceY);
-    if(foundQuadrant === 1  || foundQuadrant === 3) {
-      const angle = (Math.atan(distanceY/distanceX) * 180) / Math.PI;console.log(angle);
+    if (foundQuadrant === 1  || foundQuadrant === 3) {
+      const angle = (Math.atan(distanceY / distanceX) * 180) / Math.PI; console.log(angle);
       return this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX));
     } else {
-      const angle = -(Math.atan(distanceY/distanceX) * 180) / Math.PI;console.log(angle);
+      const angle = -(Math.atan(distanceY / distanceX) * 180) / Math.PI; console.log(angle);
       return this.getShiftedPoint(angle, pointerX, pointerY, this.y - this.findYDifferenceForBisectrix(pointerX));
     }
   }
@@ -39,7 +39,7 @@ export class CoordinatesXY {
     if (angle < 45 / 2) {
       return new CoordinatesXY(pointerX, this.y);
     } else {
-      if(angle <  3* (90 / 4)) {
+      if (angle <  3 * (90 / 4)) {
         return new CoordinatesXY(pointerX, bisectrixY);
       }
       return new CoordinatesXY(this.x, pointerY);

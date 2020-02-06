@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { DrawableService } from '../index/drawable/drawable.service';
 import { ToolSelectorService } from '../tools/tool-selector.service';
 

@@ -1,0 +1,36 @@
+@import '../../../global-style/colors.scss';
+@import '../../../global-style/dimensions.scss';
+
+.wrapper {
+  display: flex;
+  height: $full-height;
+  overflow: hidden;
+}
+
+.sidebar {
+  background-color: $sidebar-color;
+  width: fit-content;
+}
+
+.pannel {
+  background-color: $option-pannel-color;
+  width: 250px;
+  height: 100%;
+}
+
+.workspace {
+  background-color: $workspace-color;
+  flex: 1;
+  width: auto;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.scrollable::-webkit-scrollbar {
+  background-color: transparent;
+  width: 0px;
+}
+
+.mat-drawer-side {
+  border-right: none;
+}
