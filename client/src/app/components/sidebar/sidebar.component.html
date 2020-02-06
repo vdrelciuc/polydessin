@@ -47,6 +47,9 @@
     <div class="right-column">
       <div class="icon">
         <button mat-button (click)="selectTool('brush')"
+        [matTooltip]="this.toolSelectorService.getBrush().frenchName"
+        matTooltipPosition="after"
+        aria-label="brush-tooltip"
         [ngClass]="{'clicked': currentTool === 'brush',
         'not-clicked': currentTool !== 'brush'}">
         <img src="../../../assets/icons/brush.svg">

@@ -25,6 +25,7 @@ export class BrushService extends DrawableService {
 
   constructor() {
     super();
+    this.frenchName = 'Pinceau';
     this.isDrawing = false;
     this.path = '';
     this.selectedFilter = FilterList[0].referenceID;
