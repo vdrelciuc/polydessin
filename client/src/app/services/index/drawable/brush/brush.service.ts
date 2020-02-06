@@ -122,7 +122,7 @@ export class BrushService extends DrawableService {
   private beginDraw(clientX: number, clientY: number) {
     this.previousX = clientX;
     this.previousY = clientY;
-    this.path = `M ${Coords.effectiveX(this.image, clientX)},${Coords.effectiveY(this.image, clientY)}`;
+    this.path = `M ${Coords.effectiveX(this.image, clientX)},${Coords.effectiveY(this.image, clientY)} l 1,1`;
   }
 
   private addPath(clientX: number, clientY: number) {
@@ -132,11 +132,6 @@ export class BrushService extends DrawableService {
     this.path = this.path + (pathToAdd);
   }
   private endPath() {
-    if (this.path.indexOf('l') === -1) {
-      this.manipulator.removeChild(this.image.nativeElement, this.previewLine);
-      const circle = this.createCircle(Coords.effectiveX(this.image, this.previousX), Coords.effectiveY(this.image, this.previousY));
-      this.manipulator.appendChild(this.image.nativeElement, circle);
-    }
     // this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
 
     this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);

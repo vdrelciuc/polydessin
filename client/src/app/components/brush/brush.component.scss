@@ -48,6 +48,10 @@
   color: whitesmoke!important;
 }
 
+::ng-deep .mat-option {
+  padding: 0!important;
+}
+
 .pattern{
   background-repeat: repeat;
   width: 100px;
