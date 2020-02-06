@@ -9,8 +9,10 @@ import { PinceauGuideComponent } from '../guideTemplaates/pinceau-guide/pinceau-
 import { RectangleGuideComponent } from '../guideTemplaates/rectangle-guide/rectangle-guide.component';
 import { HomeComponent } from '../home/home.component';
 import {UserGuideComponent} from '../user-guide/user-guide.component';
+import { WorkingAreaComponent } from '../working-area/working-area.component';
 
 const routes: Routes = [
+  {path : 'dessin' , component : WorkingAreaComponent},
   {path : 'userGuide', component : UserGuideComponent,
     children : [
       {path : 'bienvenue', component : BienvenueGuideComponent},
@@ -20,12 +22,10 @@ const routes: Routes = [
       {path : 'rectangle',  component : RectangleGuideComponent},
       {path : 'couleur',  component : CouleurGuideComponent},
       {path : 'nouveauDessin', component : NouveauDessinComponent}
-
     ]
-
   },
-  {path : 'entrypoint', component : HomeComponent}
-  ];
+  {path : '', component : HomeComponent}
+];
 
 @NgModule({
   imports : [RouterModule.forRoot(routes)],
@@ -35,4 +35,4 @@ const routes: Routes = [
 export class AppRoutingModule {}
 export const RoutingComponents = [UserGuideComponent, BienvenueGuideComponent,
   LigneGuideComponent, PinceauGuideComponent, CrayonGuideComponent,
-  RectangleGuideComponent, CouleurGuideComponent, NouveauDessinComponent]
+  RectangleGuideComponent, CouleurGuideComponent, NouveauDessinComponent, WorkingAreaComponent];
