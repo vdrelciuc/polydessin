@@ -10,8 +10,7 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 @Component({
   selector: 'app-line',
   templateUrl: './line.component.html',
-  styleUrls: ['./line.component.scss'],
-  // providers: [DrawablePropertiesService]
+  styleUrls: ['./line.component.scss']
 })
 export class LineComponent implements OnInit {
 
@@ -30,11 +29,7 @@ export class LineComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.thickness = this.attributes.thickness.value;
-    this.service.dotDiameter = this.attributes.dotDiameter.value;
-    this.service.jointIsDot = this.attributes.junction.value;
-    this.jointType = 'Aucune';
-    this.service.initializeProperties(this.attributes);
+    this.jointType = this.service.jointIsDot ? 'Points': 'Aucune';
   }
 
   setupShortcuts(): void {

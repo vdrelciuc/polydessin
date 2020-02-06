@@ -24,7 +24,7 @@ export class PencilComponent implements OnInit {
 
   ngOnInit(): void {
     // this.thickness = this.attributes.thickness.value;
-    this.service.initializeProperties(this.attributes);
+    // this.service.initializeProperties(this.attributes);
   }
 
   onThicknessChange(): void {

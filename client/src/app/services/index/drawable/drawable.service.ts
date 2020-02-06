@@ -9,10 +9,12 @@ export abstract class DrawableService {
 
   protected manipulator: Renderer2;
   protected image: ElementRef<SVGElement>;
+  protected attributes: DrawablePropertiesService;
 
   protected assignParams(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
     this.manipulator = manipulator;
     this.image = image;
+    this.attributes = new DrawablePropertiesService();
   }
 
   abstract initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void;

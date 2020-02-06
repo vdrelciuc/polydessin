@@ -1,7 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { DrawableService } from '../drawable.service';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,6 @@ export class PencilService extends DrawableService {
   isDrawing: boolean;
   private line: SVGPathElement;
   private mousePointer: SVGCircleElement;
-  attributes: DrawablePropertiesService;
 
   constructor() {
     super();
@@ -25,10 +23,10 @@ export class PencilService extends DrawableService {
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
     this.assignParams(manipulator, image);
+    this.initializeProperties();
   }
 
-  initializeProperties(attributes: DrawablePropertiesService): void {
-    this.attributes = attributes;
+  initializeProperties(): void {
     this.thickness = this.attributes.thickness.value;
     this.attributes.thickness.subscribe((element: number) => {
       this.thickness = element;

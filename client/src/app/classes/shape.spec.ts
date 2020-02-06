@@ -4,10 +4,12 @@ describe('Shape', () => {
 
   let shape: Shape;
 
-  beforeEach( () => { shape = new Shape(); } );
+  beforeEach( () => { 
+    shape = new Shape(); 
+  });
 
   it('should create an instance', () => {
-    expect(new Shape()).toBeTruthy();
+    expect(shape).toBeTruthy();
   });
 
   it('should be origin', () => {

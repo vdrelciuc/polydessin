@@ -3,6 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
+// import * as CONSTANT from 'src/app/classes/constants';
 // import { SVGService } from '../../svg/svg.service';
 import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
@@ -29,6 +30,9 @@ export class LineService extends DrawableService {
 
   constructor() {
     super();
+    // this.thickness = CONSTANT.THICKNESS_DEFAULT
+    // this.dotDiameter = CONSTANT.DIAMETER_DEFAULT
+    // this.jointIsDot = false
     this.points = new Stack<CoordinatesXY>();
     this.circles = new Stack<SVGCircleElement>();
   }
@@ -38,10 +42,10 @@ export class LineService extends DrawableService {
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
     this.assignParams(manipulator, image);
     this.shiftPressed = false;
+    this.initializeProperties();
   }
 
-  initializeProperties(attributes: DrawablePropertiesService) {
-    this.attributes = attributes;
+  initializeProperties() {
     this.thickness = this.attributes.thickness.value;
     this.dotDiameter = this.attributes.dotDiameter.value;
     this.jointIsDot = this.attributes.junction.value;
@@ -60,7 +64,7 @@ export class LineService extends DrawableService {
 
     this.attributes.color.subscribe((element: string) => {
       this.color = element;
-    })
+    });
   }
 
   onMouseInCanvas(event: MouseEvent): void {}
@@ -94,9 +98,7 @@ export class LineService extends DrawableService {
   }
 
   onKeyReleased(event: KeyboardEvent): void {
-    console.log('out');
     if (!event.shiftKey) {
-      console.log('innn');
       this.shiftPressed = false;
     }
   }

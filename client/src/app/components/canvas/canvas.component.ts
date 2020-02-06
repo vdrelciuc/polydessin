@@ -3,7 +3,6 @@ import { EventListenerService } from 'src/app/services/events/event-listener.ser
 import { SVGService } from 'src/app/services/index/svg/svg.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
-// import { WorkspaceService } from 'src/app/services/workspace.service';
 
 @Component({
   selector: 'app-canvas',
@@ -22,7 +21,7 @@ export class CanvasComponent implements OnInit {
   constructor(
     protected workspaceService: WorkspaceService,
     private manipulator: Renderer2,
-    private toolSelector: ToolSelectorService,
+    private toolSelector: ToolSelectorService
     ) { }
 
   ngOnInit(width: number = 100, height: number = 100, backgroundColorHex: string = 'FFFFFF') {

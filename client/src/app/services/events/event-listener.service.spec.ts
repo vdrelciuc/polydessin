@@ -3,7 +3,6 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { EventListenerService } from './event-listener.service';
 import { ElementRef, Renderer2 } from '@angular/core';
 import { ToolSelectorService } from '../tools/tool-selector.service';
-// import { BehaviorSubject } from 'rxjs';
 import { Tools } from 'src/app/enums/tools';
 import { BehaviorSubject } from 'rxjs';
 import { LineService } from '../index/drawable/line/line.service';
@@ -12,6 +11,7 @@ describe('EventListenerService', () => {
 
   let service: EventListenerService;
   let manipulator: Renderer2;
+  const line: LineService = new LineService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -32,6 +32,7 @@ describe('EventListenerService', () => {
           drawerService: () => null,
           $currentTool: new BehaviorSubject<Tools>(Tools.Selection),
           getLine: () => new LineService(),
+          getCurrentTool: () => line,
         },
       },
       {
@@ -55,6 +56,8 @@ describe('EventListenerService', () => {
     const testBed = getTestBed();
     service = testBed.get(EventListenerService);
     manipulator = testBed.get(Renderer2);
+    service.currentTool = line;
+    service.currentTool.initialize(manipulator, testBed.get(ElementRef));
   });
 
   it('should be created', () => {
@@ -65,5 +68,13 @@ describe('EventListenerService', () => {
     const spyOnListen = spyOn(manipulator, 'listen');
     service.initializeEvents();
     expect(spyOnListen).toHaveBeenCalledTimes(9);
-  })
+  });
+
+  it('should call keyup event', () => {
+    service.currentTool = line;
+    service.initializeEvents();
+    const spyOnListen = spyOn(line, 'onKeyReleased');
+    window.dispatchEvent(new KeyboardEvent('keyup', {key: 'backspace', bubbles: true}));
+    expect(spyOnListen).toHaveBeenCalled();
+  });
 });
