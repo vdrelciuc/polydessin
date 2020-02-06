@@ -7,7 +7,7 @@
 }
 
 .header {
-  background-color: #38364B;
+  background-color: rgb(50,50,50);
   text-align: center ;
   color: azure;
   font-weight: bold;
@@ -18,7 +18,7 @@
 
 .navigationGuide{
   width: 15%;
-  background-color: #F1F1F1;
+  background-color: #dfdfdf;
   float: left;
   height: 100%;
   overflow-y: scroll;
@@ -33,7 +33,7 @@
 }
 
 .navigationGuide::-webkit-scrollbar-thumb , .currentElementDescription::-webkit-scrollbar-thumb  {
-  background-color: #38364B;
+  background-color: rgb(50,50,50);
 }
 
 
@@ -84,8 +84,8 @@ li {
   outline: none !important;
   height: auto !important;
 }
-subCategoryStyleAlone{
-  margin: auto;
+.subCategoryStyleAlone{
+  margin: 10px auto 0;
   outline: none !important;
   height: auto !important;
 }
@@ -104,6 +104,7 @@ subCategoryStyleAlone{
 }
 mat-expansion-panel{
   background-color: #F1F1F1 !important;
+  margin-top: 10px !important;
 }
 
 mat-action-list{
@@ -140,7 +141,7 @@ mat-expansion-panel-header{
 
 tr ,table{
   width: 85%;
-  background-color: #FFC107;
+  background-color: rgb(50,50,50);
 
 }
 
@@ -153,7 +154,11 @@ table{
 
 td{
   width: 50%;
-  background-color: #FFC107;
+  background-color: rgb(50,50,50);
 }
 
+.navButton{
+  background-color: #FFC107;
+  outline : none;
+}
 
