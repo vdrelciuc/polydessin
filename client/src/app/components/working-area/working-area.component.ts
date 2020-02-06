@@ -9,12 +9,12 @@ import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 })
 export class WorkingAreaComponent {
 
-  constructor(private drawerService: DrawerService, public route: Router) { }
-
-  ngOnInit() {}
+  constructor(
+    private drawerService: DrawerService, 
+    public route: Router
+  ) { }
 
   getDrawerStatus(): boolean {
     return this.drawerService.navIsOpened;
   }
-
 }

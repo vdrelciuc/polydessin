@@ -33,8 +33,6 @@ export abstract class ShapeService extends DrawableService {
 
   protected svgHtmlTag: SVGProperties;
   protected svgTitle: Tools;
-
-  
   
   constructor() {
     super();
@@ -46,7 +44,6 @@ export abstract class ShapeService extends DrawableService {
   }
 
   initializeProperties(): void {
-    
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.shapeStyle.fillColor = color;
     });
@@ -54,15 +51,6 @@ export abstract class ShapeService extends DrawableService {
     this.colorSelectorService.secondaryColor.subscribe((color: Color) => {
       this.shapeStyle.borderColor = color;
     });
-/*
-
-    this.attributes.color.subscribe((element: string) => {
-      this.shapeStyle.borderColor = new Color(element);
-    });
-
-    this.attributes.fillColor.subscribe((element: string) => {
-      this.shapeStyle.fillColor = new Color(element);
-    });*/
   }
 
   onMousePress(event: MouseEvent): void {
@@ -73,7 +61,6 @@ export abstract class ShapeService extends DrawableService {
       this.shapeOrigin = Coords.getEffectiveCoords(this.image, event);
       this.drawOnNextMove = true;
     }
-
   }
 
   onMouseRelease(event?: MouseEvent): void {
@@ -200,7 +187,6 @@ export abstract class ShapeService extends DrawableService {
 
   
   // Methods to implement in concrete shape class
-
   protected abstract setDimensionsAttributes(width: number, height: number): void;
   protected abstract setShapeOriginFromRightQuadrants(width: number): void;
   protected abstract setShapeOriginFromLeftQuadrants(width: number): void;

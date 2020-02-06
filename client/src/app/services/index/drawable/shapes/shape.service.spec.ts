@@ -5,6 +5,8 @@ import { RectangleService } from '../rectangle/rectangle.service';
 import { Renderer2, ElementRef, Type } from '@angular/core';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { BehaviorSubject } from 'rxjs';
+import { Color } from 'src/app/classes/color';
 
 describe('ShapeService', () => {
   
@@ -43,6 +45,8 @@ describe('ShapeService', () => {
         {
           provide: ColorSelectorService,
           useValue: {
+            primaryColor: new BehaviorSubject<Color>(new Color('#000000')),
+            secondaryColor: new BehaviorSubject<Color>(new Color('#000000'))
           },
         }
       ],
