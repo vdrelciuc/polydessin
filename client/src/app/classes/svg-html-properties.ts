@@ -12,6 +12,7 @@ export enum SVGProperties {
   topLeftCornerCoordinates = 'viewBox',
   width = 'width',
   title = 'title',
+  visibility = 'visibility',
 
   // Circle and Ellipse
   centerX = 'cx',

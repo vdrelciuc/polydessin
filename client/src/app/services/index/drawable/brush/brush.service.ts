@@ -14,6 +14,7 @@ export class BrushService extends DrawableService {
   selectedFilter: string;
   path: string;
   private color: Color;
+  opacity: number;
   previousX: number;
   previousY: number;
   thickness: number;
@@ -41,6 +42,10 @@ export class BrushService extends DrawableService {
 
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.color = color;
+    });
+
+    this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
+      this.opacity = opacity;
     });
 
     this.attributes.thickness.subscribe((element: number) => {
@@ -76,6 +81,7 @@ export class BrushService extends DrawableService {
     this.previewLine = this.manipulator.createElement(SVGProperties.path, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.color, this.color.getHex());
+    this.manipulator.setAttribute(this.previewLine, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(this.previewLine, SVGProperties.typeOfLine, 'round');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.endOfLine, 'round');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
@@ -85,6 +91,9 @@ export class BrushService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.previewLine);
 
     this.manipulator.removeChild(this.image.nativeElement, this.previewCricle);
+
+    this.addPath(event.clientX, event.clientY);
+    this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'hidden');
   }
   onMouseRelease(event: MouseEvent): void {
     if (event.button === 0) { // 0 for the left mouse button
@@ -92,6 +101,8 @@ export class BrushService extends DrawableService {
         this.isDrawing = false;
         //this.addPath(event.clientX, event.clientY);
         this.endPath();
+        this.updateCursor(event.clientX, event.clientY);
+      this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'visible');
       }
     }
   }
@@ -138,6 +149,7 @@ export class BrushService extends DrawableService {
     let circle: SVGCircleElement;
     circle = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(circle, SVGProperties.fill, this.color.getHex());
+    this.manipulator.setAttribute(circle, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(circle, SVGProperties.radius, (this.getThickness() / 2).toString());
     this.manipulator.setAttribute(circle, SVGProperties.centerX, x.toString());
     this.manipulator.setAttribute(circle, SVGProperties.centerY, y.toString());

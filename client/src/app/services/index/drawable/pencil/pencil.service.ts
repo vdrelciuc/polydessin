@@ -19,6 +19,7 @@ export class PencilService extends DrawableService {
   private line: SVGPathElement;
   private mousePointer: SVGCircleElement;
   private color: Color;
+  opacity: number;
   attributes: DrawablePropertiesService;
   colorSelectorService: ColorSelectorService;
 
@@ -39,6 +40,10 @@ export class PencilService extends DrawableService {
 
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.color = color;
+    });
+
+    this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
+      this.opacity = opacity;
     });
 
     this.thickness = this.attributes.thickness.value;
@@ -65,6 +70,7 @@ export class PencilService extends DrawableService {
     this.line = this.manipulator.createElement('path', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color.getHex());
+    this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.typeOfLine, 'round');
     this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
     //this.manipulator.setAttribute(this.line, 'stroke-linecap', 'round');
@@ -74,12 +80,15 @@ export class PencilService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.line);
     this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
     this.addPath(event.clientX, event.clientY);
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'hidden');
   }
 
   onMouseRelease(event: MouseEvent): void {
     if (event.button === 0) { // 0 for the left mouse button
       this.isDrawing = false;
       this.endPath();
+      this.updateCursor(event.clientX, event.clientY);
+      this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
     }
   }
 
@@ -124,6 +133,7 @@ export class PencilService extends DrawableService {
   private createCircle(x: number, y: number): void {
     this.mousePointer = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, this.color.getHex());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, x.toString());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, y.toString());
