@@ -1,6 +1,6 @@
 <div class="head">
   <button >Annuler</button>
-  <button >Confirmer</button>
+  <button (click) = "onConfirm()">Confirmer</button>
 </div>
 <div>
   <div>
@@ -11,7 +11,7 @@
     <input type="number" min="1" [value]="getcanvasSizeX()" (change) = "canvasSize.x = $event.target.value">
     <br/>
     <label for="height">hauteur : </label>
-    <input type="number" min="1" [value]="getcanvasSizeY()" (change) = "canvasSize.x = $event.target.value">
+    <input type="number" min="1" [value]="getcanvasSizeY()" (change) = "canvasSize.y = $event.target.value">
   </div>
 </div>
 <div>
