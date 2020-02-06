@@ -31,5 +31,14 @@ export enum SVGProperties {
   y = 'y',
 
   // Rectangle
-  rectangle = 'rect'
+  rectangle = 'rect',
+  
+  // Path
+  path = 'path',
+  d = 'd',
+  typeOfLine = 'stroke-linejoin',
+  endOfLine = 'stroke-linecap',
+
+  // Patern
+  pattern= 'pattern',
 }

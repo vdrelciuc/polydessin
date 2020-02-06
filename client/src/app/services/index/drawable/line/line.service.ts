@@ -76,6 +76,7 @@ export class LineService extends DrawableService {
   onMouseOutCanvas(event: MouseEvent): void {}
 
   onMouseMove(event: MouseEvent): void {
+    console.log('moving - line');
     if(this.isStarted) {
       let previewPoints = this.pointsToString();
       if (this.shiftPressed) {

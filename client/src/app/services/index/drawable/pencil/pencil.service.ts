@@ -58,7 +58,9 @@ export class PencilService extends DrawableService {
     this.line = this.manipulator.createElement('path', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.attributes.color.value);
-    this.manipulator.setAttribute(this.line, 'stroke-linecap', 'round');
+    this.manipulator.setAttribute(this.line, SVGProperties.typeOfLine, 'round');
+    this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
+    //this.manipulator.setAttribute(this.line, 'stroke-linecap', 'round');
     // this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
     this.manipulator.setAttribute(this.line, 'd', this.path);
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());

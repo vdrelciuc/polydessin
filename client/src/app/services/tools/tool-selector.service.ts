@@ -6,6 +6,7 @@ import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
+import { BrushService } from '../index/drawable/brush/brush.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,16 +22,20 @@ export class ToolSelectorService {
   private line: LineService;
   private pencil: PencilService;
   private rectangle: RectangleService;
+  private brush: BrushService;
+
 
   constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
     this.line = new LineService();
     this.pencil = new PencilService();
     this.rectangle = new RectangleService();
+    this.brush = new BrushService();
 
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
     this.tools.set(Tools.Rectangle, this.rectangle);
+    this.tools.set(Tools.Brush, this.brush);
       // Initialize currentTool as the selector(mouse)
     // this.isHidden = true;
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
@@ -47,6 +52,7 @@ export class ToolSelectorService {
   getLine(): LineService { return this.line; }
   getPencil(): PencilService { return this.pencil; }
   getRectangle(): RectangleService { return this.rectangle; }
+  getBrush(): BrushService { return this.brush; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
