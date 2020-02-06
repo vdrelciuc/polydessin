@@ -8,6 +8,7 @@ import { Color } from 'src/app/classes/color';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { invertColor } from 'src/app/classes/color-inverter';
 import { Tools } from 'src/app/enums/tools';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ import { Tools } from 'src/app/enums/tools';
 export abstract class ShapeService extends DrawableService {
 
   attributes: DrawablePropertiesService;
+  colorSelectorService: ColorSelectorService;
   shapeStyle: ShapeStyle;
 
   protected mousePosition: Coords;
@@ -32,6 +34,8 @@ export abstract class ShapeService extends DrawableService {
   protected svgHtmlTag: SVGProperties;
   protected svgTitle: Tools;
 
+  
+  
   constructor() {
     super();
   }
@@ -41,8 +45,18 @@ export abstract class ShapeService extends DrawableService {
     this.shiftPressed = false;
   }
 
-  initializeProperties(attributes: DrawablePropertiesService): void {
+  initializeProperties(attributes: DrawablePropertiesService, colorSelectorService: ColorSelectorService): void {
     this.attributes = attributes;
+    this.colorSelectorService = colorSelectorService;
+    
+    this.colorSelectorService.primaryColor.subscribe((color: Color) => {
+      this.shapeStyle.fillColor = color;
+    });
+
+    this.colorSelectorService.secondaryColor.subscribe((color: Color) => {
+      this.shapeStyle.borderColor = color;
+    });
+/*
 
     this.attributes.color.subscribe((element: string) => {
       this.shapeStyle.borderColor = new Color(element);
@@ -50,7 +64,7 @@ export abstract class ShapeService extends DrawableService {
 
     this.attributes.fillColor.subscribe((element: string) => {
       this.shapeStyle.fillColor = new Color(element);
-    });
+    });*/
   }
 
   onMousePress(event: MouseEvent): void {

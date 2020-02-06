@@ -4,6 +4,7 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Component({
   selector: 'app-rectangle',
@@ -20,12 +21,13 @@ export class RectangleComponent implements OnInit {
     protected service: RectangleService,
     private toolSelector: ToolSelectorService,
     protected attributes: DrawablePropertiesService,
+    protected colorSelectorService: ColorSelectorService
     ) {
     this.service = this.toolSelector.getRectangle();
   }
 
   ngOnInit(): void {
-    this.service.initializeProperties(this.attributes);
+    this.service.initializeProperties(this.attributes, this.colorSelectorService);
   }
 
   updateBorder(): void {

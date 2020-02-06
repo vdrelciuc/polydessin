@@ -8,6 +8,8 @@ import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { Color } from 'src/app/classes/color';
 //import { from } from 'rxjs';
 
 @Injectable({
@@ -16,6 +18,7 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
 export class LineService extends DrawableService {
 
   attributes: DrawablePropertiesService;
+  colorSelectorService: ColorSelectorService;
   thickness: number;
   jointIsDot: boolean;
   dotDiameter: number;
@@ -41,11 +44,16 @@ export class LineService extends DrawableService {
     this.shiftPressed = false;
   }
 
-  initializeProperties(attributes: DrawablePropertiesService) {
+  initializeProperties(attributes: DrawablePropertiesService, colorSelectorService: ColorSelectorService) {
     this.attributes = attributes;
+    this.colorSelectorService = colorSelectorService;
     // this.thickness = this.attributes.thickness.value;
     // this.dotDiameter = this.attributes.dotDiameter.value;
     // this.jointIsDot = this.attributes.junction.value;
+
+    this.colorSelectorService.primaryColor.subscribe((color: Color) => {
+      this.color = color.getHex();
+    });
 
     this.attributes.thickness.subscribe((element: number) => {
         this.thickness = element;
@@ -58,10 +66,10 @@ export class LineService extends DrawableService {
     this.attributes.dotDiameter.subscribe((element: number) => {
         this.dotDiameter = element;
     });
-
+/*
     this.attributes.color.subscribe((element: string) => {
       this.color = element;
-    });
+    });*/
   }
 
   onMouseInCanvas(event: MouseEvent): void {}

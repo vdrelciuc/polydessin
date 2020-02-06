@@ -8,6 +8,7 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { ShapeService } from '../shapes/shape.service';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
+//import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 
 

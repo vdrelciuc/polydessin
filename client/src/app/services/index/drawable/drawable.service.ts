@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { DrawablePropertiesService } from './properties/drawable-properties.service';
+import { ColorSelectorService } from '../../color-selector.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export abstract class DrawableService {
   }
 
   abstract initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void;
-  abstract initializeProperties(attributes: DrawablePropertiesService): void;
+  abstract initializeProperties(attributes: DrawablePropertiesService, colorSelectorService: ColorSelectorService): void;
 
   canDraw(canvas: HTMLElement, pointer: MouseEvent): boolean {
     return (

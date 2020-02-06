@@ -6,6 +6,7 @@ import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.servic
 import { LineService } from 'src/app/services/index/drawable/line/line.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Component({
   selector: 'app-line',
@@ -29,7 +30,8 @@ export class LineComponent implements OnInit {
     private shortcuts: HotkeysService,
     protected service: LineService,
     private toolSelector: ToolSelectorService,
-    protected attributes: DrawablePropertiesService
+    protected attributes: DrawablePropertiesService,
+    protected colorSelectorService: ColorSelectorService
     ) {
     this.setupShortcuts();
     this.service = this.toolSelector.getLine();
@@ -38,7 +40,7 @@ export class LineComponent implements OnInit {
   ngOnInit(): void {
     this.thickness = this.attributes.thickness.value;
     this.dotDiameter = this.attributes.dotDiameter.value;
-    this.service.initializeProperties(this.attributes);
+    this.service.initializeProperties(this.attributes, this.colorSelectorService);
     this.typeSelected = 'Aucune';
   }
 
