@@ -31,6 +31,7 @@ export class LineService extends DrawableService {
 
   constructor() {
     super();
+    this.frenchName = 'Ligne';
     this.points = new Stack<CoordinatesXY>();
     this.circles = new Stack<SVGCircleElement>();
   }

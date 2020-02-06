@@ -145,6 +145,7 @@ export class BrushService extends DrawableService {
   updateCursor(clientX: number, clientY: number) {
     this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerX, Coords.effectiveX(this.image, clientX).toString());
     this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerY, Coords.effectiveY(this.image, clientY).toString());
+    this.manipulator.setAttribute(this.previewCricle, SVGProperties.globalOpacity, this.opacity.toString());
   }
   private createCircle(x: number, y: number): SVGCircleElement {
     let circle: SVGCircleElement;
