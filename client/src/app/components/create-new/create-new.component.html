@@ -7,34 +7,22 @@
     <p>Dimensions:</p>
   </div>
   <div>
-    <input type="number" min="1" [value]="createNewService.getcanvasSize(0)" (change) = createNewService.setCanvasSize(0,$event.target.value)> px X
-    <input type="number" min="1" [value]="createNewService.getcanvasSize(1)" (change) = createNewService.setCanvasSize(1,$event.target.value)> px
+    <label for="width">largeur : </label>
+    <input type="number" min="1" [value]="getcanvasSizeX()" (change) = "canvasSize.x = $event.target.value">
+    <br/>
+    <label for="height">hauteur : </label>
+    <input type="number" min="1" [value]="getcanvasSizeY()" (change) = "canvasSize.x = $event.target.value">
   </div>
 </div>
 <div>
 
   <div>
-    <p>Couleur:</p>
-  </div>
-  <div class="col6">
-      <mat-slider min="0" max="255" step="1" thumbLabel="true" [value] = 'createNewService.backgroundColor.getRGB()[0]' (change) = 'setBackgroundColor(0, $event.value)'></mat-slider> <br/>
-      R <br/>
-      <mat-slider min="0" max="255" step="1" thumbLabel="true" [value] = 'createNewService.backgroundColor.getRGB()[1]' (change) = 'setBackgroundColor(1, $event.value)'></mat-slider> <br/>
-      G <br/>
-      <mat-slider min="0" max="255" step="1" thumbLabel="true" [value] = 'createNewService.backgroundColor.getRGB()[2]' (change) = 'setBackgroundColor(2, $event.value)'></mat-slider> <br/>
-      B
-  </div>
-  <div class="col6">
-    <div class="col9 hexColor">
-      <mat-form-field>
-        <input matInput type="string" [value] = 'getBackgroundColor().substr(1)' (change) = 'createNewService.backgroundColor.setHex($event.target.value)'>
-        <span matPrefix>#&nbsp;</span>
-      </mat-form-field>
-      <button [ngStyle]="{'background-color' : getBackgroundColor()}" (click) = "toggleShowPalette()"></button>
-      <div *ngIf="showPalette">
-        <button *ngFor="let color of colorPalette" [ngStyle]="{'background-color' : '#' + color}" (click) = "createNewService.backgroundColor.setHex(color)"></button>
-      </div>
 
+    <h6 class="title">Couleur d'arrière-plan</h6>
+    <div class="color-preview">
+      <button id="color-button"
+      (click)="onBackgroundChange()"
+      [style.background-color]="backgroundColor.getHex()"></button>
     </div>
   </div>
 </div>

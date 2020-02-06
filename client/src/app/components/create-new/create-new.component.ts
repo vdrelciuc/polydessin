@@ -1,13 +1,19 @@
 import { Component, OnInit} from '@angular/core';
 import { Color } from 'src/app/classes/color';
-import { CreateNewService } from 'src/app/services/create-new/create-new.service';
-import { colorPalette } from './colors';
+import { MatDialog } from '@angular/material';
+import { ColorPickerComponent } from 'src/app/components/color-picker/color-picker.component';
+import { ColorType } from 'src/app/enums/color-types';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { Coords } from 'src/app/classes/coordinates';
+
+const toolBoxWidth: number = 96 + 250;
 
 @Component({
   selector: 'app-create-new',
   templateUrl: './create-new.component.html',
   styleUrls: ['./create-new.component.scss']
 })
+
 
 export class CreateNewComponent implements OnInit {
   /* hex color verif
@@ -18,27 +24,31 @@ export class CreateNewComponent implements OnInit {
   i          -> ignore case
   */
 
-  colorPalette = colorPalette;
-  showPalette = false;
+  backgroundColor: Color;
+  canvasSize: Coords;
 
-  constructor(public createNewService: CreateNewService) { }
+  constructor(private colorSelectorService: ColorSelectorService,
+              private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.createNewService.backgroundColor = new Color('FFFFFF');
-    this.createNewService.canvasSize = [0, 0];
+    this.canvasSize = new Coords(0, 0);
+    this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
+      this.backgroundColor = color;
+    });
   }
 
-  getBackgroundColor(): string {
-    return this.createNewService.backgroundColor.getHex();
+  getcanvasSizeX(): number {
+    return (this.canvasSize.x || window.innerWidth - toolBoxWidth);
+  }
+  getcanvasSizeY(): number {
+    return (this.canvasSize.y || window.innerHeight);
+  }
+  onBackgroundChange(): void {
+    this.colorSelectorService.colorToChange = ColorType.Background;
+    this.launchDialog();
   }
 
-  setBackgroundColor(colorType: number, value: number): void {
-    const color: number[] = this.createNewService.backgroundColor.getRGB();
-    color[colorType] = Math.floor(value);
-    this.createNewService.backgroundColor.setRGB(color);
-  }
-
-  toggleShowPalette(): void {
-    this.showPalette = !this.showPalette;
+  private launchDialog(): void {
+    this.dialog.open(ColorPickerComponent, { disableClose: true });
   }
 }
