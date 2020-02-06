@@ -33,3 +33,4 @@ describe('BrushService', () => {
 //     expect(service.getcanvasSize(0)).toEqual(1);
 //   });
 // });
+});

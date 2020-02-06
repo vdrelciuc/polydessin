@@ -6,6 +6,7 @@ import { ToolSelectorService } from '../tools/tool-selector.service';
 import { Tools } from 'src/app/enums/tools';
 import { BehaviorSubject } from 'rxjs';
 import { LineService } from '../index/drawable/line/line.service';
+import { ColorSelectorService } from '../color-selector.service';
 
 describe('EventListenerService', () => {
 
@@ -51,13 +52,18 @@ describe('EventListenerService', () => {
             },
           },
         },
+        {
+          provide: ColorSelectorService,
+          useValue: {
+            },
+        },
       ],
     }).compileComponents();
     const testBed = getTestBed();
     service = testBed.get(EventListenerService);
     manipulator = testBed.get(Renderer2);
     service.currentTool = line;
-    service.currentTool.initialize(manipulator, testBed.get(ElementRef));
+    service.currentTool.initialize(manipulator, testBed.get(ElementRef), testBed.get(ColorSelectorService));
   });
 
   it('should be created', () => {

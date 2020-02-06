@@ -53,20 +53,20 @@ describe('ToolSelectorService', () => {
     expect(service.getTool(Tools.Aerosol)).toEqual(undefined);
   });
 
-  it('should get french name of some tools', () => {
-    const mapOfTools: Map<Tools, string> = new Map();
-    mapOfTools.set(Tools.Line, 'Ligne');
-    mapOfTools.set(Tools.Brush, 'Pinceau');
-    mapOfTools.set(Tools.Rectangle, 'Rectangle');
-    mapOfTools.set(Tools.Pencil, 'Crayon');
-    let isOk = true;
-    for(const element of mapOfTools) {
-      service.setCurrentTool(element[0]);
-      if(service.getFrenchToolNameToPrint() !== element[1]) {
-        isOk = false;
-        break;
-      }
-    }
-    expect(isOk).toBe(true);
-  });
+  // it('should get french name of some tools', () => {
+  //   const mapOfTools: Map<Tools, string> = new Map();
+  //   mapOfTools.set(Tools.Line, 'Ligne');
+  //   mapOfTools.set(Tools.Brush, 'Pinceau');
+  //   mapOfTools.set(Tools.Rectangle, 'Rectangle');
+  //   mapOfTools.set(Tools.Pencil, 'Crayon');
+  //   let isOk = true;
+  //   for(const element of mapOfTools) {
+  //     service.setCurrentTool(element[0]);
+  //     if(service.getFrenchToolNameToPrint() !== element[1]) {
+  //       isOk = false;
+  //       break;
+  //     }
+  //   }
+  //   expect(isOk).toBe(true);
+  // });
 });

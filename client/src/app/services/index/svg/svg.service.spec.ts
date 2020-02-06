@@ -90,4 +90,3 @@ describe('SVGService', () => {
     expect(stack.removeLastElement()).toBe(undefined);
   })
 });
-*/

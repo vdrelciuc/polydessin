@@ -5,6 +5,7 @@ import { Renderer2, ElementRef, Type } from '@angular/core';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { Tools } from 'src/app/enums/tools';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 describe('LineService', () => {
   let line: LineService;
@@ -39,12 +40,17 @@ describe('LineService', () => {
             },
           },
         },
+        {
+          provide: ColorSelectorService,
+          useValue: {
+            },
+        },
       ],
     });
     line = getTestBed().get(LineService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
-    line.initialize(manipulator, image);
+    line.initialize(manipulator, image, getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
 
   it('should be created', () => {
@@ -58,7 +64,7 @@ describe('LineService', () => {
 
   it('should set default properties', () => {
     const properties = new DrawablePropertiesService();
-    line.initializeProperties(properties);
+    line.initializeProperties();
     expect(line.thickness).toEqual(properties.thickness.value);
     expect(line.dotDiameter).toEqual(properties.dotDiameter.value);
     expect(line.jointIsDot).toEqual(properties.junction.value);
@@ -67,7 +73,7 @@ describe('LineService', () => {
   it('should initialize subscriptions', () => {
     const properties = new DrawablePropertiesService();
     const randomTestValue = 10;
-    line.initializeProperties(properties);
+    line.initializeProperties();
     properties.thickness.next(randomTestValue);
     properties.dotDiameter.next(randomTestValue);
     expect(line.thickness).toEqual(randomTestValue);

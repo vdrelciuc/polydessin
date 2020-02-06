@@ -21,10 +21,10 @@ export class LineComponent implements OnInit {
   readonly DIAMETER_SLIDER_MINIMUM = CONSTANT.DIAMETER_MINIMUM;
   readonly DIAMETER_SLIDER_MAXIMUM = CONSTANT.DIAMETER_MAXIMUM;
   protected specificationForm: FormGroup;
-  protected typeSelected: string;
-  protected thickness: number;
-  protected dotDiameter: number;
-  protected jointType: string;
+  typeSelected: string;
+  thickness: number;
+  dotDiameter: number;
+  jointType: string;
 
   constructor(
     private shortcuts: HotkeysService,

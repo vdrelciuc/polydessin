@@ -28,8 +28,6 @@ describe('PencilComponent', () => {
     fixture = TestBed.createComponent(PencilComponent);
     component = fixture.componentInstance;
 
-    component.ngOnInit();
-
     properties = TestBed.get<DrawablePropertiesService>(DrawablePropertiesService);
  }));
 

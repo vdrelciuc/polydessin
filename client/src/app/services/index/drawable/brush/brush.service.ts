@@ -35,6 +35,7 @@ export class BrushService extends DrawableService {
     this.assignParams(manipulator, image, colorSelectorService);
     this.initializeProperties();
   }
+  
   initializeProperties(): void {
     this.thickness = this.attributes.thickness.value;
 
