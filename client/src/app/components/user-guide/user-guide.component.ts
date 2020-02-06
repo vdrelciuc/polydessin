@@ -54,13 +54,6 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'Fonctionalites',
         elements: [
-          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
-          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
-          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
-          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
-          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
-          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
-          { nom: 'Nouveau Dessin', path: 'nouveauDessin' },
           { nom: 'Nouveau Dessin', path: 'nouveauDessin' }
 
         ]

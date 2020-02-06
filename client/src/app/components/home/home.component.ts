@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class HomeComponent {
   options: object[] =
     [
-      {description : 'Creer un nouveau dessin', optionPath : '/' , show : true},
+      {description : 'Creer un nouveau dessin', optionPath : '/dessin' , show : true},
       {description : 'Ouvrir la Galerie de dessins', optionPath: '/', show : true} ,
       {description : 'Afficher le guide d\'Utilisation', optionPath: '/userGuide/bienvenue', show : true} ,
       {description : 'Continuer un dessin', show : false}
