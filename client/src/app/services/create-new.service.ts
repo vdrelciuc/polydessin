@@ -8,5 +8,4 @@ import { Coords } from '../classes/coordinates';
 export class CreateNewService {
 
   canvasSize: BehaviorSubject<Coords> = new BehaviorSubject<Coords>(new Coords(0, 0));
-  constructor() { }
 }
