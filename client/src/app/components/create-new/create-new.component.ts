@@ -14,15 +14,7 @@ const toolBoxWidth: number = 96 + 250;
   styleUrls: ['./create-new.component.scss']
 })
 
-
 export class CreateNewComponent implements OnInit {
-  /* hex color verif
-  ^          -> match beginning
-  [0-9A-F]   -> any integer from 0 to 9 and any letter from A to F
-  {6}        -> the previous group appears exactly 6 times
-  $          -> match end
-  i          -> ignore case
-  */
 
   backgroundColor: Color;
   canvasSize: Coords;
@@ -50,5 +42,9 @@ export class CreateNewComponent implements OnInit {
 
   private launchDialog(): void {
     this.dialog.open(ColorPickerComponent, { disableClose: true });
+  }
+
+  onConfirm(): void {
+
   }
 }
