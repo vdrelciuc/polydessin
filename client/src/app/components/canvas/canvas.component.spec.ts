@@ -11,14 +11,11 @@ describe('CanvasComponent', () => {
       declarations: [ CanvasComponent ]
     })
     .compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(CanvasComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
+    component.ngOnInit();
+  }));
+  
   it('should create', () => {
     expect(component).toBeTruthy();
   });

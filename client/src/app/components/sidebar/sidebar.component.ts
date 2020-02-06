@@ -51,14 +51,13 @@ export class SidebarComponent implements OnInit {
       }
     );
   }
-  
+
 
   selectTool(tool: Tools): void {
-    console.log('Test: ' + tool + ' selected');
     this.toolSelectorService.setCurrentTool(tool);
   }
 
   createNewProject(): void {
-    this.dialog.open(CreateNewComponent, {});
+    this.dialog.open(CreateNewComponent, { disableClose: true });
   }
 }

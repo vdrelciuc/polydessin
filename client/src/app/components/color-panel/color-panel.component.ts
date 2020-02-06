@@ -56,6 +56,17 @@ export class ColorPanelComponent implements OnInit {
     }
   }
 
+  onLeftClick(selectedColor: Color): void {
+    this.colorSelectorService.colorToChange = ColorType.Primary;
+    this.colorSelectorService.primaryColor.next(selectedColor);
+  }
+
+  onRightClick(selectedColor: Color): boolean {
+    this.colorSelectorService.colorToChange = ColorType.Secondary;
+    this.colorSelectorService.secondaryColor.next(selectedColor);
+    return false; // avoid default browser action from the event
+  }
+
   onPrimaryColorChange(): void {
     this.colorSelectorService.colorToChange = ColorType.Primary;
     this.launchDialog();

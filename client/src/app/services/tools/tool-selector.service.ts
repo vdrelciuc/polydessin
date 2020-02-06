@@ -7,6 +7,7 @@ import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
 import { BrushService } from '../index/drawable/brush/brush.service';
+import { ColorSelectorService } from '../color-selector.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,6 @@ import { BrushService } from '../index/drawable/brush/brush.service';
 export class ToolSelectorService {
 
   $currentTool: BehaviorSubject<Tools>;
-  // currentToolName: Observable<Tools> = this.toolName.asObservable();
-  // currentTool: DrawableService | undefined;
-  // private isHidden: boolean;
   private tools: Map<Tools, DrawableService>;
   private tool: DrawableService | undefined;
   private line: LineService;
@@ -41,9 +39,9 @@ export class ToolSelectorService {
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
   }
 
-  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService): void {
     for (const element of this.tools) {
-      element[1].initialize(manipulator, image);
+      element[1].initialize(manipulator, image, colorSelectorService);
     }
   }
 

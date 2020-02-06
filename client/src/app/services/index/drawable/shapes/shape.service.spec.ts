@@ -4,6 +4,7 @@ import { ShapeService } from './shape.service';
 import { RectangleService } from '../rectangle/rectangle.service';
 import { Renderer2, ElementRef, Type } from '@angular/core';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 describe('ShapeService', () => {
   
@@ -21,7 +22,7 @@ describe('ShapeService', () => {
             setAttribute: () => null,
             appendChild: () => null,
             removeChild: () => null,
-          },
+        },
       },
       {
         provide: ElementRef,
@@ -39,12 +40,18 @@ describe('ShapeService', () => {
             },
           },
         },
+        {
+          provide: ColorSelectorService,
+          useValue: {
+          },
+        }
       ],
     });
     shapeService = getTestBed().get(RectangleService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
-    shapeService.initialize(manipulator, image);
+    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
+    shapeService.initialize(manipulator, image, 
+      getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
 
   it('should be created', () => {
@@ -54,7 +61,7 @@ describe('ShapeService', () => {
 
   it('#initializeProperties should set default properties', () => {
     const properties = new DrawablePropertiesService();
-    shapeService.initializeProperties(properties);
+    shapeService.initializeProperties();
     expect(shapeService.shapeStyle.fillColor.getHex()).toBe(properties.fillColor.value);
     expect(shapeService.shapeStyle.borderColor.getHex()).toBe(properties.color.value);
   });
@@ -62,7 +69,7 @@ describe('ShapeService', () => {
   it('#initializeProperties should define subscriptions', () => {
     const properties = new DrawablePropertiesService();
     const newColor = "#ABCDEF";
-    shapeService.initializeProperties(properties);
+    shapeService.initializeProperties();
     properties.fillColor.next(newColor);
     properties.color.next(newColor);
     expect(shapeService.shapeStyle.fillColor.getHex()).toBe(newColor);

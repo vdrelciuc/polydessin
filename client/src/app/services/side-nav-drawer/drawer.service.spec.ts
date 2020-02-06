@@ -8,12 +8,13 @@ describe('DrawerService', () => {
   let service: DrawerService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      
+    });
     service = TestBed.get(DrawerService);
   });
 
-  it('should be created', () => {
-    const service: DrawerService = TestBed.get(DrawerService);
+  it('should be created', () => { 
     expect(service).toBeTruthy();
   });
 

@@ -47,12 +47,18 @@
   <div class="recent">
     <ul *ngFor="let color of recentColors;let i = index">
       <li *ngIf= "i < recentColors.length/2">
-        <button mat-mini-fab class="last-colors" [style.background-color]="color.getHex()"></button>
+        <button mat-mini-fab class="last-colors"
+        (click)="onLeftClick(color)"
+        (contextmenu)="onRightClick(color)"
+        [style.background-color]="color.getHex()"></button>
       </li>
     </ul>
     <ul *ngFor="let color of recentColors;let i = index">
       <li *ngIf= "i >= recentColors.length/2">
-        <button mat-mini-fab class="last-colors" [style.background-color]="color.getHex()"></button>
+        <button mat-mini-fab class="last-colors"
+        (click)="onLeftClick(color)"
+        (contextmenu)="onRightClick(color)"
+        [style.background-color]="color.getHex()"></button>
       </li>
     </ul>
   </div>

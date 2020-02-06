@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 
@@ -7,7 +7,7 @@ import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
   templateUrl: './working-area.component.html',
   styleUrls: ['./working-area.component.scss']
 })
-export class WorkingAreaComponent implements OnInit {
+export class WorkingAreaComponent {
 
   constructor(private drawerService: DrawerService, public route: Router) { }
 

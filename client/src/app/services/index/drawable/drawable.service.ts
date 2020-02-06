@@ -9,15 +9,21 @@ export abstract class DrawableService {
 
   protected manipulator: Renderer2;
   protected image: ElementRef<SVGElement>;
+  protected attributes: DrawablePropertiesService;
+  protected colorSelectorService: ColorSelectorService;
   frenchName: string;
 
-  protected assignParams(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
+  protected assignParams(manipulator: Renderer2, image: ElementRef<SVGElement>,
+      colorSelectorService: ColorSelectorService): void {
     this.manipulator = manipulator;
     this.image = image;
+    this.colorSelectorService = colorSelectorService;
+    this.attributes = new DrawablePropertiesService();
   }
 
-  abstract initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void;
-  abstract initializeProperties(attributes: DrawablePropertiesService, colorSelectorService: ColorSelectorService): void;
+  abstract initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, 
+    colorSelectorService: ColorSelectorService): void;
+  abstract initializeProperties(colorSelectorService: ColorSelectorService): void;
 
   canDraw(canvas: HTMLElement, pointer: MouseEvent): boolean {
     return (

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Filter, FilterList } from 'src/app/components/brush/patterns';
 import { Tools } from 'src/app/enums/tools';
@@ -12,7 +12,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
   templateUrl: './brush.component.html',
   styleUrls: ['./brush.component.scss']
 })
-export class BrushComponent implements OnInit {
+export class BrushComponent {
 
   filters: Filter[];
   readonly name: string = Tools.Brush;
@@ -30,10 +30,6 @@ export class BrushComponent implements OnInit {
     this.service = this.toolSelector.getBrush();
     this.showFilters = false;
     this.filters = FilterList;
-  }
-
-  ngOnInit(): void {
-    this.service.initializeProperties(this.attributes, this.colorSelectorService);
   }
 
   onThicknessChange(input: number ): void {

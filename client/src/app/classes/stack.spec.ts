@@ -4,7 +4,9 @@ describe('Stack', () => {
 
   let stack: Stack<number>;
 
-  beforeEach( () => { stack = new Stack<number>(); } );
+  beforeEach( () => { 
+    stack = new Stack<number>(); 
+  });
 
   it('should create an instance', () => {
     expect(new Stack<number>()).toBeTruthy();
@@ -92,23 +94,22 @@ describe('Stack', () => {
   });
 
   it('should return undefined last element', () => {
-    for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
-    }
-    for (let i = 0; i < 5; i++) {
-      stack.pop_back();
-    }
-    expect(stack.getLast()).toBe(undefined);
+    expect(stack.getLast()).toEqual(undefined);
   });
 
-  it('should return first element', () => {
+  it('should return undefined first element', () => {
+    stack.push_back(undefined as unknown as number);
+    expect(stack.pop_front()).toEqual(undefined);
+  });
+
+  it('should get root', () => {
     for (let i = 0; i < 5; ++i) {
       stack.push_back(i);
     }
-    expect(stack.getRoot()).toBe(0);
-  })
+    expect(stack.getRoot()).toEqual(0);
+  });
 
-  it('should return undefined first element', () => {
-    expect(stack.getRoot()).toBe(undefined);
-  })
+  it('should get undefined root', () => {
+    expect(stack.getRoot()).toEqual(undefined);
+  });
 });

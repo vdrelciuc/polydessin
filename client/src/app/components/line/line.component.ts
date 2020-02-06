@@ -11,8 +11,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 @Component({
   selector: 'app-line',
   templateUrl: './line.component.html',
-  styleUrls: ['./line.component.scss'],
-  providers: [DrawablePropertiesService]
+  styleUrls: ['./line.component.scss']
 })
 export class LineComponent implements OnInit {
 
@@ -22,13 +21,14 @@ export class LineComponent implements OnInit {
   readonly DIAMETER_SLIDER_MINIMUM = CONSTANT.DIAMETER_MINIMUM;
   readonly DIAMETER_SLIDER_MAXIMUM = CONSTANT.DIAMETER_MAXIMUM;
   protected specificationForm: FormGroup;
-  protected typeSelected: string;
-  protected thickness: number;
-  protected dotDiameter: number;
+  typeSelected: string;
+  thickness: number;
+  dotDiameter: number;
+  jointType: string;
 
   constructor(
     private shortcuts: HotkeysService,
-    protected service: LineService,
+    public service: LineService,
     private toolSelector: ToolSelectorService,
     protected attributes: DrawablePropertiesService,
     protected colorSelectorService: ColorSelectorService
@@ -38,16 +38,12 @@ export class LineComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.thickness = this.attributes.thickness.value;
-    this.dotDiameter = this.attributes.dotDiameter.value;
-    this.service.initializeProperties(this.attributes, this.colorSelectorService);
-    this.typeSelected = 'Aucune';
+    this.jointType = this.service.jointIsDot ? 'Points': 'Aucune';
   }
 
   setupShortcuts(): void {
     this.shortcuts.addShortcut({ keys: 'backspace', description: 'Remove last point' }).subscribe(
       (event) => {
-        console.log('Backspace pressed - Remove last point');
         this.service.removeLastPoint();
       }
     );
@@ -55,19 +51,41 @@ export class LineComponent implements OnInit {
     this.shortcuts.addShortcut({ keys: 'escape', description: 'Cancel current line' }).subscribe(
       (event) => {
         if (!this.service.getLineIsDone()) {
-        this.service.deleteLine();
+          this.service.deleteLine();
         }
       }
     );
   }
 
+  onThicknessChange(): void {
+    if (this.service.thickness < CONSTANT.THICKNESS_MINIMUM) {
+      this.attributes.thickness.next(CONSTANT.THICKNESS_MINIMUM);
+    } else {
+      if (this.service.thickness > CONSTANT.THICKNESS_MAXIMUM) {
+        this.attributes.thickness.next(CONSTANT.THICKNESS_MAXIMUM);
+      } else {
+        this.attributes.thickness.next(this.service.thickness);
+      }
+    }
+  }
+
   onDotSelected(): void {
-    if (this.typeSelected === 'Points') {
+    if (this.jointType === 'Points') {
       this.attributes.junction.next(true);
-      this.service.jointIsDot = true;
     } else {
       this.attributes.junction.next(false);
-      this.service.jointIsDot = false;
+    }
+  }
+
+  onDiameterChange(): void {
+    if (this.service.dotDiameter < CONSTANT.DIAMETER_MINIMUM) {
+      this.attributes.dotDiameter.next(CONSTANT.DIAMETER_MINIMUM)
+    } else {
+      if (this.service.dotDiameter > CONSTANT.DIAMETER_MAXIMUM) {
+        this.attributes.dotDiameter.next(CONSTANT.DIAMETER_MAXIMUM)
+      } else {
+        this.attributes.dotDiameter.next(this.service.dotDiameter);
+      }
     }
   }
 }

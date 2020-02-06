@@ -30,7 +30,7 @@ export class CanvasComponent implements OnInit {
   ngOnInit(width: number = 100, height: number = 100) {
     this.width = width;
     this.height = height;
-    this.toolSelector.initialize(this.manipulator, this.image);
+    this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService);
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
     this.eventListener.initializeEvents();
 

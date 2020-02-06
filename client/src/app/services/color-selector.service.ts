@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ColorType } from 'src/app/enums/color-types';
 import { Color } from '../classes/color';
-import * as CONSTANT from '../classes/constants';
+import * as CONSTANT from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,7 @@ export class ColorSelectorService {
   primaryColor: BehaviorSubject<Color>;
   secondaryColor: BehaviorSubject<Color>;
   backgroundColor: BehaviorSubject<Color>;
+  temporaryColor: BehaviorSubject<Color>;
   recentColors: BehaviorSubject<Color[]>;
   primaryTransparency: BehaviorSubject<number>;
   secondaryTransparency: BehaviorSubject<number>;
@@ -21,6 +22,7 @@ export class ColorSelectorService {
     this.primaryColor = new BehaviorSubject<Color>(new Color(CONSTANT.DEFAULT_PRIMARY_COLOR));
     this.secondaryColor = new BehaviorSubject<Color>(new Color(CONSTANT.DEFAULT_SECONDARY_COLOR));
     this.backgroundColor = new BehaviorSubject<Color>(new Color(CONSTANT.DEFAULT_SECONDARY_COLOR));
+    this.temporaryColor = new BehaviorSubject<Color>(new Color(CONSTANT.DEFAULT_SECONDARY_COLOR));
     this.recentColors = new BehaviorSubject<Color[]>(this.initializeDefaultColors());
     this.primaryTransparency = new BehaviorSubject<number>(CONSTANT.DEFAULT_TRANSPARENCY);
     this.secondaryTransparency = new BehaviorSubject<number>(CONSTANT.DEFAULT_TRANSPARENCY);
@@ -45,9 +47,9 @@ export class ColorSelectorService {
   addRecentColor(color: Color): void {
     const colors = this.recentColors.getValue();
     if (colors.length === CONSTANT.MAX_RECENT_COLORS) {
-      colors.shift();
+      colors.pop();
     }
-    colors.push(color);
+    colors.unshift(color);
     this.recentColors.next(colors);
   }
 
@@ -67,8 +69,13 @@ export class ColorSelectorService {
         currentlySelectedColor = this.secondaryColor.getValue();
         break;
       }
-      default: {
+      case ColorType.Background: {
         currentlySelectedColor = this.backgroundColor.getValue();
+        break;
+      }
+      default: {
+        currentlySelectedColor = this.temporaryColor.getValue();
+        break;
       }
     }
     return currentlySelectedColor;
@@ -84,9 +91,17 @@ export class ColorSelectorService {
         this.secondaryColor.next(newColor);
         break;
       }
-      default: {
+      case ColorType.Background: {
         this.backgroundColor.next(newColor);
+        break;
       }
+      default: {
+        this.temporaryColor.next(newColor);
+        break;
+      }
+    }
+    if (!this.recentColors.getValue().includes(newColor) && this.colorToChange !== ColorType.Preview) {
+      this.addRecentColor(newColor);
     }
   }
 }

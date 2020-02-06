@@ -27,10 +27,10 @@ export class CoordinatesXY {
     const distanceY = pointerY - this.y;
     const foundQuadrant = CoordinatesXY.findQuadrantFromDelta(distanceX, distanceY);
     if (foundQuadrant === 1  || foundQuadrant === 3) {
-      const angle = (Math.atan(distanceY / distanceX) * 180) / Math.PI; console.log(angle);
+      const angle = (Math.atan(distanceY / distanceX) * 180) / Math.PI;
       return this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX));
     } else {
-      const angle = -(Math.atan(distanceY / distanceX) * 180) / Math.PI; console.log(angle);
+      const angle = -(Math.atan(distanceY / distanceX) * 180) / Math.PI;
       return this.getShiftedPoint(angle, pointerX, pointerY, this.y - this.findYDifferenceForBisectrix(pointerX));
     }
   }
