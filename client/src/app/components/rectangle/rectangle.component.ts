@@ -1,35 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
-import { PencilService } from 'src/app/services/index/drawable/pencil/pencil.service';
+import * as CONSTANT from 'src/app/classes/constants';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
+import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Component({
-  selector: 'app-pencil',
-  templateUrl: './pencil.component.html',
-  styleUrls: ['./pencil.component.scss']
+  selector: 'app-rectangle',
+  templateUrl: './rectangle.component.html',
+  styleUrls: ['./rectangle.component.scss']
 })
-export class PencilComponent implements OnInit {
+export class RectangleComponent implements OnInit {
 
-  readonly name: string = Tools.Pencil;
+  readonly name: string = Tools.Rectangle;
   readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
   readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
-  protected thickness: number;
 
   constructor(
-    protected service: PencilService,
+    protected service: RectangleService,
     private toolSelector: ToolSelectorService,
     protected attributes: DrawablePropertiesService,
     protected colorSelectorService: ColorSelectorService
     ) {
-    this.service = this.toolSelector.getPencil();
+    this.service = this.toolSelector.getRectangle();
   }
 
   ngOnInit(): void {
-    console.log('component pencil init');
-    this.thickness = this.attributes.thickness.value;
     this.service.initializeProperties(this.attributes, this.colorSelectorService);
+  }
+
+  updateBorder(): void {
+    this.service.shapeStyle.hasBorder = !this.service.shapeStyle.hasBorder;
+  }
+
+  updateFill(): void {
+    this.service.shapeStyle.hasFill = !this.service.shapeStyle.hasFill;
   }
 }

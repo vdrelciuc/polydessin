@@ -1,0 +1,26 @@
+<div id="container">
+  <form id="line-form">
+    <div class="group">
+      <label class="title" id="thickness">Épaisseur</label>
+      <mat-slider
+        [(ngModel)]="service.thickness"
+        id="thickness-slider"
+        name="thickness-slider"
+        disabled="false"
+        [min]="SLIDER_MINIMUM"
+        [max]="SLIDER_MAXIMUM"
+        step="1"
+        thumbLabel="true"
+        tickInterval="false"
+        vertical="false">
+      </mat-slider>
+    </div>
+    <div class="group">
+      <label class="title" id="texture">Texture</label>
+      <mat-select name="filter-select" [value]="filters[0].name">
+        <mat-option *ngFor="let filter of this.filters" (click)="changeFilter(filter.referenceID)" [value]="filter.name"> {{ filter.name }} </mat-option>
+      </mat-select>
+    </div>
+  </form>
+</div>
+

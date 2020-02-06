@@ -20,13 +20,13 @@
     margin-bottom: 50px;
   }
 
+  #thickness {
+    margin: 0;
+  }
+
   .mat-slider {
     margin-top: $slider-bubble-margin;
     width: $slider-width;
-  }
-
-  .head-group {
-    padding-bottom: 20px;
   }
 
   .group {
@@ -45,14 +45,20 @@
 }
 
 ::ng-deep .mat-select-value {
-  color: white;
+  color: whitesmoke!important;
 }
 
-.mat-select {
-  padding-top: 20px;
-  border-bottom-color: $medium;
+.pattern{
+  background-repeat: repeat;
+  width: 100px;
+  height: 25px;
+  position: relative;
+  display: block;
 }
 
-::ng-deep .mat-select-arrow {
-  color: $vivid;
+#patternSelect{
+  position: absolute;
+  left: 0;
+  top: 25px;
+  display: inline-block;
 }

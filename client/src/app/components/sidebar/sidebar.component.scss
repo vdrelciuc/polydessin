@@ -73,3 +73,8 @@ hr {
 .bumper {
   padding-bottom: 195px;
 }
+
+::ng-deep .mat-tooltip {
+  background-color: $light;
+  font-size: 10px;
+}

@@ -26,10 +26,13 @@
   <div class="tool-group">
     <div class="left-column">
       <div class="icon">
-        <button mat-button (click)="selectTool('pencil')"
+        <button mat-button
+        [matTooltip]="this.toolSelectorService.getPencil().frenchName"
+        matTooltipPosition="after"
+        aria-label="pencil-tooltip"
+        (click)="selectTool('pencil')"
         [ngClass]="{'clicked': currentTool === 'pencil',
-        'not-clicked': currentTool !== 'pencil'}"
-        >
+        'not-clicked': currentTool !== 'pencil'}">
         <img src="../../../assets/icons/pencil.svg">
         </button>
       </div>
@@ -63,7 +66,11 @@
   <div class="tool-group">
     <div class="left-column">
       <div class="icon">
-        <button mat-button (click)="selectTool('rectangle')"
+        <button mat-button
+        [matTooltip]="this.toolSelectorService.getRectangle().frenchName"
+        matTooltipPosition="after"
+        aria-label="rectangle-tooltip"
+        (click)="selectTool('rectangle')"
         [ngClass]="{'clicked': currentTool === 'rectangle',
         'not-clicked': currentTool !== 'rectangle'}">
         <img src="../../../assets/icons/rectangle.svg">
@@ -86,7 +93,11 @@
         </button>
       </div>
       <div class="icon">
-        <button mat-button (click)="selectTool('line')"
+        <button mat-button
+        [matTooltip]="this.toolSelectorService.getLine().frenchName"
+        matTooltipPosition="after"
+        aria-label="line-tooltip"
+        (click)="selectTool('line')"
         [ngClass]="{'clicked': currentTool === 'line',
         'not-clicked': currentTool !== 'line'}">
         <img src="../../../assets/icons/line.svg">
