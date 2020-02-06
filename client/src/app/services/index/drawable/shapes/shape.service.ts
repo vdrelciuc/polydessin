@@ -56,6 +56,15 @@ export abstract class ShapeService extends DrawableService {
     this.colorSelectorService.secondaryColor.subscribe((color: Color) => {
       this.shapeStyle.borderColor = color;
     });
+
+    this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
+      this.shapeStyle.fillOpacity = opacity;
+      console.log("Opacity: " + this.shapeStyle.fillOpacity);
+    });
+
+    this.colorSelectorService.secondaryTransparency.subscribe((opacity: number) => {
+      this.shapeStyle.borderOpacity = opacity;
+    });
 /*
 
     this.attributes.color.subscribe((element: string) => {
@@ -150,7 +159,8 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.shape, SVGProperties.fill, this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getHex() : 'none');
     this.manipulator.setAttribute(this.shape, SVGProperties.thickness, this.shapeStyle.hasBorder ? this.shapeStyle.thickness.toString() : '0');
     this.manipulator.setAttribute(this.shape, SVGProperties.color, this.shapeStyle.borderColor.getHex());
-    this.manipulator.setAttribute(this.shape, SVGProperties.opacity, this.shapeStyle.opacity);
+    this.manipulator.setAttribute(this.shape, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
+    this.manipulator.setAttribute(this.shape, SVGProperties.fillOpacity, this.shapeStyle.fillOpacity.toString());
 
     // Adding text properties
     this.manipulator.setAttribute(this.text, SVGProperties.fill, this.shapeStyle.hasFill ? invertColor(this.shapeStyle.fillColor, true).getHex() : 'black');

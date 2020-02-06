@@ -23,7 +23,7 @@ export class LineService extends DrawableService {
   jointIsDot: boolean;
   dotDiameter: number;
   color: string;
-  opacity: string;
+  opacity: number;
   private isDone: boolean;
   private isStarted: boolean;
   private points: Stack<CoordinatesXY>;
@@ -53,6 +53,10 @@ export class LineService extends DrawableService {
 
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.color = color.getHex();
+    });
+
+    this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
+      this.opacity = opacity;
     });
 
     this.attributes.thickness.subscribe((element: number) => {
@@ -166,7 +170,7 @@ export class LineService extends DrawableService {
       this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
       this.manipulator.setAttribute(circle, SVGProperties.color, this.color);
       this.manipulator.setAttribute(circle, SVGProperties.fill, this.color);
-      this.manipulator.setAttribute(circle, SVGProperties.opacity, this.opacity);
+      this.manipulator.setAttribute(circle, SVGProperties.globalOpacity, this.opacity.toString());
       this.manipulator.appendChild(this.subElement, circle);
       this.circles.push_back(circle);
     }
@@ -207,7 +211,7 @@ export class LineService extends DrawableService {
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color);
-    this.manipulator.setAttribute(this.line, SVGProperties.opacity, this.opacity);
+    this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
 
     this.manipulator.appendChild(this.subElement, this.line);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
