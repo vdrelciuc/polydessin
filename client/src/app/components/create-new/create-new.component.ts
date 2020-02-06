@@ -1,12 +1,15 @@
 import { Component, OnInit} from '@angular/core';
-import { MatDialogRef, MatDialog } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { Color } from 'src/app/classes/color';
 import { Coords } from 'src/app/classes/coordinates';
 import { ColorType } from 'src/app/enums/color-types';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { CreateNewService } from 'src/app/services/create-new.service';
+import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 
-const toolBoxWidth: number = 96 + 250;
+const toolBoxWidth = 96
+const toolDescWidth = 250;
 
 @Component({
   selector: 'app-create-new',
@@ -22,7 +25,9 @@ export class CreateNewComponent implements OnInit {
 
   constructor(private colorSelectorService: ColorSelectorService,
               private dialogRef: MatDialogRef<CreateNewComponent>,
-              private colorDialog: MatDialog) { }
+              private colorDialog: MatDialog,
+              private createNewService: CreateNewService,
+              private drawerService: DrawerService) { }
 
   ngOnInit() {
     this.canvasSize = new Coords(0, 0);
@@ -35,7 +40,8 @@ export class CreateNewComponent implements OnInit {
   }
 
   getcanvasSizeX(): number {
-    return (this.canvasSize.x || window.innerWidth - toolBoxWidth);
+    return (this.canvasSize.x ||
+      window.innerWidth - toolBoxWidth - (this.drawerService.navIsOpened ? toolDescWidth : 0));
   }
   getcanvasSizeY(): number {
     return (this.canvasSize.y || window.innerHeight);
@@ -58,5 +64,6 @@ export class CreateNewComponent implements OnInit {
 
   onCloseDialog(): void {
     this.dialogRef.close();
+    this.createNewService.canvasSize.next(new Coords(this.getcanvasSizeX(), this.getcanvasSizeY()));
   }
 }
