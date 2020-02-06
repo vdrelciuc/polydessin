@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
-import { Filter, FilterList } from 'src/app/components/brush/patterns';
+import { Filter, FilterList } from 'src/app/classes/patterns';
 import { Tools } from 'src/app/enums/tools';
 import { BrushService } from 'src/app/services/index/drawable/brush/brush.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
@@ -22,7 +22,7 @@ export class BrushComponent {
   readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
 
   constructor(
-    protected service: BrushService,
+    public service: BrushService,
     private toolSelector: ToolSelectorService,
     protected attributes: DrawablePropertiesService,
     protected colorSelectorService: ColorSelectorService
@@ -48,7 +48,9 @@ export class BrushComponent {
     this.showFilters = !this.showFilters;
   }
 
-  changeFilter(filter: string): void {
-    this.service.selectedFilter = filter;
+  changeFilter(filter: number): void {
+    if(filter < this.filters.length - 1) {
+      this.service.selectedFilter = this.filters[filter].referenceID;
+    }
   }
 }

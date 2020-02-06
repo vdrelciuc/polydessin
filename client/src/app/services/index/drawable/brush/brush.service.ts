@@ -2,7 +2,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { FilterList } from 'src/app/components/brush/patterns';
+import { FilterList } from 'src/app/classes/patterns';
 import { Coords } from 'src/app/classes/coordinates';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { Color } from 'src/app/classes/color';

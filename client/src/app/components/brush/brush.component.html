@@ -18,7 +18,7 @@
     <div class="group">
       <label class="title" id="texture">Texture</label>
       <mat-select name="filter-select" [value]="filters[0].name">
-        <mat-option *ngFor="let filter of this.filters" (click)="changeFilter(filter.referenceID)" [value]="filter.name"> {{ filter.name }} </mat-option>
+        <mat-option *ngFor="let filter of this.filters; index as i" (click)="changeFilter(i)" [value]="filter.name"> {{ filter.name }} </mat-option>
       </mat-select>
     </div>
   </form>
