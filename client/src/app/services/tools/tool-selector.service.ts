@@ -5,7 +5,6 @@ import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
-// import { DrawablePropertiesService } from '../index/drawable/properties/drawable-properties.service';
 
 @Injectable({
   providedIn: 'root'

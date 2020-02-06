@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-// import * as CONSTANT from 'src/app/classes/constants';
+import * as CONSTANT from 'src/app/classes/constants';
 // import { SVGService } from '../../svg/svg.service';
 import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
@@ -120,17 +120,10 @@ export class LineService extends DrawableService {
 
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
-      const lastPoint = new CoordinatesXY(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
       const firstPoint = this.points.getRoot();
       if(firstPoint != undefined) {
-        let differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
-        let differenceOfCoordinatesY = firstPoint.getY() - lastPoint.getY();
-        let isWithin3Px: boolean = 
-          differenceOfCoordinatesX <= 3 && 
-          differenceOfCoordinatesX >= -3 &&
-          differenceOfCoordinatesY <= 3 && 
-          differenceOfCoordinatesY >= -3;
-        if(isWithin3Px) {
+        const lastPoint = new CoordinatesXY(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
+        if(this.isWithin3Px(firstPoint, lastPoint)) {
           this.addPointToLine(firstPoint.getX(), firstPoint.getY());
         } else {
           this.addPointToLine(this.effectiveX(event.clientX), this.effectiveY(event.clientY));
@@ -183,6 +176,18 @@ export class LineService extends DrawableService {
   }
 
   getLineIsDone(): boolean { return this.isDone; }
+
+
+  private isWithin3Px(firstPoint: CoordinatesXY, lastPoint: CoordinatesXY): boolean {
+    let differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
+    let differenceOfCoordinatesY = firstPoint.getY() - lastPoint.getY();
+    return (
+      differenceOfCoordinatesX <= CONSTANT.MAX_DIFFERENCE_OF_PIXEL && 
+      differenceOfCoordinatesX >= -CONSTANT.MAX_DIFFERENCE_OF_PIXEL &&
+      differenceOfCoordinatesY <= CONSTANT.MAX_DIFFERENCE_OF_PIXEL && 
+      differenceOfCoordinatesY >= -CONSTANT.MAX_DIFFERENCE_OF_PIXEL
+    )
+  }
 
   private updateLine(): void {
     this.manipulator.setAttribute(
