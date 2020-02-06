@@ -7,6 +7,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANTS from 'src/app/classes/constants';
+import { ColorType } from 'src/app/enums/color-types';
 
 describe('ColorPanelComponent', () => {
   let component: ColorPanelComponent;
@@ -21,6 +22,7 @@ describe('ColorPanelComponent', () => {
         {
           provide: MatDialog,
           useValue: {
+            open: () => true,
           },
         },
         {
@@ -94,11 +96,20 @@ describe('ColorPanelComponent', () => {
     expect(service.secondaryColor.value.getHex()).toBe(mockedColor.getHex());
   });
 
-  // On primary change
+  it('#onPrimaryColorChange should ', () => {
+    component.onPrimaryColorChange();
+    expect(service.colorToChange).toEqual(ColorType.Primary);
+  });
 
-  // On Secondary change
+  it('#onSecondaryColorChange should ', () => {
+    component.onSecondaryColorChange();
+    expect(service.colorToChange).toEqual(ColorType.Secondary);
+  });
 
-  // On background change
+  it('#onBackgroundChange should ', () => {
+    component.onBackgroundChange();
+    expect(service.colorToChange).toEqual(ColorType.Background);
+  });
 
   it('#onColorInversion should invert primary and secondary colors', () => {
     service.primaryColor.next(mockedColor);
