@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { WorkspaceService } from 'src/app/services/workspace.service';
 import { Color } from 'src/app/classes/color';
 
@@ -8,14 +8,14 @@ import { Color } from 'src/app/classes/color';
   styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-
+  @ViewChild('workspace', { static: true }) workspace: ElementRef<HTMLDivElement>;
   backgroundColor: Color;
 
-  constructor(protected workspaceService: WorkspaceService) {
-  }
+    ngOnInit() {
+      this.backgroundColor = this.workspaceService.backgroundColor;
+    }
 
-  ngOnInit() {
-    this.backgroundColor = this.workspaceService.backgroundColor;
-  }
+  constructor(protected workspaceService: WorkspaceService) {
+  };
 
 }
