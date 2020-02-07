@@ -31,7 +31,7 @@ import { PencilComponent } from './components/pencil/pencil.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserGuideComponent } from './components/user-guide/user-guide.component';
 import { WorkingAreaComponent } from './components/working-area/working-area.component';
-import { WorkspaceComponent } from './components/workspace/workspace.component';
+import {WorkspaceComponent} from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
 import { RectangleComponent } from './components/rectangle/rectangle.component';
@@ -56,13 +56,13 @@ import { BrushComponent } from './components/brush/brush.component';
     CouleurGuideComponent,
     NouveauDessinComponent,
     UserGuideComponent,
-    RoutingComponents,
     CreateNewComponent,
     WorkingAreaComponent,
     ColorPanelComponent,
     ColorPickerComponent,
     ColorPaletteComponent,
-    ColorSliderComponent
+    ColorSliderComponent,
+    RoutingComponents
   ],
   entryComponents: [
     ColorPickerComponent,
@@ -81,8 +81,7 @@ import { BrushComponent } from './components/brush/brush.component';
     AppRoutingModule,
     MatListModule,
     MatExpansionModule,
-    RouterModule,
-
+    RouterModule
   ],
   providers: [DrawablePropertiesService],
   bootstrap: [AppComponent],

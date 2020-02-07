@@ -1,7 +1,7 @@
 @import "../../../global-style/colors.scss";
 
 .color-wrapper {
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -30,9 +30,20 @@ h4 {
 }
 
 .color-panel {
-  width: 90%;
+  width: 100%;
   position: absolute;
   bottom: 1px;
   background-color: $dark;
+  z-index: 9;
 }
 
+.mat-expansion-panel {
+  background-color: $gray;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+ .inner-color {
+   width: 100%;
+   background-color: $gray;
+ }
