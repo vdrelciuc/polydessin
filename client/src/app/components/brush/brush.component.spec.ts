@@ -3,10 +3,13 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { BrushComponent } from './brush.component';
 import { MatSliderModule, MatSelectModule, MatOptionModule, MatRadioModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
+// import { FilterList } from 'src/app/classes/patterns';
+// import { BrushService } from 'src/app/services/index/drawable/brush/brush.service';
 
 describe('BrushComponent', () => {
   let component: BrushComponent;
   let fixture: ComponentFixture<BrushComponent>;
+  // let service: BrushService;
   const mockedThickness = 15;
 
   beforeEach(async(() => {
@@ -24,6 +27,7 @@ describe('BrushComponent', () => {
     fixture = TestBed.createComponent(BrushComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    // service = TestBed.get<BrushService>(BrushService);
   }));
 
   it('should create', () => {
@@ -52,9 +56,9 @@ describe('BrushComponent', () => {
     expect(component.showFilters).toBeTruthy();
   });
 
-  // it('#changeFilter shouldn\'t change filter\'s state', () => {
-  //   component.changeFilter(0);
-  //   component.changeFilter(component.filters.length);
-  //   expect(component.service.selectedFilter).toEqual(component.filters[0].referenceID);
+  // it('#changeFilter should change filter', () => {
+  //   component.changeFilter(new FilterList());
+  //   expect(service.selectedFilter).toEqual('displacementFilter');
+  //   expect(component.selectedOption).toEqual(FilterList[2]);
   // });
 });
