@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Color } from 'src/app/classes/color';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { EventListenerService } from 'src/app/services/events/event-listener.service';
 import { SVGService } from 'src/app/services/index/svg/svg.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
-import { Color } from 'src/app/classes/color';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-// import { WorkspaceService } from 'src/app/services/workspace.service';
+import { CreateNewService } from 'src/app/services/create-new.service';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Component({
   selector: 'app-canvas',
@@ -14,7 +15,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 })
 export class CanvasComponent implements OnInit {
   @ViewChild('drawing', { static: true }) image: ElementRef<SVGElement>;
-
+  filters: string;
   width: number;
   height: number;
   stack: SVGService;
@@ -24,12 +25,12 @@ export class CanvasComponent implements OnInit {
     protected workspaceService: WorkspaceService,
     private manipulator: Renderer2,
     private toolSelector: ToolSelectorService,
-    private colorSelectorService: ColorSelectorService
+    private colorSelectorService: ColorSelectorService,
+    private createNewService: CreateNewService
     ) { }
 
-  ngOnInit(width: number = 100, height: number = 100) {
-    this.width = width;
-    this.height = height;
+  ngOnInit() {
+    this.filters = this.image.nativeElement.innerHTML;
     this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService);
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
     this.eventListener.initializeEvents();
@@ -37,6 +38,16 @@ export class CanvasComponent implements OnInit {
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
       this.manipulator.setAttribute(this.image.nativeElement, 'style', `background-color: ${color.getHex()}`);
     });
+
+    this.createNewService.canvasSize.subscribe((canvasSize: CoordinatesXY) => {
+      this.manipulator.setAttribute(this.image.nativeElement, 'width', `${canvasSize.getX()}`);
+      this.manipulator.setAttribute(this.image.nativeElement, 'height', `${canvasSize.getY()}`);
+      this.resetCanvas();
+    })
+  }
+
+  resetCanvas() {
+    this.image.nativeElement.innerHTML = this.filters;
   }
 
 }

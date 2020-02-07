@@ -17,6 +17,7 @@ export class BrushComponent {
   filters: Filter[];
   readonly name: string = Tools.Brush;
   showFilters: boolean;
+  selectedOption: Filter;
 
   readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
   readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
@@ -30,6 +31,7 @@ export class BrushComponent {
     this.service = this.toolSelector.getBrush();
     this.showFilters = false;
     this.filters = FilterList;
+    this.selectedOption = this.filters[0];
   }
 
   onThicknessChange(input: number ): void {
@@ -48,9 +50,8 @@ export class BrushComponent {
     this.showFilters = !this.showFilters;
   }
 
-  changeFilter(filter: number): void {
-    if(filter < this.filters.length - 1) {
-      this.service.selectedFilter = this.filters[filter].referenceID;
-    }
+  changeFilter(filter: Filter): void {
+    this.service.selectedFilter = filter.referenceID;
+    this.selectedOption = filter;
   }
 }

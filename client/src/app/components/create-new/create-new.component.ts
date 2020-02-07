@@ -1,12 +1,16 @@
 import { Component, OnInit} from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { Color } from 'src/app/classes/color';
-import { MatDialog } from '@angular/material';
-import { ColorPickerComponent } from 'src/app/components/color-picker/color-picker.component';
 import { ColorType } from 'src/app/enums/color-types';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { Coords } from 'src/app/classes/coordinates';
+import { CreateNewService } from 'src/app/services/create-new.service';
+import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { Router } from '@angular/router';
 
-const toolBoxWidth: number = 96 + 250;
+const toolBoxWidth = 96
+const toolDescWidth = 250;
 
 @Component({
   selector: 'app-create-new',
@@ -17,34 +21,54 @@ const toolBoxWidth: number = 96 + 250;
 export class CreateNewComponent implements OnInit {
 
   backgroundColor: Color;
-  canvasSize: Coords;
+  previewColor: Color;
+  canvasSize: CoordinatesXY;
 
   constructor(private colorSelectorService: ColorSelectorService,
-              private dialog: MatDialog) { }
+              private dialogRef: MatDialogRef<CreateNewComponent>,
+              private colorDialog: MatDialog,
+              private createNewService: CreateNewService,
+              private drawerService: DrawerService,
+              public router: Router) { }
 
   ngOnInit() {
-    this.canvasSize = new Coords(0, 0);
+    this.canvasSize = new CoordinatesXY(0, 0);
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
       this.backgroundColor = color;
+    });
+    this.colorSelectorService.temporaryColor.subscribe((color: Color) => {
+      this.previewColor = color;
     });
   }
 
   getcanvasSizeX(): number {
-    return (this.canvasSize.x || window.innerWidth - toolBoxWidth);
+    return (this.canvasSize.getX() ||
+      window.innerWidth - toolBoxWidth - (this.drawerService.navIsOpened ? toolDescWidth : 0));
   }
   getcanvasSizeY(): number {
-    return (this.canvasSize.y || window.innerHeight);
+    return (this.canvasSize.getY() || window.innerHeight);
   }
-  onBackgroundChange(): void {
-    this.colorSelectorService.colorToChange = ColorType.Background;
+  onColorSelect(): void {
+    this.colorSelectorService.colorToChange = ColorType.Preview;
+    this.colorSelectorService.updateColor(this.previewColor);
     this.launchDialog();
   }
 
   private launchDialog(): void {
-    this.dialog.open(ColorPickerComponent, { disableClose: true });
+    this.colorDialog.open(ColorPickerComponent, { disableClose: true });
   }
 
   onConfirm(): void {
+    this.colorSelectorService.colorToChange = ColorType.Background;
+    this.colorSelectorService.updateColor(this.previewColor);
+    this.createNewService.canvasSize.next(new CoordinatesXY(this.getcanvasSizeX(), this.getcanvasSizeY()));
+    this.dialogRef.close();
+  }
 
+  onCloseDialog(): void {
+    this.dialogRef.close();
+    if (history.state.comingFromEntryPoint) {
+      this.router.navigateByUrl('/')
+    }
   }
 }

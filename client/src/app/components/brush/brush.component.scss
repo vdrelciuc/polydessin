@@ -48,6 +48,15 @@
   color: whitesmoke!important;
 }
 
+::ng-deep .mat-option {
+  padding: 0!important;
+  border-bottom : 2px solid $light;
+}
+
+::ng-deep .mat-select-arrow {
+  color: $vivid;
+}
+
 .pattern{
   background-repeat: repeat;
   width: 100px;

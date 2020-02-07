@@ -8,7 +8,6 @@ import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { Coords } from 'src/app/classes/coordinates';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +19,7 @@ export class LineService extends DrawableService {
   jointIsDot: boolean;
   dotDiameter: number;
   color: string;
-  opacity: string;
+  opacity: number;
   private isDone: boolean;
   private isStarted: boolean;
   private points: Stack<CoordinatesXY>;
@@ -31,6 +30,7 @@ export class LineService extends DrawableService {
 
   constructor() {
     super();
+    this.frenchName = 'Ligne';
     this.points = new Stack<CoordinatesXY>();
     this.circles = new Stack<SVGCircleElement>();
   }
@@ -48,6 +48,10 @@ export class LineService extends DrawableService {
     this.thickness = this.attributes.thickness.value;
     this.dotDiameter = this.attributes.dotDiameter.value;
     this.jointIsDot = this.attributes.junction.value;
+
+    this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
+      this.opacity = opacity;
+    });
 
     this.attributes.thickness.subscribe((element: number) => {
         this.thickness = element;
@@ -72,12 +76,12 @@ export class LineService extends DrawableService {
       if (this.shiftPressed) {
         const lastPoint = this.points.getLast();
         if (lastPoint !== undefined) {
-          const shiftPoint = lastPoint.getClosestPoint(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
+          const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
           previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
         }
       } else {
-      previewPoints += Coords.effectiveX(this.image, event.clientX).toString()
-          + ',' + Coords.effectiveY(this.image, event.clientY).toString();
+      previewPoints += CoordinatesXY.effectiveX(this.image, event.clientX).toString()
+          + ',' + CoordinatesXY.effectiveY(this.image, event.clientY).toString();
       }
       this.manipulator.setAttribute(
           this.line,
@@ -116,7 +120,7 @@ export class LineService extends DrawableService {
 
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
-      const lastPoint = new CoordinatesXY(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
+      const lastPoint = new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
       const firstPoint = this.points.getRoot();
       if(firstPoint != undefined) {
         let differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
@@ -129,7 +133,7 @@ export class LineService extends DrawableService {
         if(isWithin3Px) {
           this.addPointToLine(firstPoint.getX(), firstPoint.getY());
         } else {
-          this.addPointToLine(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
+          this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
         }
       }
       // Send the line to the whole image to be pushed
@@ -141,21 +145,21 @@ export class LineService extends DrawableService {
 
   onClick(event: MouseEvent): void {
     if (this.isStarted) {
-      this.addPointToLine(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
+      this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
     } else {
       this.updateProperties();
-      this.addPointToLine(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
+      this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
       this.isStarted = true;
       this.isDone = false;
     }
     if (this.jointIsDot) {
       const circle: SVGCircleElement = this.manipulator.createElement('circle', 'http://www.w3.org/2000/svg');
-      this.manipulator.setAttribute(circle, SVGProperties.centerX, Coords.effectiveX(this.image, event.clientX).toString());
-      this.manipulator.setAttribute(circle, SVGProperties.centerY, Coords.effectiveY(this.image, event.clientY).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, event.clientX).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, event.clientY).toString());
       this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
       this.manipulator.setAttribute(circle, SVGProperties.color, this.color);
       this.manipulator.setAttribute(circle, SVGProperties.fill, this.color);
-      this.manipulator.setAttribute(circle, SVGProperties.opacity, this.opacity);
+      this.manipulator.setAttribute(circle, SVGProperties.globalOpacity, this.opacity.toString());
       this.manipulator.appendChild(this.subElement, circle);
       this.circles.push_back(circle);
     }
@@ -196,7 +200,7 @@ export class LineService extends DrawableService {
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color);
-    this.manipulator.setAttribute(this.line, SVGProperties.opacity, this.opacity);
+    this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
 
     this.manipulator.appendChild(this.subElement, this.line);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
