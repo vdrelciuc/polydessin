@@ -60,4 +60,6 @@ export class SidebarComponent implements OnInit {
   createNewProject(): void {
     this.dialog.open(CreateNewComponent, { disableClose: true });
   }
+
+
 }
