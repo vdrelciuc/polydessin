@@ -1,10 +1,10 @@
-import { Coords } from 'src/app/classes/coordinates';
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { Color } from 'src/app/classes/color';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +53,7 @@ export class PencilService extends DrawableService {
 
   onMouseInCanvas(event: MouseEvent): void {
     if (this.mousePointer === undefined) {
-      this.createCircle(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
+      this.createCircle(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
     }
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
     this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
@@ -103,7 +103,7 @@ export class PencilService extends DrawableService {
   private beginDraw(clientX: number, clientY: number) {
     this.previousX = clientX;
     this.previousY = clientY;
-    this.path = `M ${Coords.effectiveX(this.image, clientX)},${Coords.effectiveY(this.image, clientY)}`;
+    this.path = `M ${CoordinatesXY.effectiveX(this.image, clientX)},${CoordinatesXY.effectiveY(this.image, clientY)}`;
   }
 
   private addPath(clientX: number, clientY: number) {
@@ -117,7 +117,7 @@ export class PencilService extends DrawableService {
   private endPath() {
     if (this.path.indexOf('l') === -1) {
       this.manipulator.removeChild(this.image.nativeElement, this.line);
-      const circle = this.createCircle(Coords.effectiveX(this.image, this.previousX), Coords.effectiveY(this.image, this.previousY));
+      const circle = this.createCircle(CoordinatesXY.effectiveX(this.image, this.previousX), CoordinatesXY.effectiveY(this.image, this.previousY));
       this.manipulator.appendChild(this.image.nativeElement, circle);
     }
     this.manipulator.setAttribute(this.line, 'd', this.path);
@@ -126,8 +126,8 @@ export class PencilService extends DrawableService {
   }
 
   private updateCursor(clientX: number, clientY: number) {
-    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, Coords.effectiveX(this.image, clientX).toString());
-    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, Coords.effectiveY(this.image, clientY).toString());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
   }
 
   private createCircle(x: number, y: number): void {

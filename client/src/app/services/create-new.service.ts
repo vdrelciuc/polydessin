@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Coords } from '../classes/coordinates';
+import { CoordinatesXY } from '../classes/coordinates-x-y';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CreateNewService {
 
-  canvasSize: BehaviorSubject<Coords> = new BehaviorSubject<Coords>(new Coords(0, 0));
+  canvasSize: BehaviorSubject<CoordinatesXY> = new BehaviorSubject<CoordinatesXY>(new CoordinatesXY(0, 0));
 }

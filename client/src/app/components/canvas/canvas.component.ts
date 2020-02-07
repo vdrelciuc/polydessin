@@ -6,7 +6,7 @@ import { SVGService } from 'src/app/services/index/svg/svg.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
 import { CreateNewService } from 'src/app/services/create-new.service';
-import { Coords } from 'src/app/classes/coordinates';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Component({
   selector: 'app-canvas',
@@ -39,9 +39,9 @@ export class CanvasComponent implements OnInit {
       this.manipulator.setAttribute(this.image.nativeElement, 'style', `background-color: ${color.getHex()}`);
     });
 
-    this.createNewService.canvasSize.subscribe((canvasSize: Coords) => {
-      this.manipulator.setAttribute(this.image.nativeElement, 'width', `${canvasSize.x}`);
-      this.manipulator.setAttribute(this.image.nativeElement, 'height', `${canvasSize.y}`);
+    this.createNewService.canvasSize.subscribe((canvasSize: CoordinatesXY) => {
+      this.manipulator.setAttribute(this.image.nativeElement, 'width', `${canvasSize.getX()}`);
+      this.manipulator.setAttribute(this.image.nativeElement, 'height', `${canvasSize.getY()}`);
       this.resetCanvas();
     })
   }

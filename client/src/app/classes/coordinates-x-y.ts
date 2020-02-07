@@ -1,3 +1,5 @@
+import { ElementRef } from '@angular/core';
+
 export class CoordinatesXY {
 
   constructor(x: number, y: number) {
@@ -62,5 +64,32 @@ export class CoordinatesXY {
       return 3;
     }
     return 4;
+  }
+
+  static getCoords(pointer: MouseEvent): CoordinatesXY {
+    return new CoordinatesXY(pointer.clientX, pointer.clientY);
+  }
+
+  static getEffectiveCoords(referenceElement: ElementRef<SVGElement>, pointer: MouseEvent): CoordinatesXY {
+    return new CoordinatesXY(CoordinatesXY.effectiveX(referenceElement, pointer.clientX), CoordinatesXY.effectiveY(referenceElement, pointer.clientY));
+  }
+
+  static effectiveX(referenceElement: ElementRef<SVGElement>, onScreenX: number): number {
+    return onScreenX - referenceElement.nativeElement.getBoundingClientRect().left;
+  }
+
+  static effectiveY(referenceElement: ElementRef<SVGElement>, onScreenY: number): number {
+    return onScreenY - referenceElement.nativeElement.getBoundingClientRect().top;
+  }
+
+  getQuadrant(origin: CoordinatesXY): 1 | 2 | 3 | 4 {
+    //    2 | 1
+    //   ---|---
+    //    3 | 4
+
+    const isTop = this.y < origin.y;
+    const isLeft = this.x < origin.x;
+
+    return isTop ? (isLeft ? 2 : 1) : (isLeft ? 3 : 4);
   }
 }

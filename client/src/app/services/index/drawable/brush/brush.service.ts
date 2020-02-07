@@ -3,9 +3,9 @@ import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { FilterList } from 'src/app/components/brush/patterns';
-import { Coords } from 'src/app/classes/coordinates';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { Color } from 'src/app/classes/color';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Injectable({
   providedIn: 'root'
@@ -62,7 +62,7 @@ export class BrushService extends DrawableService {
   }
   onMouseInCanvas(event: MouseEvent): void {
     if (this.previewCricle === undefined) {
-      this.previewCricle = this.createCircle(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
+      this.previewCricle = this.createCircle(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
     }
     this.manipulator.setAttribute(this.previewCricle, SVGProperties.radius, (this.getThickness() / 2).toString());
     this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);
@@ -122,7 +122,7 @@ export class BrushService extends DrawableService {
   private beginDraw(clientX: number, clientY: number) {
     this.previousX = clientX;
     this.previousY = clientY;
-    this.path = `M ${Coords.effectiveX(this.image, clientX)},${Coords.effectiveY(this.image, clientY)} l 1,1`;
+    this.path = `M ${CoordinatesXY.effectiveX(this.image, clientX)},${CoordinatesXY.effectiveY(this.image, clientY)} l 1,1`;
   }
 
   private addPath(clientX: number, clientY: number) {
@@ -138,8 +138,8 @@ export class BrushService extends DrawableService {
   }
 
   updateCursor(clientX: number, clientY: number) {
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerX, Coords.effectiveX(this.image, clientX).toString());
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerY, Coords.effectiveY(this.image, clientY).toString());
+    this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
+    this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
     this.manipulator.setAttribute(this.previewCricle, SVGProperties.globalOpacity, this.opacity.toString());
   }
   private createCircle(x: number, y: number): SVGCircleElement {

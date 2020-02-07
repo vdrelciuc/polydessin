@@ -29,6 +29,11 @@ describe('CoordinatedXY', () => {
     expect(point.getY()).toBe(1);
   });
 
-
+  it('#getQuadrant should return correct quadrant from the giving origin coordinates', () => {
+    expect(point.getQuadrant(new CoordinatesXY(5, 15))).toBe(1);
+    expect(point.getQuadrant(new CoordinatesXY(15, 15))).toBe(2);
+    expect(point.getQuadrant(new CoordinatesXY(15, 5))).toBe(3);
+    expect(point.getQuadrant(new CoordinatesXY(5, 5))).toBe(4);
+  })
 
 });
