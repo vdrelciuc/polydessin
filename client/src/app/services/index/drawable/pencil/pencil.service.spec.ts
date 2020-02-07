@@ -52,6 +52,7 @@ describe('PencilService', () => {
           provide: ColorSelectorService,
           useValue: {
             primaryColor: colorSubject,
+            primaryTransparency: new BehaviorSubject<number>(3)
           },
         },
       ],
@@ -84,7 +85,7 @@ describe('PencilService', () => {
     const spyAttributes = spyOn(manipulator, 'setAttribute');
     service.onMouseInCanvas(eventMocker('mousemove', 0));
     expect(spy).toHaveBeenCalled();
-    expect(spyAttributes).toHaveBeenCalledTimes(5);
+    expect(spyAttributes).toHaveBeenCalledTimes(6);
   });
 
   it('#onMouseInCanvas shouldn\'t create circle', () => {
@@ -106,7 +107,7 @@ describe('PencilService', () => {
     const spy = spyOn(manipulator, 'setAttribute');
 
     service.onMousePress(eventMocker('mousepress', 0));
-    expect(spy).toHaveBeenCalledTimes(7);
+    expect(spy).toHaveBeenCalledTimes(9);
     expect(service['previousX']).toEqual(10);
     expect(service['previousY']).toEqual(10);
   });
