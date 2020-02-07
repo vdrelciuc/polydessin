@@ -6,6 +6,8 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
 import { Tools } from 'src/app/enums/tools';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { Color } from 'src/app/classes/color';
+import { BehaviorSubject } from 'rxjs';
 
 describe('LineService', () => {
   let line: LineService;
@@ -43,18 +45,19 @@ describe('LineService', () => {
         {
           provide: ColorSelectorService,
           useValue: {
-            },
+            primaryColor: new BehaviorSubject<Color>(new Color('#FFFFFF')),
+          },
         },
       ],
     });
     line = getTestBed().get(LineService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
+    line.attributes = new DrawablePropertiesService();
     line.initialize(manipulator, image, getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
 
   it('should be created', () => {
-    // const service: LineService = TestBed.get(LineService);
     expect(line).toBeTruthy();
   });
 
@@ -63,19 +66,17 @@ describe('LineService', () => {
   });
 
   it('should set default properties', () => {
-    const properties = new DrawablePropertiesService();
     line.initializeProperties();
-    expect(line.thickness).toEqual(properties.thickness.value);
-    expect(line.dotDiameter).toEqual(properties.dotDiameter.value);
-    expect(line.jointIsDot).toEqual(properties.junction.value);
+    expect(line.thickness).toEqual(line.attributes.thickness.value);
+    expect(line.dotDiameter).toEqual(line.attributes.dotDiameter.value);
+    expect(line.jointIsDot).toEqual(line.attributes.junction.value);
   });
 
   it('should initialize subscriptions', () => {
-    const properties = new DrawablePropertiesService();
     const randomTestValue = 10;
     line.initializeProperties();
-    properties.thickness.next(randomTestValue);
-    properties.dotDiameter.next(randomTestValue);
+    line.attributes.thickness.next(randomTestValue);
+    line.attributes.dotDiameter.next(randomTestValue);
     expect(line.thickness).toEqual(randomTestValue);
     expect(line.dotDiameter).toEqual(randomTestValue);
   });
