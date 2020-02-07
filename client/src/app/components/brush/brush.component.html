@@ -19,8 +19,9 @@
       <label class="title" id="texture">Texture</label>
       <mat-radio-group
         aria-labelledby="example-radio-group-label"
-        [(ngModel)]="selected">
-        <mat-radio-button *ngFor="let filter of this.filters" (click)="changeFilter(filter)" [value]="filter.name">
+        name="filter-selection"
+        [(ngModel)]="selectedOption">
+        <mat-radio-button *ngFor="let filter of this.filters" (click)="changeFilter(filter)" [value]="filter">
           <img width="100%" height="100%" [src]="filter.imagePath">
         </mat-radio-button>
       </mat-radio-group>
