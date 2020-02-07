@@ -21,7 +21,8 @@ button:focus {
 }
 
 .recent {
-  min-height: 100px;
+  margin: auto;
+  max-width: 170px;
 }
 
 .color-preview {
@@ -52,6 +53,11 @@ ul li {
 
 .centered-section {
   text-align: center;
+}
+
+.mat-mini-fab {
+  height: 30px;
+  width: 30px;
 }
 
 #invert-button {
