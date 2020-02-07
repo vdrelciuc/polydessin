@@ -1,6 +1,6 @@
 <div id="container">
     <form id="line-form">
-      <h6 id="title">Épaisseur : {{ thickness || '1'}}</h6>
+        <label class="title" id="thickness">Épaisseur</label>
         <mat-slider
             id="thickness-slider"
             name="thickness-slider"
@@ -8,9 +8,8 @@
             [min]="SLIDER_MINIMUM"
             [max]="SLIDER_MAXIMUM"
             step="1"
-            thumbLabel="false"
+            thumbLabel="true"
             tickInterval="false"
-            (input)="onInputChange($event)"
             [(ngModel)]="service.thickness"
             vertical="false">
         </mat-slider>

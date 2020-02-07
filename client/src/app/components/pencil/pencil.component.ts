@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { MatSliderChange } from '@angular/material';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { PencilService } from 'src/app/services/index/drawable/pencil/pencil.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Component({
   selector: 'app-pencil',
@@ -26,8 +25,7 @@ export class PencilComponent {
     protected colorSelectorService: ColorSelectorService
     ) {
       this.service = this.toolSelector.getPencil();
-      this.thickness = CONSTANT.THICKNESS_DEFAULT;
-    }
+  }
 
   onThicknessChange(): void {
     if (this.service.thickness < CONSTANT.THICKNESS_MINIMUM) {
@@ -38,12 +36,6 @@ export class PencilComponent {
       } else {
         this.attributes.thickness.next(this.service.thickness);
       }
-    }
-  }
-
-  onInputChange(event: MatSliderChange): void {
-    if (event.value) {
-      this.thickness = event.value;
     }
   }
 
