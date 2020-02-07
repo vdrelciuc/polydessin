@@ -60,6 +60,7 @@ export class BrushService extends DrawableService {
   getThickness() {
     return Math.floor(this.thickness);
   }
+
   onMouseInCanvas(event: MouseEvent): void {
     if (this.previewCricle === undefined) {
       this.previewCricle = this.createCircle(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
@@ -103,7 +104,7 @@ export class BrushService extends DrawableService {
         //this.addPath(event.clientX, event.clientY);
         this.endPath();
         this.updateCursor(event.clientX, event.clientY);
-      this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'visible');
+        this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'visible');
       }
     }
   }
@@ -112,7 +113,9 @@ export class BrushService extends DrawableService {
     this.addPath(event.clientX, event.clientY);
 
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
-    } else {this.updateCursor(event.clientX, event.clientY); }
+    } else {
+      this.updateCursor(event.clientX, event.clientY); 
+    }
   }
 
   onClick(event: MouseEvent): void {
