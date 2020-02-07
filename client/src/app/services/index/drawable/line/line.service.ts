@@ -8,6 +8,7 @@ import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { Color } from 'src/app/classes/color';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class LineService extends DrawableService {
   thickness: number;
   jointIsDot: boolean;
   dotDiameter: number;
-  color: string;
+  color: Color;
   opacity: number;
   private isDone: boolean;
   private isStarted: boolean;
@@ -49,25 +50,30 @@ export class LineService extends DrawableService {
     this.dotDiameter = this.attributes.dotDiameter.value;
     this.jointIsDot = this.attributes.junction.value;
 
+    this.colorSelectorService.primaryColor.subscribe((color: Color) => {
+      this.color = color;
+    });
+
     this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
       this.opacity = opacity;
     });
 
     this.attributes.thickness.subscribe((element: number) => {
-        this.thickness = element;
+      this.thickness = element;
     });
 
     this.attributes.junction.subscribe((element: boolean) => {
-        this.jointIsDot = element;
+      console.log("Junction changed");
+      this.jointIsDot = element;
     });
 
     this.attributes.dotDiameter.subscribe((element: number) => {
-        this.dotDiameter = element;
+      this.dotDiameter = element;
     });
-
+    /*
     this.attributes.color.subscribe((element: string) => {
       this.color = element;
-    })
+    })*/
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -157,8 +163,8 @@ export class LineService extends DrawableService {
       this.manipulator.setAttribute(circle, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, event.clientX).toString());
       this.manipulator.setAttribute(circle, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, event.clientY).toString());
       this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
-      this.manipulator.setAttribute(circle, SVGProperties.color, this.color);
-      this.manipulator.setAttribute(circle, SVGProperties.fill, this.color);
+      this.manipulator.setAttribute(circle, SVGProperties.color, this.color.getHex());
+      this.manipulator.setAttribute(circle, SVGProperties.fill, this.color.getHex());
       this.manipulator.setAttribute(circle, SVGProperties.globalOpacity, this.opacity.toString());
       this.manipulator.appendChild(this.subElement, circle);
       this.circles.push_back(circle);
@@ -199,7 +205,7 @@ export class LineService extends DrawableService {
 
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
-    this.manipulator.setAttribute(this.line, SVGProperties.color, this.color);
+    this.manipulator.setAttribute(this.line, SVGProperties.color, this.color.getHex());
     this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
 
     this.manipulator.appendChild(this.subElement, this.line);

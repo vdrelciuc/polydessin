@@ -21,7 +21,6 @@ export class LineComponent implements OnInit {
   readonly DIAMETER_SLIDER_MINIMUM = CONSTANT.DIAMETER_MINIMUM;
   readonly DIAMETER_SLIDER_MAXIMUM = CONSTANT.DIAMETER_MAXIMUM;
   protected specificationForm: FormGroup;
-  typeSelected: string;
   thickness: number;
   dotDiameter: number;
   jointType: string;
@@ -57,35 +56,13 @@ export class LineComponent implements OnInit {
     );
   }
 
-  onThicknessChange(): void {
-    if (this.service.thickness < CONSTANT.THICKNESS_MINIMUM) {
-      this.attributes.thickness.next(CONSTANT.THICKNESS_MINIMUM);
-    } else {
-      if (this.service.thickness > CONSTANT.THICKNESS_MAXIMUM) {
-        this.attributes.thickness.next(CONSTANT.THICKNESS_MAXIMUM);
-      } else {
-        this.attributes.thickness.next(this.service.thickness);
-      }
-    }
-  }
-
   onDotSelected(): void {
     if (this.jointType === 'Points') {
       this.attributes.junction.next(true);
+      this.service.jointIsDot = true;
     } else {
       this.attributes.junction.next(false);
-    }
-  }
-
-  onDiameterChange(): void {
-    if (this.service.dotDiameter < CONSTANT.DIAMETER_MINIMUM) {
-      this.attributes.dotDiameter.next(CONSTANT.DIAMETER_MINIMUM)
-    } else {
-      if (this.service.dotDiameter > CONSTANT.DIAMETER_MAXIMUM) {
-        this.attributes.dotDiameter.next(CONSTANT.DIAMETER_MAXIMUM)
-      } else {
-        this.attributes.dotDiameter.next(this.service.dotDiameter);
-      }
+      this.service.jointIsDot = false;
     }
   }
 }
