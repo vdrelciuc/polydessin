@@ -7,6 +7,7 @@ import { CreateNewService } from 'src/app/services/create-new.service';
 import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { Router } from '@angular/router';
 
 const toolBoxWidth = 96
 const toolDescWidth = 250;
@@ -27,7 +28,8 @@ export class CreateNewComponent implements OnInit {
               private dialogRef: MatDialogRef<CreateNewComponent>,
               private colorDialog: MatDialog,
               private createNewService: CreateNewService,
-              private drawerService: DrawerService) { }
+              private drawerService: DrawerService,
+              public router: Router) { }
 
   ngOnInit() {
     this.canvasSize = new CoordinatesXY(0, 0);
@@ -60,10 +62,13 @@ export class CreateNewComponent implements OnInit {
     this.colorSelectorService.colorToChange = ColorType.Background;
     this.colorSelectorService.updateColor(this.previewColor);
     this.createNewService.canvasSize.next(new CoordinatesXY(this.getcanvasSizeX(), this.getcanvasSizeY()));
-    this.onCloseDialog();
+    this.dialogRef.close();
   }
 
   onCloseDialog(): void {
     this.dialogRef.close();
+    if (history.state.comingFromEntryPoint) {
+      this.router.navigateByUrl('/')
+    }
   }
 }
