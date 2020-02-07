@@ -1,7 +1,7 @@
 export interface Filter {
   name: string;
   referenceID: string;
-  imagePath?: string;
+  imagePath: string;
 }
 
 export const FilterList: Filter[] = [

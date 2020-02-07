@@ -48,7 +48,7 @@ export class BrushComponent {
     this.showFilters = !this.showFilters;
   }
 
-  changeFilter(filter: string): void {
-    this.service.selectedFilter = filter;
+  changeFilter(filter: Filter): void {
+    this.service.selectedFilter = filter.referenceID;
   }
 }
