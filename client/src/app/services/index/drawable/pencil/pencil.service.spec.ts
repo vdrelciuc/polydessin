@@ -12,7 +12,7 @@ describe('PencilService', () => {
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
   const colorSubject =  new BehaviorSubject<Color>(new Color('#FFFFFF'));
-  const bla = (parentElement: any, name: string, debugInfo?: any): Element => {
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
@@ -26,7 +26,7 @@ describe('PencilService', () => {
         {
           provide: Renderer2,
           useValue: {
-              createElement: () => bla,
+              createElement: () => mockedRendered,
               setAttribute: () => null,
               appendChild: () => null,
               removeChild: () => null,
@@ -105,7 +105,6 @@ describe('PencilService', () => {
 
   it('#onMousePress should remove mouse pointer', () => {
     const spy = spyOn(manipulator, 'setAttribute');
-
     service.onMousePress(eventMocker('mousepress', 0));
     expect(spy).toHaveBeenCalledTimes(9);
     expect(service['previousX']).toEqual(10);

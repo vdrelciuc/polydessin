@@ -67,7 +67,7 @@ export class LineService extends DrawableService {
 
     this.attributes.color.subscribe((element: string) => {
       this.color = element;
-    })
+    });
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -77,11 +77,11 @@ export class LineService extends DrawableService {
         const lastPoint = this.points.getLast();
         if (lastPoint !== undefined) {
           const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
-          previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
+          previewPoints += shiftPoint.getX() + ',' + shiftPoint.getY();
         }
       } else {
-      previewPoints += CoordinatesXY.effectiveX(this.image, event.clientX).toString()
-          + ',' + CoordinatesXY.effectiveY(this.image, event.clientY).toString();
+      previewPoints += CoordinatesXY.effectiveX(this.image, event.clientX)
+          + ',' + CoordinatesXY.effectiveY(this.image, event.clientY);
       }
       this.manipulator.setAttribute(
           this.line,
@@ -114,9 +114,6 @@ export class LineService extends DrawableService {
     }
     this.updateLine();
   }
-
-  onMousePress(event: MouseEvent): void {}
-  onMouseRelease(event: MouseEvent): void {}
 
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
@@ -209,8 +206,10 @@ export class LineService extends DrawableService {
   private pointsToString({newPoints= this.points}: {newPoints?: Stack<CoordinatesXY>}= {}) {
     let pointsToString = '';
     for (const point of newPoints.getAll()) {
-      pointsToString += point.getX() + ',' + point.getY() + ' ';
-    }
+      if(point !== undefined) {
+        pointsToString += point.getX() + ',' + point.getY() + ' ';
+      }
+    } 
     return pointsToString;
   }
 }

@@ -1,6 +1,5 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 
-import { ShapeService } from './shape.service';
 import { RectangleService } from '../rectangle/rectangle.service';
 import { Renderer2, ElementRef, Type } from '@angular/core';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
@@ -10,9 +9,19 @@ import { Color } from 'src/app/classes/color';
 
 describe('ShapeService', () => {
   
-  let shapeService: RectangleService;
+  let service: RectangleService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
+  const colorSubject =  new BehaviorSubject<Color>(new Color('#FFFFFF'));
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+    const element = new Element();
+    parentElement.children.push(element);
+    return element;
+  }
+
+  const eventMocker = (event: string, keyUsed: number) => 
+      new MouseEvent(event, {button: keyUsed, clientX: 10, clientY: 10});
+
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -20,24 +29,24 @@ describe('ShapeService', () => {
         {
           provide: Renderer2,
           useValue: {
-            createElement: () => new SVGElement(),
-            setAttribute: () => null,
-            appendChild: () => null,
-            removeChild: () => null,
-        },
+              createElement: () => mockedRendered,
+              setAttribute: () => null,
+              appendChild: () => null,
+              removeChild: () => null,
+          },
       },
       {
         provide: ElementRef,
         useValue: {
             nativeElement: {
                 getBoundingClientRect: () => {
-                  const boundleft = 0;
-                  const boundtop = 0;
-                  const boundRect = {
-                    left: boundleft,
-                    top: boundtop,
-                  };
-                  return boundRect;
+                    const boundleft = 0;
+                    const boundtop = 0;
+                    const boundRect = {
+                        left: boundleft,
+                        top: boundtop,
+                    };
+                    return boundRect;
                 },
             },
           },
@@ -45,38 +54,63 @@ describe('ShapeService', () => {
         {
           provide: ColorSelectorService,
           useValue: {
-            primaryColor: new BehaviorSubject<Color>(new Color('#000000')),
-            secondaryColor: new BehaviorSubject<Color>(new Color('#000000'))
+            primaryColor: colorSubject,
+            primaryTransparency: new BehaviorSubject<number>(3)
           },
-        }
+        },
       ],
     });
-    shapeService = getTestBed().get(RectangleService);
+    service = getTestBed().get(RectangleService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
-    shapeService.initialize(manipulator, image, 
+    service.attributes = new DrawablePropertiesService();
+    service.initialize(manipulator, image, 
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
 
   it('should be created', () => {
-    const service: ShapeService = TestBed.get(ShapeService);
     expect(service).toBeTruthy();
   });
 
   it('#initializeProperties should set default properties', () => {
     const properties = new DrawablePropertiesService();
-    shapeService.initializeProperties();
-    expect(shapeService.shapeStyle.fillColor.getHex()).toBe(properties.fillColor.value);
-    expect(shapeService.shapeStyle.borderColor.getHex()).toBe(properties.color.value);
+    service.initializeProperties();
+    expect(service.shapeStyle.fillColor.getHex()).toBe(properties.fillColor.value);
+    expect(service.shapeStyle.borderColor.getHex()).toBe(properties.color.value);
   });
 
   it('#initializeProperties should define subscriptions', () => {
     const properties = new DrawablePropertiesService();
     const newColor = "#ABCDEF";
-    shapeService.initializeProperties();
+    service.initializeProperties();
     properties.fillColor.next(newColor);
     properties.color.next(newColor);
-    expect(shapeService.shapeStyle.fillColor.getHex()).toBe(newColor);
-    expect(shapeService.shapeStyle.borderColor.getHex()).toBe(newColor);
+    expect(service.shapeStyle.fillColor.getHex()).toBe(newColor);
+    expect(service.shapeStyle.borderColor.getHex()).toBe(newColor);
   });
+
+  it('#onMousePress should release mouse out of canvas', () => {
+    service['isChanging'] = true;
+    const spy = spyOn(service, 'onMouseRelease');
+    const spy2 = spyOn(manipulator, 'removeChild');
+    service.onMousePress(eventMocker('mouseup', 0));
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
+    expect(service['isChanging']).not.toBeTruthy();
+  });
+
+  it('#onMousePress should release mouse out of canvas', () => {
+    // test
+  });
+
+  it('#onMouseRelease should stop shape', () => {
+    service['drawOnNextMove'] = true;
+    service.onMouseRelease(eventMocker('mouserelease', 0));
+    expect(service['drawOnNextMove']).not.toBeTruthy();
+  });
+
+  it('#onMouseMove should release mouse out of canvas', () => {
+    // test
+  });
+
 });
