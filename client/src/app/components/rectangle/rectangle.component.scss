@@ -7,39 +7,26 @@
     padding-bottom: 0px;
 
     .title {
-        text-align: center;
         font-weight: bold;
-    }
-
-    ul {
-        list-style: none;
-        display: inline;
-    }
-
-    li {
-        padding-bottom: 50px;
-    }
-
-    mat-form-field {
-        margin-bottom: 50px;
-    }
-
-    #borderCheckbox {
-        padding-right: 30px;
-    }
-
-    p {
-        color: #cc3300;
-        font-size: 8pt;
-    }
-
-    .mat-slider {
-        margin-top: $slider-bubble-margin;
-        width: $slider-width;
+        color: whitesmoke;
     }
 
     .group {
         padding: 10px 0 40px 0;
+
+        #borderCheckbox {
+          padding-right: 30px;
+        }
+
+        .mat-slider {
+          margin-top: $slider-bubble-margin;
+          width: $slider-width;
+        }
+
+        #warning {
+          color:red;
+          font-size: 8pt;
+        }
     }
 }
 

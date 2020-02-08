@@ -3,63 +3,82 @@
 .wrapper {
   background-color: $dark;
   min-height: 100%;
+
+  .tool-header {
+
+    #title {
+      color: whitesmoke;
+      text-align: center;
+      padding-bottom: 4px;
+      padding-top: 10px;
+      margin: 0;
+    }
+
+    #tool {
+      margin: 0;
+      color: lightgray;
+      text-align: center;
+      padding-bottom: 10px;
+    }
+
+    .mat-divider {
+      border-top-width: 1px;
+      border-top-color: $gray;
+      padding-bottom: 10px;
+    }
+  }
+
+  .color-wrapper {
+    width: 100%;
+    margin: 0 auto;
+
+    .color-panel {
+      width: 100%;
+      position: absolute;
+      bottom: 1px;
+      background-color: $dark;
+      z-index: 9;
+
+      .mat-expansion-panel {
+        background-color: $light;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+
+        .mat-expansion-panel-header-description, .mat-expansion-panel-header-title {
+          margin: auto;
+
+          h6 {
+            color: whitesmoke;
+          }
+
+          .mat-icon {
+            color: whitesmoke;
+          }
+
+          .inner-color {
+            width: 100%;
+            background-color: $light;
+          }
+        }
+      }
+
+
+    }
+  }
 }
 
-.color-wrapper {
-  width: 100%;
-  margin: 0 auto;
-}
 
-#title {
-  color: whitesmoke;
-  text-align: center;
-  padding-bottom: 4px;
-}
 
-h4 {
-  margin: 0;
-  padding-top: 10px;
-}
 
-h6 {
-  color: whitesmoke;
-}
 
-#tool {
-  margin: 0;
-  color: lightgray;
-  text-align: center;
-  padding-bottom: 10px;
-}
 
-.mat-divider {
-  border-top-width: 1px;
-  border-top-color: $gray;
-  padding-bottom: 10px;
-}
 
-.color-panel {
-  width: 100%;
-  position: absolute;
-  bottom: 1px;
-  background-color: $dark;
-  z-index: 9;
-}
 
-.mat-expansion-panel {
-  background-color: $light;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.mat-expansion-panel-header-description, .mat-expansion-panel-header-title {
-  margin: auto;
-}
 
-.mat-icon {
-  color: whitesmoke;
-}
 
-.inner-color {
-  width: 100%;
-  background-color: $light;
-}
+
+
+
+
+
+
