@@ -25,6 +25,13 @@ export abstract class DrawableService {
                       colorSelectorService: ColorSelectorService): void;
   abstract initializeProperties(colorSelectorService: ColorSelectorService): void;
 
+  canDraw(canvas: HTMLElement, pointer: MouseEvent): boolean {
+    return (
+        // To change depending on what is the canvas' type and how to get it's dimensions
+      true
+    );
+  }
+
   onMouseInCanvas(event: MouseEvent): void { /*To Override if needed*/}
   onMouseOutCanvas(event: MouseEvent): void { /*To Override if needed*/}
   onMousePress(event: MouseEvent): void { /*To Override if needed*/}

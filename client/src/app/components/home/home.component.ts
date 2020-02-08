@@ -10,7 +10,7 @@ export class HomeComponent {
     [
       {description : 'Creer un nouveau dessin', optionPath : '/dessin' , show : true},
       {description : 'Ouvrir la Galerie de dessins', optionPath: '/', show : true} ,
-      {description : 'Afficher le guide d\'Utilisation', optionPath: '/guide/bienvenue', show : true} ,
+      {description : 'Afficher le Guide d\'utilisation', optionPath: '/userGuide/bienvenue', show : true} ,
       {description : 'Continuer un dessin', show : false}
     ];
 }

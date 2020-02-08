@@ -21,6 +21,16 @@ export class Color {
       }
   }
 
+  private static rgbToHex(value: number): string {
+      let hex = Number(value).toString(CONSTANT.HEX_BASE);
+      if (hex.length < 2) {
+          hex = '0' + hex;
+      }
+      return hex;
+    }
+  private static clamp(value: number): number {
+      return Math.min(Math.max(value, Color.MIN_VALUE), Color.MAX_VALUE);
+  }
   getHex(): string {
       return this.hex;
   }
@@ -72,36 +82,24 @@ export class Color {
   }
 
   setRedHex(red: string): void {
-    red = this.correctHexDigit(red);
+    this.correctHexDigit(red);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(red)) {
       this.hex = this.hex.charAt(0) + red + this.hex.substr(3);
     }
   }
 
   setGreenHex(green: string): void {
-    green = this.correctHexDigit(green);
+    this.correctHexDigit(green);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(green)) {
       this.hex = this.hex.substr(0, 3) + green + this.hex.substr(5);
     }
   }
 
   setBlueHex(blue: string): void {
-    blue = this.correctHexDigit(blue);
+    this.correctHexDigit(blue);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(blue)) {
       this.hex = this.hex.substr(0, 5) + blue;
     }
-  }
-
-  private static rgbToHex(value: number): string {
-    let hex = Number(value).toString(CONSTANT.HEX_BASE);
-    if (hex.length < 2) {
-        hex = '0' + hex;
-    }
-    return hex;
-  }
-
-  private static clamp(value: number): number {
-    return Math.min(Math.max(value, Color.MIN_VALUE), Color.MAX_VALUE);
   }
 
   private correctHexDigit(n: string): string {

@@ -5,25 +5,13 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { RectangleService } from './rectangle.service';
-import { BehaviorSubject } from 'rxjs';
-import { Color } from 'src/app/classes/color';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 describe('RectangleService', () => {
 
-  let service: RectangleService;
+  let rectangleService: RectangleService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
 
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
-    const element = new Element();
-    parentElement.children.push(element);
-    return element;
-  }
-
-  let mockedPrimary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
-  let mockedSecondary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
-  
   // Faking a MouseEvent
   const e = {
     type: 'click',
@@ -68,10 +56,10 @@ describe('RectangleService', () => {
         {
           provide: Renderer2,
           useValue: {
-              createElement: () => mockedRendered,
-              setAttribute: () => mockedRendered,
-              appendChild: () => mockedRendered,
-              removeChild: () => mockedRendered,
+            createElement: () => new SVGElement(),
+            setAttribute: () => null,
+            appendChild: () => null,
+            removeChild: () => null,
           },
       },
       {
@@ -79,13 +67,13 @@ describe('RectangleService', () => {
         useValue: {
             nativeElement: {
                 getBoundingClientRect: () => {
-                    const boundleft = 0;
-                    const boundtop = 0;
-                    const boundRect = {
-                        left: boundleft,
-                        top: boundtop,
-                    };
-                    return boundRect;
+                  const boundleft = 0;
+                  const boundtop = 0;
+                  const boundRect = {
+                    left: boundleft,
+                    top: boundtop,
+                  };
+                  return boundRect;
                 },
             },
           },
@@ -93,24 +81,19 @@ describe('RectangleService', () => {
         {
           provide: ColorSelectorService,
           useValue: {
-            primaryColor: mockedPrimary,
-            secondaryColor: mockedSecondary,
-            primaryTransparency: new BehaviorSubject<number>(1),
-            secondaryTransparency: new BehaviorSubject<number>(1),
-          },
+            },
         },
       ],
     });
-    service = getTestBed().get(RectangleService);
+    rectangleService = getTestBed().get(RectangleService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
     rectangleService.initialize(manipulator, image,
         getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
-  
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(rectangleService).toBeTruthy();
   });
 
   it('#constructer should set the RectangleService with its correct default attributes', () => {
@@ -125,10 +108,10 @@ describe('RectangleService', () => {
   });
 
   it('#initializeProperties should set default properties', () => {
-    service.attributes = new DrawablePropertiesService();
-    service.initializeProperties();
-    expect(service.colorSelectorService.primaryColor.value.getHex())
-      .toBe('#FFFFFF');
+    const properties = new DrawablePropertiesService();
+    rectangleService.initializeProperties();
+    expect(rectangleService.shapeStyle.fillColor.getHex()).toBe(properties.fillColor.value);
+    expect(rectangleService.shapeStyle.borderColor.getHex()).toBe(properties.color.value);
   });
 
   it('#initializeProperties should define subscriptions', () => {
@@ -141,16 +124,4 @@ describe('RectangleService', () => {
     expect(rectangleService.shapeStyle.borderColor.getHex()).toBe(newColor);
   });
 
-  it('#setShapeOriginFromRightQuadrants should set all attributes', () => {
-    service['isChanging'] = false;
-    service['drawOnNextMove'] = true;
-    service.onMouseMove(new MouseEvent('mousemove', {}));
-    
-    service['isChanging'] = true;
-    service['shapeOrigin'] = new CoordinatesXY(0,0);
-    const spy = spyOn(manipulator, 'setAttribute');
-    service.onMouseMove(new MouseEvent('mousemove', {}));
-    expect(service['shiftPressed']).toBeTruthy();
-    expect(spy).toHaveBeenCalled();
-  });
 });

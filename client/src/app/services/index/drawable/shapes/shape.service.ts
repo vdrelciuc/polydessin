@@ -69,6 +69,7 @@ export abstract class ShapeService extends DrawableService {
       this.shapeOrigin = CoordinatesXY.getEffectiveCoords(this.image, event);
       this.drawOnNextMove = true;
     }
+
   }
 
   onMouseRelease(event?: MouseEvent): void {
@@ -98,7 +99,6 @@ export abstract class ShapeService extends DrawableService {
       this.updateSize();
     }
   }
-  
   onKeyReleased(event: KeyboardEvent): void {
     if (!event.shiftKey && this.shiftPressed) {
       this.shiftPressed = false;
@@ -198,6 +198,7 @@ export abstract class ShapeService extends DrawableService {
   }
 
   // Methods to implement in concrete shape class
+
   protected abstract setDimensionsAttributes(width: number, height: number): void;
   protected abstract setShapeOriginFromRightQuadrants(width: number): void;
   protected abstract setShapeOriginFromLeftQuadrants(width: number): void;

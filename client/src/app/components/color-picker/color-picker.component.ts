@@ -21,25 +21,16 @@ export class ColorPickerComponent {
     this.selectedHue = this.colorSelectorService.getCurrentlySelectedColor();
   }
 
-  updateRed(event: Event): void {
-    if(event !== null) {
-      const target = event.target as HTMLTextAreaElement;
-      this.selectedColor.setRedHex(target.value);
-    }
+  updateRed(event: any): void {
+    this.selectedColor.setRedHex(event.target.value);
   }
 
-  updateGreen(event: Event): void {
-    if(event !== null) {
-      const target = event.target as HTMLTextAreaElement;
-      this.selectedColor.setGreenHex(target.value);
-    }
+  updateGreen(event: any): void {
+    this.selectedColor.setGreenHex(event.target.value);
   }
 
-  updateBlue(event: Event): void {
-    if(event !== null) {
-      const target = event.target as HTMLTextAreaElement;
-      this.selectedColor.setBlueHex(target.value);
-    }
+  updateBlue(event: any): void {
+    this.selectedColor.setBlueHex(event.target.value);
   }
 
   onDialogClose() {

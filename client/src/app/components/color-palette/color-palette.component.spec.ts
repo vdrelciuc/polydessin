@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ColorPaletteComponent } from './color-palette.component';
-import { Color } from 'src/app/classes/color';
 
 describe('ColorPaletteComponent', () => {
   let component: ColorPaletteComponent;
@@ -12,11 +11,13 @@ describe('ColorPaletteComponent', () => {
       declarations: [ ColorPaletteComponent ]
     })
     .compileComponents();
+  }));
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(ColorPaletteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component.initialColor = new Color('#000000');
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();

@@ -4,9 +4,6 @@ import { Tools } from 'src/app/enums/tools';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { ToolSelectorService } from './tool-selector.service';
-import { Tools } from 'src/app/enums/tools';
-import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
-import { BrushService } from '../index/drawable/brush/brush.service';
 
 describe('ToolSelectorService', () => {
 
@@ -23,44 +20,53 @@ describe('ToolSelectorService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('#getCurrentTool should return default current tool', () => {
+  it('should return default current tool', () => {
     expect(service.getCurrentTool()).toEqual(undefined);
     // To change when selection tool is available
   });
 
-  it('#getLine should get line', () => {
+  it('should get line', () => {
     expect(service.getLine()).toEqual(new LineService());
   });
 
-  it('#getPencil should get pencil', () => {
+  it('should get pencil', () => {
     expect(service.getPencil()).toEqual(new PencilService());
-  });
-
-  it('#getRectangle should get rectangle', () => {
-    expect(service.getRectangle()).toEqual(new RectangleService());
-  });
-
-  it('#getBrush should get rectangle', () => {
-    expect(service.getBrush()).toEqual(new BrushService());
   });
 
   // Add other should get here, brush, rectangle...
 
-  it('#setCurrentTool should set new current tool (available)', () => {
+  it('should set new current tool (available)', () => {
     service.setCurrentTool(Tools.Line);
     expect(service.getCurrentTool()).toEqual(new LineService());
   });
 
-  it('#setCurrentTool should set new current tool (not available)', () => {
+  it('should set new current tool (not available)', () => {
     service.setCurrentTool(Tools.None);
     expect(service.getCurrentTool()).toEqual(undefined);
   });
 
-  it('#getTool should find Line tool in map', () => {
+  it('should find Line tool in map', () => {
     expect(service.getTool(Tools.Line)).toEqual(new LineService());
   });
 
-  it('#getTool shouldn\'t find non existant tool in map', () => {
+  it('shouldn\'t find non existant tool in map', () => {
     expect(service.getTool(Tools.Aerosol)).toEqual(undefined);
   });
+
+  // it('should get french name of some tools', () => {
+  //   const mapOfTools: Map<Tools, string> = new Map();
+  //   mapOfTools.set(Tools.Line, 'Ligne');
+  //   mapOfTools.set(Tools.Brush, 'Pinceau');
+  //   mapOfTools.set(Tools.Rectangle, 'Rectangle');
+  //   mapOfTools.set(Tools.Pencil, 'Crayon');
+  //   let isOk = true;
+  //   for(const element of mapOfTools) {
+  //     service.setCurrentTool(element[0]);
+  //     if(service.getFrenchToolNameToPrint() !== element[1]) {
+  //       isOk = false;
+  //       break;
+  //     }
+  //   }
+  //   expect(isOk).toBe(true);
+  // });
 });
