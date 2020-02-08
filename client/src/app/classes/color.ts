@@ -2,16 +2,6 @@ import * as CONSTANT from 'src/app/classes/constants';
 
 export class Color {
 
-  constructor(color?: string | number[]) {
-      if (typeof color === 'string') {
-          this.setHex(color);
-      } else if (color instanceof Array) {
-          this.setRGB(color);
-      } else {
-          this.hex = CONSTANT.DEFAULT_PRIMARY_COLOR;
-      }
-  }
-
   private static readonly MIN_VALUE: number = 0;
   private static readonly MAX_VALUE: number = 255;
   private static readonly BYTES_IN_HEX: number = 3;
@@ -21,16 +11,14 @@ export class Color {
 
   private hex: string;
 
-  private static rgbToHex(value: number): string {
-    let hex = Number(value).toString(CONSTANT.HEX_BASE);
-    if (hex.length < 2) {
-        hex = '0' + hex;
-    }
-    return hex;
-  }
-
-  private static clamp(value: number): number {
-    return Math.min(Math.max(value, Color.MIN_VALUE), Color.MAX_VALUE);
+  constructor(color?: string | number[]) {
+      if (typeof color === 'string') {
+          this.setHex(color);
+      } else if (color instanceof Array) {
+          this.setRGB(color);
+      } else {
+          this.hex = CONSTANT.DEFAULT_PRIMARY_COLOR;
+      }
   }
 
   getHex(): string {
@@ -102,6 +90,18 @@ export class Color {
     if (this.REGEX_RGB_VALUE_IN_HEX.test(blue)) {
       this.hex = this.hex.substr(0, 5) + blue;
     }
+  }
+
+  private static rgbToHex(value: number): string {
+    let hex = Number(value).toString(CONSTANT.HEX_BASE);
+    if (hex.length < 2) {
+        hex = '0' + hex;
+    }
+    return hex;
+  }
+
+  private static clamp(value: number): number {
+    return Math.min(Math.max(value, Color.MIN_VALUE), Color.MAX_VALUE);
   }
 
   private correctHexDigit(n: string): string {

@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { MatOptionModule, MatRadioModule, MatSelectModule, MatSliderModule } from '@angular/material';
 import * as CONSTANT from 'src/app/classes/constants';
 import { BrushComponent } from './brush.component';
+import { MatSliderModule, MatSelectModule, MatOptionModule, MatRadioModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
 // import { FilterList } from 'src/app/classes/patterns';
 // import { BrushService } from 'src/app/services/index/drawable/brush/brush.service';
 
@@ -15,7 +15,7 @@ describe('BrushComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ BrushComponent ],
-      imports: [
+      imports: [ 
         FormsModule,
         MatSliderModule,
         MatSelectModule,

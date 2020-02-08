@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { IndexService } from '../../services/index/index.service';
 import { AppComponent } from './app.component';

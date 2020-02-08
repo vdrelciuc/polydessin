@@ -15,7 +15,7 @@ export class WorkingAreaComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (history.state !== null) {
+    if(history.state !== null) {
       if (history.state.comingFromEntryPoint) {
         this.dialog.open(CreateNewComponent, { disableClose: true });
       }

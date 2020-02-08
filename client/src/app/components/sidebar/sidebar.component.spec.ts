@@ -1,16 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { SidebarComponent } from './sidebar.component';
+import { RouterModule } from '@angular/router';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { MatDialog, MatTooltipModule } from '@angular/material';
+import { Tools } from 'src/app/enums/tools';
 import { By } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { RouterModule } from '@angular/router';
-import { Tools } from 'src/app/enums/tools';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { SidebarComponent } from './sidebar.component';
 import { SidebarComponent } from './sidebar.component';
 
 describe('SidebarComponent', () => {

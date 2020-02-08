@@ -78,32 +78,32 @@ describe('Color', () => {
     });
 
     it('#getRedHex should get red part', () => {
-        color.setRGB([15, 16, 17]); // #0f1011
+        color.setRGB([15,16,17]); // #0f1011
         expect(color.getRedHex()).toEqual('0F');
     });
 
     it('#getGreenHex should get green part', () => {
-        color.setRGB([15, 16, 17]); // #0f1011
+        color.setRGB([15,16,17]); // #0f1011
         expect(color.getGreenHex()).toEqual('10');
     });
 
     it('#getBlueHex should get blue part', () => {
-        color.setRGB([15, 16, 17]); // #0f1011
+        color.setRGB([15,16,17]); // #0f1011
         expect(color.getBlueHex()).toEqual('11');
     });
 
     it('#setRedHex should set red part', () => {
-        color.setRedHex('0f');
+        color.setRedHex('0f'); 
         expect(color.getRedHex()).toEqual('0F');
     });
 
     it('#setRedHex should set red part with empty parameter', () => {
-        color.setRedHex('');
+        color.setRedHex(''); 
         expect(color.getRedHex()).toEqual('00');
     });
 
     it('#setRedHex should set red part with missing parameter', () => {
-        color.setRedHex('F');
+        color.setRedHex('F'); 
         expect(color.getRedHex()).toEqual('0F');
     });
 
@@ -113,12 +113,12 @@ describe('Color', () => {
     });
 
     it('#setGreenHex should set green part with empty parameter', () => {
-        color.setGreenHex('');
+        color.setGreenHex(''); 
         expect(color.getGreenHex()).toEqual('00');
     });
 
     it('#setGreenHex should set green part with missing parameter', () => {
-        color.setGreenHex('F');
+        color.setGreenHex('F'); 
         expect(color.getGreenHex()).toEqual('0F');
     });
 
@@ -128,12 +128,12 @@ describe('Color', () => {
     });
 
     it('#setBlueHex should set blue part with empty parameter', () => {
-        color.setBlueHex('');
+        color.setBlueHex(''); 
         expect(color.getBlueHex()).toEqual('00');
     });
 
     it('#setBlueHex should set blue part with missing parameter', () => {
-        color.setBlueHex('F');
+        color.setBlueHex('F'); 
         expect(color.getBlueHex()).toEqual('0F');
     });
 });

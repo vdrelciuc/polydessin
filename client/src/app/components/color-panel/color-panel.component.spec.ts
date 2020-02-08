@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { ColorPanelComponent } from './color-panel.component';
+import { MatSliderModule, MatDialog } from '@angular/material';
 import { FormsModule } from '@angular/forms';
-import { MatDialog, MatSliderModule } from '@angular/material';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { ColorType } from 'src/app/enums/color-types';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { ColorPanelComponent } from './color-panel.component';
 
 describe('ColorPanelComponent', () => {
   let component: ColorPanelComponent;
@@ -44,7 +44,7 @@ describe('ColorPanelComponent', () => {
     .compileComponents();
     fixture = TestBed.createComponent(ColorPanelComponent);
     component = fixture.componentInstance;
-    service =  TestBed.get<ColorSelectorService>(ColorSelectorService);
+    service=  TestBed.get<ColorSelectorService>(ColorSelectorService);
     fixture.detectChanges();
   }));
 

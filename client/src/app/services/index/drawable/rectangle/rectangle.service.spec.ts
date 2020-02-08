@@ -1,13 +1,13 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Color } from 'src/app/classes/color';
 import * as CONSTANT from 'src/app/classes/constants';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { RectangleService } from './rectangle.service';
+import { BehaviorSubject } from 'rxjs';
+import { Color } from 'src/app/classes/color';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 describe('RectangleService', () => {
 
@@ -21,9 +21,9 @@ describe('RectangleService', () => {
     return element;
   }
 
-  const mockedPrimary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
-  const mockedSecondary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
-
+  let mockedPrimary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
+  let mockedSecondary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
+  
   // Faking a MouseEvent
   const e = {
     type: 'click',
@@ -107,6 +107,7 @@ describe('RectangleService', () => {
     rectangleService.initialize(manipulator, image,
         getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
+  
 
   it('should be created', () => {
     expect(service).toBeTruthy();
@@ -141,15 +142,15 @@ describe('RectangleService', () => {
   });
 
   it('#setShapeOriginFromRightQuadrants should set all attributes', () => {
-    service.isChanging = false;
-    service.drawOnNextMove = true;
+    service['isChanging'] = false;
+    service['drawOnNextMove'] = true;
     service.onMouseMove(new MouseEvent('mousemove', {}));
-
-    service.isChanging = true;
-    service.shapeOrigin = new CoordinatesXY(0, 0);
+    
+    service['isChanging'] = true;
+    service['shapeOrigin'] = new CoordinatesXY(0,0);
     const spy = spyOn(manipulator, 'setAttribute');
     service.onMouseMove(new MouseEvent('mousemove', {}));
-    expect(service.shiftPressed).toBeTruthy();
+    expect(service['shiftPressed']).toBeTruthy();
     expect(spy).toHaveBeenCalled();
   });
 });

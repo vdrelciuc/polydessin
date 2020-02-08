@@ -98,7 +98,7 @@ export abstract class ShapeService extends DrawableService {
       this.updateSize();
     }
   }
-
+  
   onKeyReleased(event: KeyboardEvent): void {
     if (!event.shiftKey && this.shiftPressed) {
       this.shiftPressed = false;
