@@ -12,7 +12,7 @@ describe('EventListenerService', () => {
 
   let service: EventListenerService;
   let manipulator: Renderer2;
-  const line: LineService = new LineService;
+  const line: LineService = new LineService();
 
   beforeEach(() => {
     TestBed.configureTestingModule({

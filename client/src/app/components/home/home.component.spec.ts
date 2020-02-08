@@ -31,7 +31,7 @@ describe('HomeComponent', () => {
   });
 
   it('should create and correctly initialize the options attribute', () => {
-    const options: Object[] =
+    const options: object[] =
       [
         {description : 'Creer un nouveau dessin', optionPath : '/dessin' , show : true},
         {description : 'Ouvrir la Galerie de dessins', optionPath: '/', show : true} ,

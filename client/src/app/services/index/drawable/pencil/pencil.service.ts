@@ -117,7 +117,9 @@ export class PencilService extends DrawableService {
   private endPath() {
     if (this.path.indexOf('l') === -1) {
       this.manipulator.removeChild(this.image.nativeElement, this.line);
-      const circle = this.createCircle(CoordinatesXY.effectiveX(this.image, this.previousX), CoordinatesXY.effectiveY(this.image, this.previousY));
+      const effectiveX = CoordinatesXY.effectiveX(this.image, this.previousX);
+      const effectiveY = CoordinatesXY.effectiveY(this.image, this.previousY);
+      const circle = this.createCircle(effectiveX, effectiveY);
       this.manipulator.appendChild(this.image.nativeElement, circle);
     }
     this.manipulator.setAttribute(this.line, 'd', this.path);

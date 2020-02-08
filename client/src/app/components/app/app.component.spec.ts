@@ -1,7 +1,8 @@
 // import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatDialogModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatSidenavModule, MatSliderModule } from '@angular/material';
+import { MatDialogModule, MatFormFieldModule, MatOptionModule,
+  MatSelectModule, MatSidenavModule, MatSliderModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 // import { RouterTestingModule } from '@angular/router/testing';

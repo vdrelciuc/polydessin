@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from '../../../../../common/communication/message';
@@ -9,7 +9,7 @@ import { IndexService } from '../../services/index/index.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   readonly title: string = 'LOG2990';
   message = new BehaviorSubject<string>('');
@@ -22,7 +22,5 @@ export class AppComponent implements OnInit {
       .pipe(map((message: Message) => `${message.title} ${message.body}`))
       .subscribe(this.message);
   }
-
-  ngOnInit() {}
 
 }

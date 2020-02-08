@@ -62,7 +62,9 @@ export class BrushService extends DrawableService {
   }
   onMouseInCanvas(event: MouseEvent): void {
     if (this.previewCricle === undefined) {
-      this.previewCricle = this.createCircle(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+      const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
+      const effectiveY = CoordinatesXY.effectiveY(this.image, event.clientY);
+      this.previewCricle = this.createCircle(effectiveX, effectiveY);
     }
     this.manipulator.setAttribute(this.previewCricle, SVGProperties.radius, (this.getThickness() / 2).toString());
     this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);

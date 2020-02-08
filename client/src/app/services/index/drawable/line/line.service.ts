@@ -76,7 +76,9 @@ export class LineService extends DrawableService {
       if (this.shiftPressed) {
         const lastPoint = this.points.getLast();
         if (lastPoint !== undefined) {
-          const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+          const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
+          const effectiveY = CoordinatesXY.effectiveY(this.image, event.clientY);
+          const shiftPoint = lastPoint.getClosestPoint(effectiveX, effectiveY);
           previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
         }
       } else {
@@ -120,9 +122,11 @@ export class LineService extends DrawableService {
 
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
-      const lastPoint = new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+      const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
+      const effectiveY = CoordinatesXY.effectiveY(this.image, event.clientY);
+      const lastPoint = new CoordinatesXY(effectiveX, effectiveY);
       const firstPoint = this.points.getRoot();
-      if (firstPoint != undefined) {
+      if (firstPoint !== undefined) {
         const differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
         const differenceOfCoordinatesY = firstPoint.getY() - lastPoint.getY();
         const isWithin3Px: boolean =

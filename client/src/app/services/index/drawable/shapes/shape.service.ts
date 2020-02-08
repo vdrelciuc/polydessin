@@ -6,7 +6,6 @@ import { ShapeStyle } from 'src/app/classes/shape-style';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
-// import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 
@@ -142,14 +141,16 @@ export abstract class ShapeService extends DrawableService {
     this.text = this.manipulator.createElement('text', 'http://www.w3.org/2000/svg');
 
     // Adding shape properties
+    const thickness = this.shapeStyle.hasBorder ? this.shapeStyle.thickness.toString() : '0';
     this.manipulator.setAttribute(this.shape, SVGProperties.fill, this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getHex() : 'none');
-    this.manipulator.setAttribute(this.shape, SVGProperties.thickness, this.shapeStyle.hasBorder ? this.shapeStyle.thickness.toString() : '0');
+    this.manipulator.setAttribute(this.shape, SVGProperties.thickness, thickness);
     this.manipulator.setAttribute(this.shape, SVGProperties.color, this.shapeStyle.borderColor.getHex());
     this.manipulator.setAttribute(this.shape, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
     this.manipulator.setAttribute(this.shape, SVGProperties.fillOpacity, this.shapeStyle.fillOpacity.toString());
 
     // Adding text properties
-    this.manipulator.setAttribute(this.text, SVGProperties.fill, this.shapeStyle.hasFill ? invertColor(this.shapeStyle.fillColor, true).getHex() : 'black');
+    const fill = this.shapeStyle.hasFill ? invertColor(this.shapeStyle.fillColor, true).getHex() : 'black';
+    this.manipulator.setAttribute(this.text, SVGProperties.fill, fill);
     this.manipulator.setAttribute(this.text, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.text, SVGProperties.color, this.shapeStyle.hasFill ? 'none' : 'grey');
     this.manipulator.setAttribute(this.text, 'text-anchor', 'middle');

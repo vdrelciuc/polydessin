@@ -20,7 +20,7 @@ export const MIN_TRANSPARENCY = 0.01;
 export const WORKSPACE_BACKGROUND = '808080';
 
 export const COLOR_DEFAULT = '#000000';
-export const OPACITY_DEFAULT = '1';
+export const OPACITY_DEFAULT = 1;
 export const MAX_RECENT_COLORS = 10;
 
 // Math

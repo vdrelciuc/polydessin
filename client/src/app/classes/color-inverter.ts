@@ -1,6 +1,6 @@
 import { Color } from './color';
 
-// Inspired from https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color, but heavily reajusted.
+// Inspired from https://bit.ly/2H5a0UF, but heavily reajusted.
 
 // If bw is true, the function will return the closest to black or white
 
@@ -17,7 +17,8 @@ export function invertColor(color: Color, bw: boolean): Color {
         const greenConversionFactor = 0.587;
         const blueConversionFactor = 0.114;
         const shadeLimit = 186;
-        const blackOrWhite = (red * redConversionFactor + green * greenConversionFactor + blue * blueConversionFactor) > shadeLimit ? '#000000' : '#FFFFFF';
+        const blackOrWhite = (red * redConversionFactor + green * greenConversionFactor + blue * blueConversionFactor)
+          > shadeLimit ? '#000000' : '#FFFFFF';
 
         return new Color(blackOrWhite);
     }

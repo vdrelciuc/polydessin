@@ -1,14 +1,9 @@
 import { Injectable, } from '@angular/core';
-// import { invertColor } from 'src/app/classes/color-inverter';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANT from 'src/app/classes/constants';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
-// import { Coords } from 'src/app/classes/coordinates';
-// import { SVGProperties } from 'src/app/classes/svg-html-properties';
-// import { Tools } from 'src/app/enums/tools';
 import { ShapeService } from '../shapes/shape.service';
-// import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +17,8 @@ export class RectangleService extends ShapeService {
       thickness: CONSTANT.THICKNESS_DEFAULT,
       borderColor: new Color(),
       fillColor: new Color(),
-      borderOpacity: parseInt(CONSTANT.OPACITY_DEFAULT),
-      fillOpacity: parseInt(CONSTANT.OPACITY_DEFAULT),
+      borderOpacity: CONSTANT.OPACITY_DEFAULT,
+      fillOpacity: CONSTANT.OPACITY_DEFAULT,
       hasBorder: true,
       hasFill: true,
       nameDisplayDefault: '[Rectangle]',
