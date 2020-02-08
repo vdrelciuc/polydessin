@@ -8,10 +8,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { CreateNewService } from 'src/app/services/create-new.service';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { WorkspaceService } from 'src/app/services/workspace.service';
-import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
 
-const toolBoxWidth: number = 96
-const toolBoxDescWidth: number = 250;
 @Component({
   selector: 'app-create-new',
   templateUrl: './create-new.component.html',
@@ -32,7 +29,7 @@ export class CreateNewComponent implements OnInit {
               private colorDialog: MatDialog,
               private createNewService: CreateNewService,
               private workspaceService: WorkspaceService,
-              private drawerService: DrawerService) { }
+              ) { }
 
   ngOnInit() {
     this.canvasSize = new Coords(0, 0);
@@ -51,10 +48,10 @@ export class CreateNewComponent implements OnInit {
   }
 
   getcanvasSizeX(): number {
-    return (this.canvasSize.x || window.innerWidth - toolBoxWidth - (this.drawerService.navIsOpened ? toolBoxDescWidth : 0));
+    return (this.canvasSize.x || this.workspaceSize.x);
   }
   getcanvasSizeY(): number {
-    return (this.canvasSize.y || window.innerHeight);
+    return (this.canvasSize.y || this.workspaceSize.y);
   }
   setcanvasSizeX(event: any) {
     if (event.target.value > 0) {

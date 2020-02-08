@@ -1,20 +1,22 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { WorkspaceService } from 'src/app/services/workspace.service';
 import { Color } from 'src/app/classes/color';
-
+import { Coords } from 'src/app/classes/coordinates';
 @Component({
   selector: 'app-workspace',
   templateUrl: './workspace.component.html',
   styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-  @ViewChild('workspace', { static: true }) workspace: ElementRef<HTMLDivElement>;
   backgroundColor: Color;
 
     ngOnInit() {
       this.backgroundColor = this.workspaceService.backgroundColor;
     }
 
+    onResize(event: any) {
+      this.workspaceService.Size.next(new Coords(event.contentRect.width, event.contentRect.height));
+    }
   constructor(protected workspaceService: WorkspaceService) {
   };
 

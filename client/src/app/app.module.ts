@@ -36,6 +36,7 @@ import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
 import { RectangleComponent } from './components/rectangle/rectangle.component';
 import { BrushComponent } from './components/brush/brush.component';
+import { ResizeObserverDirective } from './components/workspace/resize-observer.directive';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { BrushComponent } from './components/brush/brush.component';
     ColorPickerComponent,
     ColorPaletteComponent,
     ColorSliderComponent,
-    RoutingComponents
+    RoutingComponents,
+    ResizeObserverDirective
   ],
   entryComponents: [
     ColorPickerComponent,
