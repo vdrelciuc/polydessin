@@ -1,16 +1,19 @@
-import { getTestBed, TestBed } from '@angular/core/testing';
-
 import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
+import { BehaviorSubject } from 'rxjs';
+import { Color } from 'src/app/classes/color';
+import * as CONSTANT from 'src/app/classes/constants';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { RectangleService } from '../rectangle/rectangle.service';
-import { ShapeService } from './shape.service';
 
 describe('ShapeService', () => {
 
-  let shapeService: RectangleService;
+  const shapeService: RectangleService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
+  let service: any;
   const colorSubject =  new BehaviorSubject<Color>(new Color('#FFFFFF'));
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
@@ -68,8 +71,8 @@ describe('ShapeService', () => {
       thickness: CONSTANT.THICKNESS_DEFAULT,
       borderColor: new Color(CONSTANT.DEFAULT_PRIMARY_COLOR),
       fillColor: new Color(CONSTANT.COLOR_DEFAULT),
-      borderOpacity: parseInt(CONSTANT.OPACITY_DEFAULT),
-      fillOpacity: parseInt(CONSTANT.OPACITY_DEFAULT),
+      borderOpacity: parseInt(CONSTANT.OPACITY_DEFAULT, CONSTANT.DECIMAL_BASE),
+      fillOpacity: parseInt(CONSTANT.OPACITY_DEFAULT, CONSTANT.DECIMAL_BASE),
       hasBorder: true,
       hasFill: true,
       nameDisplayDefault: '[Rectangle]',
@@ -77,7 +80,7 @@ describe('ShapeService', () => {
     };
     service.initialize(manipulator, image,
     shapeService.initialize(manipulator, image,
-      getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
+      getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>)));
   });
 
   it('should be created', () => {
@@ -127,9 +130,9 @@ describe('ShapeService', () => {
     it('#onMousePress should create rectangle', () => {
     service.isChanging = false;
     service.drawOnNextMove = true;
-    const spy = spyOn(CoordinatesXY, 'getEffectiveCoords');
+    const spy2 = spyOn(CoordinatesXY, 'getEffectiveCoords');
     service.onMousePress(eventMocker('mouseup', 0));
-    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
     expect(service.drawOnNextMove).toBeTruthy();
   });
 
@@ -141,10 +144,10 @@ describe('ShapeService', () => {
 
     it('#onMouseRelease should stop shape', () => {
     service.drawOnNextMove = false;
-    const spy = spyOn(manipulator, 'removeChild');
+    const spy2 = spyOn(manipulator, 'removeChild');
     service.onMouseRelease(eventMocker('mouserelease', 0));
     expect(service.drawOnNextMove).not.toBeTruthy();
-    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
   });
 
     it('#onMouseMove should save mouse position', () => {
@@ -177,10 +180,10 @@ describe('ShapeService', () => {
     it('#onMouseMove should init properties', () => {
     service.isChanging = false;
     service.drawOnNextMove = true;
-    const spy = spyOn(manipulator, 'createElement');
+    const spy3 = spyOn(manipulator, 'createElement');
     const spy2 = spyOn(manipulator, 'appendChild');
     service.onMouseMove(eventMocker('mousemove', 0));
-    expect(spy).toHaveBeenCalledTimes(3);
+    expect(spy3).toHaveBeenCalledTimes(3);
     expect(spy2).toHaveBeenCalledTimes(3);
     expect(service.drawOnNextMove).not.toBeTruthy();
   });
@@ -269,4 +272,4 @@ describe('ShapeService', () => {
     expect(service.shiftPressed).toBeTruthy();
   });
 
-});
+}) });
