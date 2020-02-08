@@ -9,7 +9,7 @@ import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Router } from '@angular/router';
 
-const toolBoxWidth = 96
+const toolBoxWidth = 96;
 const toolDescWidth = 250;
 
 @Component({

@@ -10,17 +10,31 @@
 
       <div class="choiceContent">
         <p >Veuillez choisir une option :</p>
-        <div *ngFor="let option of options ">
 
-
-          <a *ngIf="option.show " class="btn btn-warning btn-center "
-             [routerLink] = [option.optionPath] role="button" [state]="{path : '', comingFromEntryPoint : true}">
-            {{option.description}}
-          </a>
+        <div>
+          <div>
+            <a class="btn btn-warning btn-center " routerLink = '/dessin'
+               role="button" [state]="{path : '', comingFromEntryPoint : true}">
+              Creer un nouveau dessin
+            </a>
+          </div>
+          <div>
+            <a class="btn btn-warning btn-center " routerLink = '/'
+               role="button" [state]="{path : '', comingFromEntryPoint : true}">
+              Ouvrir la Galerie de dessins
+            </a>
+          </div>
+          <div>
+            <a class="btn btn-warning btn-center " routerLink = '/guide/bienvenue'
+               role="button" [state]="{path : '', comingFromEntryPoint : true}">
+              Afficher le guide d'Utilisation
+            </a>
+          </div>
+        </div>
           <!--<a *ngIf="option.show ===false" class="btn btn-warning btn-center disabled "  role="button">
                       {{option.description}}
                     </a>-->
-        </div>
+
 
       </div>
     </div>
