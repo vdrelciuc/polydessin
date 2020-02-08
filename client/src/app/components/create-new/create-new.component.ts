@@ -62,6 +62,7 @@ export class CreateNewComponent implements OnInit {
     this.colorSelectorService.colorToChange = ColorType.Background;
     this.colorSelectorService.updateColor(this.previewColor);
     this.createNewService.canvasSize.next(new CoordinatesXY(this.getcanvasSizeX(), this.getcanvasSizeY()));
+    history.state.comingFromEntryPoint = false;
     this.dialogRef.close();
   }
 
