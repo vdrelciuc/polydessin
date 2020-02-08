@@ -51,7 +51,7 @@ export class LineComponent implements OnInit {
     );
   }
 
-  onDotSelected(): void {
+  updateJunctionType(): void {
     this.service.jointIsDot = !this.service.jointIsDot;
   }
 }

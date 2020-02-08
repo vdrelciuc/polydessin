@@ -96,7 +96,6 @@ export class LineService extends DrawableService {
   }
 
   private followPointer() {
-    //console.log("Following pointer: " + this.pointerPosition.getX() + ", " + this.pointerPosition.getY());
     let previewPoints = this.pointsToString();
     if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
@@ -104,7 +103,6 @@ export class LineService extends DrawableService {
         const canvasHeight = this.image.nativeElement.clientHeight;
         const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()), CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()), canvasHeight);
         previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
-        console.log(shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString());
       }
     } else {
     previewPoints += CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()).toString()
@@ -186,7 +184,6 @@ export class LineService extends DrawableService {
     }
     this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
     this.followPointer();
-    console.log("clicked");
   }
 
 

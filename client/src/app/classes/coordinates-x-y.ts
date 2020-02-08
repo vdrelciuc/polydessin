@@ -39,12 +39,12 @@ export class CoordinatesXY {
 
   private getShiftedPoint(angle: number, pointerX: number, pointerY: number, bisectrixY: number, verticalLimit: number): CoordinatesXY {
     if (angle < 45 / 2) {
-      return new CoordinatesXY(pointerX, this.clamp(this.y, verticalLimit));
+      return new CoordinatesXY(pointerX, this.y);
     } else {
       if (angle <  3 * (90 / 4)) {
         return new CoordinatesXY(pointerX, this.clamp(bisectrixY, verticalLimit));
       }
-      return new CoordinatesXY(this.x, this.clamp(pointerY, verticalLimit));
+      return new CoordinatesXY(this.x, pointerY);
     }
   }
 
@@ -64,7 +64,7 @@ export class CoordinatesXY {
     if (distanceX < 0 && distanceY > 0) {
       return 2;
     }
-    if (distanceX <= 0 && distanceY <= 0) {
+    if (distanceX < 0 && distanceY <= 0) {
       return 3;
     }
     return 4;
