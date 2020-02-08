@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+
+import { Tools } from 'src/app/enums/tools';
 import { Tools } from 'src/app/enums/tools';
 import { BrushService } from '../index/drawable/brush/brush.service';
 import { LineService } from '../index/drawable/line/line.service';

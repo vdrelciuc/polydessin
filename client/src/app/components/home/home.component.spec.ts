@@ -41,4 +41,12 @@ describe('HomeComponent', () => {
 
     expect(component.options).toEqual(options);
   });
+
+  it('should create and correctly initialize the options attribute', () => {
+    expect(component.messageAccueil).toEqual('Bienvenue a PolyDessin');
+  });
+
+  it('should create and correctly initialize the options attribute', () => {
+    expect(component.messageDescriptif).toEqual("A tout dessin un artiste, et cet artiste, c'est vous!");
+  });
 });
