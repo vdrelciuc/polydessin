@@ -7,7 +7,7 @@
 //   let point: Coords;
 //   const testValue = 100;
 
-//   beforeEach( () => { 
+//   beforeEach( () => {
 //     TestBed.configureTestingModule({
 //       declarations: [  ],
 //       providers: [
@@ -27,7 +27,7 @@
 //         },
 //       ],
 //     }).compileComponents();
-//     point = new Coords(10, 10); 
+//     point = new Coords(10, 10);
 //   });
 
 //   it('should create a Coords', () => {

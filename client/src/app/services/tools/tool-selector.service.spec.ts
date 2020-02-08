@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { Tools } from 'src/app/enums/tools';
+import { Tools } from 'src/app/enums/tools';
+import { BrushService } from '../index/drawable/brush/brush.service';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
-import { ToolSelectorService } from './tool-selector.service';
-import { Tools } from 'src/app/enums/tools';
 import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
-import { BrushService } from '../index/drawable/brush/brush.service';
+import { ToolSelectorService } from './tool-selector.service';
 
 describe('ToolSelectorService', () => {
 

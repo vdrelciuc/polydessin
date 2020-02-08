@@ -22,21 +22,21 @@ export class ColorPickerComponent {
   }
 
   updateRed(event: Event): void {
-    if(event !== null) {
+    if (event !== null) {
       const target = event.target as HTMLTextAreaElement;
       this.selectedColor.setRedHex(target.value);
     }
   }
 
   updateGreen(event: Event): void {
-    if(event !== null) {
+    if (event !== null) {
       const target = event.target as HTMLTextAreaElement;
       this.selectedColor.setGreenHex(target.value);
     }
   }
 
   updateBlue(event: Event): void {
-    if(event !== null) {
+    if (event !== null) {
       const target = event.target as HTMLTextAreaElement;
       this.selectedColor.setBlueHex(target.value);
     }

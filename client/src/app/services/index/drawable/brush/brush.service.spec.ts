@@ -1,11 +1,11 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { BrushService } from './brush.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { BehaviorSubject } from 'rxjs';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { Color } from 'src/app/classes/color';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { BrushService } from './brush.service';
 
 describe('BrushService', () => {
   let service: BrushService;
@@ -17,7 +17,7 @@ describe('BrushService', () => {
     parentElement.children.push(element);
     return element;
   }
-  const eventMocker = (event: string, keyUsed: number) => 
+  const eventMocker = (event: string, keyUsed: number) =>
       new MouseEvent(event, {button: keyUsed, clientX: 10, clientY: 10});
 
   beforeEach(() => {
@@ -81,7 +81,7 @@ describe('BrushService', () => {
   });
 
   it('#getThickness should get integer', () => {
-    service['thickness'] = 3.49;
+    service.thickness = 3.49;
     expect(service.getThickness()).toEqual(3);
   });
 
@@ -98,7 +98,7 @@ describe('BrushService', () => {
     const spy = spyOn(manipulator, 'appendChild');
     service.onMouseInCanvas(eventMocker('mousemove', 0));
     expect(spy).toHaveBeenCalled();
-    expect(service['previewCricle']).toBeTruthy();
+    expect(service.previewCricle).toBeTruthy();
   });
 
   it('#onMouseOutCanvas should remove mousepointer preview', () => {
@@ -108,62 +108,62 @@ describe('BrushService', () => {
   });
 
   it('#onMouseOutCanvas should stop drawing', () => {
-    service['isDrawing'] = true;
+    service.isDrawing = true;
     const spy = spyOn(manipulator, 'appendChild');
     service.onMouseOutCanvas(eventMocker('mousemove', 0));
-    expect(service['isDrawing']).not.toBeTruthy();
+    expect(service.isDrawing).not.toBeTruthy();
     expect(spy).toHaveBeenCalled();
-    expect(service['previousX']).toEqual(10);
-    expect(service['previousY']).toEqual(10);
+    expect(service.previousX).toEqual(10);
+    expect(service.previousY).toEqual(10);
   });
 
   it('#onMousePress should init elements', () => {
     const spy = spyOn(manipulator, 'removeChild');
     service.onMousePress(eventMocker('mousemove', 0));
-    expect(service['previousX']).toEqual(10);
-    expect(service['previousY']).toEqual(10);
+    expect(service.previousX).toEqual(10);
+    expect(service.previousY).toEqual(10);
     expect(spy).toHaveBeenCalled();
   });
 
   it('#onMouseRelease shouldn\'t stop drawing, left not released', () => {
-    service['isDrawing'] = true;
+    service.isDrawing = true;
     service.onMouseRelease(eventMocker('mouseup', 1));
-    expect(service['isDrawing']).toBeTruthy();
+    expect(service.isDrawing).toBeTruthy();
   });
 
   it('#onMouseRelease should stop drawing, left released', () => {
     const spy = spyOn(service, 'updateCursor');
-    service['isDrawing'] = false;
+    service.isDrawing = false;
     service.onMouseRelease(eventMocker('mouseup', 0));
-    expect(service['isDrawing']).not.toBeTruthy();
+    expect(service.isDrawing).not.toBeTruthy();
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('#onMouseRelease should stop drawing', () => {
     const spy = spyOn(service, 'updateCursor');
-    service['isDrawing'] = true;
+    service.isDrawing = true;
     service.onMouseRelease(eventMocker('mouseup', 0));
-    expect(service['isDrawing']).not.toBeTruthy();
-    expect(spy).toHaveBeenCalledWith(10,10);
+    expect(service.isDrawing).not.toBeTruthy();
+    expect(spy).toHaveBeenCalledWith(10, 10);
   });
 
   it('#onMouseMove should update cursor', () => {
     const spy = spyOn(service, 'updateCursor');
-    service['isDrawing'] = false;
+    service.isDrawing = false;
     service.onMouseMove(eventMocker('mouseup', 0));
-    expect(spy).toHaveBeenCalledWith(10,10);
+    expect(spy).toHaveBeenCalledWith(10, 10);
   });
 
   it('#onMouseMove should update cursor', () => {
-    service['isDrawing'] = true;
+    service.isDrawing = true;
     service.onMouseMove(eventMocker('mouseup', 0));
-    expect(service['previousX']).toEqual(10);
-    expect(service['previousY']).toEqual(10);
+    expect(service.previousX).toEqual(10);
+    expect(service.previousY).toEqual(10);
   });
 
   it('#onClick should stop drawing', () => {
     service.onClick(eventMocker('click', 0));
-    expect(service['isDrawing']).not.toBeTruthy();
+    expect(service.isDrawing).not.toBeTruthy();
   });
 
   it('#updateCursor should update cursor attributes', () => {

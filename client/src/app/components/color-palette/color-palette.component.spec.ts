@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ColorPaletteComponent } from './color-palette.component';
 import { Color } from 'src/app/classes/color';
+import { ColorPaletteComponent } from './color-palette.component';
 
 describe('ColorPaletteComponent', () => {
   let component: ColorPaletteComponent;

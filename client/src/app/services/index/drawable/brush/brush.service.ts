@@ -1,15 +1,11 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { FilterList } from 'src/app/classes/patterns';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { FilterList } from 'src/app/components/brush/patterns';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { FilterList } from 'src/app/classes/patterns';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { Color } from 'src/app/classes/color';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Injectable({
   providedIn: 'root'
@@ -120,7 +116,7 @@ export class BrushService extends DrawableService {
 
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
     } else {
-      this.updateCursor(event.clientX, event.clientY); 
+      this.updateCursor(event.clientX, event.clientY);
     }
   }
 

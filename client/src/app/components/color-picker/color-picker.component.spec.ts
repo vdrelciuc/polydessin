@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ColorPickerComponent } from './color-picker.component';
-import { ColorPaletteComponent } from '../color-palette/color-palette.component';
-import { FormsModule } from '@angular/forms';
-import { Color } from 'src/app/classes/color';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
+import { Color } from 'src/app/classes/color';
+import { ColorPaletteComponent } from '../color-palette/color-palette.component';
+import { ColorPickerComponent } from './color-picker.component';
 
 describe('ColorPickerComponent', () => {
   let component: ColorPickerComponent;
@@ -37,12 +37,12 @@ describe('ColorPickerComponent', () => {
   });
 
   it('#updateRed should set new red value', () => {
-    let inputElement: HTMLTextAreaElement = new HTMLTextAreaElement();
+    const inputElement: HTMLTextAreaElement = new HTMLTextAreaElement();
     inputElement.value = 'FF';
-    let event: Event = new Event('input', {});
+    const event: Event = new Event('input', {});
     inputElement.dispatchEvent(event);
     component.updateRed(event);
     expect(component.selectedColor.getRedHex()).toEqual('FF');
   });
-  
+
 });

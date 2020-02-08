@@ -43,7 +43,7 @@ describe('CoordinatedXY', () => {
     const closest = point.getClosestPoint(-100, 90);
     expect(closest).toEqual(new CoordinatesXY(-100, 100));
   });
-  
+
   it('#getQuadrant should return correct quadrant from the giving origin coordinates', () => {
     expect(point.getQuadrant(new CoordinatesXY(5, 15))).toBe(1);
     expect(point.getQuadrant(new CoordinatesXY(15, 15))).toBe(2);
