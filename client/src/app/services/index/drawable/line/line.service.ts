@@ -63,7 +63,6 @@ export class LineService extends DrawableService {
     });
 
     this.attributes.junction.subscribe((element: boolean) => {
-      console.log("Junction changed");
       this.jointIsDot = element;
     });
 
@@ -82,7 +81,8 @@ export class LineService extends DrawableService {
       if (this.shiftPressed) {
         const lastPoint = this.points.getLast();
         if (lastPoint !== undefined) {
-          const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+          const canvasHeight = this.image.nativeElement.clientHeight;
+          const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY), canvasHeight);
           previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
         }
       } else {
@@ -113,7 +113,8 @@ export class LineService extends DrawableService {
     if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
       if(lastPoint !== undefined) {
-        this.points.push_back(lastPoint.getClosestPoint(onScreenX,onScreenY));
+        const canvasHeight = this.image.nativeElement.clientHeight;
+        this.points.push_back(lastPoint.getClosestPoint(onScreenX, onScreenY, canvasHeight));
       }
     } else {
       this.points.push_back(new CoordinatesXY(onScreenX, onScreenY));
@@ -150,18 +151,24 @@ export class LineService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    if (this.isStarted) {
-      this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
-    } else {
+    if (!this.isStarted) {
       this.updateProperties();
-      this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
       this.isStarted = true;
       this.isDone = false;
     }
     if (this.jointIsDot) {
+      let pointToDisplay = new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+      if (this.shiftPressed) {
+        const lastPoint = this.points.getLast();
+        if (lastPoint !== undefined) {
+          const canvasHeight = this.image.nativeElement.clientHeight;
+          pointToDisplay = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY), canvasHeight);
+        }
+      }
+
       const circle: SVGCircleElement = this.manipulator.createElement('circle', 'http://www.w3.org/2000/svg');
-      this.manipulator.setAttribute(circle, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, event.clientX).toString());
-      this.manipulator.setAttribute(circle, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, event.clientY).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerX, pointToDisplay.getX().toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerY, pointToDisplay.getY().toString());
       this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
       this.manipulator.setAttribute(circle, SVGProperties.color, this.color.getHex());
       this.manipulator.setAttribute(circle, SVGProperties.fill, this.color.getHex());
@@ -169,7 +176,10 @@ export class LineService extends DrawableService {
       this.manipulator.appendChild(this.subElement, circle);
       this.circles.push_back(circle);
     }
+    this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
   }
+
+
 
   deleteLine(): void {
     this.isDone = true;
