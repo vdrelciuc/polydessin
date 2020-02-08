@@ -13,6 +13,14 @@ describe('EventListenerService', () => {
   let service: EventListenerService;
   let manipulator: Renderer2;
   const line: LineService = new LineService();
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+    const element = new Element();
+    parentElement.children.push(element);
+    return element;
+  }
+  const mockedEventListener = (parentElement: any, name: string, debugInfo: (event: Event) => void): void => {
+    window.addEventListener(name, debugInfo);
+  }
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,18 +29,18 @@ describe('EventListenerService', () => {
       {
         provide: Renderer2,
         useValue: {
-          createElement: () => null,
-          setAttribute: () => null,
-          appendChild: () => null,
-          listen: () => null,
+          createElement: () => mockedRendered,
+          setAttribute: () => mockedRendered,
+          appendChild: () => mockedRendered,
+          listen: () => mockedEventListener,
         },
       },
       {
         provide: ToolSelectorService,
         useValue: {
           drawerService: () => null,
-          $currentTool: new BehaviorSubject<Tools>(Tools.Selection),
-          getLine: () => new LineService(),
+          $currentTool: new BehaviorSubject<Tools>(Tools.Line),
+          getLine: () => line,
           getCurrentTool: () => line,
         },
       },
@@ -62,25 +70,26 @@ describe('EventListenerService', () => {
     const testBed = getTestBed();
     service = testBed.get(EventListenerService);
     manipulator = testBed.get(Renderer2);
-    service.currentTool = line;
-    service.currentTool.initialize(manipulator, testBed.get(ElementRef), testBed.get(ColorSelectorService));
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should initialize events', () => {
+  it('#initializeEvents should initialize events', () => {
     const spyOnListen = spyOn(manipulator, 'listen');
     service.initializeEvents();
     expect(spyOnListen).toHaveBeenCalledTimes(9);
   });
 
-  it('should call keyup event', () => {
+  it('#initializeEvents should call window events', () => {
     service.currentTool = line;
     service.initializeEvents();
-    const spyOnListen = spyOn(line, 'onKeyReleased');
-    window.dispatchEvent(new KeyboardEvent('keyup', {key: 'backspace', bubbles: true}));
-    expect(spyOnListen).toHaveBeenCalled();
+    const spy = spyOn(service['currentTool'], 'onKeyPressed');
+    const spy2 = spyOn(service['currentTool'], 'onKeyReleased');
+    window.dispatchEvent(new Event('keydown'));
+    window.dispatchEvent(new Event('keyup'));
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
   });
 });

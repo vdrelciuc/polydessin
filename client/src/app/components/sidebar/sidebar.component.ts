@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { Tools } from '../../enums/tools';
 import { ToolSelectorService } from '../../services/tools/tool-selector.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,6 +13,8 @@ import { CreateNewComponent } from '../create-new/create-new.component';
 })
 export class SidebarComponent implements OnInit {
   currentTool: Tools;
+  private subscriptions: Subscription[] = [];
+  private createNewDialog: MatDialogRef<CreateNewComponent>;
 
   constructor(
     private toolSelectorService: ToolSelectorService,
@@ -57,7 +60,11 @@ export class SidebarComponent implements OnInit {
   }
 
   createNewProject(): void {
-    this.dialog.open(CreateNewComponent, { disableClose: true });
+    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+    this.createNewDialog = this.dialog.open(CreateNewComponent, { disableClose: true });
+    this.createNewDialog.afterClosed().subscribe( () => {
+      this.setupShortcuts();
+    });
   }
 
 }

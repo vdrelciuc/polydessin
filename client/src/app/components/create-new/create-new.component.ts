@@ -9,7 +9,7 @@ import { CreateNewService } from 'src/app/services/create-new.service';
 import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 
-const toolBoxWidth = 96
+const toolBoxWidth = 96;
 const toolDescWidth = 250;
 
 @Component({

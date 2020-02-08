@@ -31,10 +31,10 @@ export class RectangleComponent implements OnInit {
   }
 
   updateBorder(): void {
-    this.service.shapeStyle.hasBorder = !this.service.shapeStyle.hasBorder;
+    this.service.updateTracingType("border");
   }
 
   updateFill(): void {
-    this.service.shapeStyle.hasFill = !this.service.shapeStyle.hasFill;
+    this.service.updateTracingType("fill");
   }
 }

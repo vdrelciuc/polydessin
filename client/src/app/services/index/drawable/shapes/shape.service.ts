@@ -1,6 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Color } from 'src/app/classes/color';
-import { invertColor } from 'src/app/classes/color-inverter';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ShapeStyle } from 'src/app/classes/shape-style';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
@@ -59,6 +58,23 @@ export abstract class ShapeService extends DrawableService {
     this.colorSelectorService.secondaryTransparency.subscribe((opacity: number) => {
       this.shapeStyle.borderOpacity = opacity;
     });
+  }
+
+  updateTracingType(tracingType: "border" | "fill"): void {
+    if (this.isChanging) {
+      // This case happens if a checkbox was changed while a rectangle creation was ongoing and dragged out of canvas
+      this.cancelShape();
+    }
+    if (tracingType == "border") {
+      this.shapeStyle.hasBorder = !this.shapeStyle.hasBorder;
+    } else {
+      this.shapeStyle.hasFill = !this.shapeStyle.hasFill;
+    }
+  }
+
+  cancelShape(): void {
+    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    this.isChanging = false;
   }
 
   onMousePress(event: MouseEvent): void {
@@ -149,8 +165,7 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.shape, SVGProperties.fillOpacity, this.shapeStyle.fillOpacity.toString());
 
     // Adding text properties
-    const fill = this.shapeStyle.hasFill ? invertColor(this.shapeStyle.fillColor, true).getHex() : 'black';
-    this.manipulator.setAttribute(this.text, SVGProperties.fill, fill);
+    this.manipulator.setAttribute(this.text, SVGProperties.fill, this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getInvertedColor(true).getHex() : 'black');
     this.manipulator.setAttribute(this.text, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.text, SVGProperties.color, this.shapeStyle.hasFill ? 'none' : 'grey');
     this.manipulator.setAttribute(this.text, 'text-anchor', 'middle');

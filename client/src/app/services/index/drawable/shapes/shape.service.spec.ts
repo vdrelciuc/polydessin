@@ -1,6 +1,8 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
+import { Color } from 'src/app/classes/color';
+import * as CONSTANT from 'src/app/classes/constants';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { RectangleService } from '../rectangle/rectangle.service';
@@ -50,6 +52,18 @@ describe('ShapeService', () => {
     shapeService = getTestBed().get(RectangleService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
+    shapeService.attributes = new DrawablePropertiesService();
+    shapeService.shapeStyle = {
+      thickness: CONSTANT.THICKNESS_DEFAULT,
+      borderColor: new Color(CONSTANT.DEFAULT_PRIMARY_COLOR),
+      fillColor: new Color(CONSTANT.COLOR_DEFAULT),
+      borderOpacity: CONSTANT.OPACITY_DEFAULT,
+      fillOpacity: CONSTANT.OPACITY_DEFAULT,
+      hasBorder: true,
+      hasFill: true,
+      nameDisplayDefault: '[Rectangle]',
+      nameDisplayOnShift: '[Carré]'
+    };
     shapeService.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });

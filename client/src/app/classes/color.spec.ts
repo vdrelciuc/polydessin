@@ -76,4 +76,83 @@ describe('Color', () => {
         color.setRGB([100, 100, 10, 100]);
         expect(color.getRGB()).toEqual(defaultRGB);
     });
+
+    it('#getRedHex should get red part', () => {
+        color.setRGB([15,16,17]); // #0f1011
+        expect(color.getRedHex()).toEqual('0F');
+    });
+
+    it('#getGreenHex should get green part', () => {
+        color.setRGB([15,16,17]); // #0f1011
+        expect(color.getGreenHex()).toEqual('10');
+    });
+
+    it('#getBlueHex should get blue part', () => {
+        color.setRGB([15,16,17]); // #0f1011
+        expect(color.getBlueHex()).toEqual('11');
+    });
+
+    it('#setRedHex should set red part', () => {
+        color.setRedHex('0f');
+        expect(color.getRedHex()).toEqual('0F');
+    });
+
+    it('#setRedHex should set red part with empty parameter', () => {
+        color.setRedHex('');
+        expect(color.getRedHex()).toEqual('00');
+    });
+
+    it('#setRedHex should set red part with missing parameter', () => {
+        color.setRedHex('F');
+        expect(color.getRedHex()).toEqual('0F');
+    });
+
+    it('#setGreenHex should set green part', () => {
+        color.setGreenHex('10');
+        expect(color.getGreenHex()).toEqual('10');
+    });
+
+    it('#setGreenHex should set green part with empty parameter', () => {
+        color.setGreenHex('');
+        expect(color.getGreenHex()).toEqual('00');
+    });
+
+    it('#setGreenHex should set green part with missing parameter', () => {
+        color.setGreenHex('F');
+        expect(color.getGreenHex()).toEqual('0F');
+    });
+
+    it('#setBlueHex should set blue part', () => {
+        color.setBlueHex('11');
+        expect(color.getBlueHex()).toEqual('11');
+    });
+
+    it('#setBlueHex should set blue part with empty parameter', () => {
+        color.setBlueHex('');
+        expect(color.getBlueHex()).toEqual('00');
+    });
+
+    it('#setBlueHex should set blue part with missing parameter', () => {
+        color.setBlueHex('F');
+        expect(color.getBlueHex()).toEqual('0F');
+    });
+
+    it('#getInvertedColor should return black if color is light and bw is true', () => {
+        color = new Color('#EEDD82'); // lightYellow
+        let closestShade = color.getInvertedColor(true);
+        expect(closestShade.getHex()).toBe('#000000');
+    });
+
+    it('#getInvertedColor should return white if color is dark and bw is true', () => {
+        color = new Color('#2f2c2a'); // dark brown
+        let closestShade = color.getInvertedColor(true);
+        expect(closestShade.getHex()).toBe('#ffffff');
+    });
+
+    it('#getInvertedColor should return opposite color when bw is false', () => {
+        let white = new Color('#ffffff');
+        let black = new Color('#000000')
+        expect(white.getInvertedColor(false).getHex()).toBe(black.getHex());
+        expect(black.getInvertedColor(false).getHex()).toBe(white.getHex());
+    });
 });

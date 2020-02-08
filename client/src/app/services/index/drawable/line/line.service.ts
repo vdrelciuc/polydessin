@@ -1,9 +1,8 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-// import { Shape } from 'src/app/classes/shape';
+import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-// import { SVGService } from '../../svg/svg.service';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
@@ -18,7 +17,7 @@ export class LineService extends DrawableService {
   thickness: number;
   jointIsDot: boolean;
   dotDiameter: number;
-  color: string;
+  color: Color;
   opacity: number;
   private isDone: boolean;
   private isStarted: boolean;
@@ -27,6 +26,7 @@ export class LineService extends DrawableService {
   private line: SVGPolylineElement;
   private subElement: SVGGElement;
   private shiftPressed: boolean;
+  private pointerPosition: CoordinatesXY;
 
   constructor() {
     super();
@@ -49,67 +49,76 @@ export class LineService extends DrawableService {
     this.dotDiameter = this.attributes.dotDiameter.value;
     this.jointIsDot = this.attributes.junction.value;
 
+    this.colorSelectorService.primaryColor.subscribe((color: Color) => {
+      this.color = color;
+    });
+
     this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
       this.opacity = opacity;
     });
 
     this.attributes.thickness.subscribe((element: number) => {
-        this.thickness = element;
+      this.thickness = element;
     });
 
     this.attributes.junction.subscribe((element: boolean) => {
-        this.jointIsDot = element;
+      this.jointIsDot = element;
     });
 
     this.attributes.dotDiameter.subscribe((element: number) => {
-        this.dotDiameter = element;
+      this.dotDiameter = element;
     });
-
-    this.attributes.color.subscribe((element: string) => {
-      this.color = element;
-    })
   }
 
   onMouseMove(event: MouseEvent): void {
+    // Save pointer position to allow line update on shift press/release without moving
+    this.pointerPosition = new CoordinatesXY(event.clientX, event.clientY);
+
     if (this.isStarted) {
-      let previewPoints = this.pointsToString();
-      if (this.shiftPressed) {
-        const lastPoint = this.points.getLast();
-        if (lastPoint !== undefined) {
-          const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
-          const effectiveY = CoordinatesXY.effectiveY(this.image, event.clientY);
-          const shiftPoint = lastPoint.getClosestPoint(effectiveX, effectiveY);
-          previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
-        }
-      } else {
-      previewPoints += CoordinatesXY.effectiveX(this.image, event.clientX).toString()
-          + ',' + CoordinatesXY.effectiveY(this.image, event.clientY).toString();
-      }
-      this.manipulator.setAttribute(
-          this.line,
-          SVGProperties.pointsList,
-          previewPoints
-      );
+      this.followPointer();
     }
   }
 
   onKeyPressed(event: KeyboardEvent): void {
-    if (event.shiftKey) {
+    if (event.shiftKey && !this.shiftPressed) {
       this.shiftPressed = true;
+      this.followPointer();
     }
   }
 
   onKeyReleased(event: KeyboardEvent): void {
-    if (!event.shiftKey) {
+    if (!event.shiftKey && this.shiftPressed) {
       this.shiftPressed = false;
+      this.followPointer();
     }
+  }
+
+  private followPointer() {
+    let previewPoints = this.pointsToString();
+    if (this.shiftPressed) {
+      const lastPoint = this.points.getLast();
+      if (lastPoint !== undefined) {
+        const canvasHeight = this.image.nativeElement.clientHeight;
+        const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()), CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()), canvasHeight);
+        previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
+      }
+    } else {
+    previewPoints += CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()).toString()
+        + ',' + CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()).toString();
+    }
+    this.manipulator.setAttribute(
+        this.line,
+        SVGProperties.pointsList,
+        previewPoints
+    );
   }
 
   addPointToLine(onScreenX: number, onScreenY: number): void {
     if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
-      if (lastPoint !== undefined) {
-        this.points.push_back(lastPoint.getClosestPoint(onScreenX, onScreenY));
+      if(lastPoint !== undefined) {
+        const canvasHeight = this.image.nativeElement.clientHeight;
+        this.points.push_back(lastPoint.getClosestPoint(onScreenX, onScreenY, canvasHeight));
       }
     } else {
       this.points.push_back(new CoordinatesXY(onScreenX, onScreenY));
@@ -148,26 +157,36 @@ export class LineService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    if (this.isStarted) {
-      this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
-    } else {
+    if (!this.isStarted) {
       this.updateProperties();
-      this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
       this.isStarted = true;
       this.isDone = false;
     }
     if (this.jointIsDot) {
+      let pointToDisplay = new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+      if (this.shiftPressed) {
+        const lastPoint = this.points.getLast();
+        if (lastPoint !== undefined) {
+          const canvasHeight = this.image.nativeElement.clientHeight;
+          pointToDisplay = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY), canvasHeight);
+        }
+      }
+
       const circle: SVGCircleElement = this.manipulator.createElement('circle', 'http://www.w3.org/2000/svg');
-      this.manipulator.setAttribute(circle, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, event.clientX).toString());
-      this.manipulator.setAttribute(circle, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, event.clientY).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerX, pointToDisplay.getX().toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerY, pointToDisplay.getY().toString());
       this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
-      this.manipulator.setAttribute(circle, SVGProperties.color, this.color);
-      this.manipulator.setAttribute(circle, SVGProperties.fill, this.color);
+      this.manipulator.setAttribute(circle, SVGProperties.color, this.color.getHex());
+      this.manipulator.setAttribute(circle, SVGProperties.fill, this.color.getHex());
       this.manipulator.setAttribute(circle, SVGProperties.globalOpacity, this.opacity.toString());
       this.manipulator.appendChild(this.subElement, circle);
       this.circles.push_back(circle);
     }
+    this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+    this.followPointer();
   }
+
+
 
   deleteLine(): void {
     this.isDone = true;
@@ -184,6 +203,7 @@ export class LineService extends DrawableService {
       const lastCircle = this.circles.pop_back();
       this.manipulator.removeChild(this.subElement, lastCircle);
     }
+    this.followPointer();
   }
 
   getLineIsDone(): boolean { return this.isDone; }
@@ -203,7 +223,7 @@ export class LineService extends DrawableService {
 
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
-    this.manipulator.setAttribute(this.line, SVGProperties.color, this.color);
+    this.manipulator.setAttribute(this.line, SVGProperties.color, this.color.getHex());
     this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
 
     this.manipulator.appendChild(this.subElement, this.line);

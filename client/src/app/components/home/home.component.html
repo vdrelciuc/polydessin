@@ -1,5 +1,6 @@
 <div class="wrapper">
   <div class="container">
+
     <div class="header-area">
       <div id="title">
         <h2>Bienvenue sur PolyDessin !</h2>
@@ -9,12 +10,27 @@
     <hr >
     <div class="options-area">
       <h6 id="prompt">Veuillez choisir une option :</h6>
-      <div *ngFor="let option of options ">
-        <a *ngIf="option.show " class="btn btn-warning btn-center "
-           [routerLink] = [option.optionPath] role="button" [state]="{path : '', comingFromEntryPoint : true}">
-          {{option.description}}
-        </a>
+
+        <div>
+          <div>
+            <a class="btn btn-warning btn-center " routerLink = '/dessin'
+               role="button" [state]="{path : '', comingFromEntryPoint : true}">
+              Creer un nouveau dessin
+            </a>
+          </div>
+          <div>
+            <a class="btn btn-warning btn-center " routerLink = '/'
+               role="button" [state]="{path : '', comingFromEntryPoint : true}">
+              Ouvrir la Galerie de dessins
+            </a>
+          </div>
+          <div>
+            <a class="btn btn-warning btn-center " routerLink = '/guide/bienvenue'
+               role="button" [state]="{path : '', comingFromEntryPoint : true}">
+              Afficher le guide d'Utilisation
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
