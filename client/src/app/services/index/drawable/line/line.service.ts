@@ -28,6 +28,7 @@ export class LineService extends DrawableService {
   private line: SVGPolylineElement;
   private subElement: SVGGElement;
   private shiftPressed: boolean;
+  private pointerPosition: CoordinatesXY;
 
   constructor() {
     super();
@@ -72,37 +73,48 @@ export class LineService extends DrawableService {
   }
 
   onMouseMove(event: MouseEvent): void {
-    if(this.isStarted) {
-      let previewPoints = this.pointsToString();
-      if (this.shiftPressed) {
-        const lastPoint = this.points.getLast();
-        if (lastPoint !== undefined) {
-          const canvasHeight = this.image.nativeElement.clientHeight;
-          const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY), canvasHeight);
-          previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
-        }
-      } else {
-      previewPoints += CoordinatesXY.effectiveX(this.image, event.clientX).toString()
-          + ',' + CoordinatesXY.effectiveY(this.image, event.clientY).toString();
-      }
-      this.manipulator.setAttribute(
-          this.line,
-          SVGProperties.pointsList,
-          previewPoints
-      );
+    // Save pointer position to allow line update on shift press/release without moving
+    this.pointerPosition = new CoordinatesXY(event.clientX, event.clientY);
+
+    if (this.isStarted) {
+      this.followPointer();
     }
   }
 
   onKeyPressed(event: KeyboardEvent): void {
-    if (event.shiftKey) {
+    if (event.shiftKey && !this.shiftPressed) {
       this.shiftPressed = true;
+      this.followPointer();
     }
   }
 
   onKeyReleased(event: KeyboardEvent): void {
-    if (!event.shiftKey) {
+    if (!event.shiftKey && this.shiftPressed) {
       this.shiftPressed = false;
+      this.followPointer();
     }
+  }
+
+  private followPointer() {
+    //console.log("Following pointer: " + this.pointerPosition.getX() + ", " + this.pointerPosition.getY());
+    let previewPoints = this.pointsToString();
+    if (this.shiftPressed) {
+      const lastPoint = this.points.getLast();
+      if (lastPoint !== undefined) {
+        const canvasHeight = this.image.nativeElement.clientHeight;
+        const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()), CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()), canvasHeight);
+        previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
+        console.log(shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString());
+      }
+    } else {
+    previewPoints += CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()).toString()
+        + ',' + CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()).toString();
+    }
+    this.manipulator.setAttribute(
+        this.line,
+        SVGProperties.pointsList,
+        previewPoints
+    );
   }
 
   addPointToLine(onScreenX: number, onScreenY: number): void {
@@ -173,6 +185,8 @@ export class LineService extends DrawableService {
       this.circles.push_back(circle);
     }
     this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+    this.followPointer();
+    console.log("clicked");
   }
 
 
@@ -192,6 +206,7 @@ export class LineService extends DrawableService {
       const lastCircle = this.circles.pop_back();
       this.manipulator.removeChild(this.subElement, lastCircle);
     }
+    this.followPointer();
   }
 
   getLineIsDone(): boolean { return this.isDone; }
