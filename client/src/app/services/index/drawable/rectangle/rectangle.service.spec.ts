@@ -7,7 +7,7 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+// import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 describe('RectangleService', () => {
 
@@ -137,16 +137,16 @@ describe('RectangleService', () => {
       .toBe('#FFFFFF');
   });
 
-  it('#setShapeOriginFromRightQuadrants should set all attributes', () => {
-    service['isChanging'] = false;
-    service['drawOnNextMove'] = true;
-    service.onMouseMove(new MouseEvent('mousemove', {}));
+  // it('#setShapeOriginFromRightQuadrants should set all attributes', () => {
+  //   service['isChanging'] = false;
+  //   service['drawOnNextMove'] = true;
+  //   service.onMouseMove(new MouseEvent('mousemove', {}));
     
-    service['isChanging'] = true;
-    service['shapeOrigin'] = new CoordinatesXY(0,0);
-    const spy = spyOn(manipulator, 'setAttribute');
-    service.onMouseMove(new MouseEvent('mousemove', {}));
-    expect(service['shiftPressed']).toBeTruthy();
-    expect(spy).toHaveBeenCalled();
-  });
+  //   service['isChanging'] = true;
+  //   service['shapeOrigin'] = new CoordinatesXY(0,0);
+  //   const spy = spyOn(manipulator, 'setAttribute');
+  //   service.onMouseMove(new MouseEvent('mousemove', {}));
+  //   expect(service['shiftPressed']).toBeTruthy();
+  //   expect(spy).toHaveBeenCalled();
+  // });
 });
