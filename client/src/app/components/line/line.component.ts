@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { LineService } from 'src/app/services/index/drawable/line/line.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Component({
   selector: 'app-line',
@@ -38,7 +38,7 @@ export class LineComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.jointType = this.service.jointIsDot ? 'Points': 'Aucune';
+    this.jointType = this.service.jointIsDot ? 'Points' : 'Aucune';
   }
 
   setupShortcuts(): void {

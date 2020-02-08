@@ -1,10 +1,10 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { RectangleService } from './rectangle.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { RectangleService } from './rectangle.service';
 
 describe('RectangleService', () => {
 
@@ -13,7 +13,7 @@ describe('RectangleService', () => {
   let image: ElementRef<SVGPolylineElement>;
 
   // Faking a MouseEvent
-  let e = {
+  const e = {
     type: 'click',
     bubbles: true,
     cancelable: true,
@@ -31,7 +31,7 @@ describe('RectangleService', () => {
     relatedTarget: undefined,
   };
 
-  let evt = document.createEvent('MouseEvents');
+  const evt = document.createEvent('MouseEvents');
   evt.initMouseEvent(
     e.type,
     e.bubbles,
@@ -88,7 +88,7 @@ describe('RectangleService', () => {
     rectangleService = getTestBed().get(RectangleService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
-    rectangleService.initialize(manipulator, image, 
+    rectangleService.initialize(manipulator, image,
         getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
 
@@ -97,7 +97,7 @@ describe('RectangleService', () => {
   });
 
   it('#constructer should set the RectangleService with its correct default attributes', () => {
-    expect(rectangleService.frenchName).toBe("Rectangle");
+    expect(rectangleService.frenchName).toBe('Rectangle');
     expect(rectangleService.shapeStyle.thickness).toBe(CONSTANT.THICKNESS_DEFAULT);
     expect(rectangleService.shapeStyle.fillColor.getHex()).toBe(CONSTANT.COLOR_DEFAULT);
     expect(rectangleService.shapeStyle.borderColor.getHex()).toBe(CONSTANT.COLOR_DEFAULT);
@@ -116,7 +116,7 @@ describe('RectangleService', () => {
 
   it('#initializeProperties should define subscriptions', () => {
     const properties = new DrawablePropertiesService();
-    const newColor = "#ABCDEF";
+    const newColor = '#ABCDEF';
     rectangleService.initializeProperties();
     properties.fillColor.next(newColor);
     properties.color.next(newColor);

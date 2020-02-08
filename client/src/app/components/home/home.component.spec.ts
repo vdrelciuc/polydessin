@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeComponent } from './home.component';
 import { RouterModule } from '@angular/router';
+import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -31,7 +31,7 @@ describe('HomeComponent', () => {
   });
 
   it('should create and correctly initialize the options attribute', () => {
-    let options: Object[] =
+    const options: Object[] =
       [
         {description : 'Creer un nouveau dessin', optionPath : '/dessin' , show : true},
         {description : 'Ouvrir la Galerie de dessins', optionPath: '/', show : true} ,

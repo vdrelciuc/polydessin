@@ -10,7 +10,7 @@ export class Stack<T> {
   delete(toDelete: T): void {
     if (this.stack.length > 0) {
       const indexToRemove = this.stack.indexOf(toDelete);
-      if(indexToRemove !== -1) {
+      if (indexToRemove !== -1) {
         this.stack.splice(indexToRemove, 1);
       }
     }
@@ -61,9 +61,9 @@ export class Stack<T> {
   }
 
   getRoot(): T | undefined {
-    if(this.stack.length > 0) {
+    if (this.stack.length > 0) {
       return this.stack[0];
-    } 
+    }
     return undefined;
   }
 }

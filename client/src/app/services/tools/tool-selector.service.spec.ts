@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ToolSelectorService } from './tool-selector.service';
+import { Tools } from 'src/app/enums/tools';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
-import { Tools } from 'src/app/enums/tools';
+import { ToolSelectorService } from './tool-selector.service';
 
 describe('ToolSelectorService', () => {
 

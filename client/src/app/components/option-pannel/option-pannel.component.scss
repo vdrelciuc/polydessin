@@ -44,14 +44,14 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
 
+        .mat-icon {
+          color: whitesmoke;
+        }
+
         .mat-expansion-panel-header-description, .mat-expansion-panel-header-title {
           margin: auto;
 
           h6 {
-            color: whitesmoke;
-          }
-
-          .mat-icon {
             color: whitesmoke;
           }
 

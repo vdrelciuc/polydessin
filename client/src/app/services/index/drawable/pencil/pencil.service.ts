@@ -1,10 +1,10 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { DrawableService } from '../drawable.service';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawableService } from '../drawable.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +31,7 @@ export class PencilService extends DrawableService {
    }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
-    colorSelectorService: ColorSelectorService): void {
+             colorSelectorService: ColorSelectorService): void {
     this.assignParams(manipulator, image, colorSelectorService);
     this.initializeProperties();
   }
@@ -73,7 +73,7 @@ export class PencilService extends DrawableService {
     this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.typeOfLine, 'round');
     this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
-    //this.manipulator.setAttribute(this.line, 'stroke-linecap', 'round');
+    // this.manipulator.setAttribute(this.line, 'stroke-linecap', 'round');
     // this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
     this.manipulator.setAttribute(this.line, 'd', this.path);
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());

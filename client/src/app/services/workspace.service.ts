@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as CONSTANTS from 'src/app/classes/constants';
 import { Color } from '../classes/color';
 
 @Injectable({
@@ -9,7 +10,7 @@ export class WorkspaceService {
   backgroundColor: Color;
 
   constructor() {
-    this.backgroundColor = new Color('#808080');
+    this.backgroundColor = new Color(CONSTANTS.WORKSPACE_BACKGROUND);
   }
 
   checkIfSameBackgroundColor(color: Color): boolean {

@@ -1,17 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidebarComponent } from './sidebar.component';
-import { RouterModule } from '@angular/router';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { MatDialog } from '@angular/material';
-import { Tools } from 'src/app/enums/tools';
 import { By } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+import { Tools } from 'src/app/enums/tools';
+import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { SidebarComponent } from './sidebar.component';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
-  let selector: ToolSelectorService; 
+  let selector: ToolSelectorService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -27,7 +27,7 @@ describe('SidebarComponent', () => {
       imports: [
         RouterModule.forRoot(
           [
-            { path: "", component: SidebarComponent}
+            { path: '', component: SidebarComponent}
           ]
         )
       ]
@@ -52,7 +52,7 @@ describe('SidebarComponent', () => {
     const spy = spyOn(selector, 'setCurrentTool');
     const element = fixture.debugElement.query(By.css('.wrapper'))
     element.triggerEventHandler('keydown', {
-      key: 'l', 
+      key: 'l',
       bubbles: true
     });
     console.log(element);

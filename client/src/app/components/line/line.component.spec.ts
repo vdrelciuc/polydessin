@@ -1,14 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import * as CONSTANT from 'src/app/classes/constants';
 
-import { LineComponent } from './line.component';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatSliderModule, MatOptionModule, MatSelectModule, MatInputModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatSliderModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LineService } from 'src/app/services/index/drawable/line/line.service';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
+import { LineService } from 'src/app/services/index/drawable/line/line.service';
+import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { LineComponent } from './line.component';
 
 describe('LineComponent', () => {
   let component: LineComponent;
@@ -26,15 +26,15 @@ describe('LineComponent', () => {
       ],
       imports: [
         BrowserAnimationsModule,
-        FormsModule, 
-        MatSliderModule, 
-        MatFormFieldModule, 
-        MatOptionModule, 
+        FormsModule,
+        MatSliderModule,
+        MatFormFieldModule,
+        MatOptionModule,
         MatSelectModule,
         MatInputModule
       ]
     })
-    .compileComponents();  
+    .compileComponents();
 
     fixture = TestBed.createComponent(LineComponent);
     component = fixture.componentInstance;
@@ -50,7 +50,7 @@ describe('LineComponent', () => {
     // component.service.addPointToLine(1,1);
     // component.service.addPointToLine(2,2);
     component.setupShortcuts();
-    let spy = spyOn(TestBed.get<LineService>(LineService), 'removeLastPoint');
+    const spy = spyOn(TestBed.get<LineService>(LineService), 'removeLastPoint');
     document.dispatchEvent(new KeyboardEvent('backspace', {}));
     document.dispatchEvent(new Event('keydown.backspace'));
     expect(spy).toHaveBeenCalled();

@@ -1,13 +1,13 @@
 import { Component, OnInit} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { Router } from '@angular/router';
 import { Color } from 'src/app/classes/color';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { CreateNewService } from 'src/app/services/create-new.service';
 import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { Router } from '@angular/router';
 
 const toolBoxWidth = 96
 const toolDescWidth = 250;

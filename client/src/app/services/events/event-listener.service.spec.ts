@@ -1,12 +1,12 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { EventListenerService } from './event-listener.service';
 import { ElementRef, Renderer2 } from '@angular/core';
-import { ToolSelectorService } from '../tools/tool-selector.service';
-import { Tools } from 'src/app/enums/tools';
 import { BehaviorSubject } from 'rxjs';
-import { LineService } from '../index/drawable/line/line.service';
+import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from '../color-selector.service';
+import { LineService } from '../index/drawable/line/line.service';
+import { ToolSelectorService } from '../tools/tool-selector.service';
+import { EventListenerService } from './event-listener.service';
 
 describe('EventListenerService', () => {
 

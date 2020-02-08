@@ -4,8 +4,8 @@ describe('Stack', () => {
 
   let stack: Stack<number>;
 
-  beforeEach( () => { 
-    stack = new Stack<number>(); 
+  beforeEach( () => {
+    stack = new Stack<number>();
   });
 
   it('should create an instance', () => {

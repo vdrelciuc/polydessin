@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { Tools } from '../../enums/tools';
 import { ToolSelectorService } from '../../services/tools/tool-selector.service';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
 
 @Component({
@@ -52,7 +52,6 @@ export class SidebarComponent implements OnInit {
     );
   }
 
-
   selectTool(tool: Tools): void {
     this.toolSelectorService.setCurrentTool(tool);
   }
@@ -60,6 +59,5 @@ export class SidebarComponent implements OnInit {
   createNewProject(): void {
     this.dialog.open(CreateNewComponent, { disableClose: true });
   }
-
 
 }

@@ -1,18 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PencilComponent } from './pencil.component';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import { PencilService } from 'src/app/services/index/drawable/pencil/pencil.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { FormsModule } from '@angular/forms';
-import { MatSliderModule, MatFormFieldModule } from '@angular/material';
+import { MatFormFieldModule, MatSliderModule } from '@angular/material';
 import * as CONSTANT from 'src/app/classes/constants';
+import { PencilService } from 'src/app/services/index/drawable/pencil/pencil.service';
+import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { PencilComponent } from './pencil.component';
 
 describe('PencilComponent', () => {
   let component: PencilComponent;
   let fixture: ComponentFixture<PencilComponent>;
   let properties: DrawablePropertiesService;
-
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -34,7 +33,6 @@ describe('PencilComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 
   it('should init attributes', () => {
     expect(properties.thickness.value).toBe(CONSTANT.THICKNESS_DEFAULT);

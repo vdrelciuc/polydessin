@@ -5,7 +5,7 @@ import { Color } from './color';
 // If bw is true, the function will return the closest to black or white
 
 export function invertColor(color: Color, bw: boolean): Color {
-    let hex = color.getHex().slice(1);
+    const hex = color.getHex().slice(1);
 
     let red = parseInt(hex.slice(0, 2), 16);
     let green = parseInt(hex.slice(2, 4), 16);
@@ -26,6 +26,6 @@ export function invertColor(color: Color, bw: boolean): Color {
     red = 255 - red;
     green = 255 - green;
     blue = 255 - blue;
-    
+
     return new Color([red, green, blue]);
 }

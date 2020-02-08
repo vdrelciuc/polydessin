@@ -1,9 +1,9 @@
  import { TestBed } from '@angular/core/testing';
 
+  import { Color } from '../classes/color';
 import { WorkspaceService } from './workspace.service';
-import { Color } from '../classes/color';
 
-describe('WorkspaceService', () => {
+ describe('WorkspaceService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {

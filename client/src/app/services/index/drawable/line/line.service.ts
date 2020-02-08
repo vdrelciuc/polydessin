@@ -5,9 +5,9 @@ import { Stack } from 'src/app/classes/stack';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 // import { SVGService } from '../../svg/svg.service';
 import { Tools } from 'src/app/enums/tools';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +38,7 @@ export class LineService extends DrawableService {
   static getName(): Tools { return Tools.Line; }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
-      colorSelectorService: ColorSelectorService): void {
+             colorSelectorService: ColorSelectorService): void {
     this.assignParams(manipulator, image, colorSelectorService);
     this.initializeProperties();
     this.shiftPressed = false;
@@ -71,7 +71,7 @@ export class LineService extends DrawableService {
   }
 
   onMouseMove(event: MouseEvent): void {
-    if(this.isStarted) {
+    if (this.isStarted) {
       let previewPoints = this.pointsToString();
       if (this.shiftPressed) {
         const lastPoint = this.points.getLast();
@@ -106,8 +106,8 @@ export class LineService extends DrawableService {
   addPointToLine(onScreenX: number, onScreenY: number): void {
     if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
-      if(lastPoint !== undefined) {
-        this.points.push_back(lastPoint.getClosestPoint(onScreenX,onScreenY));
+      if (lastPoint !== undefined) {
+        this.points.push_back(lastPoint.getClosestPoint(onScreenX, onScreenY));
       }
     } else {
       this.points.push_back(new CoordinatesXY(onScreenX, onScreenY));
@@ -122,15 +122,15 @@ export class LineService extends DrawableService {
     if (this.isStarted && !this.isDone) {
       const lastPoint = new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
       const firstPoint = this.points.getRoot();
-      if(firstPoint != undefined) {
-        let differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
-        let differenceOfCoordinatesY = firstPoint.getY() - lastPoint.getY();
-        let isWithin3Px: boolean = 
-          differenceOfCoordinatesX <= 3 && 
+      if (firstPoint != undefined) {
+        const differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
+        const differenceOfCoordinatesY = firstPoint.getY() - lastPoint.getY();
+        const isWithin3Px: boolean =
+          differenceOfCoordinatesX <= 3 &&
           differenceOfCoordinatesX >= -3 &&
-          differenceOfCoordinatesY <= 3 && 
+          differenceOfCoordinatesY <= 3 &&
           differenceOfCoordinatesY >= -3;
-        if(isWithin3Px) {
+        if (isWithin3Px) {
           this.addPointToLine(firstPoint.getX(), firstPoint.getY());
         } else {
           this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));

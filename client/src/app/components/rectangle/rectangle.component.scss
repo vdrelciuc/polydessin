@@ -34,43 +34,6 @@
     background-color: grey;
 }
 
-::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
-    color: white;
-    font-size: 20px;
-}
-
-::ng-deep .mat-select-value {
-    color: white;
-}
-
-::ng-deep .mat-form-field {
-    .mat-input-element {
-        color: whitesmoke;
-    }
-    .mat-form-field-underline {
-        background-color: $medium;
-    }
-}
-
-::ng-deep .mat-form-field.mat-focused {
-    .mat-form-field-label {
-        color: $vivid;
-    }
-    .mat-form-field-ripple {
-        background-color: $vivid;
-    }
-    .mat-form-field-required-marker {
-        color: $vivid;
-    }
-    .mat-input-element {
-        color: whitesmoke;
-    }
-}
-
-.mat-select {
-    padding-top: 20px;
-}
-
 ::ng-deep .mat-checkbox .mat-checkbox-frame {
     border-color: $medium;
 }

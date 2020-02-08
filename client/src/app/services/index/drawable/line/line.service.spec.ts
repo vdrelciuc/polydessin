@@ -1,11 +1,11 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { LineService } from './line.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { Tools } from 'src/app/enums/tools';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { LineService } from './line.service';
 
 describe('LineService', () => {
   let line: LineService;
@@ -81,25 +81,25 @@ describe('LineService', () => {
   });
 
   it('should add point to line with shift pressed', () => {
-    const point = new CoordinatesXY(1,1);
-    const spy = spyOn<CoordinatesXY>(point, "getClosestPoint");
+    const point = new CoordinatesXY(1, 1);
+    const spy = spyOn<CoordinatesXY>(point, 'getClosestPoint');
     line.addPointToLine(point.getX(), point.getY());
     line.onKeyPressed(new KeyboardEvent('keydown', {shiftKey: true}));
-    line.addPointToLine(2,2);
+    line.addPointToLine(2, 2);
     expect(spy).toHaveBeenCalled();
   });
 
   it('should add point to line without shift pressed', () => {
-    const point = new CoordinatesXY(1,1);
-    const spy = spyOn<CoordinatesXY>(point, "getClosestPoint");
+    const point = new CoordinatesXY(1, 1);
+    const spy = spyOn<CoordinatesXY>(point, 'getClosestPoint');
     line.addPointToLine(point.getX(), point.getY());
     line.onKeyReleased(new KeyboardEvent('keyup', {shiftKey: false}));
-    line.addPointToLine(2,2);
+    line.addPointToLine(2, 2);
     expect(spy).toHaveBeenCalledTimes(0);
   });
 
   it('should remove last point', () => {
-    line.addPointToLine(1,1);
+    line.addPointToLine(1, 1);
     let hasChanged = false;
     manipulator.listen(image, 'change', () => {
       hasChanged = true;

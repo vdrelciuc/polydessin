@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-working-area',

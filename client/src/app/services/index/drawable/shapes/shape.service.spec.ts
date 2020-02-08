@@ -1,13 +1,13 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ShapeService } from './shape.service';
-import { RectangleService } from '../rectangle/rectangle.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { RectangleService } from '../rectangle/rectangle.service';
+import { ShapeService } from './shape.service';
 
 describe('ShapeService', () => {
-  
+
   let shapeService: RectangleService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
@@ -50,7 +50,7 @@ describe('ShapeService', () => {
     shapeService = getTestBed().get(RectangleService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
-    shapeService.initialize(manipulator, image, 
+    shapeService.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
 
@@ -68,7 +68,7 @@ describe('ShapeService', () => {
 
   it('#initializeProperties should define subscriptions', () => {
     const properties = new DrawablePropertiesService();
-    const newColor = "#ABCDEF";
+    const newColor = '#ABCDEF';
     shapeService.initializeProperties();
     properties.fillColor.next(newColor);
     properties.color.next(newColor);

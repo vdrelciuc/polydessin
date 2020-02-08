@@ -1,12 +1,12 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Color } from 'src/app/classes/color';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { CreateNewService } from 'src/app/services/create-new.service';
 import { EventListenerService } from 'src/app/services/events/event-listener.service';
 import { SVGService } from 'src/app/services/index/svg/svg.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
-import { CreateNewService } from 'src/app/services/create-new.service';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Component({
   selector: 'app-canvas',
