@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
@@ -20,10 +19,6 @@ export class LineComponent implements OnInit {
   readonly THICKNESS_SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
   readonly DIAMETER_SLIDER_MINIMUM = CONSTANT.DIAMETER_MINIMUM;
   readonly DIAMETER_SLIDER_MAXIMUM = CONSTANT.DIAMETER_MAXIMUM;
-  protected specificationForm: FormGroup;
-  thickness: number;
-  dotDiameter: number;
-  jointType: string;
 
   constructor(
     private shortcuts: HotkeysService,
@@ -32,12 +27,12 @@ export class LineComponent implements OnInit {
     protected attributes: DrawablePropertiesService,
     protected colorSelectorService: ColorSelectorService
     ) {
-    this.setupShortcuts();
+    
     this.service = this.toolSelector.getLine();
   }
 
   ngOnInit(): void {
-    this.jointType = this.service.jointIsDot ? 'Points': 'Aucune';
+    this.setupShortcuts();
   }
 
   setupShortcuts(): void {
@@ -57,12 +52,6 @@ export class LineComponent implements OnInit {
   }
 
   onDotSelected(): void {
-    if (this.jointType === 'Points') {
-      this.attributes.junction.next(true);
-      this.service.jointIsDot = true;
-    } else {
-      this.attributes.junction.next(false);
-      this.service.jointIsDot = false;
-    }
+    this.service.jointIsDot = !this.service.jointIsDot;
   }
 }
