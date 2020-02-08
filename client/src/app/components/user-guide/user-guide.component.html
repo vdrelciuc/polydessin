@@ -2,7 +2,9 @@
   <div>
 
     <div class="header">
-      <button class="backButton" [routerLink]="previousModuleRoute">Retour</button>
+      <mat-dialog-actions>
+        <button (click)="closeGuide()" class="backButton">Retour</button>
+      </mat-dialog-actions>
       Guide d'utilisation <img id="logoGuide" src="../../../assets/guideIcon.svg" alt="icone guide"></div>
   </div>
 
@@ -38,8 +40,7 @@
   </div>
 
   <div class="currentElementDescription">
-    <router-outlet></router-outlet>
-
+    <router-outlet name="guideSubCategory"></router-outlet>
     <table>
       <tr>
         <td *ngIf="getCurrentSubCategorie()!== 'Bienvenue'" class="navigationLink previous">

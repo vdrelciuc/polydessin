@@ -66,7 +66,8 @@ import { BrushComponent } from './components/brush/brush.component';
   ],
   entryComponents: [
     ColorPickerComponent,
-    CreateNewComponent
+    CreateNewComponent,
+    UserGuideComponent
   ],
   imports: [
     BrowserAnimationsModule,

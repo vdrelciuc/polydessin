@@ -25,8 +25,8 @@
             </a>
           </div>
           <div>
-            <a class="btn btn-warning btn-center " routerLink = '/guide/bienvenue'
-               role="button" [state]="{path : '', comingFromEntryPoint : true}">
+            <a class="btn btn-warning btn-center " [routerLink]="[{outlets : { guideSubCategory : ['bienvenue']}}]"
+               role="button" (click)="openDialog()">
               Afficher le guide d'Utilisation
             </a>
           </div>
