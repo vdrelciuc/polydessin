@@ -3,6 +3,7 @@ import { CoordinatesXY } from './coordinates-x-y';
 describe('CoordinatedXY', () => {
 
   let point: CoordinatesXY;
+  const verticalLimit = 1000;
 
   beforeEach( () => { point = new CoordinatesXY(0,0); } );
 
@@ -30,17 +31,17 @@ describe('CoordinatedXY', () => {
   });
 
   it('#getClosestPoint should get the same point', () => {
-    const closest = point.getClosestPoint(100, 100);
+    const closest = point.getClosestPoint(100, 100, verticalLimit);
     expect(closest).toEqual(new CoordinatesXY(100, 100));
   });
 
   it('#getClosestPoint should get on a 45degree angle point', () => {
-    const closest = point.getClosestPoint(100, 90);
+    const closest = point.getClosestPoint(100, 90, verticalLimit);
     expect(closest).toEqual(new CoordinatesXY(100, 100));
   });
 
   it('#getClosestPoint should get on a 45degree angle point negativ', () => {
-    const closest = point.getClosestPoint(-100, 90);
+    const closest = point.getClosestPoint(-100, 90, verticalLimit);
     expect(closest).toEqual(new CoordinatesXY(-100, 100));
   });
   
@@ -52,27 +53,27 @@ describe('CoordinatedXY', () => {
   })
 
   it('#getClosestPoint should get on a 45degree angle point', () => {
-    const closest = point.getClosestPoint(-100, 90);
+    const closest = point.getClosestPoint(-100, 90, verticalLimit);
     expect(closest).toEqual(new CoordinatesXY(-100, 100));
   });
 
   it('#getClosestPoint should get on a 0degree angle point', () => {
-    const closest = point.getClosestPoint(100, 5);
+    const closest = point.getClosestPoint(100, 5, verticalLimit);
     expect(closest).toEqual(new CoordinatesXY(100, 0));
   });
 
   it('#getClosestPoint should get on a 90degree angle point', () => {
-    const closest = point.getClosestPoint(5, 100);
+    const closest = point.getClosestPoint(5, 100, verticalLimit);
     expect(closest).toEqual(new CoordinatesXY(0, 100));
   });
 
   it('#getClosestPoint should get on a 90degree angle point in 3rd quadrant', () => {
-    const closest = point.getClosestPoint(-100, -100);
+    const closest = point.getClosestPoint(-100, -100, verticalLimit);
     expect(closest).toEqual(new CoordinatesXY(-100, -100));
   });
 
   it('#getClosestPoint should get on a 90degree angle point in 4th quadrant', () => {
-    const closest = point.getClosestPoint(100, -100);
+    const closest = point.getClosestPoint(100, -100, verticalLimit);
     expect(closest).toEqual(new CoordinatesXY(100, -100));
   });
 });
