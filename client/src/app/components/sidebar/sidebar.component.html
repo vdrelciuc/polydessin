@@ -205,7 +205,8 @@
         </button>
       </div>
       <div class="icon" >
-        <a  [routerLink]="['/guide/bienvenue']" [state]="{path:'/dessin'}">
+        <a  [routerLink]="['' ,{outlets : { guideSubCategory : ['bienvenue']}}]"
+            role="button" (click)="openDialog()">
           <button mat-button>
             <img src="../../../assets/icons/guide.svg">
           </button>

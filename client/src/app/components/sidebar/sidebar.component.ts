@@ -5,6 +5,7 @@ import { ToolSelectorService } from '../../services/tools/tool-selector.service'
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
 import { Subscription } from 'rxjs';
+import { UserGuideComponent } from '../user-guide/user-guide.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -76,6 +77,21 @@ export class SidebarComponent implements OnInit {
     this.createNewDialog = this.dialog.open(CreateNewComponent, { disableClose: true });
     this.createNewDialog.afterClosed().subscribe( () => {
       this.setupShortcuts();
+    });
+  }
+
+
+
+  openDialog(): void {
+    let dialogRef = this.dialog.open(UserGuideComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
     });
   }
 }
