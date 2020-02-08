@@ -44,7 +44,7 @@
 
 <div class="section">
   <h6 class="title">Dernières couleurs</h6>
-  <div class="recent">
+  <div id="recent">
     <ul *ngFor="let color of recentColors;let i = index">
       <li *ngIf= "i < recentColors.length/2">
         <button mat-mini-fab class="last-colors"
