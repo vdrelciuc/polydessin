@@ -101,7 +101,8 @@ describe('RectangleService', () => {
     expect(rectangleService.shapeStyle.thickness).toBe(CONSTANT.THICKNESS_DEFAULT);
     expect(rectangleService.shapeStyle.fillColor.getHex()).toBe(CONSTANT.COLOR_DEFAULT);
     expect(rectangleService.shapeStyle.borderColor.getHex()).toBe(CONSTANT.COLOR_DEFAULT);
-    expect(rectangleService.shapeStyle.opacity).toBe(CONSTANT.OPACITY_DEFAULT);
+    expect(rectangleService.shapeStyle.borderOpacity).toBe(parseInt(CONSTANT.OPACITY_DEFAULT, CONSTANT.DECIMAL_BASE));
+    expect(rectangleService.shapeStyle.fillOpacity).toBe(parseInt(CONSTANT.OPACITY_DEFAULT, CONSTANT.DECIMAL_BASE));
     expect(rectangleService.shapeStyle.hasBorder).toBe(true);
     expect(rectangleService.shapeStyle.nameDisplayDefault).toBe('[Rectangle]');
     expect(rectangleService.shapeStyle.nameDisplayOnShift).toBe('[Carré]');
