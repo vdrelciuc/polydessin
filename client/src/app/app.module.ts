@@ -19,6 +19,7 @@ import { ColorPanelComponent } from './components/color-panel/color-panel.compon
 import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 import { ColorSliderComponent } from './components/color-slider/color-slider.component';
 import { CreateNewComponent } from './components/create-new/create-new.component';
+import { WarningDialogComponent } from './components/create-new/warning-dialog/warning-dialog.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
 import { CrayonGuideComponent } from './components/guideTemplaates/crayon-guide/crayon-guide.component';
 import { LigneGuideComponent } from './components/guideTemplaates/ligne-guide/ligne-guide.component';
@@ -33,6 +34,7 @@ import { RectangleComponent } from './components/rectangle/rectangle.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserGuideComponent } from './components/user-guide/user-guide.component';
 import { WorkingAreaComponent } from './components/working-area/working-area.component';
+import { ResizeObserverDirective } from './components/workspace/resize-observer.directive';
 import {WorkspaceComponent} from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
@@ -62,11 +64,14 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     ColorPickerComponent,
     ColorPaletteComponent,
     ColorSliderComponent,
-    RoutingComponents
+    RoutingComponents,
+    ResizeObserverDirective,
+    WarningDialogComponent
   ],
   entryComponents: [
     ColorPickerComponent,
-    CreateNewComponent
+    CreateNewComponent,
+    WarningDialogComponent
   ],
   imports: [
     BrowserAnimationsModule,
