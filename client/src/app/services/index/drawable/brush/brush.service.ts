@@ -6,6 +6,10 @@ import { FilterList } from 'src/app/components/brush/patterns';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { FilterList } from 'src/app/classes/patterns';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { Color } from 'src/app/classes/color';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +64,7 @@ export class BrushService extends DrawableService {
   getThickness() {
     return Math.floor(this.thickness);
   }
+
   onMouseInCanvas(event: MouseEvent): void {
     if (this.previewCricle === undefined) {
       const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
@@ -114,7 +119,9 @@ export class BrushService extends DrawableService {
     this.addPath(event.clientX, event.clientY);
 
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
-    } else {this.updateCursor(event.clientX, event.clientY); }
+    } else {
+      this.updateCursor(event.clientX, event.clientY); 
+    }
   }
 
   onClick(event: MouseEvent): void {

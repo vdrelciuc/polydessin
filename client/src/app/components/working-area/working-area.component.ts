@@ -15,13 +15,14 @@ export class WorkingAreaComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (history.state.comingFromEntryPoint) {
-      this.dialog.open(CreateNewComponent, { disableClose: true });
+    if(history.state !== null) {
+      if (history.state.comingFromEntryPoint) {
+        this.dialog.open(CreateNewComponent, { disableClose: true });
+      }
     }
   }
 
   getDrawerStatus(): boolean {
     return this.drawerService.navIsOpened;
   }
-
 }

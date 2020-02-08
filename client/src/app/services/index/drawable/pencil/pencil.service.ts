@@ -58,6 +58,7 @@ export class PencilService extends DrawableService {
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
     this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
   }
+
   onMouseOutCanvas(event: MouseEvent): void {
     this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
     this.isDrawing = false;
@@ -73,8 +74,6 @@ export class PencilService extends DrawableService {
     this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.typeOfLine, 'round');
     this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
-    // this.manipulator.setAttribute(this.line, 'stroke-linecap', 'round');
-    // this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
     this.manipulator.setAttribute(this.line, 'd', this.path);
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
     this.manipulator.appendChild(this.image.nativeElement, this.line);

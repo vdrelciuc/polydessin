@@ -54,6 +54,31 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  emitColor(x: number, y: number): void {
+    const colorToEmit = this.getColorAtPosition(x, y);
+    this.newColor.emit(colorToEmit);
+  }
+
+  @HostListener('window:mouseup', ['$event'])
+  onMouseUp(evt: MouseEvent): void {
+    this.isMouseDown = false;
+  }
+
+  onMouseMove(evt: MouseEvent): void {
+    if (this.isMouseDown) {
+      this.currentSelectedPosition = { x: evt.offsetX, y: evt.offsetY };
+      this.display();
+      this.emitColor(evt.offsetX, evt.offsetY);
+    }
+  }
+
+  onMouseDown(evt: MouseEvent): void {
+    this.isMouseDown = true;
+    this.currentSelectedPosition = { x: evt.offsetX, y: evt.offsetY };
+    this.display();
+    this.newColor.emit(this.getColorAtPosition(evt.offsetX, evt.offsetY));
+  }
+
   private display(): void {
     // Initialize ctx
     if (!this.ctx) {
@@ -126,30 +151,4 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
   private correctDigits(n: string): string {
     return n.length > 1 ? n : '0' + n;
   }
-
-  emitColor(x: number, y: number): void {
-    const colorToEmit = this.getColorAtPosition(x, y);
-    this.newColor.emit(colorToEmit);
-  }
-
-  @HostListener('window:mouseup', ['$event'])
-  onMouseUp(evt: MouseEvent): void {
-    this.isMouseDown = false;
-  }
-
-  onMouseMove(evt: MouseEvent): void {
-    if (this.isMouseDown) {
-      this.currentSelectedPosition = { x: evt.offsetX, y: evt.offsetY };
-      this.display();
-      this.emitColor(evt.offsetX, evt.offsetY);
-    }
-  }
-
-  onMouseDown(evt: MouseEvent): void {
-    this.isMouseDown = true;
-    this.currentSelectedPosition = { x: evt.offsetX, y: evt.offsetY };
-    this.display();
-    this.newColor.emit(this.getColorAtPosition(evt.offsetX, evt.offsetY));
-  }
-
 }
