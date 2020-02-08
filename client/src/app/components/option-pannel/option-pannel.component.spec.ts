@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 import { OptionPannelComponent } from './option-pannel.component';
 import { LineComponent } from '../line/line.component';
 import { PencilComponent } from '../pencil/pencil.component';
-import { MatSliderModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatInputModule } from '@angular/material';
+import { MatSliderModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatInputModule, MatDividerModule, MatExpansionModule, MatIconModule, MatRadioModule, MatCheckboxModule, MatDialog } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
@@ -13,6 +13,12 @@ import { LineService } from 'src/app/services/index/drawable/line/line.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { PencilService } from 'src/app/services/index/drawable/pencil/pencil.service';
 import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
+import { RectangleComponent } from '../rectangle/rectangle.component';
+import { BrushComponent } from '../brush/brush.component';
+import { ColorPaletteComponent } from '../color-palette/color-palette.component';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { ColorSliderComponent } from '../color-slider/color-slider.component';
+import { ColorPanelComponent } from '../color-panel/color-panel.component';
 
 describe('OptionPannelComponent', () => {
   let component: OptionPannelComponent;
@@ -24,16 +30,26 @@ describe('OptionPannelComponent', () => {
         // ADD HERE ALL THE OTHER ADDED TOOLS
         OptionPannelComponent, 
         LineComponent,
-        PencilComponent
+        PencilComponent,
+        RectangleComponent,
+        BrushComponent,
+        ColorPanelComponent,
       ],
       providers: [ 
+        ColorPaletteComponent,
+        ColorPanelComponent,
+        ColorPickerComponent,
+        ColorSliderComponent,
+        BrushComponent,
         OptionPannelComponent,
         HotkeysService,
         LineService,
         ToolSelectorService,
         DrawablePropertiesService,
         DrawerService,
-        PencilService
+        PencilService,
+        RectangleComponent,
+        MatDialog
       ],
       imports: [
         BrowserAnimationsModule,
@@ -42,7 +58,12 @@ describe('OptionPannelComponent', () => {
         MatFormFieldModule, 
         MatOptionModule, 
         MatSelectModule,
-        MatInputModule
+        MatInputModule,
+        MatDividerModule,
+        MatExpansionModule,
+        MatIconModule,
+        MatRadioModule,
+        MatCheckboxModule,
       ]
     })
     .compileComponents();

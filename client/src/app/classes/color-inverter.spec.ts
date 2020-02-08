@@ -10,7 +10,7 @@ describe('Color', () => {
     });
 
     it('#invertColor should return white if color is dark and bw is true', () => {
-        let darkBrown = new Color('#2f2c1a'); // dark brown
+        let darkBrown = new Color('#2e2d25'); // dark brown
         let closestShade = invertColor(darkBrown, true);
         expect(closestShade.getHex()).toBe('#ffffff');
     });

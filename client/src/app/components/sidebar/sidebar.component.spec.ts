@@ -4,7 +4,7 @@ import { SidebarComponent } from './sidebar.component';
 import { RouterModule } from '@angular/router';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTooltipModule } from '@angular/material';
 import { Tools } from 'src/app/enums/tools';
 import { By } from '@angular/platform-browser';
 
@@ -25,6 +25,7 @@ describe('SidebarComponent', () => {
         },
       ],
       imports: [
+        MatTooltipModule,
         RouterModule.forRoot(
           [
             { path: "", component: SidebarComponent}
