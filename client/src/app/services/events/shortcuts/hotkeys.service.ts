@@ -23,31 +23,31 @@ interface Options {
 
 export class HotkeysService {
 
-    defaults: Partial<Options> = {
-      element: this.document
-    }
+  defaults: Partial<Options> = {
+    element: this.document
+  }
 
-    constructor(
-      public eventManager: EventManager,
-      @Inject(DOCUMENT) private document: Document) {
-    }
+  constructor(
+    public eventManager: EventManager,
+    @Inject(DOCUMENT) private document: Document) {
+  }
 
-    addShortcut(options: Partial<Options>): Observable<Event> {
-      const merged = { ...this.defaults, ...options };
-      const event = `keydown.${merged.keys}`;
+  addShortcut(options: Partial<Options>): Observable<KeyboardEvent> {
+    const merged = { ...this.defaults, ...options };
+    const event = `keydown.${merged.keys}`;
 
-      return new Observable((observer) => {
-          const handler = (e: Event) => {
-            e.preventDefault()
-            observer.next(e);
-          };
+    return new Observable((observer) => {
+      const handler = (e: KeyboardEvent) => {
+        e.preventDefault()
+        observer.next(e);
+      };
 
-          const dispose = this.eventManager.addEventListener(
-            merged.element, event, handler
-          );
-          return () => {
-            dispose();
-          };
-      })
-    }
+      const dispose = this.eventManager.addEventListener(
+        merged.element, event, handler
+      );
+      return () => {
+        dispose();
+      };
+    });
+  };
 }

@@ -13,7 +13,7 @@ import { WorkingAreaComponent } from '../working-area/working-area.component';
 
 const routes: Routes = [
   {path : 'dessin' , component : WorkingAreaComponent},
-  {path : 'userGuide', component : UserGuideComponent,
+  {path : 'guide', component : UserGuideComponent,
     children : [
       {path : 'bienvenue', component : BienvenueGuideComponent},
       {path : 'ligne' , component : LigneGuideComponent},

@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Color } from 'src/app/classes/color';
 import { ColorType } from 'src/app/enums/color-types';
@@ -29,7 +29,8 @@ export class CreateNewComponent implements OnInit {
               private colorDialog: MatDialog,
               private createNewService: CreateNewService,
               private drawerService: DrawerService,
-              public router: Router) { }
+              public router: Router
+  ) { }
 
   ngOnInit() {
     this.canvasSize = new CoordinatesXY(0, 0);
@@ -62,13 +63,14 @@ export class CreateNewComponent implements OnInit {
     this.colorSelectorService.colorToChange = ColorType.Background;
     this.colorSelectorService.updateColor(this.previewColor);
     this.createNewService.canvasSize.next(new CoordinatesXY(this.getcanvasSizeX(), this.getcanvasSizeY()));
+    history.state.comingFromEntryPoint = false;
     this.dialogRef.close();
   }
 
   onCloseDialog(): void {
-    this.dialogRef.close();
     if (history.state.comingFromEntryPoint) {
       this.router.navigateByUrl('/')
     }
+    this.dialogRef.close();
   }
 }

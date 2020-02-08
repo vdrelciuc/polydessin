@@ -128,9 +128,6 @@ export class LineService extends DrawableService {
     this.updateLine();
   }
 
-  onMousePress(event: MouseEvent): void {}
-  onMouseRelease(event: MouseEvent): void {}
-
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
       const lastPoint = new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
@@ -233,8 +230,10 @@ export class LineService extends DrawableService {
   private pointsToString({newPoints= this.points}: {newPoints?: Stack<CoordinatesXY>}= {}) {
     let pointsToString = '';
     for (const point of newPoints.getAll()) {
-      pointsToString += point.getX() + ',' + point.getY() + ' ';
-    }
+      if(point !== undefined) {
+        pointsToString += point.getX() + ',' + point.getY() + ' ';
+      }
+    } 
     return pointsToString;
   }
 }
