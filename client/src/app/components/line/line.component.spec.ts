@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import * as CONSTANT from 'src/app/classes/constants';
 
 import { LineComponent } from './line.component';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
@@ -13,7 +12,6 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 describe('LineComponent', () => {
   let component: LineComponent;
   let fixture: ComponentFixture<LineComponent>;
-  let properties: DrawablePropertiesService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -39,7 +37,6 @@ describe('LineComponent', () => {
     fixture = TestBed.createComponent(LineComponent);
     component = fixture.componentInstance;
     component.ngOnInit();
-    properties = TestBed.get<DrawablePropertiesService>(DrawablePropertiesService);
   }));
 
   it('should create', () => {
@@ -52,22 +49,5 @@ describe('LineComponent', () => {
     document.dispatchEvent(new KeyboardEvent('backspace', {}));
     document.dispatchEvent(new Event('keydown.backspace'));
     expect(spy).toHaveBeenCalled();
-  });
-
-  it('should default junction be none', () => {
-    component.onDotSelected();
-    expect(properties.junction.value).toBe(false);
-  });
-
-  it('should change junction type to dot', () => {
-    component.jointType = 'Points';
-    component.onDotSelected();
-    expect(properties.junction.value).toBe(true);
-  });
-
-  it('should not change junction if different than expected', () => {
-    component.jointType = 'BLA';
-    component.onDotSelected();
-    expect(properties.junction.value).toBe(false);
   });
 });
