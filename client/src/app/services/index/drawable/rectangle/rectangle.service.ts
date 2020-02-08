@@ -1,15 +1,9 @@
 import { Injectable, } from '@angular/core';
-//import { invertColor } from 'src/app/classes/color-inverter';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANT from 'src/app/classes/constants';
-//import { Coords } from 'src/app/classes/coordinates';
-//import { SVGProperties } from 'src/app/classes/svg-html-properties';
-//import { Tools } from 'src/app/enums/tools';
 import { ShapeService } from '../shapes/shape.service';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
-//import { ColorSelectorService } from 'src/app/services/color-selector.service';
-
 
 
 @Injectable({
@@ -24,7 +18,8 @@ export class RectangleService extends ShapeService {
       thickness: CONSTANT.THICKNESS_DEFAULT,
       borderColor: new Color(),
       fillColor: new Color(),
-      opacity: CONSTANT.OPACITY_DEFAULT,
+      borderOpacity: CONSTANT.OPACITY_DEFAULT,
+      fillOpacity: CONSTANT.OPACITY_DEFAULT,
       hasBorder: true,
       hasFill: true,
       nameDisplayDefault: '[Rectangle]',
@@ -42,18 +37,18 @@ export class RectangleService extends ShapeService {
   // Width and height are not needed for the SVG rectangle element, but is needed for other shapes
 
   protected setShapeOriginFromRightQuadrants(_width: number): void {
-    this.manipulator.setAttribute(this.shape, SVGProperties.x, this.shapeOrigin.x.toString());
+    this.manipulator.setAttribute(this.shape, SVGProperties.x, this.shapeOrigin.getX().toString());
   }
 
   protected setShapeOriginFromLeftQuadrants(_width: number): void {
-    this.manipulator.setAttribute(this.shape, SVGProperties.x, this.mousePosition.x.toString());
+    this.manipulator.setAttribute(this.shape, SVGProperties.x, this.mousePosition.getX().toString());
   }
 
   protected setShapeOriginFromLowerQuadrants(_height: number): void {
-    this.manipulator.setAttribute(this.shape, SVGProperties.y, this.shapeOrigin.y.toString());
+    this.manipulator.setAttribute(this.shape, SVGProperties.y, this.shapeOrigin.getY().toString());
   }
 
   protected setShapeOriginFromUpperQuadrants(_height: number): void {
-    this.manipulator.setAttribute(this.shape, SVGProperties.y, this.mousePosition.y.toString());
+    this.manipulator.setAttribute(this.shape, SVGProperties.y, this.mousePosition.getY().toString());
   }
 }

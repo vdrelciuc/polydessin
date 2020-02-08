@@ -1,7 +1,8 @@
 import { Component, OnInit, } from '@angular/core';
-import { WorkspaceService } from 'src/app/services/workspace.service';
 import { Color } from 'src/app/classes/color';
-import { Coords } from 'src/app/classes/coordinates';
+import { WorkspaceService } from 'src/app/services/workspace.service';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+
 @Component({
   selector: 'app-workspace',
   templateUrl: './workspace.component.html',
@@ -15,7 +16,7 @@ export class WorkspaceComponent implements OnInit {
     }
 
     onResize(event: any) {
-      this.workspaceService.Size.next(new Coords(Math.floor(event.contentRect.width), Math.floor(event.contentRect.height)));
+      this.workspaceService.Size.next(new CoordinatesXY(Math.floor(event.contentRect.width), Math.floor(event.contentRect.height)));
     }
   constructor(protected workspaceService: WorkspaceService) {
   };

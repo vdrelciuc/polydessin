@@ -4,7 +4,8 @@ export interface ShapeStyle {
   thickness: number;
   borderColor: Color;
   fillColor: Color;
-  opacity: string;
+  borderOpacity: number;
+  fillOpacity: number;
 
   hasBorder: boolean;
   hasFill: boolean;

@@ -1,8 +1,5 @@
-
-
+<div class="wrapper">
   <div class="tool-header">
-    <!--<h3 id="title">Attributs de l'outil</h3>
-    <p id="tool">{{ this.currentTool.getFrenchToolNameToPrint() }}</p>-->
     <h4 id="title">Attributs de l'outil</h4>
     <p id="tool">{{ this.toolSelectorService.getCurrentTool()?.frenchName }}</p>
     <mat-divider></mat-divider>
@@ -15,19 +12,30 @@
     <app-rectangle *ngSwitchCase="'rectangle'">Rectangle Selected</app-rectangle>
     <app-brush *ngSwitchCase="'brush'">Brush Selected</app-brush>
   </div>
-  <!--
-  <div class="tool-options scrollable" [ngSwitch]="currentTool">
-    <p *ngSwitchCase="'eraser'"></p>
-    <app-line *ngSwitchCase="'line'"></app-line>
-    <app-pencil *ngSwitchCase="'pencil'"></app-pencil>
-  </div>-->
 
-<div class="color-wrapper">
-  <div class="color-panel">
-    <div id="bottom-divider">
-      <mat-divider></mat-divider>
+
+  <div class="color-wrapper">
+    <div class="color-panel">
+          <!--<div id="bottom-divider">
+            <mat-divider></mat-divider>
+          </div>-->
+          <mat-accordion>
+            <mat-expansion-panel hideToggle="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Options de couleur
+                </mat-panel-title>
+                <mat-icon>unfold_more</mat-icon>
+              </mat-expansion-panel-header>
+              <mat-panel-description>
+                <div class="inner-color">
+                  <app-color-panel></app-color-panel>
+                </div>
+              </mat-panel-description>
+            </mat-expansion-panel>
+          </mat-accordion>
     </div>
-    <app-color-panel></app-color-panel>
   </div>
 </div>
+
 

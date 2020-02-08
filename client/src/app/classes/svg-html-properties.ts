@@ -5,11 +5,14 @@ export enum SVGProperties {
   container = 'g',
   height = 'height',
   hyperlink = 'a',
-  opacity = 'opacity',
+  globalOpacity = 'opacity',
+  fillOpacity = 'fill-opacity',
+  borderOpacity = 'stroke-opacity',
   thickness = 'stroke-width',
   topLeftCornerCoordinates = 'viewBox',
   width = 'width',
   title = 'title',
+  visibility = 'visibility',
 
   // Circle and Ellipse
   centerX = 'cx',

@@ -1,8 +1,9 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { Router } from '@angular/router';
 import { Color } from 'src/app/classes/color';
 import { DEFAULT_SECONDARY_COLOR } from 'src/app/classes/constants';
-import { Coords } from 'src/app/classes/coordinates';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
 import { CanvasService } from 'src/app/services/canvas.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
@@ -10,6 +11,7 @@ import { CreateNewService } from 'src/app/services/create-new.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
+
 
 @Component({
   selector: 'app-create-new',
@@ -21,24 +23,25 @@ export class CreateNewComponent implements OnInit {
 
   backgroundColor: Color;
   previewColor: Color;
-  canvasSize: Coords;
-  workspaceSize: Coords;
-  widthIsOk: boolean;
-  heightIsOk: boolean;
+  canvasSize: CoordinatesXY;
+  workspaceSize: CoordinatesXY;
+  widthChanged: boolean;
+  heightChanged: boolean;
 
   constructor(private colorSelectorService: ColorSelectorService,
               private dialogRef: MatDialogRef<CreateNewComponent>,
               private dialog: MatDialog,
               private createNewService: CreateNewService,
               private workspaceService: WorkspaceService,
-              private canvasService: CanvasService
+              private canvasService: CanvasService,
+              public router: Router
               ) { }
 
   ngOnInit() {
     this.canvasService.askForLayerCount.next(true);
-    this.canvasSize = new Coords(0, 0);
-    this.widthIsOk = true;
-    this.heightIsOk = true;
+    this.canvasSize = new CoordinatesXY(0, 0);
+    this.widthChanged = false;
+    this.heightChanged = false;
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
       this.backgroundColor = color;
     });
@@ -46,35 +49,27 @@ export class CreateNewComponent implements OnInit {
       this.previewColor = color;
     });
     this.colorSelectorService.temporaryColor.next(new Color(DEFAULT_SECONDARY_COLOR))
-    this.workspaceService.Size.subscribe((size: Coords) => {
-      this.workspaceSize = size;
-    })
     if (this.canvasService.layerCount > 0) {
       this.openDialogWarning();
     }
+    this.workspaceService.Size.subscribe((size: CoordinatesXY) => {
+      this.workspaceSize = size;
+    })
   }
 
   getcanvasSizeX(): number {
-    return (this.canvasSize.x || this.workspaceSize.x);
+    return (this.widthChanged ? this.canvasSize.getX() : this.workspaceSize.getX());
   }
   getcanvasSizeY(): number {
-    return (this.canvasSize.y || this.workspaceSize.y);
+    return (this.heightChanged ? this.canvasSize.getY() : this.workspaceSize.getY());
   }
   setcanvasSizeX(event: any) {
-    if (event.target.value > 0) {
-      this.widthIsOk = true;
-      this.canvasSize.x = event.target.value;
-    } else {
-      this.widthIsOk = false;
-    }
+    this.canvasSize.setX(event.target.value);
+    this.widthChanged = true;
   }
   setcanvasSizeY(event: any) {
-    if (event.target.value > 0) {
-      this.heightIsOk = true;
-      this.canvasSize.y = event.target.value;
-    } else {
-      this.heightIsOk = false;
-    }
+    this.canvasSize.setY(event.target.value);
+    this.widthChanged = false;
   }
 
   onColorSelect(): void {
@@ -90,11 +85,15 @@ export class CreateNewComponent implements OnInit {
   onConfirm(): void {
     this.colorSelectorService.colorToChange = ColorType.Background;
     this.colorSelectorService.updateColor(this.previewColor);
-    this.createNewService.canvasSize.next(new Coords(this.getcanvasSizeX(), this.getcanvasSizeY()));
-    this.onCloseDialog();
+    this.createNewService.canvasSize.next(new CoordinatesXY(this.getcanvasSizeX(), this.getcanvasSizeY()));
+    history.state.comingFromEntryPoint = false;
+    this.dialogRef.close();
   }
 
   onCloseDialog(): void {
+    if (history.state.comingFromEntryPoint) {
+      this.router.navigateByUrl('/')
+    }
     this.dialogRef.close();
   }
 

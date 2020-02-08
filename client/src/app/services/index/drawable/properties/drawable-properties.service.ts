@@ -36,7 +36,7 @@ export class DrawablePropertiesService {
   //color: BehaviorSubject<string> = new BehaviorSubject(CONSTANT.COLOR_DEFAULT); // Border color (secondary color)
   fillColor: BehaviorSubject<string> = new BehaviorSubject(CONSTANT.COLOR_DEFAULT); // Object color (primary color)
   color: BehaviorSubject<string> = new BehaviorSubject(CONSTANT.DEFAULT_PRIMARY_COLOR);
-  opacity: BehaviorSubject<string> = new BehaviorSubject(CONSTANT.OPACITY_DEFAULT);
+  opacity: BehaviorSubject<number> = new BehaviorSubject(CONSTANT.OPACITY_DEFAULT);
   junction: BehaviorSubject<boolean> = new BehaviorSubject(false);
   junctionDiameter: BehaviorSubject<Junctions> = new BehaviorSubject(this.JUNCTION_DIAMETER_DEFAULT);
 }

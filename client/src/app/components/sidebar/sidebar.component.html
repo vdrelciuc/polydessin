@@ -11,7 +11,7 @@
   <div class="tool-group">
     <div class="left-column">
       <div class="icon">
-        <button mat-button (click)="selectTool('selection')"
+        <button mat-button disabled (click)="selectTool('selection')"
         [ngClass]="{'clicked': currentTool === 'selection',
         'not-clicked': currentTool !== 'selection'}">
           <img src="../../../assets/icons/arrow.svg">
@@ -37,7 +37,7 @@
         </button>
       </div>
       <div class="icon">
-        <button mat-button (click)="selectTool('feather')"
+        <button mat-button disabled (click)="selectTool('feather')"
         [ngClass]="{'clicked': currentTool === 'feather',
         'not-clicked': currentTool !== 'feather'}">
         <img src="../../../assets/icons/feather.svg">
@@ -47,13 +47,16 @@
     <div class="right-column">
       <div class="icon">
         <button mat-button (click)="selectTool('brush')"
+        [matTooltip]="this.toolSelectorService.getBrush().frenchName"
+        matTooltipPosition="after"
+        aria-label="brush-tooltip"
         [ngClass]="{'clicked': currentTool === 'brush',
         'not-clicked': currentTool !== 'brush'}">
         <img src="../../../assets/icons/brush.svg">
         </button>
       </div>
       <div class="icon">
-        <button mat-button (click)="selectTool('aerosol')"
+        <button mat-button disabled (click)="selectTool('aerosol')"
         [ngClass]="{'clicked': currentTool === 'aerosol',
         'not-clicked': currentTool !== 'aerosol'}">
         <img src="../../../assets/icons/aerosol.svg">
@@ -77,7 +80,7 @@
         </button>
       </div>
       <div class="icon">
-        <button mat-button (click)="selectTool('polygon')"
+        <button mat-button disabled (click)="selectTool('polygon')"
         [ngClass]="{'clicked': currentTool === 'polygon',
         'not-clicked': currentTool !== 'polygon'}">
         <img src="../../../assets/icons/polygon.svg">
@@ -86,7 +89,7 @@
     </div>
     <div class="right-column">
       <div class="icon">
-        <button mat-button (click)="selectTool('ellipse')"
+        <button mat-button disabled (click)="selectTool('ellipse')"
         [ngClass]="{'clicked': currentTool === 'ellipse',
         'not-clicked': currentTool !== 'ellipse'}">
         <img src="../../../assets/icons/ellipse.svg">
@@ -110,7 +113,7 @@
   <div class="tool-group">
     <div class="left-column">
       <div class="icon">
-        <button mat-button (click)="selectTool('text')"
+        <button mat-button disabled (click)="selectTool('text')"
         [ngClass]="{'clicked': currentTool === 'text',
         'not-clicked': currentTool !== 'text'}">
         <img src="../../../assets/icons/text.svg">
@@ -119,7 +122,7 @@
     </div>
     <div class="right-column">
       <div class="icon">
-        <button mat-button (click)="selectTool('stamp')"
+        <button mat-button disabled (click)="selectTool('stamp')"
         [ngClass]="{'clicked': currentTool === 'stamp',
         'not-clicked': currentTool !== 'stamp'}">
         <img src="../../../assets/icons/stamp (2).svg">
@@ -132,14 +135,14 @@
   <div class="tool-group">
     <div class="left-column">
       <div class="icon">
-        <button mat-button (click)="selectTool('colorApplicator')"
+        <button mat-button disabled (click)="selectTool('colorApplicator')"
         [ngClass]="{'clicked': currentTool === 'colorApplicator',
         'not-clicked': currentTool !== 'colorApplicator'}">
         <img src="../../../assets/icons/color-applicator.svg">
         </button>
       </div>
       <div class="icon">
-        <button mat-button (click)="selectTool('pipette')"
+        <button mat-button disabled (click)="selectTool('pipette')"
         [ngClass]="{'clicked': currentTool === 'pipette',
         'not-clicked': currentTool !== 'pipette'}">
         <img src="../../../assets/icons/pipette.svg">
@@ -148,14 +151,14 @@
     </div>
     <div class="right-column">
       <div class="icon">
-        <button mat-button (click)="selectTool('bucket')"
+        <button mat-button disabled (click)="selectTool('bucket')"
         [ngClass]="{'clicked': currentTool === 'bucket',
         'not-clicked': currentTool !== 'bucket'}">
         <img src="../../../assets/icons/bucket.svg">
         </button>
       </div>
       <div class="icon">
-        <button mat-button (click)="selectTool('eraser')"
+        <button mat-button disabled (click)="selectTool('eraser')"
         [ngClass]="{'clicked': currentTool === 'eraser',
         'not-clicked': currentTool !== 'eraser'}">
         <img src="../../../assets/icons/eraser.svg">
@@ -175,7 +178,7 @@
         </button>
       </div> -->
       <div class="icon">
-        <button mat-button>
+        <button mat-button disabled>
           <img src="../../../assets/icons/undo1.svg">
         </button>
       </div>
@@ -185,24 +188,24 @@
         </button>
       </div>
       <div class="icon">
-        <button mat-button>
+        <button mat-button disabled>
           <img src="../../../assets/icons/load-project.svg">
         </button>
       </div>
     </div>
     <div class="right-column">
       <div class="icon">
-        <button mat-button>
+        <button mat-button disabled>
           <img src="../../../assets/icons/redo.svg">
         </button>
       </div>
       <div class="icon">
-        <button mat-button>
+        <button mat-button disabled>
           <img src="../../../assets/icons/save-project.svg">
         </button>
       </div>
-      <div class="icon" [routerLink]="['/userGuide/bienvenue']"  >
-        <a [routerLink]="['/userGuide/bienvenue']" [state]="{path:'/dessin'}">
+      <div class="icon" >
+        <a  [routerLink]="['/guide/bienvenue']" [state]="{path:'/dessin'}">
           <button mat-button>
             <img src="../../../assets/icons/guide.svg">
           </button>

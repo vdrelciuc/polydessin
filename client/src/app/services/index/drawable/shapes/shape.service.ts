@@ -3,12 +3,11 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { ShapeStyle } from 'src/app/classes/shape-style';
-import { Coords } from 'src/app/classes/coordinates';
 import { Color } from 'src/app/classes/color';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { invertColor } from 'src/app/classes/color-inverter';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +18,13 @@ export abstract class ShapeService extends DrawableService {
   colorSelectorService: ColorSelectorService;
   shapeStyle: ShapeStyle;
 
-  protected mousePosition: Coords;
-  protected shapeOrigin: Coords;
+  protected mousePosition: CoordinatesXY;
+  protected shapeOrigin: CoordinatesXY;
 
   protected drawOnNextMove: boolean;
   protected isChanging: boolean;
   protected shiftPressed: boolean;
-  protected mousePositionOnShiftPress: Coords;
+  protected mousePositionOnShiftPress: CoordinatesXY;
 
   protected text: SVGTextElement;
   protected subElement: SVGGElement;
@@ -33,8 +32,6 @@ export abstract class ShapeService extends DrawableService {
 
   protected svgHtmlTag: SVGProperties;
   protected svgTitle: Tools;
-
-  
   
   constructor() {
     super();
@@ -46,7 +43,6 @@ export abstract class ShapeService extends DrawableService {
   }
 
   initializeProperties(): void {
-    
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.shapeStyle.fillColor = color;
     });
@@ -54,15 +50,31 @@ export abstract class ShapeService extends DrawableService {
     this.colorSelectorService.secondaryColor.subscribe((color: Color) => {
       this.shapeStyle.borderColor = color;
     });
-/*
 
-    this.attributes.color.subscribe((element: string) => {
-      this.shapeStyle.borderColor = new Color(element);
+    this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
+      this.shapeStyle.fillOpacity = opacity;
     });
 
-    this.attributes.fillColor.subscribe((element: string) => {
-      this.shapeStyle.fillColor = new Color(element);
-    });*/
+    this.colorSelectorService.secondaryTransparency.subscribe((opacity: number) => {
+      this.shapeStyle.borderOpacity = opacity;
+    });
+  }
+
+  updateTracingType(tracingType: "border" | "fill"): void {
+    if (this.isChanging) {
+      // This case happens if a checkbox was changed while a rectangle creation was ongoing and dragged out of canvas
+      this.cancelShape();
+    }
+    if (tracingType == "border") {
+      this.shapeStyle.hasBorder = !this.shapeStyle.hasBorder;
+    } else {
+      this.shapeStyle.hasFill = !this.shapeStyle.hasFill;
+    }
+  }
+
+  cancelShape(): void {
+    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    this.isChanging = false;
   }
 
   onMousePress(event: MouseEvent): void {
@@ -70,10 +82,9 @@ export abstract class ShapeService extends DrawableService {
       // This case happens if the mouse button was released out of canvas: the shaped is confirmed on next mouse click
       this.onMouseRelease();
     } else if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
-      this.shapeOrigin = Coords.getEffectiveCoords(this.image, event);
+      this.shapeOrigin = CoordinatesXY.getEffectiveCoords(this.image, event);
       this.drawOnNextMove = true;
     }
-
   }
 
   onMouseRelease(event?: MouseEvent): void {
@@ -88,7 +99,7 @@ export abstract class ShapeService extends DrawableService {
 
   onMouseMove(event: MouseEvent): void {
     if (this.isChanging) {
-      this.mousePosition = Coords.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
+      this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
       this.updateSize();
     } else if (this.drawOnNextMove) {
       this.setupProperties();
@@ -103,10 +114,11 @@ export abstract class ShapeService extends DrawableService {
       this.updateSize();
     }
   }
+  
   onKeyReleased(event: KeyboardEvent): void {
     if (!event.shiftKey && this.shiftPressed) {
       this.shiftPressed = false;
-      this.mousePosition = new Coords(this.mousePositionOnShiftPress.x, this.mousePositionOnShiftPress.y);
+      this.mousePosition = new CoordinatesXY(this.mousePositionOnShiftPress.getX(), this.mousePositionOnShiftPress.getY());
       if (this.isChanging) {
         this.updateSize();
       }
@@ -114,20 +126,20 @@ export abstract class ShapeService extends DrawableService {
   }
 
   protected updateSize(): void {
-    let width = Math.abs(this.mousePosition.x - this.shapeOrigin.x);
-    let height = Math.abs(this.mousePosition.y - this.shapeOrigin.y);
+    let width = Math.abs(this.mousePosition.getX() - this.shapeOrigin.getX());
+    let height = Math.abs(this.mousePosition.getY() - this.shapeOrigin.getY());
 
     if (this.shiftPressed) {
-      this.mousePositionOnShiftPress = new Coords(this.mousePosition.x, this.mousePosition.y);
+      this.mousePositionOnShiftPress = new CoordinatesXY(this.mousePosition.getX(), this.mousePosition.getY());
       const quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
       if (width > height) {
         if (quadrant === 2 || quadrant === 3) {
-          this.mousePosition.x = this.mousePosition.x + (width - height); // Faking mouse position
+          this.mousePosition.setX(this.mousePosition.getX() + (width - height)); // Faking mouse position
         }
         width = height;
       } else {
         if (quadrant === 1 || quadrant === 2) {
-          this.mousePosition.y = this.mousePosition.y + (height - width); // Faking mouse position
+          this.mousePosition.setY(this.mousePosition.getY() + (height - width)); // Faking mouse position
         }
         height = width;
       }
@@ -148,10 +160,11 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.shape, SVGProperties.fill, this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getHex() : 'none');
     this.manipulator.setAttribute(this.shape, SVGProperties.thickness, this.shapeStyle.hasBorder ? this.shapeStyle.thickness.toString() : '0');
     this.manipulator.setAttribute(this.shape, SVGProperties.color, this.shapeStyle.borderColor.getHex());
-    this.manipulator.setAttribute(this.shape, SVGProperties.opacity, this.shapeStyle.opacity);
+    this.manipulator.setAttribute(this.shape, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
+    this.manipulator.setAttribute(this.shape, SVGProperties.fillOpacity, this.shapeStyle.fillOpacity.toString());
 
     // Adding text properties
-    this.manipulator.setAttribute(this.text, SVGProperties.fill, this.shapeStyle.hasFill ? invertColor(this.shapeStyle.fillColor, true).getHex() : 'black');
+    this.manipulator.setAttribute(this.text, SVGProperties.fill, this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getInvertedColor(true).getHex() : 'black');
     this.manipulator.setAttribute(this.text, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.text, SVGProperties.color, this.shapeStyle.hasFill ? 'none' : 'grey');
     this.manipulator.setAttribute(this.text, 'text-anchor', 'middle');
@@ -167,18 +180,18 @@ export abstract class ShapeService extends DrawableService {
 
     if (quadrant === 1 || quadrant === 4) {
       this.setShapeOriginFromRightQuadrants(width);
-      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.shapeOrigin.x + width / 2).toString());
+      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.shapeOrigin.getX() + width / 2).toString());
     } else {
       this.setShapeOriginFromLeftQuadrants(width);
-      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.mousePosition.x + width / 2).toString());
+      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.mousePosition.getX() + width / 2).toString());
     }
 
     if(quadrant === 3 || quadrant === 4) {
       this.setShapeOriginFromLowerQuadrants(height);
-      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.y + height / 2).toString());
+      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.getY() + height / 2).toString());
     } else {
       this.setShapeOriginFromUpperQuadrants(height);
-      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.mousePosition.y + height / 2).toString());
+      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.mousePosition.getY() + height / 2).toString());
     }
 
     this.updateTextSize(width, height);
@@ -200,7 +213,6 @@ export abstract class ShapeService extends DrawableService {
 
   
   // Methods to implement in concrete shape class
-
   protected abstract setDimensionsAttributes(width: number, height: number): void;
   protected abstract setShapeOriginFromRightQuadrants(width: number): void;
   protected abstract setShapeOriginFromLeftQuadrants(width: number): void;

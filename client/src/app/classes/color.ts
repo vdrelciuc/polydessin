@@ -21,16 +21,6 @@ export class Color {
       }
   }
 
-  private static rgbToHex(value: number): string {
-      let hex = Number(value).toString(CONSTANT.HEX_BASE);
-      if (hex.length < 2) {
-          hex = '0' + hex;
-      }
-      return hex;
-    }
-  private static clamp(value: number): number {
-      return Math.min(Math.max(value, Color.MIN_VALUE), Color.MAX_VALUE);
-  }
   getHex(): string {
       return this.hex;
   }
@@ -82,24 +72,36 @@ export class Color {
   }
 
   setRedHex(red: string): void {
-    this.correctHexDigit(red);
+    red = this.correctHexDigit(red);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(red)) {
       this.hex = this.hex.charAt(0) + red + this.hex.substr(3);
     }
   }
 
   setGreenHex(green: string): void {
-    this.correctHexDigit(green);
+    green = this.correctHexDigit(green);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(green)) {
       this.hex = this.hex.substr(0, 3) + green + this.hex.substr(5);
     }
   }
 
   setBlueHex(blue: string): void {
-    this.correctHexDigit(blue);
+    blue = this.correctHexDigit(blue);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(blue)) {
       this.hex = this.hex.substr(0, 5) + blue;
     }
+  }
+
+  private static rgbToHex(value: number): string {
+    let hex = Number(value).toString(CONSTANT.HEX_BASE);
+    if (hex.length < 2) {
+        hex = '0' + hex;
+    }
+    return hex;
+  }
+
+  private static clamp(value: number): number {
+    return Math.min(Math.max(value, Color.MIN_VALUE), Color.MAX_VALUE);
   }
 
   private correctHexDigit(n: string): string {
@@ -110,5 +112,35 @@ export class Color {
     } else {
       return n;
     }
+  }
+
+  // Inspired from https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color, but heavily reajusted.
+
+  // If bw is true, the function will return the closest to black or white (pale colors will return black and dark colors will return white)
+
+  getInvertedColor(bw: boolean): Color {
+    let hex = this.getHex().slice(1);
+
+    let red = parseInt(hex.slice(0, 2), 16);
+    let green = parseInt(hex.slice(2, 4), 16);
+    let blue = parseInt(hex.slice(4, 6), 16);
+
+    if (bw) {
+      // Factors from http://stackoverflow.com/a/3943023/112731
+      const redConversionFactor = 0.299;
+      const greenConversionFactor = 0.587;
+      const blueConversionFactor = 0.114;
+      const shadeLimit = 186;
+      const blackOrWhite = (red * redConversionFactor + green * greenConversionFactor + blue * blueConversionFactor) > shadeLimit ? '#000000' : '#FFFFFF';
+
+      return new Color(blackOrWhite);
+    }
+
+    // Invert color components
+    red = 255 - red;
+    green = 255 - green;
+    blue = 255 - blue;
+    
+    return new Color([red, green, blue]);
   }
 }

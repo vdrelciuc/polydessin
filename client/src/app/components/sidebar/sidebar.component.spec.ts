@@ -4,9 +4,8 @@ import { SidebarComponent } from './sidebar.component';
 import { RouterModule } from '@angular/router';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTooltipModule } from '@angular/material';
 import { Tools } from 'src/app/enums/tools';
-import { By } from '@angular/platform-browser';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -21,10 +20,14 @@ describe('SidebarComponent', () => {
         HotkeysService,
         {
           provide: MatDialog,
-          useValue: {}
+          useValue: {
+            open: () => null,
+            afterColsed: ()  => null
+          }
         },
       ],
       imports: [
+        MatTooltipModule,
         RouterModule.forRoot(
           [
             { path: "", component: SidebarComponent}
@@ -47,21 +50,30 @@ describe('SidebarComponent', () => {
     expect(component.currentTool).toEqual(Tools.Selection);
   });
 
-  it('should setup shortcuts', () => {
+  it('#setupShortcuts should setup shortcuts', () => {
     component.setupShortcuts();
     const spy = spyOn(selector, 'setCurrentTool');
-    const element = fixture.debugElement.query(By.css('.wrapper'))
-    element.triggerEventHandler('keydown', {
-      key: 'l', 
-      bubbles: true
-    });
-    console.log(element);
-    fixture.detectChanges();
-    expect(spy).toHaveBeenCalled();
+    const spy2 = spyOn(component, 'createNewProject');
+    const keys = ['l','c', '1', 'w', 'control.o'];
+    for(const element of keys) {
+      document.dispatchEvent(new KeyboardEvent('keydown', {
+        key: element, 
+        bubbles: true
+      }));
+    }
+    expect(spy).toHaveBeenCalledTimes(component['subscriptions'].length - 2);
+    expect(spy2).toHaveBeenCalled();
   });
 
-  it('should select current tool', () => {
+  it('#selectTool should select current tool', () => {
     component.selectTool(Tools.Line);
     expect(selector.$currentTool.value).toEqual(Tools.Line);
+    expect(component['subscriptions'].length).toEqual(5);
   });
+
+  // it('#createNewProject should  stop shortcuts and create dialog ', () => {
+  //   component.createNewProject();
+  //   expect(component['subscriptions'].length).toEqual(0);
+  //   expect(component['createNewDialog']).toBeTruthy();
+  // });
 });

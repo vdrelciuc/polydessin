@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Color } from '../classes/color';
-import { Coords } from '../classes/coordinates';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { Coords } from '../classes/coordinates';
 export class WorkspaceService {
 
   backgroundColor: Color;
-  Size: BehaviorSubject<Coords> = new BehaviorSubject<Coords>(new Coords(0, 0));
+  Size: BehaviorSubject<CoordinatesXY> = new BehaviorSubject<CoordinatesXY> (new CoordinatesXY(0, 0));
   constructor() {
     this.backgroundColor = new Color('#808080');
   }

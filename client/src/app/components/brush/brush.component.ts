@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
-import { Filter, FilterList } from 'src/app/components/brush/patterns';
+import { Filter, FilterList } from 'src/app/classes/patterns';
 import { Tools } from 'src/app/enums/tools';
 import { BrushService } from 'src/app/services/index/drawable/brush/brush.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
@@ -17,12 +17,13 @@ export class BrushComponent {
   filters: Filter[];
   readonly name: string = Tools.Brush;
   showFilters: boolean;
+  selectedOption: Filter;
 
   readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
   readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
 
   constructor(
-    protected service: BrushService,
+    public service: BrushService,
     private toolSelector: ToolSelectorService,
     protected attributes: DrawablePropertiesService,
     protected colorSelectorService: ColorSelectorService
@@ -30,6 +31,7 @@ export class BrushComponent {
     this.service = this.toolSelector.getBrush();
     this.showFilters = false;
     this.filters = FilterList;
+    this.selectedOption = this.filters[0];
   }
 
   onThicknessChange(input: number ): void {
@@ -48,7 +50,8 @@ export class BrushComponent {
     this.showFilters = !this.showFilters;
   }
 
-  changeFilter(filter: string): void {
-    this.service.selectedFilter = filter;
+  changeFilter(filter: Filter): void {
+    this.service.selectedFilter = filter.referenceID;
+    this.selectedOption = filter;
   }
 }

@@ -8,7 +8,7 @@ import { Tools } from 'src/app/enums/tools';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { Coords } from 'src/app/classes/coordinates';
+import { Color } from 'src/app/classes/color';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,8 @@ export class LineService extends DrawableService {
   thickness: number;
   jointIsDot: boolean;
   dotDiameter: number;
-  color: string;
-  opacity: string;
+  color: Color;
+  opacity: number;
   private isDone: boolean;
   private isStarted: boolean;
   private points: Stack<CoordinatesXY>;
@@ -28,9 +28,11 @@ export class LineService extends DrawableService {
   private line: SVGPolylineElement;
   private subElement: SVGGElement;
   private shiftPressed: boolean;
+  private pointerPosition: CoordinatesXY;
 
   constructor() {
     super();
+    this.frenchName = 'Ligne';
     this.points = new Stack<CoordinatesXY>();
     this.circles = new Stack<SVGCircleElement>();
   }
@@ -49,61 +51,76 @@ export class LineService extends DrawableService {
     this.dotDiameter = this.attributes.dotDiameter.value;
     this.jointIsDot = this.attributes.junction.value;
 
+    this.colorSelectorService.primaryColor.subscribe((color: Color) => {
+      this.color = color;
+    });
+
+    this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
+      this.opacity = opacity;
+    });
+
     this.attributes.thickness.subscribe((element: number) => {
-        this.thickness = element;
+      this.thickness = element;
     });
 
     this.attributes.junction.subscribe((element: boolean) => {
-        this.jointIsDot = element;
+      this.jointIsDot = element;
     });
 
     this.attributes.dotDiameter.subscribe((element: number) => {
-        this.dotDiameter = element;
+      this.dotDiameter = element;
     });
-
-    this.attributes.color.subscribe((element: string) => {
-      this.color = element;
-    })
   }
 
   onMouseMove(event: MouseEvent): void {
-    if(this.isStarted) {
-      let previewPoints = this.pointsToString();
-      if (this.shiftPressed) {
-        const lastPoint = this.points.getLast();
-        if (lastPoint !== undefined) {
-          const shiftPoint = lastPoint.getClosestPoint(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
-          previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
-        }
-      } else {
-      previewPoints += Coords.effectiveX(this.image, event.clientX).toString()
-          + ',' + Coords.effectiveY(this.image, event.clientY).toString();
-      }
-      this.manipulator.setAttribute(
-          this.line,
-          SVGProperties.pointsList,
-          previewPoints
-      );
+    // Save pointer position to allow line update on shift press/release without moving
+    this.pointerPosition = new CoordinatesXY(event.clientX, event.clientY);
+
+    if (this.isStarted) {
+      this.followPointer();
     }
   }
 
   onKeyPressed(event: KeyboardEvent): void {
-    if (event.shiftKey) {
+    if (event.shiftKey && !this.shiftPressed) {
       this.shiftPressed = true;
+      this.followPointer();
     }
   }
 
   onKeyReleased(event: KeyboardEvent): void {
-    if (!event.shiftKey) {
+    if (!event.shiftKey && this.shiftPressed) {
       this.shiftPressed = false;
+      this.followPointer();
     }
+  }
+
+  private followPointer() {
+    let previewPoints = this.pointsToString();
+    if (this.shiftPressed) {
+      const lastPoint = this.points.getLast();
+      if (lastPoint !== undefined) {
+        const canvasHeight = this.image.nativeElement.clientHeight;
+        const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()), CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()), canvasHeight);
+        previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
+      }
+    } else {
+    previewPoints += CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()).toString()
+        + ',' + CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()).toString();
+    }
+    this.manipulator.setAttribute(
+        this.line,
+        SVGProperties.pointsList,
+        previewPoints
+    );
   }
 
   addPointToLine(onScreenX: number, onScreenY: number): void {
     if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
       if(lastPoint !== undefined) {
-        this.points.push_back(lastPoint.getClosestPoint(onScreenX,onScreenY));
+        const canvasHeight = this.image.nativeElement.clientHeight;
+        this.points.push_back(lastPoint.getClosestPoint(onScreenX, onScreenY, canvasHeight));
       }
     } else {
       this.points.push_back(new CoordinatesXY(onScreenX, onScreenY));
@@ -111,12 +128,9 @@ export class LineService extends DrawableService {
     this.updateLine();
   }
 
-  onMousePress(event: MouseEvent): void {}
-  onMouseRelease(event: MouseEvent): void {}
-
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
-      const lastPoint = new CoordinatesXY(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
+      const lastPoint = new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
       const firstPoint = this.points.getRoot();
       if(firstPoint != undefined) {
         let differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
@@ -129,7 +143,7 @@ export class LineService extends DrawableService {
         if(isWithin3Px) {
           this.addPointToLine(firstPoint.getX(), firstPoint.getY());
         } else {
-          this.addPointToLine(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
+          this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
         }
       }
       // Send the line to the whole image to be pushed
@@ -140,26 +154,36 @@ export class LineService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    if (this.isStarted) {
-      this.addPointToLine(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
-    } else {
+    if (!this.isStarted) {
       this.updateProperties();
-      this.addPointToLine(Coords.effectiveX(this.image, event.clientX), Coords.effectiveY(this.image, event.clientY));
       this.isStarted = true;
       this.isDone = false;
     }
     if (this.jointIsDot) {
+      let pointToDisplay = new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+      if (this.shiftPressed) {
+        const lastPoint = this.points.getLast();
+        if (lastPoint !== undefined) {
+          const canvasHeight = this.image.nativeElement.clientHeight;
+          pointToDisplay = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY), canvasHeight);
+        }
+      }
+
       const circle: SVGCircleElement = this.manipulator.createElement('circle', 'http://www.w3.org/2000/svg');
-      this.manipulator.setAttribute(circle, SVGProperties.centerX, Coords.effectiveX(this.image, event.clientX).toString());
-      this.manipulator.setAttribute(circle, SVGProperties.centerY, Coords.effectiveY(this.image, event.clientY).toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerX, pointToDisplay.getX().toString());
+      this.manipulator.setAttribute(circle, SVGProperties.centerY, pointToDisplay.getY().toString());
       this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
-      this.manipulator.setAttribute(circle, SVGProperties.color, this.color);
-      this.manipulator.setAttribute(circle, SVGProperties.fill, this.color);
-      this.manipulator.setAttribute(circle, SVGProperties.opacity, this.opacity);
+      this.manipulator.setAttribute(circle, SVGProperties.color, this.color.getHex());
+      this.manipulator.setAttribute(circle, SVGProperties.fill, this.color.getHex());
+      this.manipulator.setAttribute(circle, SVGProperties.globalOpacity, this.opacity.toString());
       this.manipulator.appendChild(this.subElement, circle);
       this.circles.push_back(circle);
     }
+    this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+    this.followPointer();
   }
+
+
 
   deleteLine(): void {
     this.isDone = true;
@@ -176,6 +200,7 @@ export class LineService extends DrawableService {
       const lastCircle = this.circles.pop_back();
       this.manipulator.removeChild(this.subElement, lastCircle);
     }
+    this.followPointer();
   }
 
   getLineIsDone(): boolean { return this.isDone; }
@@ -195,8 +220,8 @@ export class LineService extends DrawableService {
 
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
-    this.manipulator.setAttribute(this.line, SVGProperties.color, this.color);
-    this.manipulator.setAttribute(this.line, SVGProperties.opacity, this.opacity);
+    this.manipulator.setAttribute(this.line, SVGProperties.color, this.color.getHex());
+    this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
 
     this.manipulator.appendChild(this.subElement, this.line);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
@@ -205,8 +230,10 @@ export class LineService extends DrawableService {
   private pointsToString({newPoints= this.points}: {newPoints?: Stack<CoordinatesXY>}= {}) {
     let pointsToString = '';
     for (const point of newPoints.getAll()) {
-      pointsToString += point.getX() + ',' + point.getY() + ' ';
-    }
+      if(point !== undefined) {
+        pointsToString += point.getX() + ',' + point.getY() + ' ';
+      }
+    } 
     return pointsToString;
   }
 }
