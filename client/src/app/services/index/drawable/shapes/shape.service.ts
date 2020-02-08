@@ -64,6 +64,23 @@ export abstract class ShapeService extends DrawableService {
     });
   }
 
+  updateTracingType(tracingType: "border" | "fill"): void {
+    if (this.isChanging) {
+      // This case happens if a checkbox was changed while a rectangle creation was ongoing and dragged out of canvas
+      this.cancelShape();
+    }
+    if (tracingType == "border") {
+      this.shapeStyle.hasBorder = !this.shapeStyle.hasBorder;
+    } else {
+      this.shapeStyle.hasFill = !this.shapeStyle.hasFill;
+    }
+  }
+
+  cancelShape(): void {
+    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    this.isChanging = false;
+  }
+
   onMousePress(event: MouseEvent): void {
     if(this.isChanging) {
       // This case happens if the mouse button was released out of canvas: the shaped is confirmed on next mouse click
