@@ -80,7 +80,7 @@ export class UserGuideComponent implements OnInit {
 
   setCurrentSubCategorie(value: string) {
     this.currentSubCategorie = value;
-    this.router.navigate([ '/userGuide', this.getPath() ])
+    this.router.navigate([ '/guide', this.getPath() ])
   }
 
   /**
@@ -115,7 +115,7 @@ export class UserGuideComponent implements OnInit {
     const newElement: string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
     this.openAll();
-    this.router.navigate([ '/userGuide', this.getPath() ]);
+    this.router.navigate([ '/guide', this.getPath() ]);
     return this.currentSubCategorie;
   }
 
@@ -131,7 +131,7 @@ export class UserGuideComponent implements OnInit {
     const newElement: string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
     this.openAll();
-    this.router.navigate([ '/userGuide', this.getPath() ]);
+    this.router.navigate([ '/guide', this.getPath() ]);
     return this.currentSubCategorie;
 
   }
