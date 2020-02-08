@@ -37,6 +37,7 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
 import { RectangleComponent } from './components/rectangle/rectangle.component';
 import { BrushComponent } from './components/brush/brush.component';
 import { ResizeObserverDirective } from './components/workspace/resize-observer.directive';
+import { WarningDialogComponent } from './components/create-new/warning-dialog/warning-dialog.component';
 
 @NgModule({
   declarations: [
@@ -64,11 +65,13 @@ import { ResizeObserverDirective } from './components/workspace/resize-observer.
     ColorPaletteComponent,
     ColorSliderComponent,
     RoutingComponents,
-    ResizeObserverDirective
+    ResizeObserverDirective,
+    WarningDialogComponent
   ],
   entryComponents: [
     ColorPickerComponent,
-    CreateNewComponent
+    CreateNewComponent,
+    WarningDialogComponent
   ],
   imports: [
     BrowserAnimationsModule,

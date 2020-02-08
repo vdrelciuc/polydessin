@@ -4,10 +4,12 @@ import { Color } from 'src/app/classes/color';
 import { DEFAULT_SECONDARY_COLOR } from 'src/app/classes/constants';
 import { Coords } from 'src/app/classes/coordinates';
 import { ColorType } from 'src/app/enums/color-types';
+import { CanvasService } from 'src/app/services/canvas.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { CreateNewService } from 'src/app/services/create-new.service';
-import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { WorkspaceService } from 'src/app/services/workspace.service';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
 
 @Component({
   selector: 'app-create-new',
@@ -26,12 +28,14 @@ export class CreateNewComponent implements OnInit {
 
   constructor(private colorSelectorService: ColorSelectorService,
               private dialogRef: MatDialogRef<CreateNewComponent>,
-              private colorDialog: MatDialog,
+              private dialog: MatDialog,
               private createNewService: CreateNewService,
               private workspaceService: WorkspaceService,
+              private canvasService: CanvasService
               ) { }
 
   ngOnInit() {
+    this.canvasService.askForLayerCount.next(true);
     this.canvasSize = new Coords(0, 0);
     this.widthIsOk = true;
     this.heightIsOk = true;
@@ -45,6 +49,9 @@ export class CreateNewComponent implements OnInit {
     this.workspaceService.Size.subscribe((size: Coords) => {
       this.workspaceSize = size;
     })
+    if (this.canvasService.layerCount > 0) {
+      this.openDialogWarning();
+    }
   }
 
   getcanvasSizeX(): number {
@@ -73,11 +80,11 @@ export class CreateNewComponent implements OnInit {
   onColorSelect(): void {
     this.colorSelectorService.colorToChange = ColorType.Preview;
     this.colorSelectorService.updateColor(this.previewColor);
-    this.launchDialog();
+    this.launchColorDialog();
   }
 
-  private launchDialog(): void {
-    this.colorDialog.open(ColorPickerComponent, { disableClose: true });
+  private launchColorDialog(): void {
+    this.dialog.open(ColorPickerComponent, { disableClose: true });
   }
 
   onConfirm(): void {
@@ -89,5 +96,15 @@ export class CreateNewComponent implements OnInit {
 
   onCloseDialog(): void {
     this.dialogRef.close();
+  }
+
+  openDialogWarning(): void {
+    const warning = this.dialog.open(WarningDialogComponent, { disableClose: true });
+
+    warning.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.onCloseDialog();
+      }
+    });
   }
 }

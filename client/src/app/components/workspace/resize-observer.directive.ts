@@ -1,5 +1,5 @@
 // source: https://stackblitz.com/edit/angular-resize-observer?file=src%2Fapp%2Fresize-observer.directive.ts
-import { Directive, ElementRef, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, OnDestroy, Output } from '@angular/core';
 // import ResizeObserver from 'resize-observer-polyfill'; //not needed really since > Chrome 64
 
 type ResizeObserverCallback = (entries: ResizeObserverEntry[], observer: ResizeObserver) => void
