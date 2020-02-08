@@ -113,11 +113,13 @@ describe('RectangleService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('#constructor should set the RectangleService with its correct default attributes', () => {
+  it('#constructer should set the RectangleService with its correct default attributes', () => {
     expect(service.frenchName).toBe("Rectangle");
     expect(service.shapeStyle.thickness).toBe(CONSTANT.THICKNESS_DEFAULT);
     expect(service.shapeStyle.fillColor.getHex()).toBe(CONSTANT.COLOR_DEFAULT);
     expect(service.shapeStyle.borderColor.getHex()).toBe(CONSTANT.COLOR_DEFAULT);
+    expect(service.shapeStyle.borderOpacity).toBe(CONSTANT.OPACITY_DEFAULT);
+    expect(service.shapeStyle.fillOpacity).toBe(CONSTANT.OPACITY_DEFAULT);
     expect(service.shapeStyle.hasBorder).toBe(true);
     expect(service.shapeStyle.nameDisplayDefault).toBe('[Rectangle]');
     expect(service.shapeStyle.nameDisplayOnShift).toBe('[Carré]');

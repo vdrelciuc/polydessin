@@ -136,4 +136,23 @@ describe('Color', () => {
         color.setBlueHex('F'); 
         expect(color.getBlueHex()).toEqual('0F');
     });
+
+    it('#getInvertedColor should return black if color is light and bw is true', () => {
+        color = new Color('#EEDD82'); // lightYellow
+        let closestShade = color.getInvertedColor(true);
+        expect(closestShade.getHex()).toBe('#000000');
+    });
+
+    it('#getInvertedColor should return white if color is dark and bw is true', () => {
+        color = new Color('#2f2c2a'); // dark brown
+        let closestShade = color.getInvertedColor(true);
+        expect(closestShade.getHex()).toBe('#ffffff');
+    });
+
+    it('#getInvertedColor should return opposite color when bw is false', () => {
+        let white = new Color('#ffffff');
+        let black = new Color('#000000')
+        expect(white.getInvertedColor(false).getHex()).toBe(black.getHex());
+        expect(black.getInvertedColor(false).getHex()).toBe(white.getHex());
+    });
 });

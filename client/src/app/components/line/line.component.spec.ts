@@ -47,31 +47,11 @@ describe('LineComponent', () => {
   });
 
   it('should setup shortcuts', () => {
-    // component.service.addPointToLine(1,1);
-    // component.service.addPointToLine(2,2);
     component.setupShortcuts();
     let spy = spyOn(TestBed.get<LineService>(LineService), 'removeLastPoint');
     document.dispatchEvent(new KeyboardEvent('backspace', {}));
     document.dispatchEvent(new Event('keydown.backspace'));
     expect(spy).toHaveBeenCalled();
-  });
-
-  it('should change thickness value to max', () => {
-    component.service.thickness = CONSTANT.THICKNESS_MAXIMUM + 1;
-    component.onThicknessChange();
-    expect(properties.thickness.value).toBe(CONSTANT.THICKNESS_MAXIMUM);
-  });
-
-  it('should change thickness value to min', () => {
-    component.service.thickness = CONSTANT.THICKNESS_MINIMUM - 1;
-    component.onThicknessChange();
-    expect(properties.thickness.value).toBe(CONSTANT.THICKNESS_MINIMUM);
-  });
-
-  it('should change thickness value to provided value', () => {
-    component.service.thickness = CONSTANT.THICKNESS_MINIMUM + 1;
-    component.onThicknessChange();
-    expect(properties.thickness.value).toBe(CONSTANT.THICKNESS_MINIMUM + 1);
   });
 
   it('should default junction be none', () => {
@@ -89,23 +69,5 @@ describe('LineComponent', () => {
     component.jointType = 'BLA';
     component.onDotSelected();
     expect(properties.junction.value).toBe(false);
-  });
-
-  it('should change diameter value to max', () => {
-    component.service.dotDiameter = CONSTANT.DIAMETER_MAXIMUM + 1;
-    component.onDiameterChange();
-    expect(properties.dotDiameter.value).toBe(CONSTANT.DIAMETER_MAXIMUM);
-  });
-
-  it('should change diameter value to min', () => {
-    component.service.dotDiameter = CONSTANT.DIAMETER_MINIMUM - 1;
-    component.onDiameterChange();
-    expect(properties.dotDiameter.value).toBe(CONSTANT.DIAMETER_MINIMUM);
-  });
-
-  it('should change diameter value to provided value', () => {
-    component.service.dotDiameter = CONSTANT.DIAMETER_MINIMUM + 1;
-    component.onDiameterChange();
-    expect(properties.dotDiameter.value).toBe(CONSTANT.DIAMETER_MINIMUM + 1);
   });
 });

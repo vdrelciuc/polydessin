@@ -15,12 +15,9 @@
         vertical="false">
       </mat-slider>
     </div>
+    <label class="title">Jonctions</label>
     <div class="group">
-      <label class="title">Type de jonction</label>
-      <mat-select (selectionChange)="onDotSelected()" [(ngModel)]="typeSelected" name="type-select" class="dot">
-        <mat-option value="Aucune">Aucune</mat-option>
-        <mat-option value="Points">Points</mat-option>
-      </mat-select>
+      <mat-slide-toggle [checked]="service.jointIsDot" (change)="updateJunctionType()">Avec points</mat-slide-toggle>
     </div>
     <div *ngIf="service.jointIsDot" class="group">
       <label class="title" id="diameter">Diamètre</label>
