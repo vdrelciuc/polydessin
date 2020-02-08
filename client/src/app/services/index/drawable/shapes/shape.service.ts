@@ -5,7 +5,6 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
 import { ShapeStyle } from 'src/app/classes/shape-style';
 import { Color } from 'src/app/classes/color';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { invertColor } from 'src/app/classes/color-inverter';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
@@ -168,7 +167,7 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.shape, SVGProperties.fillOpacity, this.shapeStyle.fillOpacity.toString());
 
     // Adding text properties
-    this.manipulator.setAttribute(this.text, SVGProperties.fill, this.shapeStyle.hasFill ? invertColor(this.shapeStyle.fillColor, true).getHex() : 'black');
+    this.manipulator.setAttribute(this.text, SVGProperties.fill, this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getInvertedColor(true).getHex() : 'black');
     this.manipulator.setAttribute(this.text, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.text, SVGProperties.color, this.shapeStyle.hasFill ? 'none' : 'grey');
     this.manipulator.setAttribute(this.text, 'text-anchor', 'middle');
