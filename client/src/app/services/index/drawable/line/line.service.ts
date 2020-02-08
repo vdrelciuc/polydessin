@@ -69,10 +69,6 @@ export class LineService extends DrawableService {
     this.attributes.dotDiameter.subscribe((element: number) => {
       this.dotDiameter = element;
     });
-    /*
-    this.attributes.color.subscribe((element: string) => {
-      this.color = element;
-    })*/
   }
 
   onMouseMove(event: MouseEvent): void {
