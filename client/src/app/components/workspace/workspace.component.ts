@@ -15,7 +15,7 @@ export class WorkspaceComponent implements OnInit {
     }
 
     onResize(event: any) {
-      this.workspaceService.Size.next(new Coords(event.contentRect.width, event.contentRect.height));
+      this.workspaceService.Size.next(new Coords(Math.floor(event.contentRect.width), Math.floor(event.contentRect.height)));
     }
   constructor(protected workspaceService: WorkspaceService) {
   };
