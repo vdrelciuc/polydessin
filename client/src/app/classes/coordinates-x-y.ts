@@ -28,24 +28,51 @@ export class CoordinatesXY {
     const distanceX = pointerX - this.x;
     const distanceY = pointerY - this.y;
     const foundQuadrant = CoordinatesXY.findQuadrantFromDelta(distanceX, distanceY);
+    const angle = (Math.atan(distanceY / distanceX) * 180) / Math.PI;
+
     if (foundQuadrant === 1  || foundQuadrant === 3) {
-      const angle = (Math.atan(distanceY / distanceX) * 180) / Math.PI;
       return this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX), verticalLimit);
     } else {
-      const angle = -(Math.atan(distanceY / distanceX) * 180) / Math.PI;
-      return this.getShiftedPoint(angle, pointerX, pointerY, this.y - this.findYDifferenceForBisectrix(pointerX), verticalLimit);
+      return this.getShiftedPoint(-angle, pointerX, pointerY, this.y - this.findYDifferenceForBisectrix(pointerX), verticalLimit);
     }
   }
 
+  private ajustPointerX(angle: number, pointerX: number, pointerY: number, bisectrixY: number, verticalLimit: number): number {
+    bisectrixY = this.clamp(bisectrixY, verticalLimit);
+    /*if (this.y + this.findYDifferenceForBisectrix(pointerX) > verticalLimit) {
+      return bisectrixY / (Math.tan(angle * Math.PI / 180));
+    } else if (this.y - this.findYDifferenceForBisectrix(pointerX) > verticalLimit) {
+      return bisectrixY / (Math.tan(angle * Math.PI / 180));
+    }
+    return pointerX;*/
+    //return bisectrixY / (Math.tan(angle * 180 / Math.PI));
+    //return bisectrixY * Math.atan(angle * 180 / Math.PI);
+
+    if (this.y + this.findYDifferenceForBisectrix(pointerX) > verticalLimit) {
+      console.log("1: " + (pointerY - this.y - bisectrixY) * Math.tan(angle * Math.PI / 180));
+      return (pointerY - this.y - bisectrixY) / Math.tan(angle * Math.PI / 180);
+    } else if (this.y - this.findYDifferenceForBisectrix(pointerX) < 0) {
+      console.log("2: " + (pointerY - this.y - bisectrixY) * Math.tan(angle * Math.PI / 180));
+      return (pointerY - this.y - bisectrixY) / Math.tan(angle * Math.PI / 180);
+    }
+    return 0;
+  }
+
   private getShiftedPoint(angle: number, pointerX: number, pointerY: number, bisectrixY: number, verticalLimit: number): CoordinatesXY {
-    if (angle < 45 / 2) {
+    if (angle < 45 / 2 /*|| this.checkIfHeightIsCorrect(bisectrixY, verticalLimit - this.y)*/) {
       return new CoordinatesXY(pointerX, this.y);
     } else {
       if (angle <  3 * (90 / 4)) {
-        return new CoordinatesXY(pointerX, this.clamp(bisectrixY, verticalLimit));
+        //pointerX = this.ajustPointerX(angle, pointerX, pointerY, bisectrixY, verticalLimit)
+        return new CoordinatesXY(pointerX, this.clamp(bisectrixY /*- this.ajustPointerX(angle, pointerX, pointerY, bisectrixY, verticalLimit)*/, verticalLimit));
       }
       return new CoordinatesXY(this.x, pointerY);
     }
+  }
+
+  private checkIfHeightIsCorrect(value: number, verticalLimit: number): boolean {
+    console.log(value > 0 && value < verticalLimit);
+    return (value > 0 && value < verticalLimit);
   }
 
   private clamp(value: number, verticalLimit: number): number {
