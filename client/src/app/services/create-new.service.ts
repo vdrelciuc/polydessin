@@ -11,5 +11,4 @@ export class CreateNewService {
   workspaceSize: BehaviorSubject<CoordinatesXY> = new BehaviorSubject<CoordinatesXY>(new CoordinatesXY(0, 0));
   canvasEmpty: boolean;
 
-  constructor() { }
 }

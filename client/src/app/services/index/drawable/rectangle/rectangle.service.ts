@@ -35,19 +35,23 @@ export class RectangleService extends ShapeService {
 
   // Width and height are not needed for the SVG rectangle element, but is needed for other shapes
 
-  protected setShapeOriginFromRightQuadrants(_width: number): void {
+  protected setShapeOriginFromRightQuadrants(width: number): void {
+    width = width; // TODO : to be used in Sprint 2
     this.manipulator.setAttribute(this.shape, SVGProperties.x, this.shapeOrigin.getX().toString());
   }
 
-  protected setShapeOriginFromLeftQuadrants(_width: number): void {
+  protected setShapeOriginFromLeftQuadrants(width: number): void {
+    width = width; // TODO : to be used in Sprint 2
     this.manipulator.setAttribute(this.shape, SVGProperties.x, this.mousePosition.getX().toString());
   }
 
-  protected setShapeOriginFromLowerQuadrants(_height: number): void {
+  protected setShapeOriginFromLowerQuadrants(height: number): void {
+    height = height; // TODO : to be used in Sprint 2
     this.manipulator.setAttribute(this.shape, SVGProperties.y, this.shapeOrigin.getY().toString());
   }
 
-  protected setShapeOriginFromUpperQuadrants(_height: number): void {
+  protected setShapeOriginFromUpperQuadrants(height: number): void {
+    height = height; // TODO : to be used in Sprint 2
     this.manipulator.setAttribute(this.shape, SVGProperties.y, this.mousePosition.getY().toString());
   }
 }

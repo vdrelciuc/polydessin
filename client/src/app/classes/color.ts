@@ -113,12 +113,13 @@ export class Color {
     }
   }
 
-  // Inspired from https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color, but heavily reajusted.
+  // Inspired from https://bit.ly/2UBCNIs, but heavily reajusted.
 
-  // If bw is true, the function will return the closest to black or white (pale colors will return black and dark colors will return white)
+  // If bw is true, the function will return the closest to black or white
+  // (pale colors will return black and dark colors will return white)
 
   getInvertedColor(bw: boolean): Color {
-    let hex = this.getHex().slice(1);
+    const hex = this.getHex().slice(1);
 
     let red = parseInt(hex.slice(0, 2), 16);
     let green = parseInt(hex.slice(2, 4), 16);
@@ -130,7 +131,8 @@ export class Color {
       const greenConversionFactor = 0.587;
       const blueConversionFactor = 0.114;
       const shadeLimit = 186;
-      const blackOrWhite = (red * redConversionFactor + green * greenConversionFactor + blue * blueConversionFactor) > shadeLimit ? '#000000' : '#FFFFFF';
+      const blackOrWhite = (red * redConversionFactor + green * greenConversionFactor + blue * blueConversionFactor)
+      > shadeLimit ? '#000000' : '#FFFFFF';
 
       return new Color(blackOrWhite);
     }
@@ -139,7 +141,7 @@ export class Color {
     red = 255 - red;
     green = 255 - green;
     blue = 255 - blue;
-    
+
     return new Color([red, green, blue]);
   }
 }

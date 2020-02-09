@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserGuideComponent } from './user-guide.component';
-import { MatAccordion, MatDialogRef, MatListModule, MatExpansionModule } from '@angular/material';
-import { RouterModule } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_BASE_HREF } from '@angular/common';
+import { MatAccordion, MatDialogRef, MatExpansionModule, MatListModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
+import { UserGuideComponent } from './user-guide.component';
 
 describe('UserGuideComponent', () => {
   let component: UserGuideComponent;
@@ -107,7 +107,6 @@ describe('UserGuideComponent', () => {
     component['currentSubCategorie'] = 'Bienvenue';
     expect(component.getPreviousElement()).toEqual('Bienvenue');
   });
-
 
   it('#closeGuide should close', () => {
     const spy = spyOn(component.dialogRef, 'close');

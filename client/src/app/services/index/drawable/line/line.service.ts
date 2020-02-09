@@ -89,9 +89,7 @@ export class LineService extends DrawableService {
   onKeyReleased(event: KeyboardEvent): void {
     if (!event.shiftKey && this.shiftPressed) {
       this.shiftPressed = false;
-      if (!this.isDone) {
-        this.followPointer();
-      }
+      this.followPointer();
     }
   }
 
@@ -99,10 +97,16 @@ export class LineService extends DrawableService {
     let previewPoints = this.pointsToString();
     if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
+      console.log('last is ');
+      console.log(lastPoint);
       if (lastPoint !== undefined) {
         const canvasHeight = this.image.nativeElement.clientHeight;
-        const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()), CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()), canvasHeight);
+        const effectiveX = CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX());
+        const effectiveY = CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY());
+        const shiftPoint = lastPoint.getClosestPoint(effectiveX, effectiveY, canvasHeight);
+        console.log('shift point ' + shiftPoint.getX() + ' ' + shiftPoint.getY());
         previewPoints += shiftPoint.getX() + ',' + shiftPoint.getY();
+        console.log('preview: ' + previewPoints);
       }
     } else {
     previewPoints += CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()).toString()
@@ -118,7 +122,7 @@ export class LineService extends DrawableService {
   addPointToLine(onScreenX: number, onScreenY: number): void {
     if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
-      if(lastPoint !== undefined) {
+      if (lastPoint !== undefined) {
         const canvasHeight = this.image.nativeElement.clientHeight;
         this.points.push_back(lastPoint.getClosestPoint(onScreenX, onScreenY, canvasHeight));
       }
@@ -148,13 +152,6 @@ export class LineService extends DrawableService {
           this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
         }
       }
-      // Remove last point and cancel double point from appearing
-      this.removeLastPoint();
-      let previewPoints = this.pointsToString();
-      // Removing last 8 characters, which correspond to a point in SVG attribute
-      previewPoints = previewPoints.slice(0, -8);
-      this.manipulator.setAttribute(this.line, SVGProperties.pointsList, previewPoints);
-
       // Send the line to the whole image to be pushed
       this.points.clear();
       this.isStarted = false;
@@ -164,19 +161,19 @@ export class LineService extends DrawableService {
 
   onClick(event: MouseEvent): void {
     if (!this.isStarted) {
-      this.points = new Stack<CoordinatesXY>();
-      this.circles = new Stack<SVGCircleElement>();
       this.updateProperties();
       this.isStarted = true;
       this.isDone = false;
     }
     if (this.jointIsDot) {
-      let pointToDisplay = new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+      const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
+      const effectiveY = CoordinatesXY.effectiveY(this.image, event.clientY);
+      let pointToDisplay = new CoordinatesXY(effectiveX, effectiveY);
       if (this.shiftPressed) {
         const lastPoint = this.points.getLast();
         if (lastPoint !== undefined) {
           const canvasHeight = this.image.nativeElement.clientHeight;
-          pointToDisplay = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY), canvasHeight);
+          pointToDisplay = lastPoint.getClosestPoint(effectiveX, effectiveY, canvasHeight);
         }
       }
       const circle: SVGCircleElement = this.manipulator.createElement('circle', 'http://www.w3.org/2000/svg');
@@ -202,16 +199,13 @@ export class LineService extends DrawableService {
   }
 
   removeLastPoint(): void {
-    const point = this.points.pop_back();
-    if (point !== undefined) {
-      this.updateLine();
-      if (this.jointIsDot) {
-        const lastCircle = this.circles.pop_back();
-        this.manipulator.removeChild(this.subElement, lastCircle);
-      }
-      this.followPointer();
+    this.points.pop_back();
+    this.updateLine();
+    if (this.jointIsDot) {
+      const lastCircle = this.circles.pop_back();
+      this.manipulator.removeChild(this.subElement, lastCircle);
     }
-    
+    this.followPointer();
   }
 
   getLineIsDone(): boolean { return this.isDone; }

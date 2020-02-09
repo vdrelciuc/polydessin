@@ -78,17 +78,17 @@ describe('Color', () => {
     });
 
     it('#getRedHex should get red part', () => {
-        color.setRGB([15,16,17]); // #0f1011
+        color.setRGB([15, 16, 17]); // #0f1011
         expect(color.getRedHex()).toEqual('0F');
     });
 
     it('#getGreenHex should get green part', () => {
-        color.setRGB([15,16,17]); // #0f1011
+        color.setRGB([15, 16, 17]); // #0f1011
         expect(color.getGreenHex()).toEqual('10');
     });
 
     it('#getBlueHex should get blue part', () => {
-        color.setRGB([15,16,17]); // #0f1011
+        color.setRGB([15, 16, 17]); // #0f1011
         expect(color.getBlueHex()).toEqual('11');
     });
 
@@ -139,19 +139,19 @@ describe('Color', () => {
 
     it('#getInvertedColor should return black if color is light and bw is true', () => {
         color = new Color('#EEDD82'); // lightYellow
-        let closestShade = color.getInvertedColor(true);
+        const closestShade = color.getInvertedColor(true);
         expect(closestShade.getHex()).toEqual('#000000');
     });
 
     it('#getInvertedColor should return white if color is dark and bw is true', () => {
         color = new Color('#2f2c2a'); // dark brown
-        let closestShade = color.getInvertedColor(true);
+        const closestShade = color.getInvertedColor(true);
         expect(closestShade.getHex()).toEqual('#FFFFFF');
     });
 
     it('#getInvertedColor should return opposite color when bw is false', () => {
-        let white = new Color('#FFFFFF');
-        let black = new Color('#000000')
+        const white = new Color('#FFFFFF');
+        const black = new Color('#000000')
         const ok = white.getInvertedColor(false).getHex();
         console.log(ok);
         const non = black.getInvertedColor(false).getHex();

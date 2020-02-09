@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WarningDialogComponent } from './warning-dialog.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { WarningDialogComponent } from './warning-dialog.component';
 
 describe('WarningDialogComponent', () => {
   let component: WarningDialogComponent;
@@ -17,7 +17,7 @@ describe('WarningDialogComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
-  
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });

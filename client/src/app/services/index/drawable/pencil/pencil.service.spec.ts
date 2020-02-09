@@ -1,11 +1,11 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { PencilService } from './pencil.service';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { Color } from 'src/app/classes/color';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Color } from 'src/app/classes/color';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { PencilService } from './pencil.service';
 
 describe('PencilService', () => {
   let service: PencilService;
@@ -17,7 +17,7 @@ describe('PencilService', () => {
     parentElement.children.push(element);
     return element;
   }
-  const eventMocker = (event: string, keyUsed: number) => 
+  const eventMocker = (event: string, keyUsed: number) =>
       new MouseEvent(event, {button: keyUsed, clientX: 10, clientY: 10});
 
   beforeEach(() => {
