@@ -68,7 +68,7 @@ export class CreateNewComponent implements OnInit {
   }
   setcanvasSizeY(event: any) {
     this.canvasSize.setY(event.target.value);
-    this.widthChanged = false;
+    this.heightChanged = true;
   }
 
   onColorSelect(): void {
@@ -99,7 +99,7 @@ export class CreateNewComponent implements OnInit {
   openDialogWarning(): void {
     const warning = this.dialog.open(WarningDialogComponent, { disableClose: true });
 
-    if(warning !== undefined) {
+    if (warning !== undefined) {
       warning.afterClosed().subscribe((result) => {
         if (result) {
           this.onCloseDialog();
