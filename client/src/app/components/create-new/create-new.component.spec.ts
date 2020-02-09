@@ -60,19 +60,13 @@ describe('CreateNewComponent', () => {
   it('#getcanvasSizeX should return drawable width', () => {
     component['widthChanged'] = true;
     component['canvasSize'] = new CoordinatesXY(10,10);
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(component.getcanvasSizeX()).toEqual(10);
-    });
+    expect(component.getcanvasSizeX()).toEqual(10);
   });
 
   it('#getcanvasSizeY should return drawable height', () => {
     component['widthChanged'] = true;
     component['canvasSize'] = new CoordinatesXY(10,10);
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(component.getcanvasSizeX()).toEqual(10);
-    });
+    expect(component.getcanvasSizeX()).toEqual(10);
   });
 
   it('#getcanvasSizeX should return drawable width', () => {
@@ -100,14 +94,12 @@ describe('CreateNewComponent', () => {
   });
 
   it('#onConfirm should update color', () => {
-    const spy = spyOn(component['dialogRef'], 'close');
     history.pushState({
       comingFromEntryPoint: false
     }, 'mockState');
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       component.onConfirm();
-      expect(spy).toHaveBeenCalled();
       expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
       expect(component['colorSelectorService'].colorToChange).toEqual(ColorType.Background);
     });

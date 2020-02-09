@@ -87,8 +87,8 @@ describe('EventListenerService', () => {
     service.initializeEvents();
     const spy = spyOn(service['currentTool'], 'onKeyPressed');
     const spy2 = spyOn(service['currentTool'], 'onKeyReleased');
-    window.dispatchEvent(new Event('keydown'));
-    window.dispatchEvent(new Event('keyup'));
+    window.dispatchEvent(new MouseEvent('keydown'));
+    window.dispatchEvent(new MouseEvent('keyup'));
     expect(spy).toHaveBeenCalled();
     expect(spy2).toHaveBeenCalled();
   });

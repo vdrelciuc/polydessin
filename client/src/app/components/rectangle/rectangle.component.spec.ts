@@ -49,12 +49,7 @@ describe('RectangleComponent', () => {
             },
           },
         },
-        {
-          provide: ColorSelectorService,
-          useValue: {
-            primaryColor: new BehaviorSubject<Color>(new Color('#FFFFFF'))
-          }
-        }
+        ColorSelectorService
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -67,6 +62,8 @@ describe('RectangleComponent', () => {
       TestBed.get<ElementRef>(ElementRef),
       TestBed.get<ColorSelectorService>(ColorSelectorService)
     );
+    service['colorSelectorService'] = new ColorSelectorService();
+    service['colorSelectorService'].primaryColor = new BehaviorSubject<Color>(new Color('#FFFFFF'));
     fixture.detectChanges();
   }));
 
