@@ -32,7 +32,7 @@ describe('ColorPanelComponent', () => {
             secondaryColor: new BehaviorSubject<Color>(mockedColor),
             recentColors: new BehaviorSubject<Color[]>([new Color('#FFFFFF'), new Color('#000000')]),
             primaryTransparency: new BehaviorSubject<number>(1),
-            secondaryTransparency: new BehaviorSubject<number>(1)
+            secondaryTransparency: new BehaviorSubject<number>(1),
           },
         },
       ],
@@ -112,11 +112,14 @@ describe('ColorPanelComponent', () => {
   });
 
   it('#onColorInversion should invert primary and secondary colors', () => {
-    service.primaryColor.next(mockedColor);
+    component['colorSelectorService'] = new ColorSelectorService();
+    component['colorSelectorService'].primaryColor.next(mockedColor);
+    component['primaryColor'] = mockedColor;
     const mockedColor2 = new Color('#FFFFFF');
-    service.secondaryColor.next(mockedColor2);
+    component['colorSelectorService'].secondaryColor.next(mockedColor2);
+    component['secondaryColor'] = mockedColor2;
     component.onColorInversion();
-    expect(service.primaryColor.value.getHex()).toEqual(mockedColor2.getHex());
-    expect(service.secondaryColor.value.getHex()).toEqual(mockedColor.getHex());
+    expect(component['colorSelectorService'].primaryColor.value.getHex()).toEqual(mockedColor2.getHex());
+    expect(component['colorSelectorService'].secondaryColor.value.getHex()).toEqual(mockedColor.getHex());
   });
 });

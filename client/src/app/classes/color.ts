@@ -21,6 +21,17 @@ export class Color {
       }
   }
 
+  private static rgbToHex(value: number): string {
+      let hex = Number(value).toString(CONSTANT.HEX_BASE);
+      if (hex.length < 2) {
+          hex = '0' + hex;
+      }
+      hex = hex.toUpperCase();
+      return hex;
+    }
+  private static clamp(value: number): number {
+      return Math.min(Math.max(value, Color.MIN_VALUE), Color.MAX_VALUE);
+  }
   getHex(): string {
       return this.hex;
   }
@@ -90,18 +101,6 @@ export class Color {
     if (this.REGEX_RGB_VALUE_IN_HEX.test(blue)) {
       this.hex = this.hex.substr(0, 5) + blue;
     }
-  }
-
-  private static rgbToHex(value: number): string {
-    let hex = Number(value).toString(CONSTANT.HEX_BASE);
-    if (hex.length < 2) {
-        hex = '0' + hex;
-    }
-    return hex;
-  }
-
-  private static clamp(value: number): number {
-    return Math.min(Math.max(value, Color.MIN_VALUE), Color.MAX_VALUE);
   }
 
   private correctHexDigit(n: string): string {

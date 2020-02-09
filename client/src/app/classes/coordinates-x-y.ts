@@ -9,19 +9,51 @@ export class CoordinatesXY {
   private x: number;
   private y: number;
 
+  static getCoords(pointer: MouseEvent): CoordinatesXY {
+    return new CoordinatesXY(pointer.clientX, pointer.clientY);
+  }
+
+
+  static getEffectiveCoords(referenceElement: ElementRef<SVGElement>, pointer: MouseEvent): CoordinatesXY {
+    const effectiveX = CoordinatesXY.effectiveX(referenceElement, pointer.clientX);
+    const effectiveY = CoordinatesXY.effectiveY(referenceElement, pointer.clientY);
+    return new CoordinatesXY(effectiveX, effectiveY);
+  }
+
+  static effectiveX(referenceElement: ElementRef<SVGElement>, onScreenX: number): number {
+    return onScreenX - referenceElement.nativeElement.getBoundingClientRect().left;
+  }
+
+  static effectiveY(referenceElement: ElementRef<SVGElement>, onScreenY: number): number {
+    return onScreenY - referenceElement.nativeElement.getBoundingClientRect().top;
+  }
+
+  private static findQuadrantFromDelta(distanceX: number, distanceY: number): 1 | 2 | 3 | 4 {
+    if (distanceX >= 0 && distanceY >= 0) {
+      return 1;
+    }
+    if (distanceX < 0 && distanceY > 0) {
+      return 2;
+    }
+    if (distanceX < 0 && distanceY <= 0) {
+      return 3;
+    }
+    return 4;
+  }
+
   getX(): number  { return this.x; }
   getY(): number  { return this.y; }
 
   setX(x: number): void {
-    if (x >= 0) {
+    // if (x >= 0) {
       this.x = x;
-    }
+    // }
   }
 
   setY(y: number): void {
-    if (y >= 0) {
+    // if (y >= 0) {
       this.y = y;
-    }
+    // }
   }
 
   getClosestPoint(pointerX: number, pointerY: number, verticalLimit: number): CoordinatesXY {
@@ -56,36 +88,6 @@ export class CoordinatesXY {
     return pointerX - this.x;
   }
 
-
-  private static findQuadrantFromDelta(distanceX: number, distanceY: number): 1 | 2 | 3 | 4 {
-    if (distanceX >= 0 && distanceY >= 0) {
-      return 1;
-    }
-    if (distanceX < 0 && distanceY > 0) {
-      return 2;
-    }
-    if (distanceX < 0 && distanceY <= 0) {
-      return 3;
-    }
-    return 4;
-  }
-
-  static getCoords(pointer: MouseEvent): CoordinatesXY {
-    return new CoordinatesXY(pointer.clientX, pointer.clientY);
-  }
-
-  static getEffectiveCoords(referenceElement: ElementRef<SVGElement>, pointer: MouseEvent): CoordinatesXY {
-    return new CoordinatesXY(CoordinatesXY.effectiveX(referenceElement, pointer.clientX), CoordinatesXY.effectiveY(referenceElement, pointer.clientY));
-  }
-
-  static effectiveX(referenceElement: ElementRef<SVGElement>, onScreenX: number): number {
-    return onScreenX - referenceElement.nativeElement.getBoundingClientRect().left;
-  }
-
-  static effectiveY(referenceElement: ElementRef<SVGElement>, onScreenY: number): number {
-    return onScreenY - referenceElement.nativeElement.getBoundingClientRect().top;
-  }
-
   getQuadrant(origin: CoordinatesXY): 1 | 2 | 3 | 4 {
     //    2 | 1
     //   ---|---
@@ -96,4 +98,5 @@ export class CoordinatesXY {
 
     return isTop ? (isLeft ? 2 : 1) : (isLeft ? 3 : 4);
   }
+
 }

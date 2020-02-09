@@ -1,11 +1,12 @@
 <div class="wrapper">
+
   <div class="tool-header">
     <h4 id="title">Attributs de l'outil</h4>
     <p id="tool">{{ this.toolSelectorService.getCurrentTool()?.frenchName }}</p>
     <mat-divider></mat-divider>
   </div>
 
-  <div class="option-pannel" [ngSwitch]="currentTool">
+  <div class="option-panel" [ngSwitch]="currentTool">
     <p *ngSwitchCase="'eraser'">Eraser is selected</p>
     <app-line *ngSwitchCase="'line'">Line Selected</app-line>
     <app-pencil *ngSwitchCase="'pencil'">Pencil Selected</app-pencil>
@@ -16,14 +17,11 @@
 
   <div class="color-wrapper">
     <div class="color-panel">
-          <!--<div id="bottom-divider">
-            <mat-divider></mat-divider>
-          </div>-->
           <mat-accordion>
             <mat-expansion-panel hideToggle="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Options de couleur
+                  <h6>Options de couleur</h6>
                 </mat-panel-title>
                 <mat-icon>unfold_more</mat-icon>
               </mat-expansion-panel-header>

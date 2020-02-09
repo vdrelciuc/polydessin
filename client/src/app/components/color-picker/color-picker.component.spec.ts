@@ -1,14 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ColorPickerComponent } from './color-picker.component';
-import { ColorPaletteComponent } from '../color-palette/color-palette.component';
-import { FormsModule } from '@angular/forms';
-import { Color } from 'src/app/classes/color';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { ColorType } from 'src/app/enums/color-types';
 import { BehaviorSubject } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { Color } from 'src/app/classes/color';
+import { ColorType } from 'src/app/enums/color-types';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ColorPaletteComponent } from '../color-palette/color-palette.component';
+import { ColorPickerComponent } from './color-picker.component';
 
 describe('ColorPickerComponent', () => {
   let component: ColorPickerComponent;
@@ -38,39 +39,65 @@ describe('ColorPickerComponent', () => {
       schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
+  }));
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(ColorPickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     service = TestBed.get<ColorSelectorService>(ColorSelectorService);
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('#updateRed should set new red value', () => {
-    let inputElement: HTMLTextAreaElement = document.createElement('textarea', );
-    inputElement.value = 'FF';
-    let event: Event = new Event('input', {});
-    inputElement.dispatchEvent(event);
-    component.updateRed(event);
-    expect(component.selectedColor.getRedHex()).toEqual('FF');
+    const test = fixture.debugElement.queryAll(By.css('input'));
+    test[0].triggerEventHandler('blur', {
+      target: {
+        value: 10
+      }
+    });
+    expect(component.selectedColor.getRedHex()).toEqual('10');
+  });
+
+  it('#updateRed shouldn\'t set new red value', () => {
+    const test = fixture.debugElement.queryAll(By.css('input'));
+    test[0].triggerEventHandler('blur', null);
+    expect(component.selectedColor.getGreenHex()).toEqual('00');
   });
 
   it('#updateGreen should set new green value', () => {
-
+    const test = fixture.debugElement.queryAll(By.css('input'));
+    test[1].triggerEventHandler('blur', {
+      target: {
+        value: 10
+      }
+    });
+    expect(component.selectedColor.getGreenHex()).toEqual('10');
   });
 
   it('#updateGreen shouldn\'t set new green value', () => {
-
+    const test = fixture.debugElement.queryAll(By.css('input'));
+    test[1].triggerEventHandler('blur', null);
+    expect(component.selectedColor.getGreenHex()).toEqual('00');
   });
 
   it('#updateBlue should set new blue value', () => {
-
+    const test = fixture.debugElement.queryAll(By.css('input'));
+    test[2].triggerEventHandler('blur', {
+      target: {
+        value: 10
+      }
+    });
+    expect(component.selectedColor.getBlueHex()).toEqual('10');
   });
 
   it('#updateBlue shouldn\'t set new blue value', () => {
-
+    const test = fixture.debugElement.queryAll(By.css('input'));
+    test[2].triggerEventHandler('blur', null);
+    expect(component.selectedColor.getGreenHex()).toEqual('00');
   });
 
   it('#onDialogClose should close dialog', () => {
@@ -86,5 +113,5 @@ describe('ColorPickerComponent', () => {
     component.onConfirm();
     expect(service['primaryColor'].value.getHex()).toEqual('#ABCDEF');
   });
-  
+
 });

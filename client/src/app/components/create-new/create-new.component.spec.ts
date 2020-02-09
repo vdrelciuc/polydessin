@@ -9,6 +9,7 @@ import { ColorType } from 'src/app/enums/color-types';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { Color } from 'src/app/classes/color';
+import { APP_BASE_HREF } from '@angular/common';
 describe('CreateNewComponent', () => {
   let component: CreateNewComponent;
   let fixture: ComponentFixture<CreateNewComponent>;
@@ -29,8 +30,10 @@ describe('CreateNewComponent', () => {
           provide: MatDialog,
           useValue: {
             open: () => null,
+            closeAll: () => null,
           }
-        }
+        },
+        {provide: APP_BASE_HREF, useValue : '/' }
       ],
       imports: [
         BrowserAnimationsModule,
@@ -55,18 +58,40 @@ describe('CreateNewComponent', () => {
   });
 
   it('#getcanvasSizeX should return drawable width', () => {
+    component['widthChanged'] = true;
     component['canvasSize'] = new CoordinatesXY(10,10);
-    expect(component.getcanvasSizeX()).toEqual(10);
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(component.getcanvasSizeX()).toEqual(10);
+    });
   });
 
   it('#getcanvasSizeY should return drawable height', () => {
+    component['widthChanged'] = true;
     component['canvasSize'] = new CoordinatesXY(10,10);
-    expect(component.getcanvasSizeX()).toEqual(10);
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(component.getcanvasSizeX()).toEqual(10);
+    });
   });
 
+  it('#getcanvasSizeX should return drawable width', () => {
+    component['widthChanged'] = false;
+    component['workspaceSize'] = new CoordinatesXY(100, 100);
+    component['canvasSize'] = new CoordinatesXY(10,10);
+    expect(component.getcanvasSizeX()).toEqual(100);
+  });
+
+  it('#getcanvasSizeY should return drawable height', () => {
+    component['widthChanged'] = false;
+    component['workspaceSize'] = new CoordinatesXY(100, 100);
+    component['canvasSize'] = new CoordinatesXY(10,10);
+    expect(component.getcanvasSizeX()).toEqual(100);
+  });
+  
   it('#onColorSelect should be able to select color', () => {
     component['previewColor'] = new Color('#FFFFFF');
-    const spy2 = spyOn(component['colorDialog'], 'open');
+    const spy2 = spyOn(component['dialog'], 'open');
     const spy = spyOn(component['colorSelectorService'], 'updateColor');
     component.onColorSelect();
     expect(spy).toHaveBeenCalledWith(new Color('#FFFFFF'));
@@ -79,10 +104,13 @@ describe('CreateNewComponent', () => {
     history.pushState({
       comingFromEntryPoint: false
     }, 'mockState');
-    component.onConfirm();
-    expect(spy).toHaveBeenCalled();
-    expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
-    expect(component['colorSelectorService'].colorToChange).toEqual(ColorType.Background);
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      component.onConfirm();
+      expect(spy).toHaveBeenCalled();
+      expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
+      expect(component['colorSelectorService'].colorToChange).toEqual(ColorType.Background);
+    });
   });
 
   it('#onCloseDialog should close', () => {
@@ -91,8 +119,11 @@ describe('CreateNewComponent', () => {
       comingFromEntryPoint: false
     }, 'mockState');
     component.onCloseDialog();
-    expect(spy).toHaveBeenCalled();
-    expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(spy).toHaveBeenCalled();
+      expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
+    });
   });
 
   it('#onCloseDialog should close', () => {
@@ -102,8 +133,20 @@ describe('CreateNewComponent', () => {
     const spy = spyOn(component['dialogRef'], 'close');
     const spy2 = spyOn(component['router'], 'navigateByUrl');
     component.onCloseDialog();
-    expect(spy).toHaveBeenCalled();
-    expect(spy2).toHaveBeenCalledWith('/');
-    expect(history.state['comingFromEntryPoint']).toBeTruthy();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(spy).toHaveBeenCalled();
+      expect(spy2).toHaveBeenCalledWith('/');
+      expect(history.state['comingFromEntryPoint']).toBeTruthy();
+    });
    });
+
+  it('#openDialogWarning should open warning dialog', () => {
+    const spy = spyOn(component['dialog'], 'open');
+    component.openDialogWarning();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(spy).toHaveBeenCalled();
+    });
+  });
 });

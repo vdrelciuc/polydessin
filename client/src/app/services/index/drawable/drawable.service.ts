@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { DrawablePropertiesService } from './properties/drawable-properties.service';
 import { ColorSelectorService } from '../../color-selector.service';
+import { DrawablePropertiesService } from './properties/drawable-properties.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,16 +14,23 @@ export abstract class DrawableService {
   frenchName: string;
 
   protected assignParams(manipulator: Renderer2, image: ElementRef<SVGElement>,
-      colorSelectorService: ColorSelectorService): void {
+                         colorSelectorService: ColorSelectorService): void {
     this.manipulator = manipulator;
     this.image = image;
     this.colorSelectorService = colorSelectorService;
     this.attributes = new DrawablePropertiesService();
   }
 
-  abstract initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, 
-    colorSelectorService: ColorSelectorService): void;
+  abstract initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
+                      colorSelectorService: ColorSelectorService): void;
   abstract initializeProperties(colorSelectorService: ColorSelectorService): void;
+
+  canDraw(canvas: HTMLElement, pointer: MouseEvent): boolean {
+    return (
+        // To change depending on what is the canvas' type and how to get it's dimensions
+      true
+    );
+  }
 
   onMouseInCanvas(event: MouseEvent): void { /*To Override if needed*/}
   onMouseOutCanvas(event: MouseEvent): void { /*To Override if needed*/}

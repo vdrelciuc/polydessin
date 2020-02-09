@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { WorkspaceService } from 'src/app/services/workspace.service';
 import { Color } from 'src/app/classes/color';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { WorkspaceService } from 'src/app/services/workspace.service';
 
 @Component({
   selector: 'app-workspace',
@@ -8,14 +9,16 @@ import { Color } from 'src/app/classes/color';
   styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-
   backgroundColor: Color;
 
-  constructor(protected workspaceService: WorkspaceService) {
-  }
+    ngOnInit() {
+      this.backgroundColor = this.workspaceService.backgroundColor;
+    }
 
-  ngOnInit() {
-    this.backgroundColor = this.workspaceService.backgroundColor;
-  }
+    onResize(event: any) {
+      this.workspaceService.Size.next(new CoordinatesXY(Math.floor(event.target.offsetWidth), Math.floor(event.target.offsetHeight)));
+    }
+  constructor(protected workspaceService: WorkspaceService) {
+  };
 
 }

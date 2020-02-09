@@ -1,4 +1,4 @@
-import { async, TestBed, ComponentFixture } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { IndexService } from '../../services/index/index.service';
 import { AppComponent } from './app.component';
@@ -17,18 +17,18 @@ describe('AppComponent', () => {
     });
 
     beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            providers: [
-                { 
-                    provide: IndexService, 
-                    useValue: indexServiceSpy 
-                }
-            ],
-            declarations: [ AppComponent ],
-            schemas: [NO_ERRORS_SCHEMA]
-        });
-        fixture = TestBed.createComponent(AppComponent);
-        component = fixture.componentInstance;
+      TestBed.configureTestingModule({
+        providers: [
+          { 
+              provide: IndexService, 
+              useValue: indexServiceSpy 
+          }
+        ],
+        declarations: [ AppComponent ],
+        schemas: [NO_ERRORS_SCHEMA]
+      });
+      fixture = TestBed.createComponent(AppComponent);
+      component = fixture.componentInstance;
     }));
 
     it('should create the app', () => {

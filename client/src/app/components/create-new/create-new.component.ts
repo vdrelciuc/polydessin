@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { Router } from '@angular/router';
 import { Color } from 'src/app/classes/color';
+import { DEFAULT_SECONDARY_COLOR } from 'src/app/classes/constants';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
+import { CanvasService } from 'src/app/services/canvas.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { CreateNewService } from 'src/app/services/create-new.service';
-import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
+import { WorkspaceService } from 'src/app/services/workspace.service';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { Router } from '@angular/router';
-
-const toolBoxWidth = 96;
-const toolDescWidth = 250;
+import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
 
 @Component({
   selector: 'app-create-new',
@@ -23,54 +23,88 @@ export class CreateNewComponent implements OnInit {
   backgroundColor: Color;
   previewColor: Color;
   canvasSize: CoordinatesXY;
+  workspaceSize: CoordinatesXY;
+  widthChanged: boolean;
+  heightChanged: boolean;
 
   constructor(private colorSelectorService: ColorSelectorService,
               private dialogRef: MatDialogRef<CreateNewComponent>,
-              private colorDialog: MatDialog,
+              private dialog: MatDialog,
               private createNewService: CreateNewService,
-              private drawerService: DrawerService,
+              private workspaceService: WorkspaceService,
+              private canvasService: CanvasService,
               public router: Router
-  ) { }
+              ) { }
 
   ngOnInit() {
+    this.canvasService.askForLayerCount.next(true);
     this.canvasSize = new CoordinatesXY(0, 0);
+    this.widthChanged = false;
+    this.heightChanged = false;
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
       this.backgroundColor = color;
     });
     this.colorSelectorService.temporaryColor.subscribe((color: Color) => {
       this.previewColor = color;
     });
+    this.colorSelectorService.temporaryColor.next(new Color(DEFAULT_SECONDARY_COLOR))
+    if (this.canvasService.layerCount > 0) {
+      this.openDialogWarning();
+    }
+    this.workspaceService.Size.subscribe((size: CoordinatesXY) => {
+      this.workspaceSize = size;
+    })
   }
 
   getcanvasSizeX(): number {
-    return (this.canvasSize.getX() ||
-      window.innerWidth - toolBoxWidth - (this.drawerService.navIsOpened ? toolDescWidth : 0));
+    return (this.widthChanged ? this.canvasSize.getX() : this.workspaceSize.getX());
   }
   getcanvasSizeY(): number {
-    return (this.canvasSize.getY() || window.innerHeight);
+    return (this.heightChanged ? this.canvasSize.getY() : this.workspaceSize.getY());
   }
+  setcanvasSizeX(event: any) {
+    this.canvasSize.setX(event.target.value);
+    this.widthChanged = true;
+  }
+  setcanvasSizeY(event: any) {
+    this.canvasSize.setY(event.target.value);
+    this.widthChanged = false;
+  }
+
   onColorSelect(): void {
     this.colorSelectorService.colorToChange = ColorType.Preview;
     this.colorSelectorService.updateColor(this.previewColor);
-    this.launchDialog();
+    this.launchColorDialog();
   }
 
-  private launchDialog(): void {
-    this.colorDialog.open(ColorPickerComponent, { disableClose: true });
+  private launchColorDialog(): void {
+    this.dialog.open(ColorPickerComponent, { disableClose: true });
   }
 
   onConfirm(): void {
     this.colorSelectorService.colorToChange = ColorType.Background;
     this.colorSelectorService.updateColor(this.previewColor);
     this.createNewService.canvasSize.next(new CoordinatesXY(this.getcanvasSizeX(), this.getcanvasSizeY()));
-    history.state.comingFromEntryPoint = false;
     this.dialogRef.close();
+    history.state.comingFromEntryPoint = false;
   }
 
   onCloseDialog(): void {
+    this.dialogRef.close();
     if (history.state.comingFromEntryPoint) {
       this.router.navigateByUrl('/')
     }
-    this.dialogRef.close();
+  }
+
+  openDialogWarning(): void {
+    const warning = this.dialog.open(WarningDialogComponent, { disableClose: true });
+
+    if(warning !== undefined) {
+      warning.afterClosed().subscribe((result) => {
+        if (result) {
+          this.onCloseDialog();
+        }
+      });
+   }
   }
 }

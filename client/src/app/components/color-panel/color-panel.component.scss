@@ -1,78 +1,84 @@
 @import "../../../global-style/colors.scss";
 
 button:focus {
-  outline:0;
-}
-
-.title {
-  color: whitesmoke;
-  margin-bottom: 1rem;
-}
-
-.sub-title {
-  margin-bottom: 0rem;
-  color: whitesmoke;
+  outline: 0;
 }
 
 .section {
   margin-bottom: 10px;
   width: 100%;
   min-height: 100px;
-}
 
-.recent {
-  min-height: 100px;
-}
+  .title {
+    color: whitesmoke;
+    margin-bottom: 1rem;
+  }
 
-.color-preview {
-  float: left;
-  width: 30%;
-}
+  .color-preview {
+    float: left;
+    width: 30%;
 
-.mat-slider {
-  padding-top: 0;
-  padding-bottom: 0;
-  width: 100%;
-}
+    #primary-color-button {
+      width: 55px;
+      height: 55px;
+      font-size: 12px;
+      padding: 0;
+    }
 
-.transparency {
-  float: right;
-  width: 70%;;
-}
+    #secondary-color-button {
+      width: 55px;
+      height: 55px;
+      font-size: 12px;
+      padding: 0;
+    }
+  }
 
-ul li {
-  display: inline;
-}
+  .transparency {
+    float: right;
+    width: 70%;
 
-.last-colors {
-  margin: 2px;
-  text-align: center;
-  float: left;
-}
+    .sub-title {
+      margin-bottom: 0rem;
+      color: whitesmoke;
+    }
 
-.centered-section {
-  text-align: center;
-}
+    .mat-slider {
+      padding-top: 0;
+      padding-bottom: 0;
+      width: 100%;
+    }
+  }
 
-#invert-button {
-  background-color: $vivid;
-  margin-bottom: 10px;
-}
+  .centered-section {
+    text-align: center;
 
-#change-background {
-  background-color: $vivid;
-}
+    #invert-button {
+      background-color: $vivid;
+      margin-bottom: 10px;
+    }
 
-#primary-color-button {
-  width: 55px;
-  height: 55px;
-  font-size: 12px;
-  padding: 0;
-}
+    #change-background {
+      background-color: $vivid;
+    }
+  }
 
-#secondary-color-button {
-  width: 55px;
-  height: 55px;
-  font-size: 12px;
-  padding: 0;
+  #recent {
+    margin: auto;
+    max-width: 170px;
+
+    ul li {
+      display: inline;
+
+      .last-colors {
+        margin: 2px;
+        text-align: center;
+        float: left;
+      }
+
+      .mat-mini-fab {
+        height: 30px;
+        width: 30px;
+      }
+    }
+  }
 }

@@ -15,6 +15,7 @@ describe('ShapeService', () => {
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
   const colorSubject =  new BehaviorSubject<Color>(new Color('#FFFFFF'));
+  const opacitySubject = new BehaviorSubject<number>(1);
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
@@ -58,8 +59,8 @@ describe('ShapeService', () => {
           useValue: {
             primaryColor: colorSubject,
             secondaryColor: colorSubject,
-            primaryTransparency: new BehaviorSubject<number>(1),
-            secondaryTransparency: new BehaviorSubject<number>(1)
+            primaryTransparency: opacitySubject,
+            secondaryTransparency: opacitySubject
           },
         },
       ],
@@ -98,6 +99,38 @@ describe('ShapeService', () => {
   //   service.attributes.color.next(randomTestValue);
   //   expect(service.shapeStyle.borderColor.getHex()).toEqual(randomTestValue);
   // });
+
+  it('#initializeProperties should init subscription', () => {
+    service.initializeProperties();
+    opacitySubject.next(0.5);
+    colorSubject.next(new Color('#ABCDEF'));
+    expect(opacitySubject.value).toEqual(0.5);
+    expect(colorSubject.value.getHex()).toEqual('#ABCDEF');
+  });
+
+  it('#updateTracingType should change traced with border', () => {
+    const spy = spyOn(service, 'cancelShape');
+    service['isChanging'] = true;
+    service.updateTracingType('border');
+    expect(service.shapeStyle.hasBorder).not.toBeTruthy();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#updateTracingType should change traced with fill', () => {
+    const spy = spyOn(service, 'cancelShape');
+    service['isChanging'] = false;
+    service.updateTracingType('fill');
+    expect(service.shapeStyle.hasFill).not.toBeTruthy();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('#cancelShape should stop shape', () => {
+    const spy = spyOn(manipulator, 'removeChild');
+    service.cancelShape();
+    expect(spy).toHaveBeenCalledWith(image.nativeElement, 
+        service['subElement']);
+    expect(service['isChanging']).not.toBeTruthy();
+  });
 
   it('#onMousePress should release mouse out of canvas', () => {
     service['isChanging'] = true;

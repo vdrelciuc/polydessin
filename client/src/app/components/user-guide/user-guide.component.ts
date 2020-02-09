@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion} from '@angular/material/expansion';
 import { Router } from '@angular/router';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-guide',
@@ -10,7 +11,9 @@ import { Router } from '@angular/router';
 
 export class UserGuideComponent implements OnInit {
 
-  constructor(public router: Router) {
+  constructor(public router: Router,
+              public dialogRef : MatDialogRef<UserGuideComponent>
+              ) {
 
   }
 
@@ -60,14 +63,15 @@ export class UserGuideComponent implements OnInit {
       }
     }
   ];
-  openAll() {
-    this.myPanels.openAll();
-  }
 
   ngOnInit() {
     if (history.state.path !== null && history.state.path !== undefined) {
       this.previousModuleRoute = history.state.path;
     }
+  }
+
+  openAll() {
+    this.myPanels.openAll();
   }
 
   /**
@@ -80,7 +84,7 @@ export class UserGuideComponent implements OnInit {
 
   setCurrentSubCategorie(value: string) {
     this.currentSubCategorie = value;
-    this.router.navigate([ '/guide', this.getPath() ])
+    this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}]);
   }
 
   /**
@@ -104,6 +108,9 @@ export class UserGuideComponent implements OnInit {
 
   getNextElement(): string {
     const currentElement: string = this.getCurrentSubCategorie();
+    if(currentElement === 'Nouveau Dessin') {
+      return 'Nouveau Dessin';
+    }
     const indexes: any[] = this.findIndex(currentElement);
     if (indexes[2] === true) {
       indexes[0]++;
@@ -115,12 +122,16 @@ export class UserGuideComponent implements OnInit {
     const newElement: string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
     this.openAll();
-    this.router.navigate([ '/guide', this.getPath() ]);
+    this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}]);
+
     return this.currentSubCategorie;
   }
 
   getPreviousElement(): string {
     const currentElement: string = this.getCurrentSubCategorie();
+    if(currentElement === 'Bienvenue') {
+      return 'Bienvenue';
+    }
     const indexes: any[] = this.findIndex(currentElement);
     if (indexes[1] === 0) {
       indexes[0]--;
@@ -131,7 +142,8 @@ export class UserGuideComponent implements OnInit {
     const newElement: string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
     this.openAll();
-    this.router.navigate([ '/guide', this.getPath() ]);
+    this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}]);
+
     return this.currentSubCategorie;
 
   }
@@ -139,6 +151,10 @@ export class UserGuideComponent implements OnInit {
   getPath(): string {
     const indexes: any[] = this.findIndex(this.currentSubCategorie);
     return this.categories[indexes[0]].type.elements[indexes[1]].path;
+  }
+
+  closeGuide(){
+    this.dialogRef.close();
   }
 
 }
