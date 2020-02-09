@@ -1,11 +1,11 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { DrawableService } from '../drawable.service';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { FilterList } from 'src/app/classes/patterns';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { FilterList } from 'src/app/components/brush/patterns';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawableService } from '../drawable.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,11 +33,11 @@ export class BrushService extends DrawableService {
    }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
-      colorSelectorService: ColorSelectorService): void {
+             colorSelectorService: ColorSelectorService): void {
     this.assignParams(manipulator, image, colorSelectorService);
     this.initializeProperties();
   }
-  
+
   initializeProperties(): void {
     this.thickness = this.attributes.thickness.value;
 
@@ -60,10 +60,11 @@ export class BrushService extends DrawableService {
   getThickness() {
     return Math.floor(this.thickness);
   }
-
   onMouseInCanvas(event: MouseEvent): void {
     if (this.previewCricle === undefined) {
-      this.previewCricle = this.createCircle(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+      const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
+      const effectiveY = CoordinatesXY.effectiveY(this.image, event.clientY);
+      this.previewCricle = this.createCircle(effectiveX, effectiveY);
     }
     this.manipulator.setAttribute(this.previewCricle, SVGProperties.radius, (this.getThickness() / 2).toString());
     this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);
@@ -101,7 +102,7 @@ export class BrushService extends DrawableService {
     if (event.button === 0) { // 0 for the left mouse button
       if (this.isDrawing) {
         this.isDrawing = false;
-        //this.addPath(event.clientX, event.clientY);
+        // this.addPath(event.clientX, event.clientY);
         this.endPath();
         this.updateCursor(event.clientX, event.clientY);
         this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'visible');
@@ -113,9 +114,7 @@ export class BrushService extends DrawableService {
     this.addPath(event.clientX, event.clientY);
 
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
-    } else {
-      this.updateCursor(event.clientX, event.clientY); 
-    }
+    } else {this.updateCursor(event.clientX, event.clientY); }
   }
 
   onClick(event: MouseEvent): void {

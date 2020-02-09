@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeComponent } from './home.component';
 import { RouterModule } from '@angular/router';
+import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -31,7 +31,7 @@ describe('HomeComponent', () => {
   });
 
   it('should create and correctly initialize the options attribute', () => {
-    let options: Object[] =
+    const options: object[] =
       [
         {description : 'Creer un nouveau dessin', optionPath : '/dessin' , show : true},
         {description : 'Ouvrir la Galerie de dessins', optionPath: '/', show : true} ,
@@ -40,13 +40,5 @@ describe('HomeComponent', () => {
       ];
 
     expect(component.options).toEqual(options);
-  });
-
-  it('should create and correctly initialize the options attribute', () => {
-    expect(component.messageAccueil).toEqual('Bienvenue a PolyDessin');
-  });
-
-  it('should create and correctly initialize the options attribute', () => {
-    expect(component.messageDescriptif).toEqual("A tout dessin un artiste, et cet artiste, c'est vous!");
   });
 });

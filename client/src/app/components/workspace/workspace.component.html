@@ -1,7 +1,7 @@
 <div class="workspace-background"
     [style.background-color]="this.backgroundColor.getHex()">
 
-  <div class="scrollingTool">
+  <div class="scrolling-tool" resizeObserver (resize)="onResize($event)">
     <app-canvas></app-canvas>
   </div>
 </div>

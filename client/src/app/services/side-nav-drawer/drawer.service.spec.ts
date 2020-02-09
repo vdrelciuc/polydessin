@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DrawerService } from './drawer.service';
 import { Tools } from 'src/app/enums/tools';
+import { DrawerService } from './drawer.service';
 
 describe('DrawerService', () => {
 
@@ -9,12 +9,12 @@ describe('DrawerService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      
+
     });
     service = TestBed.get(DrawerService);
   });
 
-  it('should be created', () => { 
+  it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
@@ -39,5 +39,5 @@ describe('DrawerService', () => {
     service.updateDrawer(Tools.Rectangle);
     expect(service.navIsOpened).toBe(false);
   });
-  
+
 });

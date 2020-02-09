@@ -24,7 +24,7 @@ describe('DrawablePropertiesService', () => {
   });
 
   it('should change thickness', () => {
-    let thickness: number = 0;
+    let thickness = 0;
     const testValue = 10;
     service.thickness.subscribe((newThickness) => {
       thickness = newThickness;
@@ -34,7 +34,7 @@ describe('DrawablePropertiesService', () => {
   });
 
   it('should change junction type', () => {
-    let junction: boolean = false;
+    let junction = false;
     service.junction.subscribe((newJunction) => {
       junction = newJunction;
     });

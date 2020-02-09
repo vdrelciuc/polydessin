@@ -22,4 +22,5 @@ export class AppComponent {
       .pipe(map((message: Message) => `${message.title} ${message.body}`))
       .subscribe(this.message);
   }
+
 }

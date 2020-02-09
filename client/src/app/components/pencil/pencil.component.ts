@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { PencilService } from 'src/app/services/index/drawable/pencil/pencil.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Component({
   selector: 'app-pencil',

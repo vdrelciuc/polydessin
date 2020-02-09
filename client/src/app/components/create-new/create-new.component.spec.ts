@@ -66,7 +66,7 @@ describe('CreateNewComponent', () => {
 
   it('#onColorSelect should be able to select color', () => {
     component['previewColor'] = new Color('#FFFFFF');
-    const spy2 = spyOn(component['colorDialog'], 'open');
+    const spy2 = spyOn(component['dialog'], 'open');
     const spy = spyOn(component['colorSelectorService'], 'updateColor');
     component.onColorSelect();
     expect(spy).toHaveBeenCalledWith(new Color('#FFFFFF'));

@@ -42,10 +42,10 @@
     <table>
       <tr>
         <td *ngIf="getCurrentSubCategorie()!== 'Bienvenue'" class="navigationLink previous">
-          <button mat-raised-button class="navButton" (click)="getPreviousElement()"> Précédent</button>
+          <button mat-raised-button class="navButton" (click)="getPreviousElement()"> Previous</button>
         </td>
         <td *ngIf="getCurrentSubCategorie()!== 'Nouveau Dessin' "class="navigationLink next">
-          <button mat-raised-button class="navButton" (click)="getNextElement()">Prochain </button>
+          <button mat-raised-button class="navButton" (click)="getNextElement()">Next </button>
         </td>
       </tr>
     </table>

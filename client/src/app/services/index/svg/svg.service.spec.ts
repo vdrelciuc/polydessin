@@ -1,11 +1,10 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { SVGService } from './svg.service';
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { Renderer2, Type, ElementRef } from '@angular/core';
+import { SVGService } from './svg.service';
 
 describe('SVGService', () => {
 
- 
   let stack: SVGService;
   let manipulator: Renderer2;
 
@@ -25,7 +24,6 @@ describe('SVGService', () => {
     ]
     });
 
-
     stack = getTestBed().get(SVGService)
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
   });
@@ -39,7 +37,7 @@ describe('SVGService', () => {
   });
 
   it('should return non empty stack', () => {
-    let element: SVGGElement = manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    const element: SVGGElement = manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     manipulator.setAttribute(element, SVGProperties.title, 'test');
     stack.addElement(element);
     expect(stack.getStack().getAll().length).toEqual(1);
@@ -50,9 +48,9 @@ describe('SVGService', () => {
     manipulator.setAttribute(toAdd, SVGProperties.title, 'test');
     stack.addElement(toAdd);
     const element: SVGGElement | undefined = stack.getStack().getLast();
-    if(element !== undefined) {
+    if (element !== undefined) {
       const svgElement = manipulator.createElement('svg', 'http://www.w3.org/2000/svg');
-      let reference = new ElementRef<SVGElement>(svgElement);
+      const reference = new ElementRef<SVGElement>(svgElement);
       manipulator.appendChild(svgElement, element);
       manipulator.appendChild(reference.nativeElement, svgElement);
       console.log(reference);
@@ -68,7 +66,7 @@ describe('SVGService', () => {
     manipulator.setAttribute(toAdd2, SVGProperties.title, 'test2');
     stack.addElement(toAdd2);
     const element = stack.getStack().getAll()[0];
-    if(element !== undefined) {
+    if (element !== undefined) {
       expect(element.getAttribute(SVGProperties.title)).toEqual('test');
     }
   });
@@ -80,7 +78,7 @@ describe('SVGService', () => {
     stack.addElement(toAdd2);
     const lastElement = stack.removeLastElement();
     const element = stack.getStack().getLast();
-    if(element !== undefined && lastElement !== undefined) {
+    if (element !== undefined && lastElement !== undefined) {
       expect(element.getAttribute(SVGProperties.title)).toEqual('test');
       expect(lastElement.getAttribute(SVGProperties.title)).toEqual('test2');
     }

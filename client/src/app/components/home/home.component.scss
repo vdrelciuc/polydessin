@@ -1,36 +1,46 @@
-#themeColor{
-  background: rgb(50,50,50);
-  color: azure;
-  margin: auto;
-}
-.container{
-  background: rgb(50,50,50) !important;
-}
+@import '../../../global-style/colors.scss';
 
-.background{
-  background-color: rgb(50,50,50);
-  height: 100%;
-}
+.wrapper {
+  background-color: $dark-gray;
+  min-height: 100%;
+  min-width: 100%;
 
+  .container {
+    padding-top: 10%;
+    margin: auto;
+    width: 65%;
 
-#messageDescriptif{
-  text-align: right;
-}
+    #title {
+      display: flex;
 
-.hrSeparation{
-  border: azure 1px solid;
-}
+      h2 {
+        color: whitesmoke;
+        margin-bottom: 15px;
+      }
+    }
 
-.choiceContent{
-  text-align: center;
-  font-size: 1.5rem;
-}
+    #subtitle {
+      text-align: right;
+      color: whitesmoke;
+    }
 
-.btn-center {
-  margin-bottom : 10px;
-  width : 40%;
-}
+    hr {
+      border: whitesmoke 1px solid;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
 
-#guideIcon{
- float: right;
+    .options-area {
+      text-align: center;
+
+      h6 {
+        color: whitesmoke;
+      }
+
+      .btn {
+        margin-top : 10px;
+        width : 40%;
+      }
+    }
+  }
 }

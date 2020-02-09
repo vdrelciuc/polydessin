@@ -2,12 +2,12 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Tools } from '../../enums/tools'
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
+import { ColorSelectorService } from '../color-selector.service';
+import { BrushService } from '../index/drawable/brush/brush.service';
 import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
-import { BrushService } from '../index/drawable/brush/brush.service';
-import { ColorSelectorService } from '../color-selector.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,6 @@ export class ToolSelectorService {
   private pencil: PencilService;
   private rectangle: RectangleService;
   private brush: BrushService;
-
 
   constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();

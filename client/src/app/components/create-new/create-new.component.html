@@ -1,17 +1,17 @@
 <h4>Créer un nouveau dessin</h4>
 <div class="settings-wrapper">
-  <div class="section">
+  <div class="settings-section">
     <h6>Dimensions</h6>
     <div>
       <label for="width">Largeur : </label>
-      <input type="number" id="width" min="1" [value]="getcanvasSizeX()" (change) = "canvasSize.x = $event.target.value">
+      <input type="number" id="width" min="1" [value]="getcanvasSizeX()" (change) = "setcanvasSizeX($event)">
     </div>
     <div>
       <label for="height">Hauteur : </label>
-      <input type="number" id="height" min="1" [value]="getcanvasSizeY()" (change) = "canvasSize.y = $event.target.value">
+      <input type="number" id="height" min="1" [value]="getcanvasSizeY()" (change) = "setcanvasSizeY($event)">
     </div>
   </div>
-  <div class="section">
+  <div class="settings-section">
     <h6>Couleur d'arrière-plan</h6>
     <div class="color-preview">
       <button id="color-button"
