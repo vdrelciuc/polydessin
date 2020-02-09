@@ -134,13 +134,9 @@ describe('ShapeService', () => {
 
   it('#onMousePress should release mouse out of canvas', () => {
     service['isChanging'] = true;
-    service['drawOnNextMove'] = false;
     const spy = spyOn(service, 'onMouseRelease');
-    const spy2 = spyOn(manipulator, 'removeChild');
     service.onMousePress(eventMocker('mouseup', 0));
     expect(spy).toHaveBeenCalled();
-    expect(spy2).toHaveBeenCalled();
-    expect(service['isChanging']).not.toBeTruthy();
   });
 
   it('#onMousePress should not create rectangle', () => {
@@ -150,6 +146,16 @@ describe('ShapeService', () => {
     service.onMousePress(eventMocker('mouseup', 0));
     expect(spy).toHaveBeenCalled();
     expect(service['drawOnNextMove']).toBeTruthy();
+  });
+
+  it('#onMouseRelease should release mouse out of canvas', () => {
+    service['isChanging'] = true;
+    service['drawOnNextMove'] = false;
+    const spy = spyOn(manipulator, 'removeChild');
+    service.onMouseRelease(eventMocker('mouseup', 0));
+    expect(service['isChanging']).not.toBeTruthy();
+    expect(service['drawOnNextMove']).not.toBeTruthy();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#onMousePress should create rectangle', () => {
