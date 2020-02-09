@@ -29,6 +29,7 @@ describe('CreateNewComponent', () => {
           provide: MatDialog,
           useValue: {
             open: () => null,
+            closeAll: () => null,
           }
         }
       ],
@@ -55,18 +56,34 @@ describe('CreateNewComponent', () => {
   });
 
   it('#getcanvasSizeX should return drawable width', () => {
+    component['widthChanged'] = true;
     component['canvasSize'] = new CoordinatesXY(10,10);
     expect(component.getcanvasSizeX()).toEqual(10);
   });
 
   it('#getcanvasSizeY should return drawable height', () => {
+    component['widthChanged'] = true;
     component['canvasSize'] = new CoordinatesXY(10,10);
     expect(component.getcanvasSizeX()).toEqual(10);
   });
 
+  it('#getcanvasSizeX should return drawable width', () => {
+    component['widthChanged'] = false;
+    component['workspaceSize'] = new CoordinatesXY(100, 100);
+    component['canvasSize'] = new CoordinatesXY(10,10);
+    expect(component.getcanvasSizeX()).toEqual(100);
+  });
+
+  it('#getcanvasSizeY should return drawable height', () => {
+    component['widthChanged'] = false;
+    component['workspaceSize'] = new CoordinatesXY(100, 100);
+    component['canvasSize'] = new CoordinatesXY(10,10);
+    expect(component.getcanvasSizeX()).toEqual(100);
+  });
+  
   it('#onColorSelect should be able to select color', () => {
     component['previewColor'] = new Color('#FFFFFF');
-    const spy2 = spyOn(component['colorDialog'], 'open');
+    const spy2 = spyOn(component['dialog'], 'open');
     const spy = spyOn(component['colorSelectorService'], 'updateColor');
     component.onColorSelect();
     expect(spy).toHaveBeenCalledWith(new Color('#FFFFFF'));
@@ -106,4 +123,12 @@ describe('CreateNewComponent', () => {
     expect(spy2).toHaveBeenCalledWith('/');
     expect(history.state['comingFromEntryPoint']).toBeTruthy();
    });
+
+  it('#openDialogWarning should ', () => {
+    const spy = spyOn(component['dialog'], 'open');
+    const spy2 = spyOn(component, 'onCloseDialog');
+    component['dialog'].closeAll();
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
+  });
 });

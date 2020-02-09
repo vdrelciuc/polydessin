@@ -1,11 +1,10 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { SVGService } from './svg.service';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGService } from './svg.service';
 
 describe('SVGService', () => {
 
- 
   let stack: SVGService;
   let manipulator: Renderer2;
 

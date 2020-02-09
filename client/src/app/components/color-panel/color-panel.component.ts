@@ -89,4 +89,5 @@ export class ColorPanelComponent implements OnInit {
   private launchDialog(): void {
     this.dialog.open(ColorPickerComponent, { disableClose: true });
   }
+
 }

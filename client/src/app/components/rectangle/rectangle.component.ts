@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Tools } from 'src/app/enums/tools';
 import * as CONSTANT from 'src/app/classes/constants';
+import { Tools } from 'src/app/enums/tools';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 
 @Component({
   selector: 'app-rectangle',
@@ -31,10 +31,10 @@ export class RectangleComponent implements OnInit {
   }
 
   updateBorder(): void {
-    this.service.shapeStyle.hasBorder = !this.service.shapeStyle.hasBorder;
+    this.service.updateTracingType("border");
   }
 
   updateFill(): void {
-    this.service.shapeStyle.hasFill = !this.service.shapeStyle.hasFill;
+    this.service.updateTracingType("fill");
   }
 }

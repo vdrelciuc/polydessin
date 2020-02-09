@@ -1,15 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ColorPickerComponent } from './color-picker.component';
-import { ColorPaletteComponent } from '../color-palette/color-palette.component';
-import { FormsModule } from '@angular/forms';
-import { Color } from 'src/app/classes/color';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { ColorType } from 'src/app/enums/color-types';
 import { BehaviorSubject } from 'rxjs';
 import { By } from '@angular/platform-browser';
+import { Color } from 'src/app/classes/color';
+import { ColorType } from 'src/app/enums/color-types';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ColorPaletteComponent } from '../color-palette/color-palette.component';
+import { ColorPickerComponent } from './color-picker.component';
 
 describe('ColorPickerComponent', () => {
   let component: ColorPickerComponent;
@@ -39,11 +39,14 @@ describe('ColorPickerComponent', () => {
       schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
+  }));
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(ColorPickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     service = TestBed.get<ColorSelectorService>(ColorSelectorService);
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -110,5 +113,5 @@ describe('ColorPickerComponent', () => {
     component.onConfirm();
     expect(service['primaryColor'].value.getHex()).toEqual('#ABCDEF');
   });
-  
+
 });

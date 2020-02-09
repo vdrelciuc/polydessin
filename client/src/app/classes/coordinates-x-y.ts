@@ -9,49 +9,24 @@ export class CoordinatesXY {
   private x: number;
   private y: number;
 
-  getX(): number  { return this.x; }
-  getY(): number  { return this.y; }
-
-  setX(x: number): void {
-    if (x >= 0) {
-      this.x = x;
-    }
+  static getCoords(pointer: MouseEvent): CoordinatesXY {
+    return new CoordinatesXY(pointer.clientX, pointer.clientY);
   }
 
-  setY(y: number): void {
-    if (y >= 0) {
-      this.y = y;
-    }
+
+  static getEffectiveCoords(referenceElement: ElementRef<SVGElement>, pointer: MouseEvent): CoordinatesXY {
+    const effectiveX = CoordinatesXY.effectiveX(referenceElement, pointer.clientX);
+    const effectiveY = CoordinatesXY.effectiveY(referenceElement, pointer.clientY);
+    return new CoordinatesXY(effectiveX, effectiveY);
   }
 
-  getClosestPoint(pointerX: number, pointerY: number): CoordinatesXY {
-    const distanceX = pointerX - this.x;
-    const distanceY = pointerY - this.y;
-    const foundQuadrant = CoordinatesXY.findQuadrantFromDelta(distanceX, distanceY);
-    if (foundQuadrant === 1  || foundQuadrant === 3) {
-      const angle = (Math.atan(distanceY / distanceX) * 180) / Math.PI;
-      return this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX));
-    } else {
-      const angle = -(Math.atan(distanceY / distanceX) * 180) / Math.PI;
-      return this.getShiftedPoint(angle, pointerX, pointerY, this.y - this.findYDifferenceForBisectrix(pointerX));
-    }
+  static effectiveX(referenceElement: ElementRef<SVGElement>, onScreenX: number): number {
+    return onScreenX - referenceElement.nativeElement.getBoundingClientRect().left;
   }
 
-  private getShiftedPoint(angle: number, pointerX: number, pointerY: number, bisectrixY: number): CoordinatesXY {
-    if (angle < 45 / 2) {
-      return new CoordinatesXY(pointerX, this.y);
-    } else {
-      if (angle <  3 * (90 / 4)) {
-        return new CoordinatesXY(pointerX, bisectrixY);
-      }
-      return new CoordinatesXY(this.x, pointerY);
-    }
+  static effectiveY(referenceElement: ElementRef<SVGElement>, onScreenY: number): number {
+    return onScreenY - referenceElement.nativeElement.getBoundingClientRect().top;
   }
-
-  private findYDifferenceForBisectrix(pointerX: number): number {
-    return pointerX - this.x;
-  }
-
 
   private static findQuadrantFromDelta(distanceX: number, distanceY: number): 1 | 2 | 3 | 4 {
     if (distanceX >= 0 && distanceY >= 0) {
@@ -66,20 +41,58 @@ export class CoordinatesXY {
     return 4;
   }
 
-  static getCoords(pointer: MouseEvent): CoordinatesXY {
-    return new CoordinatesXY(pointer.clientX, pointer.clientY);
+  getX(): number  { return this.x; }
+  getY(): number  { return this.y; }
+
+  setX(x: number): void {
+    // if (x >= 0) {
+      this.x = x;
+    // }
   }
 
-  static getEffectiveCoords(referenceElement: ElementRef<SVGElement>, pointer: MouseEvent): CoordinatesXY {
-    return new CoordinatesXY(CoordinatesXY.effectiveX(referenceElement, pointer.clientX), CoordinatesXY.effectiveY(referenceElement, pointer.clientY));
+  setY(y: number): void {
+    // if (y >= 0) {
+      this.y = y;
+    // }
   }
 
-  static effectiveX(referenceElement: ElementRef<SVGElement>, onScreenX: number): number {
-    return onScreenX - referenceElement.nativeElement.getBoundingClientRect().left;
+  getClosestPoint(pointerX: number, pointerY: number, verticalLimit: number): CoordinatesXY {
+    console.log(pointerX +' ' + pointerY + ' mouse');
+    console.log(this.x + ' ' + this.y + ' this');
+    const distanceX = pointerX - this.x;
+    const distanceY = pointerY - this.y;
+    console.log(distanceX + ' ' + distanceY + ' distance');
+    const foundQuadrant = CoordinatesXY.findQuadrantFromDelta(distanceX, distanceY);
+    console.log('quadrant: ' + foundQuadrant);
+    if (foundQuadrant === 1  || foundQuadrant === 3) {
+      const angle = (Math.atan(distanceY / distanceX) * 180) / Math.PI;
+      console.log('angle ' + angle);
+      console.log(this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX), verticalLimit));
+      return this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX), verticalLimit);
+    } else {
+      const angle = -(Math.atan(distanceY / distanceX) * 180) / Math.PI;
+      return this.getShiftedPoint(angle, pointerX, pointerY, this.y - this.findYDifferenceForBisectrix(pointerX), verticalLimit);
+    }
   }
 
-  static effectiveY(referenceElement: ElementRef<SVGElement>, onScreenY: number): number {
-    return onScreenY - referenceElement.nativeElement.getBoundingClientRect().top;
+  private getShiftedPoint(angle: number, pointerX: number, pointerY: number, bisectrixY: number, verticalLimit: number): CoordinatesXY {
+    if (angle < 45 / 2) {
+      return new CoordinatesXY(pointerX, this.y);
+    } else {
+      if (angle <  3 * (90 / 4)) {
+        console.log(pointerX + ' ' +  this.clamp(bisectrixY, verticalLimit))
+        return new CoordinatesXY(pointerX, this.clamp(bisectrixY, verticalLimit));
+      }
+      return new CoordinatesXY(this.x, pointerY);
+    }
+  }
+
+  private clamp(value: number, verticalLimit: number): number {
+    return Math.min(Math.max(value, 0), verticalLimit);
+  }
+
+  private findYDifferenceForBisectrix(pointerX: number): number {
+    return pointerX - this.x;
   }
 
   getQuadrant(origin: CoordinatesXY): 1 | 2 | 3 | 4 {
@@ -92,4 +105,5 @@ export class CoordinatesXY {
 
     return isTop ? (isLeft ? 2 : 1) : (isLeft ? 3 : 4);
   }
+
 }

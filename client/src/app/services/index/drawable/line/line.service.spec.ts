@@ -45,6 +45,7 @@ describe('LineService', () => {
                     };
                     return boundRect;
                 },
+                clientHeight: 100,
             },
           },
         },
@@ -60,6 +61,8 @@ describe('LineService', () => {
     service = getTestBed().get(LineService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
+    service['pointerPosition'] = new CoordinatesXY(10,10);
+    service['opacity'] = 0.5;
     service.attributes = new DrawablePropertiesService();
     service.initialize(manipulator, image, getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
@@ -111,6 +114,21 @@ describe('LineService', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('#onMouseMove should update preview with shift', () => {
+    service.addPointToLine(100,100);
+    service['isStarted'] = true;
+    service['shiftPressed'] = true;
+    const spy = spyOn(CoordinatesXY, 'effectiveX');
+    const spy2 = spyOn(CoordinatesXY, 'effectiveY');
+    service.onMouseMove(
+      new MouseEvent('keydown', {
+        clientX: 200,
+        clientY:200
+    }));
+    expect(spy).toHaveBeenCalledWith(image, 200);
+    expect(spy2).toHaveBeenCalledWith(image, 200);
+  });
+
   it('#onKeyPressed should change shift status', () => {
     service['shiftPressed'] = false;
     service.onKeyPressed(
@@ -144,14 +162,19 @@ describe('LineService', () => {
   });
 
   it('#addPointToLine should add point to line with shift pressed', () => {
-    let mockedPoints = new Stack<CoordinatesXY>();
-    mockedPoints.push_back(new CoordinatesXY(10,10));
+    service.onClick(new MouseEvent('mouseclick', {
+      clientX: 50,
+      clientY:50
+    }));
     const lastPoint = new CoordinatesXY(100,100);
-    mockedPoints.push_back(lastPoint);
-    service['points'] = mockedPoints;
+    service['points'].push_back(new CoordinatesXY(10,10));
+    service['points'].push_back(lastPoint);
     service['shiftPressed'] = true;
     const spy = spyOn<CoordinatesXY>(lastPoint, "getClosestPoint");
-    service.addPointToLine(2,2);
+    console.log('PRINTING THE STASK');
+    console.log(service['points']);
+    console.log('THIS IS THE POINTTTTTTTT');
+    service.addPointToLine(210,200);
     expect(spy).toHaveBeenCalled();
   });
 
@@ -245,6 +268,26 @@ describe('LineService', () => {
     expect(spy2).toHaveBeenCalledTimes(2);
   });
 
+  it('#onClick should add second point with dot connection and shift', () => {
+    service.onClick(new MouseEvent('mouseclick', {
+      clientX: 10,
+      clientY:10
+    }));
+    service['isStarted'] = true;
+    service['jointIsDot'] = true;
+    service['shiftPressed'] = true;
+    const spy = spyOn(CoordinatesXY, 'effectiveX');
+    const spy2 = spyOn(CoordinatesXY, 'effectiveY');
+    const event2 = new MouseEvent('mouseclick', {
+      clientX: 105,
+      clientY: 110
+    });
+    service.onClick(event2);
+    expect(spy).toHaveBeenCalledWith(image, 105);
+    expect(spy2).toHaveBeenCalledWith(image, 110);
+    expect(service['circles'].getAll().length).not.toEqual(0);
+  });
+
   it('#deleteLine should clear everything', () => {
     service.deleteLine();
     expect(service['isDone']).toBeTruthy();
@@ -253,7 +296,10 @@ describe('LineService', () => {
   });
 
   it('#removeLastPoint should remove last point with junction is dot', () => {
+    service.addPointToLine(100,100);
+    service.addPointToLine(105,105);
     service['jointIsDot'] = true;
+    service['shiftPressed'] = false;
     const spy = spyOn(service['circles'], 'pop_back');
     const spy2 = spyOn(service['points'], 'pop_back');
     service.removeLastPoint();
@@ -262,7 +308,10 @@ describe('LineService', () => {
   });
 
   it('#removeLastPoint should remove last point', () => {
+    service.addPointToLine(100,100);
+    service.addPointToLine(105,105);
     const spy = spyOn(service['points'], 'pop_back');
+    service['shiftPressed'] = false;
     service.removeLastPoint();
     expect(spy).toHaveBeenCalled();
   });

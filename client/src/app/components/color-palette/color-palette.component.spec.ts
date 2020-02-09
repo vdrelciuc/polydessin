@@ -1,8 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ColorPaletteComponent } from './color-palette.component';
 import { Color } from 'src/app/classes/color';
 import { SimpleChange } from '@angular/core';
+import { ColorPaletteComponent } from './color-palette.component';
 
 describe('ColorPaletteComponent', () => {
   let component: ColorPaletteComponent;
@@ -13,12 +12,15 @@ describe('ColorPaletteComponent', () => {
       declarations: [ ColorPaletteComponent ]
     })
     .compileComponents();
+  }));
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(ColorPaletteComponent);
     component = fixture.componentInstance;
     component.initialColor = new Color('#000000');
     component.ngAfterViewInit();
     fixture.detectChanges();
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -59,7 +61,7 @@ describe('ColorPaletteComponent', () => {
     const spy = spyOn(component, 'emitColor');
     component.onMouseMove(new MouseEvent('mousemove', {
       clientX: 100,
-      clientY: 100 
+      clientY: 100
     }));
     expect(component['currentSelectedPosition'].x).toEqual(100);
     expect(component['currentSelectedPosition'].y).toEqual(100);
@@ -72,7 +74,7 @@ describe('ColorPaletteComponent', () => {
     const spy = spyOn(component, 'emitColor');
     component.onMouseMove(new MouseEvent('mousemove', {
       clientX: 100,
-      clientY: 100 
+      clientY: 100
     }));
     expect(component['currentSelectedPosition'].x).toEqual(1);
     expect(component['currentSelectedPosition'].y).toEqual(1);
@@ -82,7 +84,7 @@ describe('ColorPaletteComponent', () => {
   it('#onMouseDown should ', () => {
     component.onMouseDown(new MouseEvent('mousemove', {
       clientX: 100,
-      clientY: 100 
+      clientY: 100
     }));
     expect(component['currentSelectedPosition'].x).toEqual(100);
     expect(component['currentSelectedPosition'].y).toEqual(100);

@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ColorSliderComponent } from './color-slider.component';
 import { Color } from 'src/app/classes/color';
+import { ColorSliderComponent } from './color-slider.component';
 
 describe('ColorSliderComponent', () => {
   let component: ColorSliderComponent;
@@ -12,11 +12,14 @@ describe('ColorSliderComponent', () => {
       declarations: [ ColorSliderComponent ]
     })
     .compileComponents();
+  }));
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(ColorSliderComponent);
     component = fixture.componentInstance;
     component.ngAfterViewInit();
     fixture.detectChanges();
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();

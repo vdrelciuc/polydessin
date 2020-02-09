@@ -1,14 +1,12 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-//import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { DrawableService } from '../drawable.service';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { ShapeStyle } from 'src/app/classes/shape-style';
 import { Color } from 'src/app/classes/color';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { ShapeStyle } from 'src/app/classes/shape-style';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { invertColor } from 'src/app/classes/color-inverter';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { DrawableService } from '../drawable.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,17 +31,18 @@ export abstract class ShapeService extends DrawableService {
 
   protected svgHtmlTag: SVGProperties;
   protected svgTitle: Tools;
-  
+
   constructor() {
     super();
   }
-  
+
   initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService): void {
     this.assignParams(manipulator, image, colorSelectorService);
     this.shiftPressed = false;
   }
 
   initializeProperties(): void {
+
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.shapeStyle.fillColor = color;
     });
@@ -61,19 +60,37 @@ export abstract class ShapeService extends DrawableService {
     });
   }
 
+  updateTracingType(tracingType: "border" | "fill"): void {
+    if (this.isChanging) {
+      // This case happens if a checkbox was changed while a rectangle creation was ongoing and dragged out of canvas
+      this.cancelShape();
+    }
+    if (tracingType === "border") {
+      this.shapeStyle.hasBorder = !this.shapeStyle.hasBorder;
+    } else {
+      this.shapeStyle.hasFill = !this.shapeStyle.hasFill;
+    }
+  }
+
+  cancelShape(): void {
+    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    this.isChanging = false;
+  }
+
   onMousePress(event: MouseEvent): void {
-    if(this.isChanging) {
+    if (this.isChanging) {
       // This case happens if the mouse button was released out of canvas: the shaped is confirmed on next mouse click
       this.onMouseRelease();
     } else if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
       this.shapeOrigin = CoordinatesXY.getEffectiveCoords(this.image, event);
       this.drawOnNextMove = true;
     }
+
   }
 
   onMouseRelease(event?: MouseEvent): void {
     this.isChanging = false;
-    if (this.drawOnNextMove){
+    if (this.drawOnNextMove) {
       // Only a click was registered and no rectangle has been created after the mouse press
       this.drawOnNextMove = false;
     } else {
@@ -93,12 +110,11 @@ export abstract class ShapeService extends DrawableService {
   }
 
   onKeyPressed(event: KeyboardEvent): void {
-    if(event.shiftKey && !this.shiftPressed && this.isChanging) {
+    if (event.shiftKey && !this.shiftPressed && this.isChanging) {
       this.shiftPressed = true;
       this.updateSize();
     }
   }
-  
   onKeyReleased(event: KeyboardEvent): void {
     if (!event.shiftKey && this.shiftPressed) {
       this.shiftPressed = false;
@@ -138,17 +154,18 @@ export abstract class ShapeService extends DrawableService {
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, this.svgTitle);
     this.shape = this.manipulator.createElement(this.svgHtmlTag, 'http://www.w3.org/2000/svg');
-    this.text = this.manipulator.createElement('text','http://www.w3.org/2000/svg');
+    this.text = this.manipulator.createElement('text', 'http://www.w3.org/2000/svg');
 
     // Adding shape properties
+    const thickness = this.shapeStyle.hasBorder ? this.shapeStyle.thickness.toString() : '0';
     this.manipulator.setAttribute(this.shape, SVGProperties.fill, this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getHex() : 'none');
-    this.manipulator.setAttribute(this.shape, SVGProperties.thickness, this.shapeStyle.hasBorder ? this.shapeStyle.thickness.toString() : '0');
+    this.manipulator.setAttribute(this.shape, SVGProperties.thickness, thickness);
     this.manipulator.setAttribute(this.shape, SVGProperties.color, this.shapeStyle.borderColor.getHex());
     this.manipulator.setAttribute(this.shape, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
     this.manipulator.setAttribute(this.shape, SVGProperties.fillOpacity, this.shapeStyle.fillOpacity.toString());
 
     // Adding text properties
-    this.manipulator.setAttribute(this.text, SVGProperties.fill, this.shapeStyle.hasFill ? invertColor(this.shapeStyle.fillColor, true).getHex() : 'black');
+    this.manipulator.setAttribute(this.text, SVGProperties.fill, this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getInvertedColor(true).getHex() : 'black');
     this.manipulator.setAttribute(this.text, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.text, SVGProperties.color, this.shapeStyle.hasFill ? 'none' : 'grey');
     this.manipulator.setAttribute(this.text, 'text-anchor', 'middle');
@@ -160,7 +177,7 @@ export abstract class ShapeService extends DrawableService {
   }
 
   protected alignShapeOrigin(width: number, height: number): void {
-    let quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
+    const quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
 
     if (quadrant === 1 || quadrant === 4) {
       this.setShapeOriginFromRightQuadrants(width);
@@ -170,7 +187,7 @@ export abstract class ShapeService extends DrawableService {
       this.manipulator.setAttribute(this.text, SVGProperties.x, (this.mousePosition.getX() + width / 2).toString());
     }
 
-    if(quadrant === 3 || quadrant === 4) {
+    if (quadrant === 3 || quadrant === 4) {
       this.setShapeOriginFromLowerQuadrants(height);
       this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.getY() + height / 2).toString());
     } else {
@@ -185,7 +202,7 @@ export abstract class ShapeService extends DrawableService {
     const minTextWidth = 40;
     const minTextHeight = 15;
 
-    if(width > minTextWidth && height > minTextHeight) {
+    if (width > minTextWidth && height > minTextHeight) {
       this.text.innerHTML = this.shiftPressed ? this.shapeStyle.nameDisplayOnShift : this.shapeStyle.nameDisplayDefault;
     } else {
       this.text.innerHTML = '';
@@ -195,8 +212,8 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.text, 'font-size', (Math.min(height, width) / fontSizeReductionFactor).toString());
   }
 
-  
   // Methods to implement in concrete shape class
+
   protected abstract setDimensionsAttributes(width: number, height: number): void;
   protected abstract setShapeOriginFromRightQuadrants(width: number): void;
   protected abstract setShapeOriginFromLeftQuadrants(width: number): void;

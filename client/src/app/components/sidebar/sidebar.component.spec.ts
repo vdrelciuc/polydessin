@@ -1,16 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidebarComponent } from './sidebar.component';
-import { RouterModule } from '@angular/router';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { MatDialog, MatTooltipModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
 import { Tools } from 'src/app/enums/tools';
+import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { SidebarComponent } from './sidebar.component';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
-  let selector: ToolSelectorService; 
+  let selector: ToolSelectorService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -30,7 +30,7 @@ describe('SidebarComponent', () => {
         MatTooltipModule,
         RouterModule.forRoot(
           [
-            { path: "", component: SidebarComponent}
+            { path: '', component: SidebarComponent}
           ]
         )
       ]
@@ -57,11 +57,11 @@ describe('SidebarComponent', () => {
     const keys = ['l','c', '1', 'w', 'control.o'];
     for(const element of keys) {
       document.dispatchEvent(new KeyboardEvent('keydown', {
-        key: element, 
+        key: element,
         bubbles: true
       }));
     }
-    expect(spy).toHaveBeenCalledTimes(component['subscriptions'].length - 2);
+    expect(spy).toHaveBeenCalledTimes(8);
     expect(spy2).toHaveBeenCalled();
   });
 
@@ -76,4 +76,10 @@ describe('SidebarComponent', () => {
   //   expect(component['subscriptions'].length).toEqual(0);
   //   expect(component['createNewDialog']).toBeTruthy();
   // });
+
+  it('#openDialog should open dialog', () => {
+    const spy = spyOn(component['dialog'], 'open');
+    component.openDialog();
+    expect(spy).toHaveBeenCalled();
+  });
 });

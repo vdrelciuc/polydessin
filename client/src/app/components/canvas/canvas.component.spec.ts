@@ -15,7 +15,7 @@ describe('CanvasComponent', () => {
     component = fixture.componentInstance;
     component.ngOnInit();
   }));
-  
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });

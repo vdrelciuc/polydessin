@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 import { OptionPannelComponent } from './option-pannel.component';
 import { LineComponent } from '../line/line.component';
 import { PencilComponent } from '../pencil/pencil.component';
-import { MatSliderModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatInputModule, MatDividerModule, MatExpansionModule, MatIconModule, MatRadioModule, MatCheckboxModule, MatDialog } from '@angular/material';
+import { MatSliderModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatInputModule, MatDividerModule, MatExpansionModule, MatIconModule, MatRadioModule, MatCheckboxModule, MatDialog, MatSlideToggleModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
@@ -64,6 +64,7 @@ describe('OptionPannelComponent', () => {
         MatIconModule,
         MatRadioModule,
         MatCheckboxModule,
+        MatSlideToggleModule
       ]
     })
     .compileComponents();

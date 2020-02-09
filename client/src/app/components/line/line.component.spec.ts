@@ -1,9 +1,8 @@
 import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
-import * as CONSTANT from 'src/app/classes/constants';
 import { LineComponent } from './line.component';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
 import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatSliderModule, MatOptionModule, MatSelectModule, MatInputModule } from '@angular/material';
+import { MatFormFieldModule, MatSliderModule, MatOptionModule, MatSelectModule, MatInputModule, MatSlideToggleModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LineService } from 'src/app/services/index/drawable/line/line.service';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
@@ -12,8 +11,7 @@ import { Renderer2, Type } from '@angular/core';
 
 describe('LineComponent', () => {
   let component: LineComponent;
-  let fixture: ComponentFixture<LineComponent>;
-  let properties: DrawablePropertiesService;
+  let fixture: ComponentFixture<LineComponent>
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
@@ -40,12 +38,13 @@ describe('LineComponent', () => {
       ],
       imports: [
         BrowserAnimationsModule,
-        FormsModule, 
-        MatSliderModule, 
-        MatFormFieldModule, 
-        MatOptionModule, 
+        FormsModule,
+        MatSliderModule,
+        MatFormFieldModule,
+        MatOptionModule,
         MatSelectModule,
-        MatInputModule
+        MatInputModule,
+        MatSlideToggleModule,
       ]
     })
     .compileComponents();  
@@ -53,7 +52,6 @@ describe('LineComponent', () => {
     component = fixture.componentInstance;
     component.ngOnInit();
     component['service']['manipulator'] = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    properties = TestBed.get<DrawablePropertiesService>(DrawablePropertiesService);
   }));
 
   it('should create', () => {
@@ -83,58 +81,5 @@ describe('LineComponent', () => {
       bubbles: true
     }));
     expect(spy).toHaveBeenCalled();
-  });
-  
-  it('#onThicknessChange should change thickness value to max', () => {
-    component.service.thickness = CONSTANT.THICKNESS_MAXIMUM + 1;
-    component.onThicknessChange();
-    expect(properties.thickness.value).toBe(CONSTANT.THICKNESS_MAXIMUM);
-  });
-
-  it('#onThicknessChange should change thickness value to min', () => {
-    component.service.thickness = CONSTANT.THICKNESS_MINIMUM - 1;
-    component.onThicknessChange();
-    expect(properties.thickness.value).toBe(CONSTANT.THICKNESS_MINIMUM);
-  });
-
-  it('#onThicknessChange should change thickness value to provided value', () => {
-    component.service.thickness = CONSTANT.THICKNESS_MINIMUM + 1;
-    component.onThicknessChange();
-    expect(properties.thickness.value).toBe(CONSTANT.THICKNESS_MINIMUM + 1);
-  });
-
-  it('#onDotSelected should default junction be none', () => {
-    component.onDotSelected();
-    expect(properties.junction.value).toBe(false);
-  });
-
-  it('#onDotSelected should change junction type to dot', () => {
-    component.jointType = 'Points';
-    component.onDotSelected();
-    expect(properties.junction.value).toBe(true);
-  });
-
-  it('#onDotSelected should not change junction if different than expected', () => {
-    component.jointType = 'BLA';
-    component.onDotSelected();
-    expect(properties.junction.value).toBe(false);
-  });
-
-  it('should change diameter value to max', () => {
-    component.service.dotDiameter = CONSTANT.DIAMETER_MAXIMUM + 1;
-    component.onDiameterChange();
-    expect(properties.dotDiameter.value).toBe(CONSTANT.DIAMETER_MAXIMUM);
-  });
-
-  it('#onDiameterChange should change diameter value to min', () => {
-    component.service.dotDiameter = CONSTANT.DIAMETER_MINIMUM - 1;
-    component.onDiameterChange();
-    expect(properties.dotDiameter.value).toBe(CONSTANT.DIAMETER_MINIMUM);
-  });
-
-  it('#onDiameterChange should change diameter value to provided value', () => {
-    component.service.dotDiameter = CONSTANT.DIAMETER_MINIMUM + 1;
-    component.onDiameterChange();
-    expect(properties.dotDiameter.value).toBe(CONSTANT.DIAMETER_MINIMUM + 1);
   });
 });

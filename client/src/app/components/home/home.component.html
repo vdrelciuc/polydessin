@@ -1,31 +1,36 @@
-<div class="background">
+<div class="wrapper">
   <div class="container">
-    <div  id="themeColor" class="jumbotron">
-      <h1 class="display-4">
-        <img  src="../../../assets/appLogo.jpg" alt="Logo de l'application" width="85" height=auto>
-        {{messageAccueil}}
-      </h1>
-      <p id="messageDescriptif" class="lead">{{messageDescriptif}}</p>
-      <hr class="hrSeparation">
 
-      <div class="choiceContent">
-        <p >Veuillez choisir une option :</p>
-        <div *ngFor="let option of options ">
+    <div class="header-area">
+      <div id="title">
+        <h2>Bienvenue sur PolyDessin !</h2>
+      </div>
+      <p id="subtitle">À tout dessin un artiste, et cet artiste, c'est vous !</p>
+    </div>
+    <hr >
+    <div class="options-area">
+      <h6 id="prompt">Veuillez choisir une option :</h6>
 
-
-          <a *ngIf="option.show " class="btn btn-warning btn-center "
-             [routerLink] = [option.optionPath] role="button" [state]="{path : '', comingFromEntryPoint : true}">
-            {{option.description}}
-          </a>
-          <!--<a *ngIf="option.show ===false" class="btn btn-warning btn-center disabled "  role="button">
-                      {{option.description}}
-                    </a>-->
+        <div>
+          <div>
+            <a class="btn btn-warning btn-center " routerLink = '/dessin'
+               role="button" [state]="{path : '', comingFromEntryPoint : true}">
+              Creer un nouveau dessin
+            </a>
+          </div>
+          <div>
+            <a class="btn btn-warning btn-center " routerLink = '/'
+               role="button" [state]="{path : '', comingFromEntryPoint : true}">
+              Ouvrir la Galerie de dessins
+            </a>
+          </div>
+          <div>
+            <a class="btn btn-warning btn-center " [routerLink]="[{outlets : { guideSubCategory : ['bienvenue']}}]"
+               role="button" (click)="openDialog()">
+              Afficher le guide d'Utilisation
+            </a>
+          </div>
         </div>
-
       </div>
     </div>
   </div>
-</div>
-
-
-

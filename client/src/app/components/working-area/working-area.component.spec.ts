@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WorkingAreaComponent } from './working-area.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { MatSidenavModule, MatSliderModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatDialogModule, MatDividerModule, MatRadioModule, MatExpansionModule, MatIconModule, MatTooltipModule, MatCheckboxModule } from '@angular/material';
+import { MatSidenavModule, MatSliderModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatDialogModule, MatDividerModule, MatRadioModule, MatExpansionModule, MatIconModule, MatTooltipModule, MatCheckboxModule, MatSlideToggleModule } from '@angular/material';
 import { OptionPannelComponent } from '../option-pannel/option-pannel.component';
 import { LineComponent } from '../line/line.component';
 import { PencilComponent } from '../pencil/pencil.component';
@@ -18,6 +18,7 @@ import { ColorPanelComponent } from '../color-panel/color-panel.component';
 import { ColorPaletteComponent } from '../color-palette/color-palette.component';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { ColorSliderComponent } from '../color-slider/color-slider.component';
+import { CreateNewComponent } from '../create-new/create-new.component';
 
 describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
@@ -27,6 +28,7 @@ describe('WorkingAreaComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ 
         CanvasComponent,
+        CreateNewComponent,
         ColorPanelComponent,
         ColorPaletteComponent,
         ColorPickerComponent,
@@ -59,6 +61,7 @@ describe('WorkingAreaComponent', () => {
         MatIconModule,
         MatTooltipModule,
         MatCheckboxModule,
+        MatSlideToggleModule,
       ]
     })
     .compileComponents();
@@ -71,11 +74,27 @@ describe('WorkingAreaComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should drawer be open', () => {
+  it('#ngOnInit shouldn\'t open', () => {
+    const spy = spyOn(component['dialog'], 'open');
+    history.pushState({
+      comingFromEntryPoint: false
+    }, 'mockState');
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('#ngOnInit shouldn open', () => {
+    const spy = spyOn(component['dialog'], 'open');
+    history.pushState({
+      comingFromEntryPoint: true
+    }, 'mockState');
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#getDrawerStatus should drawer be open', () => {
     expect(component.getDrawerStatus()).toBeTruthy();
   });
 
-  it('should drawer be closed', () => {
+  it('#getDrawerStatus should drawer be closed', () => {
     let drawer = TestBed.get<DrawerService>(DrawerService);
     drawer.navIsOpened = false;
     expect(component.getDrawerStatus()).toBe(false);

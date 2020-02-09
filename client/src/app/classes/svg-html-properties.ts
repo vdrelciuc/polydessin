@@ -17,7 +17,7 @@ export enum SVGProperties {
   // Circle and Ellipse
   centerX = 'cx',
   centerY = 'cy',
-  
+
   circle = 'circle',
   radius = 'r',
 
@@ -35,7 +35,7 @@ export enum SVGProperties {
 
   // Rectangle
   rectangle = 'rect',
-  
+
   // Path
   path = 'path',
   d = 'd',

@@ -13,22 +13,24 @@ import { WorkingAreaComponent } from '../working-area/working-area.component';
 
 const routes: Routes = [
   {path : 'dessin' , component : WorkingAreaComponent},
-  {path : 'guide', component : UserGuideComponent,
-    children : [
-      {path : 'bienvenue', component : BienvenueGuideComponent},
-      {path : 'ligne' , component : LigneGuideComponent},
-      {path : 'pinceau' , component : PinceauGuideComponent },
-      {path : 'crayon',  component : CrayonGuideComponent},
-      {path : 'rectangle',  component : RectangleGuideComponent},
-      {path : 'couleur',  component : CouleurGuideComponent},
-      {path : 'nouveauDessin', component : NouveauDessinComponent}
-    ]
-  },
   {path : '', component : HomeComponent}
 ];
 
+const secondaryRoutes : Routes = [
+  {path : 'bienvenue', component : BienvenueGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'ligne' , component : LigneGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'pinceau' , component : PinceauGuideComponent  , outlet: 'guideSubCategory'},
+  {path : 'crayon',  component : CrayonGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'rectangle',  component : RectangleGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'couleur',  component : CouleurGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'nouveauDessin', component : NouveauDessinComponent , outlet: 'guideSubCategory'},
+]
+
 @NgModule({
-  imports : [RouterModule.forRoot(routes)],
+  imports : [
+    RouterModule.forRoot(routes),
+    RouterModule.forChild(secondaryRoutes)
+  ],
   exports: [RouterModule]
 })
 

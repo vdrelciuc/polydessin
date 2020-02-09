@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { UserGuideComponent } from '../user-guide/user-guide.component';
 
 @Component({
   selector: 'app-home',
@@ -15,5 +17,16 @@ export class HomeComponent {
     ];
   messageAccueil = 'Bienvenue a PolyDessin';
   messageDescriptif = "A tout dessin un artiste, et cet artiste, c'est vous!";
+
+constructor(public dialog : MatDialog){}
+
+  openDialog(): void {
+    this.dialog.open(UserGuideComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%'
+    });
+  }
 
 }

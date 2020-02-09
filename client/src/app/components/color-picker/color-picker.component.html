@@ -1,12 +1,11 @@
 <div class="color-wrapper">
-
-  <div class="section">
+  <div class="color-subsection">
     <app-color-palette [initialColor]="selectedHue" (newColor)="selectedColor = $event"></app-color-palette>
   </div>
-  <div class="section">
+  <div class="color-subsection">
     <app-color-slider (newHue)="selectedHue = $event"></app-color-slider>
   </div>
-  <div class="input-area section">
+  <div class="color-subsection input-area">
     <h6>Couleur</h6>
     <div id="preview" [style.background-color]="selectedColor.getHex()"></div>
     <div id="input-fields">

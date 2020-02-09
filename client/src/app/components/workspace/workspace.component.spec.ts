@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WorkspaceComponent } from './workspace.component';
 import { CanvasComponent } from '../canvas/canvas.component';
+import { WorkspaceComponent } from './workspace.component';
 
 describe('WorkspaceComponent', () => {
   let component: WorkspaceComponent;
