@@ -19,6 +19,7 @@ import { ColorPaletteComponent } from '../color-palette/color-palette.component'
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { ColorSliderComponent } from '../color-slider/color-slider.component';
 import { CreateNewComponent } from '../create-new/create-new.component';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 
 describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
@@ -64,9 +65,14 @@ describe('WorkingAreaComponent', () => {
         MatSlideToggleModule,
       ]
     })
+    .overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [CreateNewComponent] } })
     .compileComponents();
+    
     fixture = TestBed.createComponent(WorkingAreaComponent);
     component = fixture.componentInstance;
+    history.pushState({
+      comingFromEntryPoint: true
+    }, 'mockState');
     fixture.detectChanges();
   }));
 
@@ -79,6 +85,7 @@ describe('WorkingAreaComponent', () => {
     history.pushState({
       comingFromEntryPoint: false
     }, 'mockState');
+    component.ngOnInit();
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -87,7 +94,8 @@ describe('WorkingAreaComponent', () => {
     history.pushState({
       comingFromEntryPoint: true
     }, 'mockState');
-    expect(spy).toHaveBeenCalled();
+    component.ngOnInit();
+    expect(spy).toHaveBeenCalledWith(CreateNewComponent, { disableClose: true });
   });
 
   it('#getDrawerStatus should drawer be open', () => {

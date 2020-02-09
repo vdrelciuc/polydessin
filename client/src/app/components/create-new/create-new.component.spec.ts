@@ -124,11 +124,9 @@ describe('CreateNewComponent', () => {
     expect(history.state['comingFromEntryPoint']).toBeTruthy();
    });
 
-  it('#openDialogWarning should ', () => {
+  it('#openDialogWarning should open warning dialog', () => {
     const spy = spyOn(component['dialog'], 'open');
-    const spy2 = spyOn(component, 'onCloseDialog');
-    component['dialog'].closeAll();
+    component.openDialogWarning();
     expect(spy).toHaveBeenCalled();
-    expect(spy2).toHaveBeenCalled();
   });
 });

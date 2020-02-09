@@ -152,7 +152,11 @@ describe('Color', () => {
     it('#getInvertedColor should return opposite color when bw is false', () => {
         let white = new Color('#FFFFFF');
         let black = new Color('#000000')
-        expect(white.getInvertedColor(false).getHex()).toEqual(black.getHex());
-        expect(black.getInvertedColor(false).getHex()).toEqual(white.getHex());
+        const ok = white.getInvertedColor(false).getHex();
+        console.log(ok);
+        const non = black.getInvertedColor(false).getHex();
+        console.log(non);
+        expect(ok).toEqual(black.getHex());
+        expect(non).toEqual(white.getHex());
     });
 });

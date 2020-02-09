@@ -26,6 +26,7 @@ export class Color {
       if (hex.length < 2) {
           hex = '0' + hex;
       }
+      hex = hex.toUpperCase();
       return hex;
     }
   private static clamp(value: number): number {

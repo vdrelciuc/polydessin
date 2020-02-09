@@ -63,6 +63,8 @@ describe('LineService', () => {
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
     service['pointerPosition'] = new CoordinatesXY(10,10);
     service['opacity'] = 0.5;
+    service['dotDiameter'] = 5;
+    service['thickness'] = 10;
     service.attributes = new DrawablePropertiesService();
     service.initialize(manipulator, image, getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
@@ -92,15 +94,6 @@ describe('LineService', () => {
     service.initializeProperties();
     service.attributes.thickness.next(randomTestValue);
     expect(service.thickness).toEqual(randomTestValue);
-  });
-
-  it('#onMouseMove should add preview point', () => {
-    service['isStarted'] = true;
-    const spy = spyOn(CoordinatesXY, 'effectiveX');
-    const spy2 = spyOn(CoordinatesXY, 'effectiveY');
-    service.onMouseMove(new MouseEvent('mousemove', {clientX: 100, clientY: 100}));
-    expect(spy).toHaveBeenCalled();
-    expect(spy2).toHaveBeenCalled();
   });
 
   it('#onMouseMove should add preview point with shift', () => {
@@ -159,23 +152,6 @@ describe('LineService', () => {
       new KeyboardEvent('keyup', {shiftKey: false})
     );
     expect(service['shiftPressed']).not.toBeTruthy();
-  });
-
-  it('#addPointToLine should add point to line with shift pressed', () => {
-    service.onClick(new MouseEvent('mouseclick', {
-      clientX: 50,
-      clientY:50
-    }));
-    const lastPoint = new CoordinatesXY(100,100);
-    service['points'].push_back(new CoordinatesXY(10,10));
-    service['points'].push_back(lastPoint);
-    service['shiftPressed'] = true;
-    const spy = spyOn<CoordinatesXY>(lastPoint, "getClosestPoint");
-    console.log('PRINTING THE STASK');
-    console.log(service['points']);
-    console.log('THIS IS THE POINTTTTTTTT');
-    service.addPointToLine(210,200);
-    expect(spy).toHaveBeenCalled();
   });
 
   it('#addPointToLine should add point to line without shift pressed', () => {
@@ -266,26 +242,6 @@ describe('LineService', () => {
     const effectivePoint = CoordinatesXY.getEffectiveCoords(image, event);
     expect(spy).toHaveBeenCalledWith(effectivePoint.getX(), effectivePoint.getY());
     expect(spy2).toHaveBeenCalledTimes(2);
-  });
-
-  it('#onClick should add second point with dot connection and shift', () => {
-    service.onClick(new MouseEvent('mouseclick', {
-      clientX: 10,
-      clientY:10
-    }));
-    service['isStarted'] = true;
-    service['jointIsDot'] = true;
-    service['shiftPressed'] = true;
-    const spy = spyOn(CoordinatesXY, 'effectiveX');
-    const spy2 = spyOn(CoordinatesXY, 'effectiveY');
-    const event2 = new MouseEvent('mouseclick', {
-      clientX: 105,
-      clientY: 110
-    });
-    service.onClick(event2);
-    expect(spy).toHaveBeenCalledWith(image, 105);
-    expect(spy2).toHaveBeenCalledWith(image, 110);
-    expect(service['circles'].getAll().length).not.toEqual(0);
   });
 
   it('#deleteLine should clear everything', () => {

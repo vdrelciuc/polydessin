@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserGuideComponent } from './user-guide.component';
 import { MatAccordion, MatDialogRef, MatListModule, MatExpansionModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('UserGuideComponent', () => {
@@ -33,8 +32,7 @@ describe('UserGuideComponent', () => {
           }]
 
         )
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+      ]
     })
     .compileComponents();
     fixture = TestBed.createComponent(UserGuideComponent);
