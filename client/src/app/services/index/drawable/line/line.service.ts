@@ -164,6 +164,8 @@ export class LineService extends DrawableService {
 
   onClick(event: MouseEvent): void {
     if (!this.isStarted) {
+      this.points = new Stack<CoordinatesXY>();
+      this.circles = new Stack<SVGCircleElement>();
       this.updateProperties();
       this.isStarted = true;
       this.isDone = false;
@@ -200,13 +202,16 @@ export class LineService extends DrawableService {
   }
 
   removeLastPoint(): void {
-    this.points.pop_back();
-    this.updateLine();
-    if (this.jointIsDot) {
-      const lastCircle = this.circles.pop_back();
-      this.manipulator.removeChild(this.subElement, lastCircle);
+    const point = this.points.pop_back();
+    if (point !== undefined) {
+      this.updateLine();
+      if (this.jointIsDot) {
+        const lastCircle = this.circles.pop_back();
+        this.manipulator.removeChild(this.subElement, lastCircle);
+      }
+      this.followPointer();
     }
-    this.followPointer();
+    
   }
 
   getLineIsDone(): boolean { return this.isDone; }
