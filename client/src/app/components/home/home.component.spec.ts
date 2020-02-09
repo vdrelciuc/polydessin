@@ -23,7 +23,6 @@ describe('HomeComponent', () => {
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component = new HomeComponent();
   }));
 
   it('should create', () => {
