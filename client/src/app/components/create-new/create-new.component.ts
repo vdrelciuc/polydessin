@@ -48,9 +48,6 @@ export class CreateNewComponent implements OnInit {
       this.previewColor = color;
     });
     this.colorSelectorService.temporaryColor.next(new Color(DEFAULT_SECONDARY_COLOR))
-    if (this.canvasService.layerCount > 0) {
-      this.openDialogWarning();
-    }
     this.workspaceService.Size.subscribe((size: CoordinatesXY) => {
       this.workspaceSize = size;
     })
@@ -82,11 +79,11 @@ export class CreateNewComponent implements OnInit {
   }
 
   onConfirm(): void {
-    this.colorSelectorService.colorToChange = ColorType.Background;
-    this.colorSelectorService.updateColor(this.previewColor);
-    this.createNewService.canvasSize.next(new CoordinatesXY(this.getcanvasSizeX(), this.getcanvasSizeY()));
-    this.dialogRef.close();
-    history.state.comingFromEntryPoint = false;
+    if (this.canvasService.layerCount > 0) {
+      this.openDialogWarning();
+    } else {
+      this.setUpNewWorkingSpace();
+    }
   }
 
   onCloseDialog(): void {
@@ -101,10 +98,18 @@ export class CreateNewComponent implements OnInit {
 
     if (warning !== undefined) {
       warning.afterClosed().subscribe((result) => {
-        if (result) {
-          this.onCloseDialog();
+        if(!result) {
+          this.setUpNewWorkingSpace(); 
         }
       });
    }
+  }
+
+  private setUpNewWorkingSpace(): void {
+    this.colorSelectorService.colorToChange = ColorType.Background;
+    this.colorSelectorService.updateColor(this.previewColor);
+    this.createNewService.canvasSize.next(new CoordinatesXY(this.getcanvasSizeX(), this.getcanvasSizeY()));
+    this.dialogRef.close();
+    history.state.comingFromEntryPoint = false;
   }
 }
