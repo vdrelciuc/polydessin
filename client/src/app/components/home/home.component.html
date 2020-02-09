@@ -26,6 +26,7 @@
           </div>
           <div>
             <a class="btn btn-warning btn-center " [routerLink]="[{outlets : { guideSubCategory : ['bienvenue']}}]"
+               skipLocationChange
                role="button" (click)="openDialog()">
               Afficher le guide d'Utilisation
             </a>
