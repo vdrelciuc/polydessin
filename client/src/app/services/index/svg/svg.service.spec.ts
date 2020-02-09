@@ -53,7 +53,9 @@ describe('SVGService', () => {
   });
 
   it('#removeLastElement should remove all elements', () => {
-    while (stack.removeLastElement() !== undefined) {}
+    while (stack.removeLastElement() !== undefined) {
+      // While not empty
+    }
     expect(stack.getStack().getAll().length).toEqual(0);
   });
 

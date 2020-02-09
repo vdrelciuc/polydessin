@@ -101,7 +101,9 @@ export class LineService extends DrawableService {
       console.log(lastPoint);
       if (lastPoint !== undefined) {
         const canvasHeight = this.image.nativeElement.clientHeight;
-        const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()), CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()), canvasHeight);
+        const effectiveX = CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX());
+        const effectiveY = CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY());
+        const shiftPoint = lastPoint.getClosestPoint(effectiveX, effectiveY, canvasHeight);
         console.log('shift point ' + shiftPoint.getX() + ' ' + shiftPoint.getY());
         previewPoints += shiftPoint.getX() + ',' + shiftPoint.getY();
         console.log('preview: ' + previewPoints);
@@ -164,12 +166,14 @@ export class LineService extends DrawableService {
       this.isDone = false;
     }
     if (this.jointIsDot) {
-      let pointToDisplay = new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
+      const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
+      const effectiveY = CoordinatesXY.effectiveY(this.image, event.clientY);
+      let pointToDisplay = new CoordinatesXY(effectiveX, effectiveY);
       if (this.shiftPressed) {
         const lastPoint = this.points.getLast();
         if (lastPoint !== undefined) {
           const canvasHeight = this.image.nativeElement.clientHeight;
-          pointToDisplay = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY), canvasHeight);
+          pointToDisplay = lastPoint.getClosestPoint(effectiveX, effectiveY, canvasHeight);
         }
       }
       const circle: SVGCircleElement = this.manipulator.createElement('circle', 'http://www.w3.org/2000/svg');

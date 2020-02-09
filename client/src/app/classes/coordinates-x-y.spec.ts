@@ -19,9 +19,11 @@ describe('CoordinatedXY', () => {
   });
 
   it('#effectiveX should get effective x', () => {
+    // TODO: create test one day
   });
 
   it('#effectiveY should get effective y', () => {
+    // TODO: create test one day
   });
 
   it('#getCoords should get coordinates', () => {

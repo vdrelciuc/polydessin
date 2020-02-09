@@ -1,7 +1,9 @@
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
 import { FormsModule } from '@angular/forms';
-import { MatCheckboxModule, MatDialog, MatDialogModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatOptionModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule } from '@angular/material';
+import { MatCheckboxModule, MatDialog, MatDialogModule, MatDividerModule,
+  MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule,
+  MatOptionModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSlideToggleModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';

@@ -12,7 +12,7 @@ describe('EventListenerService', () => {
 
   let service: EventListenerService;
   let manipulator: Renderer2;
-  const line: LineService = new LineService;
+  const line: LineService = new LineService();
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
