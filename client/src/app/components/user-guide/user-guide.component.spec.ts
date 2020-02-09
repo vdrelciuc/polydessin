@@ -4,6 +4,7 @@ import { UserGuideComponent } from './user-guide.component';
 import { MatAccordion, MatDialogRef, MatListModule, MatExpansionModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { APP_BASE_HREF } from '@angular/common';
 
 describe('UserGuideComponent', () => {
   let component: UserGuideComponent;
@@ -21,6 +22,7 @@ describe('UserGuideComponent', () => {
             close: () => null,
           }
         },
+        {provide: APP_BASE_HREF, useValue : '/' }
       ],
       imports: [
         BrowserAnimationsModule,
