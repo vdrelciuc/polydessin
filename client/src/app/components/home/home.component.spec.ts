@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { APP_BASE_HREF } from '@angular/common';
+import { MatDialog } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
-import { MatDialog } from '@angular/material';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -11,15 +12,16 @@ describe('HomeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ HomeComponent ],
-      providers: [ 
+      providers: [
         {
           provide: MatDialog,
           useValue: {
             open: () => null,
             closeAll: () => null,
           }
-        }
-       ], 
+        },
+        {provide: APP_BASE_HREF, useValue : '/' }
+       ],
       imports: [
         RouterModule.forRoot(
           [{

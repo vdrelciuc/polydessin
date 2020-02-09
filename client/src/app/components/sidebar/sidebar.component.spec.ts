@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { APP_BASE_HREF } from '@angular/common';
 import { MatDialog, MatTooltipModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { Tools } from 'src/app/enums/tools';
@@ -25,6 +26,7 @@ describe('SidebarComponent', () => {
             afterColsed: ()  => null
           }
         },
+        {provide: APP_BASE_HREF, useValue : '/' }
       ],
       imports: [
         MatTooltipModule,
@@ -54,7 +56,7 @@ describe('SidebarComponent', () => {
     component.setupShortcuts();
     const spy = spyOn(selector, 'setCurrentTool');
     const spy2 = spyOn(component, 'createNewProject');
-    const keys = ['l','c', '1', 'w', 'control.o'];
+    const keys = ['l', 'c', '1', 'w', 'control.o'];
     for(const element of keys) {
       document.dispatchEvent(new KeyboardEvent('keydown', {
         key: element,
