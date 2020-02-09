@@ -3,6 +3,7 @@
 /.vs/
 /.vscode/*
 /.vscode/**
+/.idea/*
 
 package-lock.json
 .DS_Store
