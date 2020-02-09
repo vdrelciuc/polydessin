@@ -34,7 +34,7 @@ export class CoordinatesXY {
     if (distanceX < 0 && distanceY > 0) {
       return 2;
     }
-    if (distanceX <= 0 && distanceY <= 0) {
+    if (distanceX < 0 && distanceY <= 0) {
       return 3;
     }
     return 4;
@@ -56,38 +56,31 @@ export class CoordinatesXY {
   }
 
   getClosestPoint(pointerX: number, pointerY: number, verticalLimit: number): CoordinatesXY {
-    console.log(pointerX + ' ' + pointerY + ' mouse');
-    console.log(this.x + ' ' + this.y + ' this');
     const distanceX = pointerX - this.x;
     const distanceY = pointerY - this.y;
-    console.log(distanceX + ' ' + distanceY + ' distance');
     const foundQuadrant = CoordinatesXY.findQuadrantFromDelta(distanceX, distanceY);
-    console.log('quadrant: ' + foundQuadrant);
+    const angle = (Math.atan(distanceY / distanceX) * 180) / Math.PI;
+
     if (foundQuadrant === 1  || foundQuadrant === 3) {
-      const angle = (Math.atan(distanceY / distanceX) * 180) / Math.PI;
-      console.log('angle ' + angle);
-      console.log(this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX), verticalLimit));
       return this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX), verticalLimit);
     } else {
-      const angle = -(Math.atan(distanceY / distanceX) * 180) / Math.PI;
-      return this.getShiftedPoint(angle, pointerX, pointerY, this.y - this.findYDifferenceForBisectrix(pointerX), verticalLimit);
+      return this.getShiftedPoint(-angle, pointerX, pointerY, this.y - this.findYDifferenceForBisectrix(pointerX), verticalLimit);
     }
   }
 
   private getShiftedPoint(angle: number, pointerX: number, pointerY: number, bisectrixY: number, verticalLimit: number): CoordinatesXY {
-    if (angle < 45 / 2) {
+    if (angle < 45 / 2 || this.isOutOfBounds(bisectrixY, verticalLimit)) {
       return new CoordinatesXY(pointerX, this.y);
     } else {
       if (angle <  3 * (90 / 4)) {
-        console.log(pointerX + ' ' +  this.clamp(bisectrixY, verticalLimit))
-        return new CoordinatesXY(pointerX, this.clamp(bisectrixY, verticalLimit));
+        return new CoordinatesXY(pointerX, bisectrixY);
       }
       return new CoordinatesXY(this.x, pointerY);
     }
   }
 
-  private clamp(value: number, verticalLimit: number): number {
-    return Math.min(Math.max(value, 0), verticalLimit);
+  private isOutOfBounds(value: number, verticalLimit: number): boolean {
+    return (value <= 0 || value >= verticalLimit);
   }
 
   private findYDifferenceForBisectrix(pointerX: number): number {

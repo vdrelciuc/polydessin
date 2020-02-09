@@ -9,6 +9,7 @@
   .sidebar {
     background-color: $sidebar-color;
     width: fit-content;
+    overflow-y: auto;
   }
 
   .pannel {
