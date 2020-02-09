@@ -1,25 +1,40 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WorkingAreaComponent } from './working-area.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
-import { MatSidenavModule, MatSliderModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatDialogModule, MatDividerModule, MatRadioModule, MatExpansionModule, MatIconModule, MatTooltipModule, MatCheckboxModule, MatSlideToggleModule } from '@angular/material';
-import { OptionPannelComponent } from '../option-pannel/option-pannel.component';
-import { LineComponent } from '../line/line.component';
-import { PencilComponent } from '../pencil/pencil.component';
-import { WorkspaceComponent } from '../workspace/workspace.component';
-import { RouterModule } from '@angular/router';
+import { APP_BASE_HREF } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CanvasComponent } from '../canvas/canvas.component';
+import {
+  MatCheckboxModule,
+  MatDialogModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatOptionModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatTooltipModule
+} from '@angular/material';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
-import { RectangleComponent } from '../rectangle/rectangle.component';
 import { BrushComponent } from '../brush/brush.component';
-import { ColorPanelComponent } from '../color-panel/color-panel.component';
+import { CanvasComponent } from '../canvas/canvas.component';
 import { ColorPaletteComponent } from '../color-palette/color-palette.component';
+import { ColorPanelComponent } from '../color-panel/color-panel.component';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { ColorSliderComponent } from '../color-slider/color-slider.component';
 import { CreateNewComponent } from '../create-new/create-new.component';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { LineComponent } from '../line/line.component';
+import { OptionPannelComponent } from '../option-pannel/option-pannel.component';
+import { PencilComponent } from '../pencil/pencil.component';
+import { RectangleComponent } from '../rectangle/rectangle.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { WorkspaceComponent } from '../workspace/workspace.component';
+import { WorkingAreaComponent } from './working-area.component';
 
 describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
@@ -27,7 +42,7 @@ describe('WorkingAreaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ 
+      declarations: [
         CanvasComponent,
         CreateNewComponent,
         ColorPanelComponent,
@@ -36,7 +51,7 @@ describe('WorkingAreaComponent', () => {
         ColorSliderComponent,
         BrushComponent,
         OptionPannelComponent,
-        WorkingAreaComponent, 
+        WorkingAreaComponent,
         SidebarComponent,
         LineComponent,
         PencilComponent,
@@ -63,11 +78,13 @@ describe('WorkingAreaComponent', () => {
         MatTooltipModule,
         MatCheckboxModule,
         MatSlideToggleModule,
+      ],
+      providers: [
+        {provide: APP_BASE_HREF, useValue : '/' }
       ]
     })
     .overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [CreateNewComponent] } })
     .compileComponents();
-    
     fixture = TestBed.createComponent(WorkingAreaComponent);
     component = fixture.componentInstance;
     history.pushState({
