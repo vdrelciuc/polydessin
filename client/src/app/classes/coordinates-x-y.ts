@@ -49,7 +49,7 @@ export class CoordinatesXY {
   }
 
   private isOutOfBounds(value: number, verticalLimit: number): boolean {
-    return (value < 0 || value > verticalLimit);
+    return (value <= 0 || value >= verticalLimit);
   }
 
   private findYDifferenceForBisectrix(pointerX: number): number {
