@@ -118,7 +118,7 @@ export class Color {
   // If bw is true, the function will return the closest to black or white (pale colors will return black and dark colors will return white)
 
   getInvertedColor(bw: boolean): Color {
-    let hex = this.getHex().slice(1);
+    const hex = this.getHex().slice(1);
 
     let red = parseInt(hex.slice(0, 2), 16);
     let green = parseInt(hex.slice(2, 4), 16);
@@ -139,7 +139,7 @@ export class Color {
     red = 255 - red;
     green = 255 - green;
     blue = 255 - blue;
-    
+
     return new Color([red, green, blue]);
   }
 }

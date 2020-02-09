@@ -15,7 +15,7 @@ describe('CoordinatedXY', () => {
     expect(CoordinatesXY.getCoords(new MouseEvent('push', {
       clientX: 100,
       clientY: 100
-    }))).toEqual(new CoordinatesXY(100,100));
+    }))).toEqual(new CoordinatesXY(100, 100));
   });
 
   it('#effectiveX should get effective x', () => {
@@ -24,12 +24,11 @@ describe('CoordinatedXY', () => {
   it('#effectiveY should get effective y', () => {
   });
 
-
   it('#getCoords should get coordinates', () => {
     expect(CoordinatesXY.getCoords(new MouseEvent('push', {
       clientX: 100,
       clientY: 100
-    }))).toEqual(new CoordinatesXY(100,100));
+    }))).toEqual(new CoordinatesXY(100, 100));
   });
 
   it('#getX should get coordinates', () => {

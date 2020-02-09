@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatAccordion} from '@angular/material/expansion';
 import { Router } from '@angular/router';
-import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-guide',
@@ -12,7 +12,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class UserGuideComponent implements OnInit {
 
   constructor(public router: Router,
-              public dialogRef : MatDialogRef<UserGuideComponent>
+              public dialogRef: MatDialogRef<UserGuideComponent>
               ) {
 
   }
@@ -84,7 +84,7 @@ export class UserGuideComponent implements OnInit {
 
   setCurrentSubCategorie(value: string) {
     this.currentSubCategorie = value;
-    this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}],{ skipLocationChange: true });
+    this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}], { skipLocationChange: true });
   }
 
   /**
@@ -108,7 +108,7 @@ export class UserGuideComponent implements OnInit {
 
   getNextElement(): string {
     const currentElement: string = this.getCurrentSubCategorie();
-    if(currentElement === 'Nouveau Dessin') {
+    if (currentElement === 'Nouveau Dessin') {
       return 'Nouveau Dessin';
     }
     const indexes: any[] = this.findIndex(currentElement);
@@ -122,14 +122,14 @@ export class UserGuideComponent implements OnInit {
     const newElement: string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
     this.openAll();
-    this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}],{ skipLocationChange: true });
+    this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}], { skipLocationChange: true });
 
     return this.currentSubCategorie;
   }
 
   getPreviousElement(): string {
     const currentElement: string = this.getCurrentSubCategorie();
-    if(currentElement === 'Bienvenue') {
+    if (currentElement === 'Bienvenue') {
       return 'Bienvenue';
     }
     const indexes: any[] = this.findIndex(currentElement);
@@ -142,7 +142,7 @@ export class UserGuideComponent implements OnInit {
     const newElement: string = this.categories[indexes[0]].type.elements[indexes[1]].nom;
     this.setCurrentSubCategorie(newElement);
     this.openAll();
-    this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}],{ skipLocationChange: true });
+    this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}], { skipLocationChange: true });
 
     return this.currentSubCategorie;
 
@@ -153,7 +153,7 @@ export class UserGuideComponent implements OnInit {
     return this.categories[indexes[0]].type.elements[indexes[1]].path;
   }
 
-  closeGuide(){
+  closeGuide() {
     this.dialogRef.close();
     this.router.navigate([{outlets: {guideSubCategory: null}}]);
   }

@@ -1,14 +1,14 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { LineService } from './line.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { Tools } from 'src/app/enums/tools';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { Color } from 'src/app/classes/color';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Color } from 'src/app/classes/color';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
+import { Tools } from 'src/app/enums/tools';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { LineService } from './line.service';
 
 describe('LineService', () => {
   let service: LineService;
@@ -61,7 +61,7 @@ describe('LineService', () => {
     service = getTestBed().get(LineService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
-    service['pointerPosition'] = new CoordinatesXY(10,10);
+    service['pointerPosition'] = new CoordinatesXY(10, 10);
     service['opacity'] = 0.5;
     service['dotDiameter'] = 5;
     service['thickness'] = 10;
@@ -99,8 +99,8 @@ describe('LineService', () => {
   it('#onMouseMove should add preview point with shift', () => {
     service['isStarted'] = true;
     service['shiftPressed'] = true;
-    let mockedPoints = new Stack<CoordinatesXY>();
-    mockedPoints.push_back(new CoordinatesXY(10,10));
+    const mockedPoints = new Stack<CoordinatesXY>();
+    mockedPoints.push_back(new CoordinatesXY(10, 10));
     service['points'] = mockedPoints;
     const spy = spyOn(service['points'], 'getLast');
     service.onMouseMove(new MouseEvent('mousemove', {clientX: 100, clientY: 100}));
@@ -108,7 +108,7 @@ describe('LineService', () => {
   });
 
   it('#onMouseMove should update preview with shift', () => {
-    service.addPointToLine(100,100);
+    service.addPointToLine(100, 100);
     service['isStarted'] = true;
     service['shiftPressed'] = true;
     const spy = spyOn(CoordinatesXY, 'effectiveX');
@@ -116,7 +116,7 @@ describe('LineService', () => {
     service.onMouseMove(
       new MouseEvent('keydown', {
         clientX: 200,
-        clientY:200
+        clientY: 200
     }));
     expect(spy).toHaveBeenCalledWith(image, 200);
     expect(spy2).toHaveBeenCalledWith(image, 200);
@@ -155,11 +155,11 @@ describe('LineService', () => {
   });
 
   it('#addPointToLine should add point to line without shift pressed', () => {
-    const point = new CoordinatesXY(1,1);
-    const spy = spyOn<CoordinatesXY>(point, "getClosestPoint");
+    const point = new CoordinatesXY(1, 1);
+    const spy = spyOn<CoordinatesXY>(point, 'getClosestPoint');
     service.addPointToLine(point.getX(), point.getY());
     service.onKeyReleased(new KeyboardEvent('keyup', {shiftKey: false}));
-    service.addPointToLine(2,2);
+    service.addPointToLine(2, 2);
     expect(spy).toHaveBeenCalledTimes(0);
   });
 
@@ -172,9 +172,9 @@ describe('LineService', () => {
   });
 
   it('#onDoubleClick should not be within 3px', () => {
-    let mockedPoints = new Stack<CoordinatesXY>();;
-    mockedPoints.push_back(new CoordinatesXY(10,10));
-    const lastPoint = new CoordinatesXY(100,100);
+    const mockedPoints = new Stack<CoordinatesXY>(); ;
+    mockedPoints.push_back(new CoordinatesXY(10, 10));
+    const lastPoint = new CoordinatesXY(100, 100);
     mockedPoints.push_back(lastPoint);
     service['points'] = mockedPoints;
     service['isDone'] = false;
@@ -184,13 +184,13 @@ describe('LineService', () => {
       clientX: 100,
       clientY: 100
     }));
-    expect(spy).not.toHaveBeenCalledWith(10,10);
+    expect(spy).not.toHaveBeenCalledWith(10, 10);
   });
 
   it('#onDoubleClick should be within 3px', () => {
-    let mockedPoints = new Stack<CoordinatesXY>();;
-    mockedPoints.push_back(new CoordinatesXY(10,10));
-    const lastPoint = new CoordinatesXY(100,100);
+    const mockedPoints = new Stack<CoordinatesXY>(); ;
+    mockedPoints.push_back(new CoordinatesXY(10, 10));
+    const lastPoint = new CoordinatesXY(100, 100);
     mockedPoints.push_back(lastPoint);
     service['points'] = mockedPoints;
     service['isDone'] = false;
@@ -200,7 +200,7 @@ describe('LineService', () => {
       clientX: 11,
       clientY: 11
     }));
-    expect(spy).toHaveBeenCalledWith(10,10);
+    expect(spy).toHaveBeenCalledWith(10, 10);
   });
 
   it('#onClick should add point', () => {
@@ -252,8 +252,8 @@ describe('LineService', () => {
   });
 
   it('#removeLastPoint should remove last point with junction is dot', () => {
-    service.addPointToLine(100,100);
-    service.addPointToLine(105,105);
+    service.addPointToLine(100, 100);
+    service.addPointToLine(105, 105);
     service['jointIsDot'] = true;
     service['shiftPressed'] = false;
     const spy = spyOn(service['circles'], 'pop_back');
@@ -264,8 +264,8 @@ describe('LineService', () => {
   });
 
   it('#removeLastPoint should remove last point', () => {
-    service.addPointToLine(100,100);
-    service.addPointToLine(105,105);
+    service.addPointToLine(100, 100);
+    service.addPointToLine(105, 105);
     const spy = spyOn(service['points'], 'pop_back');
     service['shiftPressed'] = false;
     service.removeLastPoint();

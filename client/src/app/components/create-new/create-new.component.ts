@@ -98,8 +98,8 @@ export class CreateNewComponent implements OnInit {
 
     if (warning !== undefined) {
       warning.afterClosed().subscribe((result) => {
-        if(!result) {
-          this.setUpNewWorkingSpace(); 
+        if (!result) {
+          this.setUpNewWorkingSpace();
         }
       });
    }

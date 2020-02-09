@@ -1,13 +1,13 @@
-import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
-import { LineComponent } from './line.component';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatSliderModule, MatOptionModule, MatSelectModule, MatInputModule, MatSlideToggleModule } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LineService } from 'src/app/services/index/drawable/line/line.service';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { Renderer2, Type } from '@angular/core';
+import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatSliderModule, MatSlideToggleModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
+import { LineService } from 'src/app/services/index/drawable/line/line.service';
+import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { LineComponent } from './line.component';
 
 describe('LineComponent', () => {
   let component: LineComponent;
@@ -47,7 +47,7 @@ describe('LineComponent', () => {
         MatSlideToggleModule,
       ]
     })
-    .compileComponents();  
+    .compileComponents();
     fixture = TestBed.createComponent(LineComponent);
     component = fixture.componentInstance;
     component.ngOnInit();
@@ -59,14 +59,14 @@ describe('LineComponent', () => {
   });
 
   it('#setupShortcuts should setup shortcuts', () => {
-    let spy = spyOn(component['service'], 'removeLastPoint');
+    const spy = spyOn(component['service'], 'removeLastPoint');
     document.dispatchEvent(new KeyboardEvent('keydown', {
-      key: 'backspace', 
+      key: 'backspace',
       bubbles: true
     }));
-    let spy2 = spyOn(component['service'], 'getLineIsDone');
+    const spy2 = spyOn(component['service'], 'getLineIsDone');
     document.dispatchEvent(new KeyboardEvent('keydown', {
-      key: 'escape', 
+      key: 'escape',
       bubbles: true
     }));
     expect(spy).toHaveBeenCalled();
@@ -74,10 +74,10 @@ describe('LineComponent', () => {
   });
 
   it('#setupShortcuts should try shortcuts with line is done', () => {
-    let spy = spyOn(component['service'], 'deleteLine');
+    const spy = spyOn(component['service'], 'deleteLine');
     component['service']['isDone'] = false;
     document.dispatchEvent(new KeyboardEvent('keydown', {
-      key: 'escape', 
+      key: 'escape',
       bubbles: true
     }));
     expect(spy).toHaveBeenCalled();

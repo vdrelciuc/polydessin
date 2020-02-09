@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ColorSelectorService } from './color-selector.service';
 import { Color } from '../classes/color';
 import { ColorType } from '../enums/color-types';
+import { ColorSelectorService } from './color-selector.service';
 
 describe('ColorSelectorService', () => {
 
   let service: ColorSelectorService;
   const colors = ['#ABCDEF', '#ABCDE1', '#ABCDE2', '#ABCDE3'];
 
-  beforeEach(() => { 
+  beforeEach(() => {
     TestBed.configureTestingModule({})
     service = TestBed.get(ColorSelectorService);
-    
+
   });
 
   it('should be created', () => {
@@ -35,14 +35,14 @@ describe('ColorSelectorService', () => {
     const firstColor = '#FFFFFF';
     const testColors = [firstColor, '#FFFFF1', '#FFFFF2', '#FFFFF3',
       '#FFFFF4', '#FFFFF5', '#FFFFF6', '#FFFFF7', '#FFFFF8', '#FFFFF9'];
-    for(const element of testColors) {
+    for (const element of testColors) {
       service.addRecentColor(new Color(element));
     }
     const toAdd = new Color('#ABCDEF');
     service.addRecentColor(toAdd);
     let found = false;
-    for(const element of service.recentColors.value) {
-      if(element.getHex() === firstColor) {
+    for (const element of service.recentColors.value) {
+      if (element.getHex() === firstColor) {
         found = true;
       }
     }
@@ -84,5 +84,5 @@ describe('ColorSelectorService', () => {
     expect(service['backgroundColor'].value.getHex()).toEqual('#ABCDE2');
     expect(service['temporaryColor'].value.getHex()).toEqual('#ABCDE3');
   });
-  
+
 });

@@ -13,7 +13,6 @@ export class CoordinatesXY {
     return new CoordinatesXY(pointer.clientX, pointer.clientY);
   }
 
-
   static getEffectiveCoords(referenceElement: ElementRef<SVGElement>, pointer: MouseEvent): CoordinatesXY {
     const effectiveX = CoordinatesXY.effectiveX(referenceElement, pointer.clientX);
     const effectiveY = CoordinatesXY.effectiveY(referenceElement, pointer.clientY);
@@ -57,7 +56,7 @@ export class CoordinatesXY {
   }
 
   getClosestPoint(pointerX: number, pointerY: number, verticalLimit: number): CoordinatesXY {
-    console.log(pointerX +' ' + pointerY + ' mouse');
+    console.log(pointerX + ' ' + pointerY + ' mouse');
     console.log(this.x + ' ' + this.y + ' this');
     const distanceX = pointerX - this.x;
     const distanceY = pointerY - this.y;

@@ -57,7 +57,7 @@ describe('SidebarComponent', () => {
     const spy = spyOn(selector, 'setCurrentTool');
     const spy2 = spyOn(component, 'createNewProject');
     const keys = ['l', 'c', '1', 'w', 'control.o'];
-    for(const element of keys) {
+    for (const element of keys) {
       document.dispatchEvent(new KeyboardEvent('keydown', {
         key: element,
         bubbles: true

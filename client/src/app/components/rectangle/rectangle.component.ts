@@ -31,10 +31,10 @@ export class RectangleComponent implements OnInit {
   }
 
   updateBorder(): void {
-    this.service.updateTracingType("border");
+    this.service.updateTracingType('border');
   }
 
   updateFill(): void {
-    this.service.updateTracingType("fill");
+    this.service.updateTracingType('fill');
   }
 }

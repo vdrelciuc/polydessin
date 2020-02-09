@@ -102,7 +102,7 @@ export class LineService extends DrawableService {
       if (lastPoint !== undefined) {
         const canvasHeight = this.image.nativeElement.clientHeight;
         const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()), CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()), canvasHeight);
-       console.log('shift point ' + shiftPoint.getX() + ' ' + shiftPoint.getY());
+        console.log('shift point ' + shiftPoint.getX() + ' ' + shiftPoint.getY());
         previewPoints += shiftPoint.getX() + ',' + shiftPoint.getY();
         console.log('preview: ' + previewPoints);
       }
@@ -120,7 +120,7 @@ export class LineService extends DrawableService {
   addPointToLine(onScreenX: number, onScreenY: number): void {
     if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
-      if(lastPoint !== undefined) {
+      if (lastPoint !== undefined) {
         const canvasHeight = this.image.nativeElement.clientHeight;
         this.points.push_back(lastPoint.getClosestPoint(onScreenX, onScreenY, canvasHeight));
       }

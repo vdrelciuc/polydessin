@@ -30,7 +30,7 @@ export default ResizeObserver;
 
 const entriesMap = new WeakMap();
 
-const ro = new ResizeObserver(entries => {
+const ro = new ResizeObserver((entries) => {
   for (const entry of entries) {
     if (entriesMap.has(entry.target)) {
       const comp = entriesMap.get(entry.target);
