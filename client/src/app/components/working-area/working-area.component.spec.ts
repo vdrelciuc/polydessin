@@ -86,7 +86,10 @@ describe('WorkingAreaComponent', () => {
       comingFromEntryPoint: false
     }, 'mockState');
     component.ngOnInit();
-    expect(spy).not.toHaveBeenCalled();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(spy).not.toHaveBeenCalled();
+    });
   });
 
   it('#ngOnInit shouldn open', () => {
@@ -95,7 +98,10 @@ describe('WorkingAreaComponent', () => {
       comingFromEntryPoint: true
     }, 'mockState');
     component.ngOnInit();
-    expect(spy).toHaveBeenCalledWith(CreateNewComponent, { disableClose: true });
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(spy).toHaveBeenCalledWith(CreateNewComponent, { disableClose: true });
+    });
   });
 
   it('#getDrawerStatus should drawer be open', () => {
