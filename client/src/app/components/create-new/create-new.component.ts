@@ -99,10 +99,12 @@ export class CreateNewComponent implements OnInit {
   openDialogWarning(): void {
     const warning = this.dialog.open(WarningDialogComponent, { disableClose: true });
 
-    warning.afterClosed().subscribe((result) => {
-      if (result === true) {
-        this.onCloseDialog();
-      }
-    });
+    if(warning !== undefined) {
+      warning.afterClosed().subscribe((result) => {
+        if (result) {
+          this.onCloseDialog();
+        }
+      });
+   }
   }
 }

@@ -1,18 +1,18 @@
-import { getTestBed, TestBed } from '@angular/core/testing';
+import { TestBed, getTestBed } from '@angular/core/testing';
 
-import { ElementRef, Renderer2 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Tools } from 'src/app/enums/tools';
-import { ColorSelectorService } from '../color-selector.service';
-import { LineService } from '../index/drawable/line/line.service';
-import { ToolSelectorService } from '../tools/tool-selector.service';
 import { EventListenerService } from './event-listener.service';
+import { ElementRef, Renderer2 } from '@angular/core';
+import { ToolSelectorService } from '../tools/tool-selector.service';
+import { Tools } from 'src/app/enums/tools';
+import { BehaviorSubject } from 'rxjs';
+import { LineService } from '../index/drawable/line/line.service';
+import { ColorSelectorService } from '../color-selector.service';
 
 describe('EventListenerService', () => {
 
   let service: EventListenerService;
   let manipulator: Renderer2;
-  const line: LineService = new LineService();
+  const line: LineService = new LineService;
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);

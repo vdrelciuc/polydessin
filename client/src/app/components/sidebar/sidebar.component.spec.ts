@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTooltipModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
@@ -27,6 +27,7 @@ describe('SidebarComponent', () => {
         },
       ],
       imports: [
+        MatTooltipModule,
         RouterModule.forRoot(
           [
             { path: '', component: SidebarComponent}
@@ -60,7 +61,7 @@ describe('SidebarComponent', () => {
         bubbles: true
       }));
     }
-    expect(spy).toHaveBeenCalledTimes(component['subscriptions'].length - 2);
+    expect(spy).toHaveBeenCalledTimes(8);
     expect(spy2).toHaveBeenCalled();
   });
 
@@ -75,4 +76,10 @@ describe('SidebarComponent', () => {
   //   expect(component['subscriptions'].length).toEqual(0);
   //   expect(component['createNewDialog']).toBeTruthy();
   // });
+
+  it('#openDialog should open dialog', () => {
+    const spy = spyOn(component['dialog'], 'open');
+    component.openDialog();
+    expect(spy).toHaveBeenCalled();
+  });
 });

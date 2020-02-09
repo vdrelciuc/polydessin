@@ -63,14 +63,15 @@ export class UserGuideComponent implements OnInit {
       }
     }
   ];
-  openAll() {
-    this.myPanels.openAll();
-  }
 
   ngOnInit() {
     if (history.state.path !== null && history.state.path !== undefined) {
       this.previousModuleRoute = history.state.path;
     }
+  }
+
+  openAll() {
+    this.myPanels.openAll();
   }
 
   /**
@@ -107,6 +108,9 @@ export class UserGuideComponent implements OnInit {
 
   getNextElement(): string {
     const currentElement: string = this.getCurrentSubCategorie();
+    if(currentElement === 'Nouveau Dessin') {
+      return 'Nouveau Dessin';
+    }
     const indexes: any[] = this.findIndex(currentElement);
     if (indexes[2] === true) {
       indexes[0]++;
@@ -125,6 +129,9 @@ export class UserGuideComponent implements OnInit {
 
   getPreviousElement(): string {
     const currentElement: string = this.getCurrentSubCategorie();
+    if(currentElement === 'Bienvenue') {
+      return 'Bienvenue';
+    }
     const indexes: any[] = this.findIndex(currentElement);
     if (indexes[1] === 0) {
       indexes[0]--;

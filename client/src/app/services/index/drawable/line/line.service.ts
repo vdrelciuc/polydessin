@@ -97,10 +97,14 @@ export class LineService extends DrawableService {
     let previewPoints = this.pointsToString();
     if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
+      console.log('last is ');
+      console.log(lastPoint);
       if (lastPoint !== undefined) {
         const canvasHeight = this.image.nativeElement.clientHeight;
         const shiftPoint = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()), CoordinatesXY.effectiveY(this.image, this.pointerPosition.getY()), canvasHeight);
-        previewPoints += shiftPoint.getX().toString() + ',' + shiftPoint.getY().toString();
+       console.log('shift point ' + shiftPoint.getX() + ' ' + shiftPoint.getY());
+        previewPoints += shiftPoint.getX() + ',' + shiftPoint.getY();
+        console.log('preview: ' + previewPoints);
       }
     } else {
     previewPoints += CoordinatesXY.effectiveX(this.image, this.pointerPosition.getX()).toString()
@@ -125,9 +129,6 @@ export class LineService extends DrawableService {
     }
     this.updateLine();
   }
-
-  onMousePress(event: MouseEvent): void {}
-  onMouseRelease(event: MouseEvent): void {}
 
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
@@ -171,7 +172,6 @@ export class LineService extends DrawableService {
           pointToDisplay = lastPoint.getClosestPoint(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY), canvasHeight);
         }
       }
-
       const circle: SVGCircleElement = this.manipulator.createElement('circle', 'http://www.w3.org/2000/svg');
       this.manipulator.setAttribute(circle, SVGProperties.centerX, pointToDisplay.getX().toString());
       this.manipulator.setAttribute(circle, SVGProperties.centerY, pointToDisplay.getY().toString());
@@ -185,8 +185,6 @@ export class LineService extends DrawableService {
     this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
     this.followPointer();
   }
-
-
 
   deleteLine(): void {
     this.isDone = true;

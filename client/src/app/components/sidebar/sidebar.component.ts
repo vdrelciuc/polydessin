@@ -31,30 +31,41 @@ export class SidebarComponent implements OnInit {
   }
 
   setupShortcuts(): void {
-    this.shortcut.addShortcut({ keys: 'l', description: 'Selecting line with shortcut' }).subscribe(
-      (event) => {
-        this.toolSelectorService.setCurrentTool(Tools.Line);
-      }
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'l', description: 'Selecting line with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Line);
+        }
+      )
     );
 
-    this.shortcut.addShortcut({ keys: 'c', description: 'Selecting pencil with shortcut' }).subscribe(
-      (event) => {
-        this.toolSelectorService.setCurrentTool(Tools.Pencil);
-      }
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'c', description: 'Selecting pencil with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Pencil);
+        }
+      )
     );
 
-    this.shortcut.addShortcut({ keys: '1', description: 'Selecting rectangle with shortcut' }).subscribe(
-      (event) => {
-        this.toolSelectorService.setCurrentTool(Tools.Rectangle);
-      }
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: '1', description: 'Selecting rectangle with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Rectangle);
+        }
+      )
     );
 
-    this.shortcut.addShortcut({ keys: 'w', description: 'Selecting brush with shortcut' }).subscribe(
-      (event) => {
-        this.toolSelectorService.setCurrentTool(Tools.Brush);
-      }
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'w', description: 'Selecting brush with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Brush);
+        }
+      )
     );
-  }
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
+      (event) => {
+        this.createNewProject();
+      }
+    )
+  );
+}
 
   selectTool(tool: Tools): void {
     this.toolSelectorService.setCurrentTool(tool);
@@ -68,15 +79,11 @@ export class SidebarComponent implements OnInit {
     });
   }
   openDialog(): void {
-    let dialogRef = this.dialog.open(UserGuideComponent, {
+    this.dialog.open(UserGuideComponent, {
       maxWidth: '100vw',
       maxHeight: '100vh',
       height: '100%',
       width: '100%'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 

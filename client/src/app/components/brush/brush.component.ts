@@ -23,7 +23,7 @@ export class BrushComponent {
   readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
 
   constructor(
-    protected service: BrushService,
+    public service: BrushService,
     private toolSelector: ToolSelectorService,
     protected attributes: DrawablePropertiesService,
     protected colorSelectorService: ColorSelectorService

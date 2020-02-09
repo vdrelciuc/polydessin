@@ -45,23 +45,29 @@ export class CoordinatesXY {
   getY(): number  { return this.y; }
 
   setX(x: number): void {
-    if (x >= 0) {
+    // if (x >= 0) {
       this.x = x;
-    }
+    // }
   }
 
   setY(y: number): void {
-    if (y >= 0) {
+    // if (y >= 0) {
       this.y = y;
-    }
+    // }
   }
 
   getClosestPoint(pointerX: number, pointerY: number, verticalLimit: number): CoordinatesXY {
+    console.log(pointerX +' ' + pointerY + ' mouse');
+    console.log(this.x + ' ' + this.y + ' this');
     const distanceX = pointerX - this.x;
     const distanceY = pointerY - this.y;
+    console.log(distanceX + ' ' + distanceY + ' distance');
     const foundQuadrant = CoordinatesXY.findQuadrantFromDelta(distanceX, distanceY);
+    console.log('quadrant: ' + foundQuadrant);
     if (foundQuadrant === 1  || foundQuadrant === 3) {
       const angle = (Math.atan(distanceY / distanceX) * 180) / Math.PI;
+      console.log('angle ' + angle);
+      console.log(this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX), verticalLimit));
       return this.getShiftedPoint(angle, pointerX, pointerY, this.y + this.findYDifferenceForBisectrix(pointerX), verticalLimit);
     } else {
       const angle = -(Math.atan(distanceY / distanceX) * 180) / Math.PI;
@@ -74,6 +80,7 @@ export class CoordinatesXY {
       return new CoordinatesXY(pointerX, this.y);
     } else {
       if (angle <  3 * (90 / 4)) {
+        console.log(pointerX + ' ' +  this.clamp(bisectrixY, verticalLimit))
         return new CoordinatesXY(pointerX, this.clamp(bisectrixY, verticalLimit));
       }
       return new CoordinatesXY(this.x, pointerY);

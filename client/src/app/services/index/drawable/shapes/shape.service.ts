@@ -65,7 +65,7 @@ export abstract class ShapeService extends DrawableService {
       // This case happens if a checkbox was changed while a rectangle creation was ongoing and dragged out of canvas
       this.cancelShape();
     }
-    if (tracingType == "border") {
+    if (tracingType === "border") {
       this.shapeStyle.hasBorder = !this.shapeStyle.hasBorder;
     } else {
       this.shapeStyle.hasFill = !this.shapeStyle.hasFill;

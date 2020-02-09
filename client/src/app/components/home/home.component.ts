@@ -21,15 +21,11 @@ export class HomeComponent {
 constructor(public dialog : MatDialog){}
 
   openDialog(): void {
-    let dialogRef = this.dialog.open(UserGuideComponent, {
+    this.dialog.open(UserGuideComponent, {
       maxWidth: '100vw',
       maxHeight: '100vh',
       height: '100%',
       width: '100%'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 

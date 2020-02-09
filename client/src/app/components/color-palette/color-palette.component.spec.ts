@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Color } from 'src/app/classes/color';
+import { SimpleChange } from '@angular/core';
 import { ColorPaletteComponent } from './color-palette.component';
 
 describe('ColorPaletteComponent', () => {
@@ -25,10 +26,23 @@ describe('ColorPaletteComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('#ngOnChanges should apply changes', () => {
-  //   component.ngOnChanges(new SimpleChange)
-  //   );
-  // });
+  it('#ngOnChanges should setup changes', () => {
+    const spy = spyOn(component['newColor'], 'emit');
+    component['currentSelectedPosition'] = {x: 10, y: 10};
+    component.ngOnChanges({
+      initialColor: new SimpleChange(null, new Color('#ABCDEF'), true)
+    });
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#ngOnChanges shouldn\'t setup changes', () => {
+    const spy = spyOn(component['newColor'], 'emit');
+    component['currentSelectedPosition'] = {x: 10, y: 10};
+    component.ngOnChanges({
+      secondaryColor: new SimpleChange(null, new Color('#ABCDEF'), true)
+    });
+    expect(spy).not.toHaveBeenCalled();
+  });
 
   it('#emitColor should emit newly slected color', () => {
     const spy = spyOn(component.newColor, 'emit');

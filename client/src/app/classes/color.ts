@@ -26,6 +26,7 @@ export class Color {
       if (hex.length < 2) {
           hex = '0' + hex;
       }
+      hex = hex.toUpperCase();
       return hex;
     }
   private static clamp(value: number): number {
@@ -82,21 +83,21 @@ export class Color {
   }
 
   setRedHex(red: string): void {
-    this.correctHexDigit(red);
+    red = this.correctHexDigit(red);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(red)) {
       this.hex = this.hex.charAt(0) + red + this.hex.substr(3);
     }
   }
 
   setGreenHex(green: string): void {
-    this.correctHexDigit(green);
+    green = this.correctHexDigit(green);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(green)) {
       this.hex = this.hex.substr(0, 3) + green + this.hex.substr(5);
     }
   }
 
   setBlueHex(blue: string): void {
-    this.correctHexDigit(blue);
+    blue = this.correctHexDigit(blue);
     if (this.REGEX_RGB_VALUE_IN_HEX.test(blue)) {
       this.hex = this.hex.substr(0, 5) + blue;
     }
