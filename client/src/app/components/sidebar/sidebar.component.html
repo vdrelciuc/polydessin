@@ -197,6 +197,7 @@
         </div>
         <div class="icon" >
           <a  [routerLink]="['' ,{outlets : { guideSubCategory : ['bienvenue']}}]"
+              skipLocationChange
               role="button" (click)="openDialog()">
             <button mat-button>
               <img src="../../../assets/icons/guide.svg">
