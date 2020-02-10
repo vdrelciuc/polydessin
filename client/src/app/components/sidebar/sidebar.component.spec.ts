@@ -23,7 +23,8 @@ describe('SidebarComponent', () => {
           provide: MatDialog,
           useValue: {
             open: () => null,
-            afterColsed: ()  => null
+            afterColsed: ()  => null,
+            closeAll: () => null
           }
         },
         {provide: APP_BASE_HREF, useValue : '/' }
