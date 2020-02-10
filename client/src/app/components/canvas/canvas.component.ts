@@ -7,6 +7,7 @@ import { CreateNewService } from 'src/app/services/create-new.service';
 import { EventListenerService } from 'src/app/services/events/event-listener.service';
 import { SVGService } from 'src/app/services/index/svg/svg.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { WorkspaceService } from 'src/app/services/workspace.service';
 
 @Component({
   selector: 'app-canvas',
@@ -26,7 +27,8 @@ export class CanvasComponent implements OnInit {
     private toolSelector: ToolSelectorService,
     private colorSelectorService: ColorSelectorService,
     private createNewService: CreateNewService,
-    private canvasService: CanvasService
+    private canvasService: CanvasService,
+    private workspaceService: WorkspaceService
     ) { }
 
   ngOnInit() {
@@ -36,7 +38,11 @@ export class CanvasComponent implements OnInit {
     this.eventListener.initializeEvents();
 
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
-      this.manipulator.setAttribute(this.image.nativeElement, 'style', `background-color: ${color.getHex()}`);
+      const isSameColor = this.workspaceService.checkIfSameBackgroundColor(color);
+      const border = isSameColor ? "1px dashed black" : "none";
+      this.manipulator.setAttribute(this.image.nativeElement, 'style', `background-color: ${color.getHex()};
+       border-bottom: ${border};
+       border-right: ${border}`);
     });
 
     this.createNewService.canvasSize.subscribe((canvasSize: CoordinatesXY) => {
