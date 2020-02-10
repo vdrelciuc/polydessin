@@ -63,19 +63,27 @@ describe('CreateNewComponent', () => {
     expect(component['workspaceSize'].getX()).toEqual(10);
   });
 
-  // it('#getcanvasSizeX should return drawable width', () => {
-  //   component['changed'] = false;
-  //   component['workspaceSize'] = new CoordinatesXY(100, 100);
-  //   component['canvasSize'] = new CoordinatesXY(10, 10);
-  //   expect(component.getcanvasSizeX()).toEqual(100);
-  // });
+  it('#setCanvasSizeX should set canvas X', () => {
+    component['changed'] = true;
+    component.setcanvasSizeX({
+      target: {
+        value: 10
+      }
+    });
+    component['workspaceService'].Size.next(new CoordinatesXY(100,100));
+    expect(component['workspaceSize'].getX()).toEqual(10);
+  });
 
-  // it('#getcanvasSizeY should return drawable height', () => {
-  //   component['widthChanged'] = false;
-  //   component['workspaceSize'] = new CoordinatesXY(100, 100);
-  //   component['canvasSize'] = new CoordinatesXY(10, 10);
-  //   expect(component.getcanvasSizeX()).toEqual(100);
-  // });
+  it('#setCanvasSizeY should set canvas X', () => {
+    component['changed'] = true;
+    component.setcanvasSizeX({
+      target: {
+        value: 10
+      }
+    });
+    component['workspaceService'].Size.next(new CoordinatesXY(100,100));
+    expect(component['workspaceSize'].getY()).toEqual(10);
+  });
 
   it('#onColorSelect should be able to select color', () => {
     component['previewColor'] = new Color('#FFFFFF');
