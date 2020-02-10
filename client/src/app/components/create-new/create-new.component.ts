@@ -24,10 +24,8 @@ export class CreateNewComponent implements OnInit, OnDestroy {
 
   backgroundColor: Color;
   previewColor: Color;
-  canvasSize: CoordinatesXY;
   workspaceSize: CoordinatesXY;
-  widthChanged: boolean;
-  heightChanged: boolean;
+  private changed: boolean;
   private subscriptions: Subscription[] = [];
 
   constructor(private colorSelectorService: ColorSelectorService,
@@ -52,9 +50,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.canvasService.askForLayerCount.next(true);
-    this.canvasSize = new CoordinatesXY(0, 0);
-    this.widthChanged = false;
-    this.heightChanged = false;
+    this.changed = false;
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
       this.backgroundColor = color;
     });
@@ -63,24 +59,18 @@ export class CreateNewComponent implements OnInit, OnDestroy {
     });
     this.colorSelectorService.temporaryColor.next(new Color(DEFAULT_SECONDARY_COLOR))
     this.workspaceService.Size.subscribe((size: CoordinatesXY) => {
-      this.workspaceSize = size;
+      if (!this.changed) {
+        this.workspaceSize = size;
+      }
     })
-
-  }
-
-  getcanvasSizeX(): number {
-    return (this.widthChanged ? this.canvasSize.getX() : this.workspaceSize.getX());
-  }
-  getcanvasSizeY(): number {
-    return (this.heightChanged ? this.canvasSize.getY() : this.workspaceSize.getY());
   }
   setcanvasSizeX(event: any) {
-    this.canvasSize.setX(event.target.value);
-    this.widthChanged = true;
+    this.workspaceSize.setX(event.target.value);
+    this.changed = true;
   }
   setcanvasSizeY(event: any) {
-    this.canvasSize.setY(event.target.value);
-    this.heightChanged = true;
+    this.workspaceSize.setY(event.target.value);
+    this.changed = true;
   }
 
   onColorSelect(): void {
@@ -123,7 +113,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
   private setUpNewWorkingSpace(): void {
     this.colorSelectorService.colorToChange = ColorType.Background;
     this.colorSelectorService.updateColor(this.previewColor);
-    this.createNewService.canvasSize.next(new CoordinatesXY(this.getcanvasSizeX(), this.getcanvasSizeY()));
+    this.createNewService.canvasSize.next(new CoordinatesXY(this.workspaceSize.getX(), this.workspaceSize.getY()));
     this.dialogRef.close();
     history.state.comingFromEntryPoint = false;
   }
