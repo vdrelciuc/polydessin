@@ -47,7 +47,7 @@ describe('RectangleComponent', () => {
                       left: boundleft,
                       top: boundtop,
                 };
-                return boundRect;
+                  return boundRect;
               },
             },
           },

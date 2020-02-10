@@ -1,12 +1,12 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { RectangleService } from './rectangle.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import * as CONSTANT from 'src/app/classes/constants';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
+import * as CONSTANT from 'src/app/classes/constants';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { RectangleService } from './rectangle.service';
 // import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 describe('RectangleService', () => {
@@ -21,11 +21,11 @@ describe('RectangleService', () => {
     return element;
   }
 
-  let mockedPrimary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
-  let mockedSecondary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
-  
+  const mockedPrimary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
+  const mockedSecondary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
+
   // Faking a MouseEvent
-  let e = {
+  const e = {
     type: 'click',
     bubbles: true,
     cancelable: true,
@@ -43,7 +43,7 @@ describe('RectangleService', () => {
     relatedTarget: undefined,
   };
 
-  let evt = document.createEvent('MouseEvents');
+  const evt = document.createEvent('MouseEvents');
   evt.initMouseEvent(
     e.type,
     e.bubbles,
@@ -107,14 +107,13 @@ describe('RectangleService', () => {
     service.attributes = new DrawablePropertiesService();
     service.initialize(manipulator, image, getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
-  
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
   it('#constructor should set the RectangleService with its correct default attributes', () => {
-    expect(service.frenchName).toBe("Rectangle");
+    expect(service.frenchName).toBe('Rectangle');
     expect(service.shapeStyle.thickness).toBe(CONSTANT.THICKNESS_DEFAULT);
     expect(service.shapeStyle.fillColor.getHex()).toBe(CONSTANT.COLOR_DEFAULT);
     expect(service.shapeStyle.borderColor.getHex()).toBe(CONSTANT.COLOR_DEFAULT);
@@ -141,7 +140,7 @@ describe('RectangleService', () => {
   //   service['isChanging'] = false;
   //   service['drawOnNextMove'] = true;
   //   service.onMouseMove(new MouseEvent('mousemove', {}));
-    
+
   //   service['isChanging'] = true;
   //   service['shapeOrigin'] = new CoordinatesXY(0,0);
   //   const spy = spyOn(manipulator, 'setAttribute');

@@ -1,13 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-nouveau-dessin',
   templateUrl: './nouveau-dessin.component.html',
   styleUrls: ['./nouveau-dessin.component.scss']
 })
-export class NouveauDessinComponent implements OnInit {
-
-  ngOnInit() {
-  }
+export class NouveauDessinComponent {
 
 }

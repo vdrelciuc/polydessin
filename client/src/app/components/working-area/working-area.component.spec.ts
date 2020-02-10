@@ -63,7 +63,7 @@ describe('WorkingAreaComponent', () => {
         MatSidenavModule,
         RouterModule.forRoot(
           [
-            { path: "", component: SidebarComponent}
+            { path: '', component: SidebarComponent}
           ]
         ),
         FormsModule,
@@ -126,7 +126,7 @@ describe('WorkingAreaComponent', () => {
   });
 
   it('#getDrawerStatus should drawer be closed', () => {
-    let drawer = TestBed.get<DrawerService>(DrawerService);
+    const drawer = TestBed.get<DrawerService>(DrawerService);
     drawer.navIsOpened = false;
     expect(component.getDrawerStatus()).toBe(false);
   });

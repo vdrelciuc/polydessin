@@ -16,7 +16,7 @@ const routes: Routes = [
   {path : '', component : HomeComponent}
 ];
 
-const secondaryRoutes : Routes = [
+const secondaryRoutes: Routes = [
   {path : 'bienvenue', component : BienvenueGuideComponent , outlet: 'guideSubCategory'},
   {path : 'ligne' , component : LigneGuideComponent , outlet: 'guideSubCategory'},
   {path : 'pinceau' , component : PinceauGuideComponent  , outlet: 'guideSubCategory'},

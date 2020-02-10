@@ -1,6 +1,7 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { DEFAULT_SECONDARY_COLOR } from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
@@ -9,6 +10,7 @@ import { CanvasService } from 'src/app/services/canvas.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { CreateNewService } from 'src/app/services/create-new.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
+import { HotkeysService } from '../../services/events/shortcuts/hotkeys.service';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
 
@@ -18,7 +20,7 @@ import { WarningDialogComponent } from './warning-dialog/warning-dialog.componen
   styleUrls: ['./create-new.component.scss']
 })
 
-export class CreateNewComponent implements OnInit {
+export class CreateNewComponent implements OnInit, OnDestroy {
 
   backgroundColor: Color;
   previewColor: Color;
@@ -26,6 +28,7 @@ export class CreateNewComponent implements OnInit {
   workspaceSize: CoordinatesXY;
   widthChanged: boolean;
   heightChanged: boolean;
+  private subscriptions: Subscription[] = [];
 
   constructor(private colorSelectorService: ColorSelectorService,
               private dialogRef: MatDialogRef<CreateNewComponent>,
@@ -33,8 +36,19 @@ export class CreateNewComponent implements OnInit {
               private createNewService: CreateNewService,
               private workspaceService: WorkspaceService,
               private canvasService: CanvasService,
-              public router: Router
-              ) { }
+              public router: Router,
+              private shortcut: HotkeysService
+              ) {
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
+      (event) => {
+        // cant open a nez dialog
+      }
+    ))
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+  }
 
   ngOnInit() {
     this.canvasService.askForLayerCount.next(true);
@@ -51,6 +65,7 @@ export class CreateNewComponent implements OnInit {
     this.workspaceService.Size.subscribe((size: CoordinatesXY) => {
       this.workspaceSize = size;
     })
+
   }
 
   getcanvasSizeX(): number {
@@ -98,8 +113,8 @@ export class CreateNewComponent implements OnInit {
 
     if (warning !== undefined) {
       warning.afterClosed().subscribe((result) => {
-        if(!result) {
-          this.setUpNewWorkingSpace(); 
+        if (!result) {
+          this.setUpNewWorkingSpace();
         }
       });
    }

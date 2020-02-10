@@ -1,15 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateNewComponent } from './create-new.component';
-import { MatDialogRef, MatDialog, MatDialogModule } from '@angular/material';
+import { APP_BASE_HREF } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
-import { Color } from 'src/app/classes/color';
-import { APP_BASE_HREF } from '@angular/common';
+import { CreateNewComponent } from './create-new.component';
 describe('CreateNewComponent', () => {
   let component: CreateNewComponent;
   let fixture: ComponentFixture<CreateNewComponent>;
@@ -72,17 +72,17 @@ describe('CreateNewComponent', () => {
   it('#getcanvasSizeX should return drawable width', () => {
     component['widthChanged'] = false;
     component['workspaceSize'] = new CoordinatesXY(100, 100);
-    component['canvasSize'] = new CoordinatesXY(10,10);
+    component['canvasSize'] = new CoordinatesXY(10, 10);
     expect(component.getcanvasSizeX()).toEqual(100);
   });
 
   it('#getcanvasSizeY should return drawable height', () => {
     component['widthChanged'] = false;
     component['workspaceSize'] = new CoordinatesXY(100, 100);
-    component['canvasSize'] = new CoordinatesXY(10,10);
+    component['canvasSize'] = new CoordinatesXY(10, 10);
     expect(component.getcanvasSizeX()).toEqual(100);
   });
-  
+
   it('#onColorSelect should be able to select color', () => {
     component['previewColor'] = new Color('#FFFFFF');
     const spy2 = spyOn(component['dialog'], 'open');

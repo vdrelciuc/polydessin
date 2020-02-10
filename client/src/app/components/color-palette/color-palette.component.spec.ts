@@ -1,6 +1,6 @@
+import { SimpleChange } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Color } from 'src/app/classes/color';
-import { SimpleChange } from '@angular/core';
 import { ColorPaletteComponent } from './color-palette.component';
 
 describe('ColorPaletteComponent', () => {
@@ -46,7 +46,7 @@ describe('ColorPaletteComponent', () => {
 
   it('#emitColor should emit newly slected color', () => {
     const spy = spyOn(component.newColor, 'emit');
-    component.emitColor(1,1);
+    component.emitColor(1, 1);
     expect(spy).toHaveBeenCalledWith(new Color('#FCFCFC'));
   });
 

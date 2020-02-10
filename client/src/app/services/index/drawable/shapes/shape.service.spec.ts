@@ -1,16 +1,16 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { RectangleService } from '../rectangle/rectangle.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANT from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { RectangleService } from '../rectangle/rectangle.service';
 
 describe('ShapeService', () => {
-  
+
   let service: RectangleService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
@@ -22,9 +22,8 @@ describe('ShapeService', () => {
     return element;
   }
 
-  const eventMocker = (event: string, keyUsed: number) => 
+  const eventMocker = (event: string, keyUsed: number) =>
       new MouseEvent(event, {button: keyUsed, clientX: 10, clientY: 10});
-
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -80,7 +79,7 @@ describe('ShapeService', () => {
       nameDisplayDefault: '[Rectangle]',
       nameDisplayOnShift: '[Carré]'
     };
-    service.initialize(manipulator, image, 
+    service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
   });
 
@@ -127,7 +126,7 @@ describe('ShapeService', () => {
   it('#cancelShape should stop shape', () => {
     const spy = spyOn(manipulator, 'removeChild');
     service.cancelShape();
-    expect(spy).toHaveBeenCalledWith(image.nativeElement, 
+    expect(spy).toHaveBeenCalledWith(image.nativeElement,
         service['subElement']);
     expect(service['isChanging']).not.toBeTruthy();
   });
@@ -187,8 +186,8 @@ describe('ShapeService', () => {
     service.onMouseMove(eventMocker('mousemove', 0));
 
     service['isChanging'] = true;
-    service['mousePosition'] = new CoordinatesXY(100,100);
-    service['shapeOrigin'] = new CoordinatesXY(10,10);
+    service['mousePosition'] = new CoordinatesXY(100, 100);
+    service['shapeOrigin'] = new CoordinatesXY(10, 10);
     service.onMouseMove(eventMocker('mousemove', 0));
     expect(service['mousePosition'].getX()).toEqual(10);
     expect(service['mousePosition'].getY()).toEqual(10);
@@ -201,8 +200,8 @@ describe('ShapeService', () => {
 
     service['isChanging'] = true;
     service['shiftPressed'] = true;
-    service['mousePosition'] = new CoordinatesXY(100,100);
-    service['shapeOrigin'] = new CoordinatesXY(10,10);
+    service['mousePosition'] = new CoordinatesXY(100, 100);
+    service['shapeOrigin'] = new CoordinatesXY(10, 10);
     service.onMouseMove(eventMocker('mousemove', 0));
     expect(service['mousePosition'].getX()).toEqual(10);
     expect(service['mousePosition'].getY()).toEqual(10);
@@ -222,9 +221,9 @@ describe('ShapeService', () => {
   it('#onKeyPressed should update size with shift', () => {
     service['shiftPressed'] = false;
     service['isChanging'] = true;
-    service['mousePosition'] = new CoordinatesXY(0,0);
-    service['shapeOrigin'] = new CoordinatesXY(10,10);
-    service['text'] = manipulator.createElement('text','http://www.w3.org/2000/svg');
+    service['mousePosition'] = new CoordinatesXY(0, 0);
+    service['shapeOrigin'] = new CoordinatesXY(10, 10);
+    service['text'] = manipulator.createElement('text', 'http://www.w3.org/2000/svg');
     service.onKeyPressed(new KeyboardEvent('keypress', {
       shiftKey: true
     }));
@@ -237,8 +236,8 @@ describe('ShapeService', () => {
     service['shiftPressed'] = false;
     service['isChanging'] = true;
     service['mousePosition'] = new CoordinatesXY(100, 200);
-    service['shapeOrigin'] = new CoordinatesXY(10,10);
-    service['text'] = manipulator.createElement('text','http://www.w3.org/2000/svg');
+    service['shapeOrigin'] = new CoordinatesXY(10, 10);
+    service['text'] = manipulator.createElement('text', 'http://www.w3.org/2000/svg');
     service.onKeyPressed(new KeyboardEvent('keypress', {
       shiftKey: true
     }));
@@ -251,8 +250,8 @@ describe('ShapeService', () => {
     service['shiftPressed'] = false;
     service['isChanging'] = true;
     service['mousePosition'] = new CoordinatesXY(200, 100);
-    service['shapeOrigin'] = new CoordinatesXY(10,10);
-    service['text'] = manipulator.createElement('text','http://www.w3.org/2000/svg');
+    service['shapeOrigin'] = new CoordinatesXY(10, 10);
+    service['text'] = manipulator.createElement('text', 'http://www.w3.org/2000/svg');
     service.onKeyPressed(new KeyboardEvent('keypress', {
       shiftKey: true
     }));
@@ -269,7 +268,7 @@ describe('ShapeService', () => {
   });
 
   it('#onKeyReleased should change shift status without update', () => {
-    service['mousePositionOnShiftPress'] = new CoordinatesXY(10,10);
+    service['mousePositionOnShiftPress'] = new CoordinatesXY(10, 10);
     service['shiftPressed'] = true;
     service['isChanging'] = false;
     service.onKeyReleased(new KeyboardEvent('keypress', {
@@ -284,9 +283,9 @@ describe('ShapeService', () => {
     service['isChanging'] = false;
     service['drawOnNextMove'] = true;
     service.onMouseMove(eventMocker('mousemove', 0));
-    
-    service['mousePositionOnShiftPress'] = new CoordinatesXY(10,10);
-    service['shapeOrigin'] = new CoordinatesXY(10,10);
+
+    service['mousePositionOnShiftPress'] = new CoordinatesXY(10, 10);
+    service['shapeOrigin'] = new CoordinatesXY(10, 10);
     service['shiftPressed'] = true;
     service['isChanging'] = true;
     service.onKeyReleased(new KeyboardEvent('keypress', {

@@ -36,7 +36,7 @@ describe('SVGService', () => {
   });
 
   it('#getStack should return non empty stack', () => {
-    let element: SVGGElement = manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    const element: SVGGElement = manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     manipulator.setAttribute(element, SVGProperties.title, 'test');
     stack.addElement(element);
     expect(stack.getStack().getAll().length).toEqual(1);
@@ -53,7 +53,9 @@ describe('SVGService', () => {
   });
 
   it('#removeLastElement should remove all elements', () => {
-    while(stack.removeLastElement() !== undefined) {}
+    while (stack.removeLastElement() !== undefined) {
+      // While not empty
+    }
     expect(stack.getStack().getAll().length).toEqual(0);
   });
 

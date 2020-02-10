@@ -1,11 +1,11 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { BrushService } from './brush.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { BehaviorSubject } from 'rxjs';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { Color } from 'src/app/classes/color';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { BrushService } from './brush.service';
 
 describe('BrushService', () => {
   let service: BrushService;
@@ -17,7 +17,7 @@ describe('BrushService', () => {
     parentElement.children.push(element);
     return element;
   }
-  const eventMocker = (event: string, keyUsed: number) => 
+  const eventMocker = (event: string, keyUsed: number) =>
       new MouseEvent(event, {button: keyUsed, clientX: 10, clientY: 10});
 
   beforeEach(() => {
@@ -144,14 +144,14 @@ describe('BrushService', () => {
     service['isDrawing'] = true;
     service.onMouseRelease(eventMocker('mouseup', 0));
     expect(service['isDrawing']).not.toBeTruthy();
-    expect(spy).toHaveBeenCalledWith(10,10);
+    expect(spy).toHaveBeenCalledWith(10, 10);
   });
 
   it('#onMouseMove should update cursor', () => {
     const spy = spyOn(service, 'updateCursor');
     service['isDrawing'] = false;
     service.onMouseMove(eventMocker('mouseup', 0));
-    expect(spy).toHaveBeenCalledWith(10,10);
+    expect(spy).toHaveBeenCalledWith(10, 10);
   });
 
   it('#onMouseMove should update cursor', () => {

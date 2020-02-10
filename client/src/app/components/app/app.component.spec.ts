@@ -19,9 +19,9 @@ describe('AppComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         providers: [
-          { 
-              provide: IndexService, 
-              useValue: indexServiceSpy 
+          {
+              provide: IndexService,
+              useValue: indexServiceSpy
           }
         ],
         declarations: [ AppComponent ],

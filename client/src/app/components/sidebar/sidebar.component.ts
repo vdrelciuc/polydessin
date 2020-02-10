@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { Tools } from '../../enums/tools';
 import { ToolSelectorService } from '../../services/tools/tool-selector.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
-import { Subscription } from 'rxjs';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
 
 @Component({
@@ -61,6 +61,8 @@ export class SidebarComponent implements OnInit {
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
       (event) => {
+        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+        this.dialog.closeAll();
         this.createNewProject();
       }
     )
