@@ -105,6 +105,16 @@ describe('CreateNewComponent', () => {
     });
   });
 
+  it('#onConfirm should open warning message', () => {
+    component['canvasService']['layerCount'] = 1;
+    const spy = spyOn(component, 'openDialogWarning');
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      component.onConfirm();
+      expect(spy).toHaveBeenCalled();
+    });
+  });
+
   it('#onCloseDialog should close', () => {
     const spy = spyOn(component['dialogRef'], 'close');
     history.pushState({
