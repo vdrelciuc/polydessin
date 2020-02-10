@@ -1,17 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Color } from 'src/app/classes/color';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { RectangleComponent } from './rectangle.component';
+import { NO_ERRORS_SCHEMA, Renderer2, ElementRef } from '@angular/core';
+import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
 
 describe('RectangleComponent', () => {
   let component: RectangleComponent;
   let fixture: ComponentFixture<RectangleComponent>;
-  let service: RectangleService;
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
@@ -21,15 +18,21 @@ describe('RectangleComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ RectangleComponent ],
-      providers: [
-        RectangleService,
+      providers:[
+        {
+          provide: RectangleService,
+          useValue: {
+            initializeProperties: () => { return ; },
+            initialize: () => {}
+          }
+        },
         {
           provide: Renderer2,
           useValue: {
-              createElement: () => mockedRendered,
-              setAttribute: () => mockedRendered,
-              appendChild: () => mockedRendered,
-              removeChild: () => mockedRendered,
+            createElement: () => mockedRendered,
+            setAttribute: () => mockedRendered,
+            appendChild: () => mockedRendered,
+            removeChild: () => mockedRendered,
           },
         },
         ToolSelectorService,
@@ -49,24 +52,13 @@ describe('RectangleComponent', () => {
             },
           },
         },
-        {
-          provide: ColorSelectorService,
-          useValue: {
-            primaryColor: new BehaviorSubject<Color>(new Color('#FFFFFF'))
-          }
-        }
+        ColorSelectorService
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
     fixture = TestBed.createComponent(RectangleComponent);
     component = fixture.componentInstance;
-    service = TestBed.get<RectangleService>(RectangleService);
-    service.initialize(
-      null as unknown as Renderer2,
-      TestBed.get<ElementRef>(ElementRef),
-      TestBed.get<ColorSelectorService>(ColorSelectorService)
-    );
     fixture.detectChanges();
   }));
 

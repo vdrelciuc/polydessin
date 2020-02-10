@@ -42,7 +42,6 @@ export abstract class ShapeService extends DrawableService {
   }
 
   initializeProperties(): void {
-
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.shapeStyle.fillColor = color;
     });
@@ -80,7 +79,8 @@ export abstract class ShapeService extends DrawableService {
   onMousePress(event: MouseEvent): void {
     if (this.isChanging) {
       // This case happens if the mouse button was released out of canvas: the shaped is confirmed on next mouse click
-      this.onMouseRelease();
+
+      this.onMouseRelease(event);
     } else if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
       this.shapeOrigin = CoordinatesXY.getEffectiveCoords(this.image, event);
       this.drawOnNextMove = true;
