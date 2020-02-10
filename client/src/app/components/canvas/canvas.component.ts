@@ -39,7 +39,7 @@ export class CanvasComponent implements OnInit {
 
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
       const isSameColor = this.workspaceService.checkIfSameBackgroundColor(color);
-      const border = isSameColor ? "1px dashed black" : "none";
+      const border = isSameColor ? '1px dashed black' : 'none';
       this.manipulator.setAttribute(this.image.nativeElement, 'style', `background-color: ${color.getHex()};
        border-bottom: ${border};
        border-right: ${border}`);

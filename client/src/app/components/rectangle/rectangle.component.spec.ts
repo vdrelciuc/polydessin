@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RectangleComponent } from './rectangle.component';
-import { NO_ERRORS_SCHEMA, Renderer2, ElementRef } from '@angular/core';
+import { ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { RectangleComponent } from './rectangle.component';
 
 describe('RectangleComponent', () => {
   let component: RectangleComponent;
@@ -18,12 +18,12 @@ describe('RectangleComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ RectangleComponent ],
-      providers:[
+      providers: [
         {
           provide: RectangleService,
           useValue: {
             initializeProperties: () => { return ; },
-            initialize: () => {}
+            initialize: () => null
           }
         },
         {
