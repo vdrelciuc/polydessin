@@ -61,6 +61,7 @@ export class SidebarComponent implements OnInit {
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
       (event) => {
+        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
         this.dialog.closeAll();
         this.createNewProject();
       }
