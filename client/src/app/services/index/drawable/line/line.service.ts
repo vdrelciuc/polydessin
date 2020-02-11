@@ -42,6 +42,8 @@ export class LineService extends DrawableService {
     this.assignParams(manipulator, image, colorSelectorService);
     this.initializeProperties();
     this.shiftPressed = false;
+    this.isStarted = false;
+    this.isDone = true;
   }
 
   initializeProperties() {
@@ -82,7 +84,9 @@ export class LineService extends DrawableService {
   onKeyPressed(event: KeyboardEvent): void {
     if (event.shiftKey && !this.shiftPressed) {
       this.shiftPressed = true;
-      this.followPointer();
+      if (!this.isDone) {
+        this.followPointer();
+      }
     }
   }
 
@@ -165,7 +169,14 @@ export class LineService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
+    let recoverShiftPressed = false;
     if (!this.isStarted) {
+      if (this.shiftPressed) {
+        // This case happens if shift is pressed before first click
+        // shiftPressed will be recovered at the end of onClick function
+        recoverShiftPressed = true;
+        this.shiftPressed = false;
+      }
       this.points = new Stack<CoordinatesXY>();
       this.circles = new Stack<SVGCircleElement>();
       this.updateProperties();
@@ -195,6 +206,10 @@ export class LineService extends DrawableService {
     }
     this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
     this.followPointer();
+
+    if (recoverShiftPressed) {
+      this.shiftPressed = true;
+    }
   }
 
   deleteLine(): void {
