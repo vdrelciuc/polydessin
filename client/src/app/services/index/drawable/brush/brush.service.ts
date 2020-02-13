@@ -49,10 +49,6 @@ export class BrushService extends DrawableService {
       this.opacity = opacity;
     });
 
-    this.attributes.thickness.subscribe((element: number) => {
-      this.thickness = element;
-    });
-
     // Create a type for the 5 different textures
     // Subscribe to that type (for changes and updates)
   }

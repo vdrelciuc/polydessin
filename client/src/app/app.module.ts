@@ -30,6 +30,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LineComponent } from './components/line/line.component';
 import { OptionPannelComponent } from './components/option-pannel/option-pannel.component';
 import { PencilComponent } from './components/pencil/pencil.component';
+import { PolygonComponent } from './components/polygon/polygon.component';
 import { RectangleComponent } from './components/rectangle/rectangle.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserGuideComponent } from './components/user-guide/user-guide.component';
@@ -66,7 +67,8 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     ColorSliderComponent,
     RoutingComponents,
     ResizeObserverDirective,
-    WarningDialogComponent
+    WarningDialogComponent,
+    PolygonComponent
   ],
   entryComponents: [
     ColorPickerComponent,
