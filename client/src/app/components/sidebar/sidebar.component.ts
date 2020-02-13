@@ -18,7 +18,7 @@ export class SidebarComponent implements OnInit {
   private createNewDialog: MatDialogRef<CreateNewComponent>;
 
   constructor(
-    private toolSelectorService: ToolSelectorService,
+    public toolSelectorService: ToolSelectorService,
     private shortcut: HotkeysService,
     protected dialog: MatDialog) {
     this.setupShortcuts();
@@ -60,13 +60,27 @@ export class SidebarComponent implements OnInit {
     );
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
-      (event) => {
-        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
-        this.dialog.closeAll();
-        this.createNewProject();
-      }
-    )
-  );
+        (event) => {
+          this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+          this.dialog.closeAll();
+          this.createNewProject();
+        }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.z', description: 'Undo' }).subscribe(
+        (event) => {
+          this.toolSelectorService.memory.undo();
+        }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.shift.z', description: 'Redo' }).subscribe(
+        (event) => {
+          this.toolSelectorService.memory.redo();
+        }
+      )
+    );
 }
 
   selectTool(tool: Tools): void {

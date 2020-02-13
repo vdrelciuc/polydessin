@@ -8,6 +8,8 @@ import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
+import { DrawStackService } from './draw-stack/draw-stack.service';
+import { UndoRedoService } from './undo-redo/undo-redo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,7 @@ import { RectangleService } from '../index/drawable/rectangle/rectangle.service'
 export class ToolSelectorService {
 
   $currentTool: BehaviorSubject<Tools>;
+  memory: UndoRedoService;
   private tools: Map<Tools, DrawableService>;
   private tool: DrawableService | undefined;
   private line: LineService;
@@ -38,9 +41,10 @@ export class ToolSelectorService {
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
   }
 
-  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService): void {
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
+    this.memory = new UndoRedoService(drawStack, manipulator, image)
     for (const element of this.tools) {
-      element[1].initialize(manipulator, image, colorSelectorService);
+      element[1].initialize(manipulator, image, colorSelectorService, drawStack);
     }
   }
 

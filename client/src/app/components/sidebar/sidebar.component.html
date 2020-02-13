@@ -170,7 +170,7 @@
     <div class="bottom">
       <div class="left-column">
         <div class="icon">
-          <button mat-button disabled>
+          <button mat-button (click)="toolSelectorService.memory.undo()">
             <img src="../../../assets/icons/undo1.svg">
           </button>
         </div>
@@ -187,7 +187,7 @@
       </div>
       <div class="right-column">
         <div class="icon">
-          <button mat-button disabled>
+          <button mat-button (click)="toolSelectorService.memory.redo()">
             <img src="../../../assets/icons/redo.svg">
           </button>
         </div>

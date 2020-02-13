@@ -7,6 +7,7 @@ import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +37,8 @@ export abstract class ShapeService extends DrawableService {
     super();
   }
 
-  initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService): void {
-    this.assignParams(manipulator, image, colorSelectorService);
+  initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
+    this.assignParams(manipulator, image, colorSelectorService, drawStack);
     this.shiftPressed = false;
   }
 
@@ -95,6 +96,7 @@ export abstract class ShapeService extends DrawableService {
       this.drawOnNextMove = false;
     } else {
       this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
+      this.drawStack.addElement(this.shape);
     }
   }
 
