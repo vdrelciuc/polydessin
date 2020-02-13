@@ -1,5 +1,4 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
-
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
@@ -7,7 +6,6 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { RectangleService } from './rectangle.service';
-// import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 describe('RectangleService', () => {
 
