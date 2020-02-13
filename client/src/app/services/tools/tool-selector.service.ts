@@ -8,6 +8,7 @@ import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
+import { EllipseService } from '../index/drawable/ellipse/ellipse.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class ToolSelectorService {
   private pencil: PencilService;
   private rectangle: RectangleService;
   private brush: BrushService;
+  private ellipse: EllipseService;
 
   constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
@@ -28,11 +30,13 @@ export class ToolSelectorService {
     this.pencil = new PencilService();
     this.rectangle = new RectangleService();
     this.brush = new BrushService();
+    this.ellipse = new EllipseService();
 
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
     this.tools.set(Tools.Rectangle, this.rectangle);
     this.tools.set(Tools.Brush, this.brush);
+    this.tools.set(Tools.Ellipse, this.ellipse);
       // Initialize currentTool as the selector(mouse)
     // this.isHidden = true;
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
@@ -50,6 +54,7 @@ export class ToolSelectorService {
   getPencil(): PencilService { return this.pencil; }
   getRectangle(): RectangleService { return this.rectangle; }
   getBrush(): BrushService { return this.brush; }
+  getEllipse(): EllipseService { return this.ellipse; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
