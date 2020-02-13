@@ -16,6 +16,7 @@ export class PencilService extends DrawableService {
   private previousY: number;
   thickness: number;
   isDrawing: boolean;
+  private subElement: SVGGElement;
   private line: SVGPathElement;
   private mousePointer: SVGCircleElement;
   private color: Color;
@@ -67,17 +68,20 @@ export class PencilService extends DrawableService {
   onMousePress(event: MouseEvent): void {
     this.isDrawing = true;
     this.beginDraw(event.clientX, event.clientY);
+    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.subElement, SVGProperties.title, 'pencil-path');
     this.line = this.manipulator.createElement('path', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color.getHex());
     this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.typeOfLine, 'round');
     this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
-    // this.manipulator.setAttribute(this.line, 'stroke-linecap', 'round');
-    // this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
     this.manipulator.setAttribute(this.line, 'd', this.path);
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
-    this.manipulator.appendChild(this.image.nativeElement, this.line);
+
+    this.manipulator.appendChild(this.subElement, this.line);
+    this.manipulator.appendChild(this.image.nativeElement, this.subElement);
+    
     this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
     this.addPath(event.clientX, event.clientY);
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'hidden');
