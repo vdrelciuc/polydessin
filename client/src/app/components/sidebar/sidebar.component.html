@@ -83,7 +83,11 @@
       </div>
       <div class="right-column">
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('ellipse')"
+          <button mat-button
+                  [matTooltip]="this.toolSelectorService.getEllipse().frenchName"
+                  matTooltipPosition="after"
+                  aria-label="ellipse-tooltip"
+                  (click)="selectTool('ellipse')"
                   [ngClass]="{'clicked': currentTool === 'ellipse',
             'not-clicked': currentTool !== 'ellipse'}">
             <img src="../../../assets/icons/ellipse.svg">
