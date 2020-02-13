@@ -69,6 +69,7 @@ export class PencilService extends DrawableService {
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
     this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
   }
+
   onMouseOutCanvas(event: MouseEvent): void {
     this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
     this.isDrawing.next(false);
@@ -107,7 +108,7 @@ export class PencilService extends DrawableService {
   }
 
   onMouseMove(event: MouseEvent): void {
-    if (this.isDrawing) {
+    if (this.isDrawing.value) {
       this.addPath(event.clientX, event.clientY);
     } else {
       this.updateCursor(event.clientX, event.clientY);

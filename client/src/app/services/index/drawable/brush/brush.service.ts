@@ -83,7 +83,7 @@ export class BrushService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);
   }
   onMouseOutCanvas(event: MouseEvent): void {
-    if (this.isDrawing) {
+    if (this.isDrawing.value) {
       this.addPath(event.clientX, event.clientY);
       this.endPath();
       this.isDrawing.next(false);
@@ -116,7 +116,7 @@ export class BrushService extends DrawableService {
   }
   onMouseRelease(event: MouseEvent): void {
     if (event.button === 0) { // 0 for the left mouse button
-      if (this.isDrawing) {
+      if (this.isDrawing.value) {
         this.isDrawing.next(false);
         // this.addPath(event.clientX, event.clientY);
         this.endPath();
@@ -126,7 +126,7 @@ export class BrushService extends DrawableService {
     }
   }
   onMouseMove(event: MouseEvent): void {
-    if (this.isDrawing) {
+    if (this.isDrawing.value) {
     this.addPath(event.clientX, event.clientY);
 
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
