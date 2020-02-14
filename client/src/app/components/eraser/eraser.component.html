@@ -1,0 +1,20 @@
+<div id="container">
+    <form id="line-form">
+      <div class="head-group">
+        <label class="title" id="thickness">Épaisseur</label>
+        <mat-slider
+          id="thickness-slider"
+          name="thickness-slider"
+          disabled="false"
+          [min]="THICKNESS_ERASER_MINIMUM"
+          [max]="THICKNESS_ERASER_MAXIMUM"
+          step="1"
+          thumbLabel="true"
+          tickInterval="false"
+          [(ngModel)]="service.thickness"
+          vertical="false">
+        </mat-slider>
+      </div>
+    </form>
+  </div>
+  

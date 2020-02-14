@@ -156,7 +156,7 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('eraser')"
+          <button mat-button (click)="selectTool('eraser')"
                   [ngClass]="{'clicked': currentTool === 'eraser',
             'not-clicked': currentTool !== 'eraser'}">
             <img src="../../../assets/icons/eraser.svg">
