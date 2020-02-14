@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EraserComponent } from './eraser.component';
+import { MatSliderModule, MatFormFieldModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 describe('EraserComponent', () => {
   let component: EraserComponent;
@@ -8,7 +11,13 @@ describe('EraserComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EraserComponent ]
+      declarations: [ EraserComponent ],
+      imports: [
+        BrowserAnimationsModule,
+        FormsModule,
+        MatSliderModule,
+        MatFormFieldModule,
+      ]
     })
     .compileComponents();
   }));
