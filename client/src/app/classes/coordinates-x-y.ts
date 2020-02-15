@@ -102,8 +102,8 @@ export class CoordinatesXY {
     return (
      element.right > this.x && 
      element.left < this.x &&
-     element.top > this.y &&
-     element.bottom < this.y
+     element.top < this.y &&
+     element.bottom > this.y
     );
   }
 

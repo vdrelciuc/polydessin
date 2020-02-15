@@ -35,10 +35,12 @@ export class EraserService extends DrawableService {
   }
 
   onMouseMove(event: MouseEvent): void {
-    console.log('eraser move');
-    let elementOnTop = this.drawStack.findTopElementAt(new CoordinatesXY(event.x, event.y));
+    let elementOnTop = this.drawStack.findTopElementAt(new CoordinatesXY(
+        CoordinatesXY.effectiveX(this.image, event.clientX), 
+        CoordinatesXY.effectiveY(this.image, event.clientY)));
     if(elementOnTop !== undefined) {
-      this.manipulator.setAttribute(elementOnTop, SVGProperties.color, CONSTANTS.ERASER_OUTLINE);
+      console.log('Found element');
+      this.manipulator.setProperty(elementOnTop, SVGProperties.color, CONSTANTS.ERASER_OUTLINE);
     }
   }
 }
