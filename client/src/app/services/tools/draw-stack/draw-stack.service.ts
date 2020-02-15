@@ -20,15 +20,19 @@ export class DrawStackService {
   }
 
   addElement(toAdd: SVGElement): void {
-    this.addElementWithInfos({
-      target: toAdd,
-      id: this.nextId++
-    });
-    this.isAdding.next(true);
+    if(toAdd !== undefined) {
+      this.addElementWithInfos({
+        target: toAdd,
+        id: this.nextId++
+      });
+      this.isAdding.next(true);
+    }
   }
 
   addElementWithInfos(toAdd: SVGElementInfos): void {
-    this.elements.push_back(toAdd);
+    if(toAdd !== undefined) {
+      this.elements.push_back(toAdd);
+    }
   }
 
   removeElement(toRemove: number): void  {

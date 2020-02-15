@@ -30,3 +30,6 @@ export const MAX_RECENT_COLORS = 10;
 export const HEX_BASE = 16;
 export const HEX_LENGTH = 6;
 export const DECIMAL_BASE = 10;
+
+// Eraser
+export const ERASER_OUTLINE = 'red';
