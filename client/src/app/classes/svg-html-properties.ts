@@ -3,6 +3,7 @@ export enum SVGProperties {
   fill = 'fill',
   color = 'stroke',
   container = 'g',
+  outline = 'outline',
   height = 'height',
   hyperlink = 'a',
   globalOpacity = 'opacity',

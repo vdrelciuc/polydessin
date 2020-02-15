@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Stack } from 'src/app/classes/stack';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { BehaviorSubject } from 'rxjs';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +51,15 @@ export class DrawStackService {
 
   isEmpty(): boolean {
     return this.nextId === 0;
+  }
+
+  findTopElementAt(position: CoordinatesXY): SVGElement | undefined {
+    const array = this.elements.getAll();
+    for(let i: number = array.length - 1; i >= 0; i--) {
+      if(position.inRadius(array[i].target.getBoundingClientRect())) {
+        return array[i].target;
+      }
+    }
+    return undefined;
   }
 }
