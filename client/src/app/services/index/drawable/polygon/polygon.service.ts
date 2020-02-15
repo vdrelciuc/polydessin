@@ -21,11 +21,16 @@ export class PolygonService extends DrawableService {
 
   protected shapeCorner: CoordinatesXY;
   protected shapeOrigin: CoordinatesXY;
+  protected mousePointer: CoordinatesXY;
   protected radius: number;
+  protected theta: number;
+  protected needRotate: boolean;
   protected isChanging: boolean;
 
   protected subElement: SVGGElement;
   protected polygon: SVGPolygonElement;
+  protected perimeter: SVGPolygonElement;
+  protected ratioYX: number;
 
   private shapeIsEmpty: boolean;
 
@@ -75,7 +80,6 @@ export class PolygonService extends DrawableService {
       this.onMouseRelease(event);
     } else if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
       this.shapeCorner = CoordinatesXY.getEffectiveCoords(this.image, event);
-      this.isChanging = true;
       this.setupProperties();
     }
   }
@@ -86,37 +90,80 @@ export class PolygonService extends DrawableService {
     if (this.shapeIsEmpty) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
+    this.manipulator.removeChild(this.image.nativeElement, this.perimeter);
   }
 
   onMouseMove(event: MouseEvent): void {
     if (this.isChanging) {
-      const mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
-      this.radius = Math.min(
-        Math.abs(mousePosition.getX() - this.shapeCorner.getX()),
-        Math.abs(mousePosition.getY() - this.shapeCorner.getY())
-      ) / 2;
-      const quadrant = mousePosition.getQuadrant(this.shapeCorner);
+      this.mousePointer = CoordinatesXY.getEffectiveCoords(this.image, event);
+      let height = Math.abs(this.mousePointer.getY() - this.shapeCorner.getY());
+      let width = Math.abs(this.mousePointer.getX() - this.shapeCorner.getX());
+      const quadrant = this.mousePointer.getQuadrant(this.shapeCorner);
 
-      const originY = (this.shapeCorner.getY() + ((quadrant === 1 || quadrant === 2) ? -this.radius : this.radius));
-      const originX = (this.shapeCorner.getX() + ((quadrant === 1 || quadrant === 4) ? this.radius : -this.radius));
+      this.needRotate = height > width;
+
+      if (height > (this.needRotate ? width / this.ratioYX : width * this.ratioYX)) {
+        height = (this.needRotate ? width / this.ratioYX : width * this.ratioYX);
+      } else {
+        width = (this.needRotate ? height * this.ratioYX : height / this.ratioYX);
+      }
+
+      this.radius = (this.needRotate ? width : height) / (this.nSides % 2 ? 1 + Math.cos(this.theta / 2) : 2 * Math.cos(this.theta / 2));
+      let originX: number;
+      let originY: number;
+      if (quadrant === 1 || quadrant === 4) {
+        originX = this.shapeCorner.getX() + (this.needRotate ? this.radius : width / 2);
+      } else {
+        originX = this.shapeCorner.getX() - (this.needRotate ? width - this.radius : width / 2);
+      }
+      if (quadrant === 1 || quadrant === 2) {
+        originY = this.shapeCorner.getY() - (this.needRotate ? height / 2 : height - this.radius);
+      } else {
+        originY = this.shapeCorner.getY() + (this.needRotate ? height / 2 : this.radius);
+      }
       this.shapeOrigin = new CoordinatesXY(originX, originY);
 
       this.updateShape();
     }
   }
 
+  calculateRatioYX(): void {
+    let angle = ((Math.PI / 2) - (this.theta / 2));
+    while (true) {
+      if (Math.cos(angle) < Math.cos(angle - this.theta)) {
+        angle -= this.theta;
+      } else {
+        break;
+      }
+    }
+
+    const width = 2 * Math.cos(angle);
+    const height = ((this.nSides % 2) ? 1 + Math.cos(this.theta / 2) : 2 * Math.cos(this.theta / 2));
+
+    this.ratioYX = height / width;
+  }
+
   protected updateShape(): void {
     let points = '';
-    let angle = (this.nSides % 2 ? -(Math.PI / 2) : -(Math.PI / 2) + (Math.PI / this.nSides));
+    let angle = this.theta / 2 + (this.needRotate ? 0 : (Math.PI / 2));
     for (let i = 0; i < this.nSides; i++) {
       points += `${this.shapeOrigin.getX() + this.radius * Math.cos(angle)},${this.shapeOrigin.getY() + this.radius * Math.sin(angle)} `
-      angle += (2 * Math.PI / this.nSides);
+      angle += this.theta;
     }
+    let perimeterPoints = `${this.shapeCorner.getX()},${this.shapeCorner.getY()} `;
+    perimeterPoints += `${this.shapeCorner.getX()},${this.mousePointer.getY()} `;
+    perimeterPoints += `${this.mousePointer.getX()},${this.mousePointer.getY()} `;
+    perimeterPoints += `${this.mousePointer.getX()},${this.shapeCorner.getY()}`;
     this.polygon.setAttribute(SVGProperties.points, points);
+    this.perimeter.setAttribute(SVGProperties.points, perimeterPoints);
     this.shapeIsEmpty = (this.radius === 0);
   }
 
   protected setupProperties(): void {
+    this.theta = (2 * Math.PI / this.nSides);
+    this.calculateRatioYX();
+    this.isChanging = true;
+
     // Creating elements
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Polygon);
@@ -139,8 +186,15 @@ export class PolygonService extends DrawableService {
       this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, 'none');
     }
 
+    // Creating perimeter
+    this.perimeter = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.thickness, '1');
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.fill, 'none');
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.color, this.shapeStyle.fillColor.getHex());
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.borderDash, '5,5');
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.polygon);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
+    this.manipulator.appendChild(this.image.nativeElement, this.perimeter);
   }
 }

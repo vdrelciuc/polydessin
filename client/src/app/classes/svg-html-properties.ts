@@ -13,7 +13,7 @@ export enum SVGProperties {
   width = 'width',
   title = 'title',
   visibility = 'visibility',
-
+  borderDash = 'stroke-dasharray',
   // Circle and Ellipse
   centerX = 'cx',
   centerY = 'cy',
