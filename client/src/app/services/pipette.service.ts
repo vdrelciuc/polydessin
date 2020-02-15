@@ -1,14 +1,20 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { CoordinatesXY } from '../classes/coordinates-x-y';
+import { SVGProperties } from '../classes/svg-properties';
 import { ColorSelectorService } from './color-selector.service';
 import { DrawableService } from './index/drawable/drawable.service';
 import { DrawablePropertiesService } from './index/drawable/properties/drawable-properties.service';
 import { DrawStackService } from './tools/draw-stack/draw-stack.service';
-import { CoordinatesXY } from '../classes/coordinates-x-y';
+import { Color } from '../classes/color';
+import { ColorType } from '../enums/color-types';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PipetteService extends DrawableService {
+  readonly LEFT_CLICK = 0;
+  readonly WHEEL_CLICK = 1;
+  readonly RIGHT_CLICK = 2;
 
   constructor() {
     super();
@@ -18,12 +24,11 @@ export class PipetteService extends DrawableService {
              image: ElementRef<SVGElement>,
              colorSelectorService: ColorSelectorService,
              drawStack: DrawStackService): void {
-    this.initializeProperties(colorSelectorService);
+    this.initializeProperties();
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
   }
 
-  initializeProperties(colorSelectorService: ColorSelectorService): void {
-  }
+  initializeProperties(): void {}
 
   protected assignParams(
     manipulator: Renderer2,
@@ -36,10 +41,22 @@ export class PipetteService extends DrawableService {
     this.drawStack = drawStack;
     this.attributes = new DrawablePropertiesService();
   }
-  onClick(event: MouseEvent): void {
-    const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
-    const effectiveY = CoordinatesXY.effectiveX(this.image, event.clientY);
-    const position = new CoordinatesXY(effectiveX, effectiveY);
 
+  onClick(event: MouseEvent): void {
+    // const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
+    // const effectiveY = CoordinatesXY.effectiveX(this.image, event.clientY);
+    const position = new CoordinatesXY(event.clientX, event.clientY);
+    const svgElement = this.drawStack.findTopElementAt(position);
+    if (svgElement !== undefined) {
+      const stroke = svgElement.getAttribute(SVGProperties.color); // could be color instead!!!!
+      if (stroke !== null && event.button !== this.WHEEL_CLICK) {
+        if (event.button === this.LEFT_CLICK) {
+          this.colorSelectorService.colorToChange = ColorType.Primary;
+        } else if (event.button === this.RIGHT_CLICK) {
+          this.colorSelectorService.colorToChange = ColorType.Secondary;
+        }
+        this.colorSelectorService.updateColor(new Color(stroke));
+      }
+    }
   }
 }

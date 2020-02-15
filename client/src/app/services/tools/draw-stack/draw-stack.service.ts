@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DrawStackService {
 
@@ -13,40 +13,40 @@ export class DrawStackService {
   private nextId: number;
   isAdding: BehaviorSubject<boolean>;
 
-  constructor() { 
+  constructor() {
     this.elements = new Stack<SVGElementInfos>();
     this.nextId = 0;
     this.isAdding = new BehaviorSubject<boolean>(false);
   }
 
   addElement(toAdd: SVGElement): void {
-    if(toAdd !== undefined) {
+    if (toAdd !== undefined) {
       this.addElementWithInfos({
         target: toAdd,
-        id: this.nextId++
+        id: this.nextId++,
       });
       this.isAdding.next(true);
     }
   }
 
   addElementWithInfos(toAdd: SVGElementInfos): void {
-    if(toAdd !== undefined) {
+    if (toAdd !== undefined) {
       this.elements.push_back(toAdd);
     }
   }
 
-  removeElement(toRemove: number): void  {
-    for(const element of this.elements.getAll()) {
-      if(element.id === toRemove) {
+  removeElement(toRemove: number): void {
+    for (const element of this.elements.getAll()) {
+      if (element.id === toRemove) {
         this.elements.delete(element);
         this.nextId--;
       }
     }
   }
-  
+
   removeLastElement(): SVGElementInfos | undefined {
     const lastElement = this.elements.pop_back();
-    if(lastElement !== undefined) {
+    if (lastElement !== undefined) {
       this.isAdding.next(false);
       this.nextId--;
     }
@@ -59,8 +59,8 @@ export class DrawStackService {
 
   findTopElementAt(position: CoordinatesXY): SVGElement | undefined {
     const array = this.elements.getAll();
-    for(let i: number = array.length - 1; i >= 0; i--) {
-      if(position.inRadius(array[i].target.getBoundingClientRect())) {
+    for (let i: number = array.length - 1; i >= 0; i--) {
+      if (position.inRadius(array[i].target.getBoundingClientRect())) {
         return array[i].target;
       }
     }
