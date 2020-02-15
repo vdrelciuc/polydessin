@@ -67,6 +67,13 @@ export class SidebarComponent implements OnInit {
       }
     )
   );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: '3', description: 'Selecting polygon with shortcut' }).subscribe(
+    (event) => {
+      this.toolSelectorService.setCurrentTool(Tools.Polygon);
+    }
+  )
+);
 }
 
   selectTool(tool: Tools): void {
