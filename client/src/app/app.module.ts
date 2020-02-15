@@ -38,6 +38,7 @@ import { ResizeObserverDirective } from './components/workspace/resize-observer.
 import {WorkspaceComponent} from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
+import { PipetteComponent } from './components/pipette/pipette.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     ColorSliderComponent,
     RoutingComponents,
     ResizeObserverDirective,
-    WarningDialogComponent
+    WarningDialogComponent,
+    PipetteComponent
   ],
   entryComponents: [
     ColorPickerComponent,

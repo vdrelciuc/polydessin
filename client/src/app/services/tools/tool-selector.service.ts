@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Tools } from '../../enums/tools'
+import { Tools } from '../../enums/tools';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { ColorSelectorService } from '../color-selector.service';
 import { BrushService } from '../index/drawable/brush/brush.service';
@@ -8,6 +8,7 @@ import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from '../index/drawable/line/line.service';
 import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
+import { PipetteService } from '../pipette.service';
 import { DrawStackService } from './draw-stack/draw-stack.service';
 import { UndoRedoService } from './undo-redo/undo-redo.service';
 
@@ -24,6 +25,7 @@ export class ToolSelectorService {
   private pencil: PencilService;
   private rectangle: RectangleService;
   private brush: BrushService;
+  private pipette: PipetteService;
 
   constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
@@ -31,11 +33,13 @@ export class ToolSelectorService {
     this.pencil = new PencilService();
     this.rectangle = new RectangleService();
     this.brush = new BrushService();
+    this.pipette = new PipetteService();
 
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
     this.tools.set(Tools.Rectangle, this.rectangle);
     this.tools.set(Tools.Brush, this.brush);
+    this.tools.set(Tools.Pipette, this.pipette);
       // Initialize currentTool as the selector(mouse)
     // this.isHidden = true;
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
@@ -54,6 +58,7 @@ export class ToolSelectorService {
   getPencil(): PencilService { return this.pencil; }
   getRectangle(): RectangleService { return this.rectangle; }
   getBrush(): BrushService { return this.brush; }
+  getPipette(): PipetteService { return this.pipette; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
