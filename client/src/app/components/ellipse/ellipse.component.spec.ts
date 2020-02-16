@@ -51,15 +51,8 @@ describe('EllipseComponent', () => {
     .compileComponents();
     fixture = TestBed.createComponent(EllipseComponent);
     component = fixture.componentInstance;
-    component.ngOnInit();
     component['service']['manipulator'] = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(EllipseComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
