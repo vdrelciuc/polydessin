@@ -53,11 +53,11 @@ export class SidebarComponent implements OnInit {
     );
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: '2', description: 'Selecting rectangle with shortcut' }).subscribe(
-      (event) => {
-        this.toolSelectorService.setCurrentTool(Tools.Ellipse);
-      }
-    )
-  );
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Ellipse);
+        }
+      )
+    );
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'w', description: 'Selecting brush with shortcut' }).subscribe(
         (event) => {

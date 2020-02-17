@@ -26,6 +26,7 @@ export abstract class ShapeService extends DrawableService {
   protected mousePositionOnShiftPress: CoordinatesXY;
 
   protected text: SVGTextElement;
+  protected perimeter: SVGRectElement;
   protected subElement: SVGGElement;
   protected shape: SVGElement;
 
@@ -95,6 +96,7 @@ export abstract class ShapeService extends DrawableService {
       this.drawOnNextMove = false;
     } else {
       this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
+      this.manipulator.removeChild(this.subElement, this.perimeter);
     }
   }
 
@@ -145,8 +147,39 @@ export abstract class ShapeService extends DrawableService {
       }
     }
 
+    // Set dimensions attributes for perimeter
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.width, width.toString());
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.height, height.toString());
+
+    let thicknessOffset = this.shapeStyle.hasBorder ? this.shapeStyle.thickness / 2 : 0;
+
+    if (this.shapeStyle.hasBorder) {
+      let fakedWidth = width - this.shapeStyle.thickness;
+      let fakedHeight = height - this.shapeStyle.thickness;
+    
+      // Recover border
+      this.manipulator.setAttribute(this.shape, SVGProperties.thickness, this.shapeStyle.thickness.toString());
+      // Check if border thickness is larger than width or height
+      if (fakedWidth <= 0) {
+        fakedWidth = 1;
+        this.manipulator.setAttribute(this.shape, SVGProperties.thickness, Math.min(width, height).toString());
+        thicknessOffset = Math.min(width, height) / 2;
+        fakedHeight = height - 2 * thicknessOffset;
+      }
+      if (fakedHeight <= 0) {
+        fakedHeight = 1;
+        this.manipulator.setAttribute(this.shape, SVGProperties.thickness, Math.min(width, height).toString());
+        thicknessOffset = Math.min(width, height) / 2;
+        fakedWidth = width - 2 * thicknessOffset;
+      }
+
+      width = fakedWidth;
+      height = fakedHeight;
+    }
+
+    // Set dimensions attributes for shape
     this.setDimensionsAttributes(width, height);
-    this.alignShapeOrigin(width, height);
+    this.alignShapeOrigin(width, height, thicknessOffset);
   }
 
   protected setupProperties(): void {
@@ -155,6 +188,7 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, this.svgTitle);
     this.shape = this.manipulator.createElement(this.svgHtmlTag, 'http://www.w3.org/2000/svg');
     this.text = this.manipulator.createElement('text', 'http://www.w3.org/2000/svg');
+    this.perimeter = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
 
     // Adding shape properties
     const thickness = this.shapeStyle.hasBorder ? this.shapeStyle.thickness.toString() : '0';
@@ -171,29 +205,41 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.text, SVGProperties.color, this.shapeStyle.hasFill ? 'none' : 'grey');
     this.manipulator.setAttribute(this.text, 'text-anchor', 'middle');
 
+    // Adding perimeter properties
+    const perimeterColor = this.colorSelectorService.backgroundColor.getValue().getInvertedColor(true);
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.fill, 'none');
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.color, perimeterColor.getHex());
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.thickness, '1');
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.dashedBorder, '4, 2');
+
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.shape);
     this.manipulator.appendChild(this.subElement, this.text);
+    this.manipulator.appendChild(this.subElement, this.perimeter);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
   }
 
-  protected alignShapeOrigin(width: number, height: number): void {
+  protected alignShapeOrigin(width: number, height: number, thicknessOffset: number): void {
     const quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
 
     if (quadrant === 1 || quadrant === 4) {
-      this.setShapeOriginFromRightQuadrants(width);
-      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.shapeOrigin.getX() + width / 2).toString());
+      this.setShapeOriginFromRightQuadrants(width, thicknessOffset);
+      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.shapeOrigin.getX() + width / 2 + thicknessOffset).toString());
+      this.manipulator.setAttribute(this.perimeter, SVGProperties.x, this.shapeOrigin.getX().toString());
     } else {
-      this.setShapeOriginFromLeftQuadrants(width);
-      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.mousePosition.getX() + width / 2).toString());
+      this.setShapeOriginFromLeftQuadrants(width, thicknessOffset);
+      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.mousePosition.getX() + width / 2 + thicknessOffset).toString());
+      this.manipulator.setAttribute(this.perimeter, SVGProperties.x, this.mousePosition.getX().toString());
     }
 
     if (quadrant === 3 || quadrant === 4) {
-      this.setShapeOriginFromLowerQuadrants(height);
-      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.getY() + height / 2).toString());
+      this.setShapeOriginFromLowerQuadrants(height, thicknessOffset);
+      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.getY() + height / 2 + thicknessOffset).toString());
+      this.manipulator.setAttribute(this.perimeter, SVGProperties.y, this.shapeOrigin.getY().toString());
     } else {
-      this.setShapeOriginFromUpperQuadrants(height);
-      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.mousePosition.getY() + height / 2).toString());
+      this.setShapeOriginFromUpperQuadrants(height, thicknessOffset);
+      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.mousePosition.getY() + height / 2 + thicknessOffset).toString());
+      this.manipulator.setAttribute(this.perimeter, SVGProperties.y, this.mousePosition.getY().toString());
     }
 
     this.updateTextSize(width, height);
@@ -216,8 +262,8 @@ export abstract class ShapeService extends DrawableService {
   // Methods to implement in concrete shape class
 
   protected abstract setDimensionsAttributes(width: number, height: number): void;
-  protected abstract setShapeOriginFromRightQuadrants(width: number): void;
-  protected abstract setShapeOriginFromLeftQuadrants(width: number): void;
-  protected abstract setShapeOriginFromLowerQuadrants(height: number): void;
-  protected abstract setShapeOriginFromUpperQuadrants(height: number): void;
+  protected abstract setShapeOriginFromRightQuadrants(width: number, thicknessOffset: number): void;
+  protected abstract setShapeOriginFromLeftQuadrants(width: number, thicknessOffset: number): void;
+  protected abstract setShapeOriginFromLowerQuadrants(height: number, thicknessOffset: number): void;
+  protected abstract setShapeOriginFromUpperQuadrants(height: number, thicknessOffset: number): void;
 }
