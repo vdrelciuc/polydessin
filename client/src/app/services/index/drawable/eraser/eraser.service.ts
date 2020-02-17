@@ -5,6 +5,7 @@ import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.s
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import * as CONSTANTS from '../../../../classes/constants';
+import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ import * as CONSTANTS from '../../../../classes/constants';
 export class EraserService extends DrawableService {
 
   thickness: number;
+  private selectedElement: SVGElementInfos;
+  private oldBorder: string;
 
   constructor() { 
     super();
@@ -36,11 +39,28 @@ export class EraserService extends DrawableService {
 
   onMouseMove(event: MouseEvent): void {
     let elementOnTop = this.drawStack.findTopElementAt(new CoordinatesXY(
-        CoordinatesXY.effectiveX(this.image, event.clientX), 
-        CoordinatesXY.effectiveY(this.image, event.clientY)));
-    if(elementOnTop !== undefined) {
-      console.log('Found element');
-      this.manipulator.setProperty(elementOnTop, SVGProperties.color, CONSTANTS.ERASER_OUTLINE);
+        event.clientX, 
+         event.clientY));
+    if(elementOnTop !== undefined) {      
+      if(this.selectedElement === undefined) {
+        this.selectedElement = elementOnTop;
+      }
+      if(this.selectedElement !== elementOnTop) {
+        this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+        this.selectedElement = elementOnTop;
+      }
+      const color = this.selectedElement.target.getAttribute(SVGProperties.color); // NO I HAVE TO THE COLOR OF .firstChild
+      if(color !== null) {
+        this.oldBorder = color;
+      }
+      this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, CONSTANTS.ERASER_OUTLINE);
+    }
+  }
+
+  onClick(event: MouseEvent): void {
+    if(this.selectedElement !== undefined) {
+      // this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+      this.drawStack.removeElement(this.selectedElement.id);
     }
   }
 }

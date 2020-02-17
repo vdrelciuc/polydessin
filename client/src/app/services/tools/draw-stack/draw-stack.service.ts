@@ -19,7 +19,7 @@ export class DrawStackService {
     this.isAdding = new BehaviorSubject<boolean>(false);
   }
 
-  addElement(toAdd: SVGElement): void {
+  addElement(toAdd: SVGGElement): void {
     if(toAdd !== undefined) {
       this.addElementWithInfos({
         target: toAdd,
@@ -57,11 +57,11 @@ export class DrawStackService {
     return this.nextId === 0;
   }
 
-  findTopElementAt(position: CoordinatesXY): SVGElement | undefined {
+  findTopElementAt(position: CoordinatesXY): SVGElementInfos | undefined {
     const array = this.elements.getAll();
     for(let i: number = array.length - 1; i >= 0; i--) {
       if(position.inRadius(array[i].target.getBoundingClientRect())) {
-        return array[i].target;
+        return array[i];
       }
     }
     return undefined;

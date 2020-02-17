@@ -32,4 +32,4 @@ export const HEX_LENGTH = 6;
 export const DECIMAL_BASE = 10;
 
 // Eraser
-export const ERASER_OUTLINE = 'red';
+export const ERASER_OUTLINE = '#FF0000';
