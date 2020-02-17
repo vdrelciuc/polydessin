@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class DrawStackService {
 
@@ -19,25 +19,25 @@ export class DrawStackService {
     this.isAdding = new BehaviorSubject<boolean>(false);
   }
 
-  addElement(toAdd: SVGElement): void {
-    if (toAdd !== undefined) {
+  addElement(toAdd: SVGGElement): void {
+    if(toAdd !== undefined) {
       this.addElementWithInfos({
         target: toAdd,
-        id: this.nextId++,
+        id: this.nextId++
       });
       this.isAdding.next(true);
     }
   }
 
   addElementWithInfos(toAdd: SVGElementInfos): void {
-    if (toAdd !== undefined) {
+    if(toAdd !== undefined) {
       this.elements.push_back(toAdd);
     }
   }
 
-  removeElement(toRemove: number): void {
-    for (const element of this.elements.getAll()) {
-      if (element.id === toRemove) {
+  removeElement(toRemove: number): void  {
+    for(const element of this.elements.getAll()) {
+      if(element.id === toRemove) {
         this.elements.delete(element);
         this.nextId--;
       }
@@ -46,7 +46,7 @@ export class DrawStackService {
 
   removeLastElement(): SVGElementInfos | undefined {
     const lastElement = this.elements.pop_back();
-    if (lastElement !== undefined) {
+    if(lastElement !== undefined) {
       this.isAdding.next(false);
       this.nextId--;
     }
@@ -57,11 +57,11 @@ export class DrawStackService {
     return this.nextId === 0;
   }
 
-  findTopElementAt(position: CoordinatesXY): SVGElement | undefined {
+  findTopElementAt(position: CoordinatesXY): SVGElementInfos | undefined {
     const array = this.elements.getAll();
-    for (let i: number = array.length - 1; i >= 0; i--) {
-      if (position.inRadius(array[i].target.getBoundingClientRect())) {
-        return array[i].target;
+    for(let i: number = array.length - 1; i >= 0; i--) {
+      if(position.inRadius(array[i].target.getBoundingClientRect())) {
+        return array[i];
       }
     }
     return undefined;

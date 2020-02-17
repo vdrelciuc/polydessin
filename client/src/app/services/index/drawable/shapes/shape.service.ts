@@ -96,7 +96,7 @@ export abstract class ShapeService extends DrawableService {
       this.drawOnNextMove = false;
     } else {
       this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
-      this.drawStack.addElement(this.shape);
+      this.drawStack.addElement(this.subElement);
     }
   }
 
