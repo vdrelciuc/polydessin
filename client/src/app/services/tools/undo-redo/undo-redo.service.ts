@@ -47,4 +47,9 @@ export class UndoRedoService {
   canRedo(): boolean {
     return this.removed.getAll().length > 0;
   }
+
+  addToRemoved(toUndo: SVGElementInfos): void {
+    this.removed.push_back(toUndo);
+    this.manipulator.removeChild(this.image, toUndo.target);
+  }
 }

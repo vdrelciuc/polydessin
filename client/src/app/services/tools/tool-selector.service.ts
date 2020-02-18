@@ -52,6 +52,7 @@ export class ToolSelectorService {
     for (const element of this.tools) {
       element[1].initialize(manipulator, image, colorSelectorService, drawStack);
     }
+    this.eraser.assignUndoRedo(this.memory);
   }
 
   getCurrentTool(): DrawableService | undefined { return this.tool; }

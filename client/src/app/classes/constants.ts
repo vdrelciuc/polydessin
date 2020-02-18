@@ -33,3 +33,4 @@ export const DECIMAL_BASE = 10;
 
 // Eraser
 export const ERASER_OUTLINE = '#FF0000';
+export const ERASER_OUTLINE_RED_ELEMENTS = '#8B0000';
