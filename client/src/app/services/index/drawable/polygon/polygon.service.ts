@@ -112,14 +112,14 @@ export class PolygonService extends DrawableService {
       let originX: number;
       let originY: number;
       if (quadrant === 1 || quadrant === 4) {
-        originX = this.shapeCorner.getX() + (this.needRotate ? this.radius : width / 2);
+        originX = this.shapeCorner.getX() + (this.needRotate && this.nSides % 2 ? this.radius : width / 2);
       } else {
-        originX = this.shapeCorner.getX() - (this.needRotate ? width - this.radius : width / 2);
+        originX = this.shapeCorner.getX() - (this.needRotate && this.nSides % 2 ? width - this.radius : width / 2);
       }
       if (quadrant === 1 || quadrant === 2) {
-        originY = this.shapeCorner.getY() - (this.needRotate ? height / 2 : height - this.radius);
+        originY = this.shapeCorner.getY() - (this.needRotate || (this.nSides % 2 === 0) ? height / 2 : height - this.radius);
       } else {
-        originY = this.shapeCorner.getY() + (this.needRotate ? height / 2 : this.radius);
+        originY = this.shapeCorner.getY() + (this.needRotate || (this.nSides % 2 === 0) ? height / 2 : this.radius);
       }
       this.shapeOrigin = new CoordinatesXY(originX, originY);
 
@@ -145,6 +145,9 @@ export class PolygonService extends DrawableService {
 
   protected updateShape(): void {
     let points = '';
+
+    this.radius -= this.shapeStyle.thickness / 2 / Math.sin((this.nSides - 2) * Math.PI / this.nSides / 2);
+
     let angle = this.theta / 2 + (this.needRotate ? 0 : (Math.PI / 2));
     for (let i = 0; i < this.nSides; i++) {
       points += `${this.shapeOrigin.getX() + this.radius * Math.cos(angle)},${this.shapeOrigin.getY() + this.radius * Math.sin(angle)} `
@@ -179,7 +182,7 @@ export class PolygonService extends DrawableService {
 
     // Adding border properties
     if (this.shapeStyle.hasBorder) {
-      this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, this.shapeStyle.thickness.toString());
+      this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, (this.shapeStyle.thickness).toString());
       this.manipulator.setAttribute(this.polygon, SVGProperties.color, this.shapeStyle.borderColor.getHex());
       this.manipulator.setAttribute(this.polygon, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
     } else {
