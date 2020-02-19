@@ -10,6 +10,7 @@ export enum SVGProperties {
   borderOpacity = 'stroke-opacity',
   thickness = 'stroke-width',
   dashedBorder = 'stroke-dasharray',
+  dashedBorderOffset = 'stroke-dashoffset',
   topLeftCornerCoordinates = 'viewBox',
   width = 'width',
   title = 'title',
