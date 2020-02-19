@@ -64,6 +64,10 @@ export class DrawStackService {
     return this.nextId === 0;
   }
 
+  size(): number {
+    return this.elements.getAll().length;
+  }
+
   findTopElementAt(position: CoordinatesXY): SVGElementInfos | undefined {
     const array = this.elements.getAll();
     for(let i: number = array.length - 1; i >= 0; i--) {
@@ -72,6 +76,17 @@ export class DrawStackService {
       }
     }
     return undefined;
+  }
+
+  hasElementIn(elementID: number, zone: DOMRect): SVGElementInfos | undefined {
+    console.log("hasElementIn entered with id: " + elementID);
+    const element = this.elements.getAll()[elementID].target.getBoundingClientRect();
+    const isIncludedX = zone.left <= element.right && zone.right >= element.left;
+    const isIncludedY = zone.top <= element.bottom && zone.bottom >= element.top;
+    console.log("IncX: " + isIncludedX);
+    console.log("IncY: " + isIncludedY);
+
+    return (isIncludedX && isIncludedY) ? this.elements.getAll()[elementID] : undefined;
   }
 
   removeElements(from: number): SVGElementInfos[] {
