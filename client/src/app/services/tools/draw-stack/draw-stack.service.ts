@@ -79,12 +79,12 @@ export class DrawStackService {
   }
 
   hasElementIn(elementID: number, zone: DOMRect): SVGElementInfos | undefined {
-    console.log("hasElementIn entered with id: " + elementID);
+    //console.log("hasElementIn entered with id: " + elementID);
     const element = this.elements.getAll()[elementID].target.getBoundingClientRect();
     const isIncludedX = zone.left <= element.right && zone.right >= element.left;
     const isIncludedY = zone.top <= element.bottom && zone.bottom >= element.top;
-    console.log("IncX: " + isIncludedX);
-    console.log("IncY: " + isIncludedY);
+    //console.log("IncX: " + isIncludedX);
+    //console.log("IncY: " + isIncludedY);
 
     return (isIncludedX && isIncludedY) ? this.elements.getAll()[elementID] : undefined;
   }
