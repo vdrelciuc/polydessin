@@ -12,6 +12,7 @@ import { DrawStackService } from './draw-stack/draw-stack.service';
 import { UndoRedoService } from './undo-redo/undo-redo.service';
 import { EllipseService } from '../index/drawable/ellipse/ellipse.service';
 import { EraserService } from '../index/drawable/eraser/eraser.service';
+import { SelectionService } from '../index/drawable/selection/selection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,7 @@ export class ToolSelectorService {
   private brush: BrushService;
   private ellipse: EllipseService;
   private eraser: EraserService;
+  private selection: SelectionService;
 
   constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
@@ -37,6 +39,7 @@ export class ToolSelectorService {
     this.brush = new BrushService();
     this.ellipse = new EllipseService();
     this.eraser = new EraserService();
+    this.selection = new SelectionService();
 
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
@@ -44,7 +47,9 @@ export class ToolSelectorService {
     this.tools.set(Tools.Brush, this.brush);
     this.tools.set(Tools.Ellipse, this.ellipse);
     this.tools.set(Tools.Eraser, this.eraser);
-    this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
+    this.tools.set(Tools.Selection, this.selection);
+    this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
+    this.setCurrentTool(Tools.Selection);
   }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
@@ -63,6 +68,7 @@ export class ToolSelectorService {
   getBrush(): BrushService { return this.brush; }
   getEllipse(): EllipseService { return this.ellipse; }
   getEraser(): EraserService { return this.eraser; }
+  getSelection(): SelectionService { return this.selection; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
