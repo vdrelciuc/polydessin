@@ -79,8 +79,10 @@ export class PolygonService extends DrawableService {
       // This case happens if the mouse button was released out of canvas: the shaped is confirmed on next mouse click
       this.onMouseRelease(event);
     } else if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
+      this.isChanging = true;
+      this.startDraw();
       this.shapeCorner = CoordinatesXY.getEffectiveCoords(this.image, event);
-      this.setupProperties();
+      this.updateProperties();
     }
   }
 
@@ -91,6 +93,12 @@ export class PolygonService extends DrawableService {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
     this.manipulator.removeChild(this.image.nativeElement, this.perimeter);
+  }
+
+  onMouseInCanvas(event: MouseEvent): void {
+    if (this.isChanging) {
+      this.updateProperties();
+    }
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -123,7 +131,7 @@ export class PolygonService extends DrawableService {
       }
       this.shapeOrigin = new CoordinatesXY(originX, originY);
 
-      this.updateShape();
+      this.updateDraw();
     }
   }
 
@@ -143,7 +151,7 @@ export class PolygonService extends DrawableService {
     this.ratioYX = height / width;
   }
 
-  protected updateShape(): void {
+  protected updateDraw(): void {
     let points = '';
     const thicknessRadius = this.shapeStyle.thickness / 2 / Math.sin((this.nSides - 2) * Math.PI / this.nSides / 2);
     if (this.radius > thicknessRadius) {
@@ -169,15 +177,9 @@ export class PolygonService extends DrawableService {
     this.shapeIsEmpty = (this.radius === 0);
   }
 
-  protected setupProperties(): void {
+  protected updateProperties(): void {
     this.theta = (2 * Math.PI / this.nSides);
     this.calculateRatioYX();
-    this.isChanging = true;
-
-    // Creating elements
-    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Polygon);
-    this.polygon = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
 
     // Adding fill properties
     if (this.shapeStyle.hasFill) {
@@ -195,15 +197,27 @@ export class PolygonService extends DrawableService {
       this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, 'none');
     }
 
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.color, this.shapeStyle.fillColor.getHex());
+  }
+
+  startDraw(): void {
+    // Creating elements
+    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Polygon);
+    this.polygon = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
+
     // Creating perimeter
     this.perimeter = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.perimeter, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.perimeter, SVGProperties.fill, 'none');
-    this.manipulator.setAttribute(this.perimeter, SVGProperties.color, this.shapeStyle.fillColor.getHex());
     this.manipulator.setAttribute(this.perimeter, SVGProperties.borderDash, '5,5');
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.polygon);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
     this.manipulator.appendChild(this.image.nativeElement, this.perimeter);
+  }
+  cancelDraw(): void {
+    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    this.manipulator.removeChild(this.image.nativeElement, this.perimeter);
   }
 }
