@@ -39,11 +39,13 @@ import {WorkspaceComponent} from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
 import { EllipseComponent } from './components/ellipse/ellipse.component';
+import { EraserComponent } from './components/eraser/eraser.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CanvasComponent,
+    EraserComponent,
     OptionPannelComponent,
     SidebarComponent,
     LineComponent,
@@ -68,7 +70,8 @@ import { EllipseComponent } from './components/ellipse/ellipse.component';
     RoutingComponents,
     ResizeObserverDirective,
     WarningDialogComponent,
-    EllipseComponent
+    EllipseComponent,
+    EraserComponent
   ],
   entryComponents: [
     ColorPickerComponent,

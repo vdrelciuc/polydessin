@@ -5,6 +5,8 @@ import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,7 @@ export class PencilService extends DrawableService {
   private previousX: number;
   private previousY: number;
   thickness: number;
-  isDrawing: boolean;
+  isDrawing: BehaviorSubject<boolean>;
   private subElement: SVGGElement;
   private line: SVGPathElement;
   private mousePointer: SVGCircleElement;
@@ -27,14 +29,22 @@ export class PencilService extends DrawableService {
   constructor() {
     super();
     this.frenchName = 'Crayon';
-    this.isDrawing = false;
+    this.isDrawing = new BehaviorSubject<boolean>(false);
     this.path = '';
    }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
-             colorSelectorService: ColorSelectorService): void {
-    this.assignParams(manipulator, image, colorSelectorService);
+             colorSelectorService: ColorSelectorService,
+             drawStack: DrawStackService): void {
+    this.assignParams(manipulator, image, colorSelectorService, drawStack);
     this.initializeProperties();
+    this.isDrawing.subscribe(
+      () => {
+        if(!this.isDrawing.value) {
+          drawStack.addElement(this.subElement);
+        }
+      }
+    )
   }
 
   initializeProperties(): void {
@@ -59,14 +69,15 @@ export class PencilService extends DrawableService {
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
     this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
   }
+
   onMouseOutCanvas(event: MouseEvent): void {
     this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
-    this.isDrawing = false;
+    this.isDrawing.next(false);
     delete(this.mousePointer);
   }
 
   onMousePress(event: MouseEvent): void {
-    this.isDrawing = true;
+    this.isDrawing.next(true);
     this.beginDraw(event.clientX, event.clientY);
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, 'pencil-path');
@@ -89,7 +100,7 @@ export class PencilService extends DrawableService {
 
   onMouseRelease(event: MouseEvent): void {
     if (event.button === 0) { // 0 for the left mouse button
-      this.isDrawing = false;
+      this.isDrawing.next(false);
       this.endPath();
       this.updateCursor(event.clientX, event.clientY);
       this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
@@ -97,7 +108,7 @@ export class PencilService extends DrawableService {
   }
 
   onMouseMove(event: MouseEvent): void {
-    if (this.isDrawing) {
+    if (this.isDrawing.value) {
       this.addPath(event.clientX, event.clientY);
     } else {
       this.updateCursor(event.clientX, event.clientY);

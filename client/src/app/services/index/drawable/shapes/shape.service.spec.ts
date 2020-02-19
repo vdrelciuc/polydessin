@@ -8,6 +8,7 @@ import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { RectangleService } from '../rectangle/rectangle.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 describe('ShapeService', () => {
 
@@ -62,6 +63,7 @@ describe('ShapeService', () => {
             secondaryTransparency: opacitySubject
           },
         },
+        DrawStackService
       ],
     });
     service = getTestBed().get(RectangleService);
@@ -79,8 +81,9 @@ describe('ShapeService', () => {
       nameDisplayDefault: '[Rectangle]',
       nameDisplayOnShift: '[Carré]'
     };
-    service.initialize(manipulator, image,
-      getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
+    service.initialize(manipulator, image, 
+      getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
+      getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
   });
 
   it('should be created', () => {

@@ -11,6 +11,9 @@ export const DIAMETER_MAXIMUM = 100;
 // Line pixel detection
 export const MAX_DIFFERENCE_OF_PIXEL = 3;
 
+// Eraser thickness
+export const THICKNESS_MINIMUM_ERASER = 3;
+
 // Colors
 export const DEFAULT_PRIMARY_COLOR = '#000000';
 export const DEFAULT_SECONDARY_COLOR = '#FFFFFF';
@@ -27,3 +30,7 @@ export const MAX_RECENT_COLORS = 10;
 export const HEX_BASE = 16;
 export const HEX_LENGTH = 6;
 export const DECIMAL_BASE = 10;
+
+// Eraser
+export const ERASER_OUTLINE = '#FF0000';
+export const ERASER_OUTLINE_RED_ELEMENTS = '#8B0000';

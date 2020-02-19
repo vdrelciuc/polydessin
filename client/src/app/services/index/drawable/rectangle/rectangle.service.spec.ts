@@ -6,6 +6,8 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { RectangleService } from './rectangle.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+// import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 describe('RectangleService', () => {
 
@@ -97,14 +99,17 @@ describe('RectangleService', () => {
             secondaryTransparency: new BehaviorSubject<number>(1),
           },
         },
+        DrawStackService
       ],
     });
     service = getTestBed().get(RectangleService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
     service.attributes = new DrawablePropertiesService();
-    service.initialize(manipulator, image, getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
-  });
+    service.initialize(manipulator, image, 
+      getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
+      getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
+    });
 
   it('should be created', () => {
     expect(service).toBeTruthy();

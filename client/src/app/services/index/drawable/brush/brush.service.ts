@@ -6,6 +6,8 @@ import { FilterList } from 'src/app/components/brush/patterns';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,7 @@ export class BrushService extends DrawableService {
   previousX: number;
   previousY: number;
   thickness: number;
-  isDrawing: boolean;
+  isDrawing: BehaviorSubject<boolean>;
   private subElement: SVGGElement;
   previewLine: SVGPathElement;
   previewCricle: SVGCircleElement;
@@ -28,15 +30,25 @@ export class BrushService extends DrawableService {
   constructor() {
     super();
     this.frenchName = 'Pinceau';
-    this.isDrawing = false;
+    this.isDrawing = new BehaviorSubject<boolean>(false);
     this.path = '';
     this.selectedFilter = FilterList[0].referenceID;
    }
 
-  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
-             colorSelectorService: ColorSelectorService): void {
-    this.assignParams(manipulator, image, colorSelectorService);
+  initialize(
+    manipulator: Renderer2, 
+    image: ElementRef<SVGElement>,
+    colorSelectorService: ColorSelectorService, 
+    drawStack: DrawStackService): void {
+    this.assignParams(manipulator, image, colorSelectorService, drawStack);
     this.initializeProperties();
+    this.isDrawing.subscribe(
+      () => {
+        if(!this.isDrawing.value) {
+          drawStack.addElement(this.subElement);
+        }
+      }
+    )
   }
 
   initializeProperties(): void {
@@ -71,16 +83,16 @@ export class BrushService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);
   }
   onMouseOutCanvas(event: MouseEvent): void {
-    if (this.isDrawing) {
+    if (this.isDrawing.value) {
       this.addPath(event.clientX, event.clientY);
       this.endPath();
-      this.isDrawing = false;
+      this.isDrawing.next(false);
     }
     this.manipulator.removeChild(this.image.nativeElement, this.previewCricle);
     delete(this.previewCricle);
   }
   onMousePress(event: MouseEvent): void {
-    this.isDrawing = true;
+    this.isDrawing.next(true);
     this.beginDraw(event.clientX, event.clientY);
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, 'brush-path');
@@ -104,8 +116,8 @@ export class BrushService extends DrawableService {
   }
   onMouseRelease(event: MouseEvent): void {
     if (event.button === 0) { // 0 for the left mouse button
-      if (this.isDrawing) {
-        this.isDrawing = false;
+      if (this.isDrawing.value) {
+        this.isDrawing.next(false);
         // this.addPath(event.clientX, event.clientY);
         this.endPath();
         this.updateCursor(event.clientX, event.clientY);
@@ -114,7 +126,7 @@ export class BrushService extends DrawableService {
     }
   }
   onMouseMove(event: MouseEvent): void {
-    if (this.isDrawing) {
+    if (this.isDrawing.value) {
     this.addPath(event.clientX, event.clientY);
 
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
@@ -122,7 +134,7 @@ export class BrushService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    this.isDrawing = false;
+    this.isDrawing.next(false);
   }
 
   private beginDraw(clientX: number, clientY: number) {

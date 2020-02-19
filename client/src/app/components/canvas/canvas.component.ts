@@ -8,6 +8,7 @@ import { EventListenerService } from 'src/app/services/events/event-listener.ser
 import { SVGService } from 'src/app/services/index/svg/svg.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Component({
   selector: 'app-canvas',
@@ -27,13 +28,14 @@ export class CanvasComponent implements OnInit {
     private toolSelector: ToolSelectorService,
     private colorSelectorService: ColorSelectorService,
     private createNewService: CreateNewService,
+    private drawStack: DrawStackService,
     private canvasService: CanvasService,
     private workspaceService: WorkspaceService
     ) { }
 
   ngOnInit() {
     this.filters = this.image.nativeElement.innerHTML;
-    this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService);
+    this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack);
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
     this.eventListener.initializeEvents();
 

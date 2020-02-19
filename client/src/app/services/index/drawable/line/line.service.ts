@@ -7,6 +7,7 @@ import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,13 +34,17 @@ export class LineService extends DrawableService {
     this.frenchName = 'Ligne';
     this.points = new Stack<CoordinatesXY>();
     this.circles = new Stack<SVGCircleElement>();
+    
   }
 
   static getName(): Tools { return Tools.Line; }
 
-  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
-             colorSelectorService: ColorSelectorService): void {
-    this.assignParams(manipulator, image, colorSelectorService);
+  initialize(
+    manipulator: Renderer2, 
+    image: ElementRef<SVGElement>,
+    colorSelectorService: ColorSelectorService,
+    drawStack: DrawStackService): void {
+    this.assignParams(manipulator, image, colorSelectorService, drawStack);
     this.initializeProperties();
     this.shiftPressed = false;
     this.isStarted = false;
@@ -165,6 +170,7 @@ export class LineService extends DrawableService {
       this.points.clear();
       this.isStarted = false;
       this.isDone = true;
+      this.drawStack.addElement(this.subElement);
     }
   }
 
