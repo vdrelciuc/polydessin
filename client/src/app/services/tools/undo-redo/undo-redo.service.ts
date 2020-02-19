@@ -21,7 +21,16 @@ export class UndoRedoService {
             this.removed = new Stack<SVGElementInfos>();
           }
         }
+      );
+      this.drawStack.changeAt.subscribe(
+        () => {
+          const changeValue = this.drawStack.changeAt.value;
+          if(changeValue !== 0) {
+            this.redrawStackFrom(changeValue);
+          }
+        }
       )
+
     }
 
   undo(): void {
@@ -51,5 +60,15 @@ export class UndoRedoService {
   addToRemoved(toUndo: SVGElementInfos): void {
     this.removed.push_back(toUndo);
     this.manipulator.removeChild(this.image, toUndo.target);
+  }
+
+  private redrawStackFrom(from: number): void {
+    const toRedraw = this.drawStack.removeElements(from);
+    for(const element of toRedraw) {
+      this.manipulator.removeChild(this.image, element.target);
+    }
+    for(const element of toRedraw) {
+      this.manipulator.appendChild(this.image, element);
+    }
   }
 }
