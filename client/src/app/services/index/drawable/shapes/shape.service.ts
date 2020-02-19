@@ -80,7 +80,6 @@ export abstract class ShapeService extends DrawableService {
   onMousePress(event: MouseEvent): void {
     if (this.isChanging) {
       // This case happens if the mouse button was released out of canvas: the shaped is confirmed on next mouse click
-
       this.onMouseRelease(event);
     } else if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
       this.shapeOrigin = CoordinatesXY.getEffectiveCoords(this.image, event);
@@ -154,7 +153,7 @@ export abstract class ShapeService extends DrawableService {
     let thicknessOffset = this.shapeStyle.hasBorder ? this.shapeStyle.thickness / 2 : 0;
 
     if (this.shapeStyle.hasBorder) {
-      let fakedWidth = width - this.shapeStyle.thickness;
+      /*let fakedWidth = width - this.shapeStyle.thickness;
       let fakedHeight = height - this.shapeStyle.thickness;
     
       // Recover border
@@ -174,7 +173,26 @@ export abstract class ShapeService extends DrawableService {
       }
 
       width = fakedWidth;
-      height = fakedHeight;
+      height = fakedHeight;*/
+
+      if (width > this.shapeStyle.thickness && height > this.shapeStyle.thickness) {
+        width = width - this.shapeStyle.thickness;
+        height = height - this.shapeStyle.thickness;
+        this.manipulator.setAttribute(this.shape, SVGProperties.thickness, this.shapeStyle.thickness.toString());
+      } else {
+        let newThickness: number;
+        if (width <= height) {
+          newThickness = width / 2;
+          width = width / 2;
+          height = height - newThickness;
+        } else {
+          newThickness = height / 2;
+          height = height / 2;
+          width = width - newThickness;
+        }
+        this.manipulator.setAttribute(this.shape, SVGProperties.thickness, newThickness.toString());
+        thicknessOffset = newThickness / 2;
+      }
     }
 
     // Set dimensions attributes for shape
