@@ -10,6 +10,7 @@ export class UndoRedoService {
 
   private removed: Stack<SVGElementInfos>;
   private toRedo: SVGElementInfos | undefined;
+  private toRedraw: Stack<SVGElementInfos>;
 
   constructor(
     private drawStack: DrawStackService,
@@ -26,7 +27,7 @@ export class UndoRedoService {
       this.drawStack.changeAt.subscribe(
         () => {
           const changeValue = this.drawStack.changeAt.value;
-          if(changeValue !== 0) {
+          if(changeValue !== -1) {
             this.redrawStackFrom(changeValue);
           }
         }
@@ -51,6 +52,14 @@ export class UndoRedoService {
       this.drawStack.addElementWithInfos(this.toRedo);
       this.manipulator.appendChild(this.image.nativeElement, this.toRedo.target);
     }
+    if(this.toRedraw !== undefined) {
+      let elementToRedraw = this.toRedraw.pop_front();
+      while(elementToRedraw !== undefined) {
+        this.manipulator.appendChild(this.image.nativeElement, elementToRedraw.target);
+        this.drawStack.addFromUndo(elementToRedraw);
+        elementToRedraw = this.toRedraw.pop_front();
+      }
+    }
   }
 
   canRedo(): boolean {
@@ -63,14 +72,10 @@ export class UndoRedoService {
   }
 
   private redrawStackFrom(from: number): void {
+    this.toRedraw = this.drawStack.removeElements(from);
     if(this.toRedo !== undefined) {
-      let toRedraw = this.drawStack.removeElements(from);
-      for(const element of toRedraw) {
-        this.manipulator.removeChild(this.image.nativeElement, element.target);
-      }
-      toRedraw[toRedraw.length] = this.toRedo;
-      for(const element of toRedraw) {
-        this.manipulator.appendChild(this.image.nativeElement, element.target);
+      for(const elementToRedraw of this.toRedraw.getAll()) {
+        this.manipulator.removeChild(this.image.nativeElement, elementToRedraw.target);
       }
     }
   }

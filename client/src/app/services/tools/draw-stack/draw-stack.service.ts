@@ -27,28 +27,27 @@ export class DrawStackService {
         target: toAdd,
         id: this.nextId
       });
-      this.nextId++; // Je sais je peux faire ++, GARDER CA LA
       this.isAdding.next(true);
     }
   }
 
   addElementWithInfos(toAdd: SVGElementInfos): void {
     if(toAdd !== undefined) {
-      if(toAdd.id !== this.nextId) {
-        // this.percolateUpIDs(toAdd.id);
+      if(toAdd.id + 1 !== this.nextId) {
         this.changeAt.next(toAdd.id);
       }
       this.elements.insert(toAdd, toAdd.id);
     }
-    console.log(this.elements.getAll());
+  }
+
+  addFromUndo(toAdd: SVGElementInfos): void {
+    this.elements.insert(toAdd, toAdd.id);
   }
 
   removeElement(toRemove: number): void  {
     for(const element of this.elements.getAll()) {
       if(element.id === toRemove) {
         this.elements.delete(element);
-        this.nextId--;
-        // this.percolateDownIDs(toRemove);
       }
     }
   }
@@ -80,13 +79,15 @@ export class DrawStackService {
     return undefined;
   }
 
-  removeElements(from: number): SVGElementInfos[] {
-    let toRemove: SVGElementInfos[] = [];
-    let j = 0;
-    for(let i: number = this.elements.getAll().length - 1 ; i >= from; i--) {
-      const poped = this.elements.pop_back();
-      if(poped !== undefined) {
-        toRemove[j] = poped;
+  removeElements(from: number): Stack<SVGElementInfos> {
+    let toRemove = new Stack<SVGElementInfos>();
+    let poped = this.elements.pop_back();
+    while(poped !== undefined) {
+      toRemove.push_front(poped);
+      poped = this.elements.pop_back();
+      if(poped !== undefined && poped.id < from) {
+        this.elements.push_back(poped);
+        break;
       }
     }
     return toRemove;
@@ -97,26 +98,4 @@ export class DrawStackService {
   }
 
   getNextID(): number { return this.nextId++; }
-
-  // private percolateDownIDs(from: number): void {
-  //   let newStack = new Stack<SVGElementInfos>();
-  //   for(const element of this.elements.getAll()) {
-  //     if(element.id >= from) {
-  //       element.id--;
-  //     }
-  //     newStack.push_back(element);
-  //   }
-  //   this.elements = newStack;
-  // }
-
-  // private percolateUpIDs(from: number): void {
-  //   let newStack = new Stack<SVGElementInfos>();
-  //   for(const element of this.elements.getAll()) {
-  //     if(element.id > from) {
-  //       element.id++;
-  //     }
-  //     newStack.push_back(element);
-  //   }
-  //   this.elements = newStack;
-  // }
 }
