@@ -87,12 +87,14 @@ export class PolygonService extends DrawableService {
   }
 
   onMouseRelease(event: MouseEvent): void {
-    this.onMouseMove(event);
-    this.isChanging = false;
-    if (this.shapeIsEmpty) {
-      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    if (this.isChanging) {
+      this.onMouseMove(event);
+      this.isChanging = false;
+      if (this.shapeIsEmpty) {
+        this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+      }
+      this.manipulator.removeChild(this.image.nativeElement, this.perimeter);
     }
-    this.manipulator.removeChild(this.image.nativeElement, this.perimeter);
   }
 
   onMouseInCanvas(event: MouseEvent): void {
