@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
@@ -11,7 +11,7 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
   templateUrl: './ellipse.component.html',
   styleUrls: ['./ellipse.component.scss']
 })
-export class EllipseComponent implements OnInit {
+export class EllipseComponent implements OnInit, OnDestroy {
 
   readonly name: string = Tools.Ellipse;
   readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
@@ -28,6 +28,10 @@ export class EllipseComponent implements OnInit {
 
   ngOnInit(): void {
     this.service.initializeProperties();
+  }
+
+  ngOnDestroy(): void {
+    this.service.cancelShapeIfOngoing();
   }
 
   updateBorder(): void {

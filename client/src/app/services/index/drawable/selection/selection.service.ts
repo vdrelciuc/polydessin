@@ -34,6 +34,7 @@ export class SelectionService extends DrawableService {
 
   initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
+    console.log("initialized");
   }
 
   initializeProperties(): void {
@@ -140,7 +141,7 @@ export class SelectionService extends DrawableService {
 
   private updateSelectedElements(): void {
     this.selectedElements.clear();
-
+    
     for (let i = 0; i < this.drawStack.size(); i++) {
       const element = this.drawStack.hasElementIn(i, this.selectionBox);
       if (element !== undefined) {
@@ -148,7 +149,12 @@ export class SelectionService extends DrawableService {
         this.setGeneratedAreaBorders(element);
       }
     }
-    console.log(this.selectedElements);
+  }
+
+  selectAllElements() {
+    this.selectedElements.clear();
+    console.log(this.drawStack);
+    this.selectedElements = this.drawStack.getAll();
   }
 
   private setGeneratedAreaBorders(element: SVGElementInfos): void {

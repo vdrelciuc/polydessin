@@ -62,10 +62,9 @@ export abstract class ShapeService extends DrawableService {
   }
 
   updateTracingType(tracingType: 'border' | 'fill'): void {
-    if (this.isChanging) {
-      // This case happens if a checkbox was changed while a rectangle creation was ongoing and dragged out of canvas
-      this.cancelShape();
-    }
+    // Verify if a checkbox was changed while a rectangle creation was ongoing and dragged out of canvas
+    this.cancelShapeIfOngoing();
+    
     if (tracingType === 'border') {
       this.shapeStyle.hasBorder = !this.shapeStyle.hasBorder;
     } else {
@@ -73,9 +72,11 @@ export abstract class ShapeService extends DrawableService {
     }
   }
 
-  cancelShape(): void {
-    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
-    this.isChanging = false;
+  cancelShapeIfOngoing(): void {
+    if (this.isChanging) {
+      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+      this.isChanging = false;
+    }
   }
 
   onMousePress(event: MouseEvent): void {
@@ -90,15 +91,15 @@ export abstract class ShapeService extends DrawableService {
   }
 
   onMouseRelease(event?: MouseEvent): void {
-    this.isChanging = false;
     if (this.drawOnNextMove) {
       // Only a click was registered and no rectangle has been created after the mouse press
       this.drawOnNextMove = false;
-    } else {
+    } else if (this.isChanging) {
       this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
       this.manipulator.removeChild(this.subElement, this.perimeter);
       this.drawStack.addElement(this.subElement);
     }
+    this.isChanging = false;
   }
 
   onMouseMove(event: MouseEvent): void {
