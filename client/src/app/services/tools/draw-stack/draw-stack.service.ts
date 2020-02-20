@@ -34,11 +34,13 @@ export class DrawStackService {
 
   addElementWithInfos(toAdd: SVGElementInfos): void {
     if(toAdd !== undefined) {
-      this.elements.insert(toAdd, toAdd.id);
       if(toAdd.id !== this.nextId) {
+        this.percolateUpIDs(toAdd.id);
         this.changeAt.next(toAdd.id);
       }
+      this.elements.insert(toAdd, toAdd.id);
     }
+    console.log(this.elements.getAll());
   }
 
   removeElement(toRemove: number): void  {
@@ -91,6 +93,17 @@ export class DrawStackService {
     for(const element of this.elements.getAll()) {
       if(element.id >= from) {
         element.id--;
+      }
+      newStack.push_back(element);
+    }
+    this.elements = newStack;
+  }
+
+  private percolateUpIDs(from: number): void {
+    let newStack = new Stack<SVGElementInfos>();
+    for(const element of this.elements.getAll()) {
+      if(element.id > from) {
+        element.id++;
       }
       newStack.push_back(element);
     }

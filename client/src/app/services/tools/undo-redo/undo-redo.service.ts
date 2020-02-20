@@ -30,7 +30,6 @@ export class UndoRedoService {
           }
         }
       )
-
     }
 
   undo(): void {
@@ -49,7 +48,7 @@ export class UndoRedoService {
     const toRedo = this.removed.pop_back();
     if(toRedo !== undefined) {
       this.drawStack.addElementWithInfos(toRedo);
-      this.manipulator.appendChild(this.image.nativeElement, toRedo.target);
+      this.manipulator.appendChild(this.image, toRedo.target);
     }
   }
 
@@ -64,11 +63,9 @@ export class UndoRedoService {
 
   private redrawStackFrom(from: number): void {
     const toRedraw = this.drawStack.removeElements(from);
+    console.log(toRedraw);
     for(const element of toRedraw) {
       this.manipulator.removeChild(this.image, element.target);
-    }
-    for(const element of toRedraw) {
-      this.manipulator.appendChild(this.image, element);
     }
   }
 }
