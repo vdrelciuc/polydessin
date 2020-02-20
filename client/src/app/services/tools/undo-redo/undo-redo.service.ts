@@ -9,6 +9,7 @@ import { Stack } from 'src/app/classes/stack';
 export class UndoRedoService {
 
   private removed: Stack<SVGElementInfos>;
+  private toRedo: SVGElementInfos | undefined;
 
   constructor(
     private drawStack: DrawStackService,
@@ -45,10 +46,10 @@ export class UndoRedoService {
   }
 
   redo(): void{
-    const toRedo = this.removed.pop_back();
-    if(toRedo !== undefined) {
-      this.drawStack.addElementWithInfos(toRedo);
-      this.manipulator.appendChild(this.image, toRedo.target);
+    this.toRedo = this.removed.pop_back();
+    if(this.toRedo !== undefined) {
+      this.drawStack.addElementWithInfos(this.toRedo);
+      this.manipulator.appendChild(this.image.nativeElement, this.toRedo.target);
     }
   }
 
@@ -58,14 +59,22 @@ export class UndoRedoService {
 
   addToRemoved(toUndo: SVGElementInfos): void {
     this.removed.push_back(toUndo);
-    this.manipulator.removeChild(this.image, toUndo.target);
+    this.manipulator.removeChild(this.image.nativeElement, toUndo.target);
   }
 
   private redrawStackFrom(from: number): void {
-    const toRedraw = this.drawStack.removeElements(from);
-    console.log(toRedraw);
-    for(const element of toRedraw) {
-      this.manipulator.removeChild(this.image, element.target);
+    console.log('in redraw');
+    if(this.toRedo !== undefined) {
+      let toRedraw = this.drawStack.removeElements(from);
+      console.log('to redraw');
+      console.log(toRedraw);
+      for(const element of toRedraw) {
+        this.manipulator.removeChild(this.image.nativeElement, element.target);
+      }
+      toRedraw[toRedraw.length] = this.toRedo;
+      for(const element of toRedraw) {
+        this.manipulator.appendChild(this.image.nativeElement, element.target);
+      }
     }
   }
 }
