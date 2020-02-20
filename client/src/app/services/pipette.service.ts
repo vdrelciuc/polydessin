@@ -43,19 +43,18 @@ export class PipetteService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    // const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
-    // const effectiveY = CoordinatesXY.effectiveX(this.image, event.clientY);
     const position = new CoordinatesXY(event.clientX, event.clientY);
     const svgElement = this.drawStack.findTopElementAt(position);
     if (svgElement !== undefined) {
-      const stroke = svgElement.getAttribute(SVGProperties.color); // could be color instead!!!!
-      if (stroke !== null && event.button !== this.WHEEL_CLICK) {
-        if (event.button === this.LEFT_CLICK) {
-          this.colorSelectorService.colorToChange = ColorType.Primary;
-        } else if (event.button === this.RIGHT_CLICK) {
-          this.colorSelectorService.colorToChange = ColorType.Secondary;
-        }
-        this.colorSelectorService.updateColor(new Color(stroke));
+      const capturedSVG = svgElement.target.firstChild as SVGElement;
+      const targetedColor = capturedSVG.getAttribute(SVGProperties.fill);
+      if (targetedColor !== null) {
+         if (event.button === this.LEFT_CLICK) {
+           this.colorSelectorService.colorToChange = ColorType.Primary;
+         } else if (event.button === this.RIGHT_CLICK) {
+           this.colorSelectorService.colorToChange = ColorType.Secondary;
+         }
+         this.colorSelectorService.updateColor(new Color(targetedColor));
       }
     }
   }
