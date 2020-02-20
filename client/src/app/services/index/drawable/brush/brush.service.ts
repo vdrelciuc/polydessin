@@ -8,6 +8,7 @@ import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { BehaviorSubject } from 'rxjs';
+import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -115,7 +116,7 @@ export class BrushService extends DrawableService {
     this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'hidden');
   }
   onMouseRelease(event: MouseEvent): void {
-    if (event.button === 0) { // 0 for the left mouse button
+    if (event.button === CONSTANTS.MOUSE_LEFT) { // 0 for the left mouse button
       if (this.isDrawing.value) {
         this.isDrawing.next(false);
         // this.addPath(event.clientX, event.clientY);

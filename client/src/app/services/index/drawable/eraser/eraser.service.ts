@@ -20,13 +20,11 @@ export class EraserService extends DrawableService {
   private oldBorder: string;
   private undoRedo: UndoRedoService;
   private elements: Stack<SVGElementInfos>;
-  private canDelete: boolean;
   private leftClick: boolean;
 
   constructor() { 
     super();
     this.frenchName = 'Efface';
-    this.canDelete = false;
     this.leftClick = false;
   }
 
@@ -51,15 +49,8 @@ export class EraserService extends DrawableService {
     this.undoRedo = undoRedo;
   }
 
-  // onMouseInCanvas(event: MouseEvent): void {
-  //   this.canDelete = true;
-  // }
-
-  // onMouseOutCanvas(event: MouseEvent): void {
-  //   this.canDelete = false;
-  // }
-
   onMouseMove(event: MouseEvent): void {
+    this.updateSVGElements();
     let elementOnTop = DrawStackService.findTopElementAt(new CoordinatesXY(
         event.clientX, 
         event.clientY),
@@ -82,17 +73,31 @@ export class EraserService extends DrawableService {
         this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
       }
     }
+    if(this.leftClick) {
+      this.deleteSelectedElement();
+    }
+  }
+
+  onClick(event: MouseEvent): void {
+    this.deleteSelectedElement();
   }
 
   onMousePress(event: MouseEvent): void {
-    if(event.button === 0) {
+    if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = true;
     }
   }
 
   onMouseRelease(event: MouseEvent): void {
-    if(event.button === 0) {
+    if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = false;
+    }
+  }
+
+  private deleteSelectedElement(): void {
+    if(this.selectedElement !== undefined) {
+      this.undoRedo.addToRemoved(this.selectedElement);
+      this.drawStack.removeElement(this.selectedElement.id);
     }
   }
 

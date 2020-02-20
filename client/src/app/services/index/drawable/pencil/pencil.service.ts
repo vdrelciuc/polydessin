@@ -7,6 +7,7 @@ import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { BehaviorSubject } from 'rxjs';
+import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -99,7 +100,7 @@ export class PencilService extends DrawableService {
   }
 
   onMouseRelease(event: MouseEvent): void {
-    if (event.button === 0) { // 0 for the left mouse button
+    if (event.button === CONSTANTS.MOUSE_LEFT) { // 0 for the left mouse button
       this.isDrawing.next(false);
       this.endPath();
       this.updateCursor(event.clientX, event.clientY);

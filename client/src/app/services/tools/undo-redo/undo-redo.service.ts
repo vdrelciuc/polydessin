@@ -63,11 +63,8 @@ export class UndoRedoService {
   }
 
   private redrawStackFrom(from: number): void {
-    console.log('in redraw');
     if(this.toRedo !== undefined) {
       let toRedraw = this.drawStack.removeElements(from);
-      console.log('to redraw');
-      console.log(toRedraw);
       for(const element of toRedraw) {
         this.manipulator.removeChild(this.image.nativeElement, element.target);
       }
