@@ -9,11 +9,12 @@ export enum SVGProperties {
   fillOpacity = 'fill-opacity',
   borderOpacity = 'stroke-opacity',
   thickness = 'stroke-width',
+  dashedBorder = 'stroke-dasharray',
+  dashedBorderOffset = 'stroke-dashoffset',
   topLeftCornerCoordinates = 'viewBox',
   width = 'width',
   title = 'title',
   visibility = 'visibility',
-  borderDash = 'stroke-dasharray',
   // Circle and Ellipse
   centerX = 'cx',
   centerY = 'cy',
