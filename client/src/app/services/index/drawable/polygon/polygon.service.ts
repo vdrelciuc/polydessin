@@ -217,7 +217,10 @@ export class PolygonService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.perimeter);
   }
   cancelDraw(): void {
-    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
-    this.manipulator.removeChild(this.image.nativeElement, this.perimeter);
+    if (this.isChanging) {
+      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+      this.manipulator.removeChild(this.image.nativeElement, this.perimeter);
+      this.isChanging = false;
+    }
   }
 }
