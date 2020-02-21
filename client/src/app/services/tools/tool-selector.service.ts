@@ -31,7 +31,6 @@ export class ToolSelectorService {
   private eraser: EraserService;
   private pipette: PipetteService;
 
-
   constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
     this.line = new LineService();
@@ -54,11 +53,12 @@ export class ToolSelectorService {
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
   }
 
-  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService, canvas: ElementRef<HTMLCanvasElement>): void {
     this.memory = new UndoRedoService(drawStack, manipulator, image)
     for (const element of this.tools) {
       element[1].initialize(manipulator, image, colorSelectorService, drawStack);
     }
+    this.pipette.setupCanvas(canvas);
   }
 
   getCurrentTool(): DrawableService | undefined { return this.tool; }
