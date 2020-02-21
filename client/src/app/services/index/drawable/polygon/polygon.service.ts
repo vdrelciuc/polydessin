@@ -8,6 +8,7 @@ import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { ConsoleReporter } from 'jasmine';
 
 @Injectable({
   providedIn: 'root'
@@ -147,19 +148,22 @@ export class PolygonService extends DrawableService {
     const height = ((this.nSides % 2) ? 1 + Math.cos(this.theta / 2) : 2 * Math.cos(this.theta / 2));
 
     this.ratioYX = height / width;
+    console.log(this.ratioYX);
   }
 
   protected updateDraw(): void {
-    let points = '';
-    const thicknessRadius = this.shapeStyle.thickness / 2 / Math.sin((this.nSides - 2) * Math.PI / this.nSides / 2);
-    if (this.radius > thicknessRadius) {
-      this.radius -= thicknessRadius;
-      this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, (this.shapeStyle.thickness).toString());
-    } else {
-      const newThickness = this.radius * Math.sin((this.nSides - 2) * Math.PI / this.nSides / 2);
-      this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, (newThickness).toString());
-      this.radius /= 2;
+    if (this.shapeStyle.hasBorder) {
+      const thicknessRadius = this.shapeStyle.thickness / 2 / Math.sin((this.nSides - 2) * Math.PI / this.nSides / 2);
+      if (this.radius > thicknessRadius) {
+        this.radius -= thicknessRadius;
+        this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, (this.shapeStyle.thickness).toString());
+      } else {
+        const newThickness = this.radius * Math.sin((this.nSides - 2) * Math.PI / this.nSides / 2);
+        this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, (newThickness).toString());
+        this.radius /= 2;
+      }
     }
+    let points = '';
 
     let angle = this.theta / 2 + Math.PI / 2;
     for (let i = 0; i < this.nSides; i++) {
@@ -193,7 +197,7 @@ export class PolygonService extends DrawableService {
       this.manipulator.setAttribute(this.polygon, SVGProperties.color, this.shapeStyle.borderColor.getHex());
       this.manipulator.setAttribute(this.polygon, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
     } else {
-      this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, 'none');
+      this.manipulator.setAttribute(this.polygon, SVGProperties.color, 'none');
     }
     const background = this.colorSelectorService.backgroundColor.getValue();
     this.manipulator.setAttribute(this.perimeter, SVGProperties.color, background.getInvertedColor(true).getHex());
