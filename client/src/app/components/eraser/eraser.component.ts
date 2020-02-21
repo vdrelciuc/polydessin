@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
 import { EraserService } from 'src/app/services/index/drawable/eraser/eraser.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
@@ -10,7 +10,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
   templateUrl: './eraser.component.html',
   styleUrls: ['./eraser.component.scss']
 })
-export class EraserComponent implements OnInit {
+export class EraserComponent{
 
   readonly THICKNESS_ERASER_MINIMUM = CONSTANT.THICKNESS_MINIMUM_ERASER;
   readonly THICKNESS_ERASER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
@@ -23,8 +23,4 @@ export class EraserComponent implements OnInit {
   ) {
     this.service = this.toolSelector.getEraser();
   }
-
-  ngOnInit() {
-  }
-
 }
