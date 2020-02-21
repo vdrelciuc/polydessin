@@ -55,7 +55,6 @@ export class PipetteService extends DrawableService {
     ctx = this.hiddenCanvas.nativeElement.getContext('2d');
 
     const xml = new XMLSerializer().serializeToString(this.image.nativeElement);
-    console.log(xml);
     const svg64 = btoa(xml);
     const b64Start = 'data:image/svg+xml;base64,';
     const image64 = b64Start + svg64;
@@ -67,24 +66,23 @@ export class PipetteService extends DrawableService {
     img.src = image64;
 
     console.log(img.src);
+    console.log(coordinates.getX() + "  |  " + coordinates.getY());
+    console.log("height " + height);
 
     ctx.drawImage(img, 0, 0);
 
-    // TODO: FIX 0,0 WITH X, Y VALUES
-    const imageData = ctx.getImageData(0, 0, width, height).data;
+    const imageData = ctx.getImageData(coordinates.getX(), coordinates.getY(), width, height).data;
     console.log(imageData);
     const hexValue = '#'
     + this.correctDigits(imageData[0].toString(CONSTANTS.HEX_BASE))
     + this.correctDigits(imageData[1].toString(CONSTANTS.HEX_BASE))
     + this.correctDigits(imageData[2].toString(CONSTANTS.HEX_BASE));
 
-    console.log(hexValue);
-
     var clearImg = ctx.createImageData(width, height);
     for (var i = clearImg.data.length; --i >= 0; ) {
       clearImg.data[i] = 0;
     }
-    ctx.putImageData(clearImg, 100, 100);
+    ctx.putImageData(clearImg, 0, 0);
 
     return new Color(hexValue);
   }
@@ -94,7 +92,7 @@ export class PipetteService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    const position = new CoordinatesXY(event.clientX, event.clientY);
+    const position = CoordinatesXY.getEffectiveCoords(this.image, event);
     const newColor = this.getColorAtPosition(position);
     if (newColor != null) {
       if (event.button === this.LEFT_CLICK) {
