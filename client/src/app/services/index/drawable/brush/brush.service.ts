@@ -22,7 +22,6 @@ export class BrushService extends DrawableService {
   previousY: number;
   thickness: number;
   isDrawing: BehaviorSubject<boolean>;
-  private subElement: SVGGElement;
   previewLine: SVGPathElement;
   previewCricle: SVGCircleElement;
   attributes: DrawablePropertiesService;
@@ -45,8 +44,8 @@ export class BrushService extends DrawableService {
     this.initializeProperties();
     this.isDrawing.subscribe(
       () => {
-        if(!this.isDrawing.value) {
-          drawStack.addElement(this.subElement);
+        if(!this.isDrawing.value && this.subElement !== undefined) {
+          this.pushElement();
         }
       }
     )

@@ -31,15 +31,18 @@ export class UndoRedoService {
             this.redrawStackFrom(changeValue);
           }
         }
-      )
+      );
+      this.toRedraw = new Stack<SVGElementInfos>();
     }
 
   undo(): void {
+    console.log('undoing');
     const toUndo = this.drawStack.removeLastElement();
     if(toUndo !== undefined) {
       this.removed.push_back(toUndo);
       this.manipulator.removeChild(this.image, toUndo.target);
     }
+    console.log(this.removed);
   }
 
   canUndo(): boolean {
@@ -47,18 +50,15 @@ export class UndoRedoService {
   }
 
   redo(): void{
+    console.log('redoing');
     this.toRedo = this.removed.pop_back();
+    console.log(this.toRedo);
     if(this.toRedo !== undefined) {
       this.drawStack.addElementWithInfos(this.toRedo);
       this.manipulator.appendChild(this.image.nativeElement, this.toRedo.target);
     }
-    if(this.toRedraw !== undefined) {
-      let elementToRedraw = this.toRedraw.pop_front();
-      while(elementToRedraw !== undefined) {
-        this.manipulator.appendChild(this.image.nativeElement, elementToRedraw.target);
-        this.drawStack.addFromUndo(elementToRedraw);
-        elementToRedraw = this.toRedraw.pop_front();
-      }
+    if(this.toRedraw.getAll().length > 0) {
+      this.redrawStack();
     }
   }
 
@@ -76,6 +76,18 @@ export class UndoRedoService {
     if(this.toRedo !== undefined) {
       for(const elementToRedraw of this.toRedraw.getAll()) {
         this.manipulator.removeChild(this.image.nativeElement, elementToRedraw.target);
+      }
+    }
+  }
+
+  private redrawStack(): void {
+    if(this.toRedraw.getAll().length !== 0) {
+      let elementToRedraw = this.toRedraw.pop_front();
+      while(elementToRedraw !== undefined) {
+        console.log(elementToRedraw);
+        this.manipulator.appendChild(this.image.nativeElement, elementToRedraw.target);
+        this.drawStack.addFromUndo(elementToRedraw);
+        elementToRedraw = this.toRedraw.pop_front();
       }
     }
   }

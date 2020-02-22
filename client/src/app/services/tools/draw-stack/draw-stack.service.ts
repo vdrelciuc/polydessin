@@ -18,25 +18,16 @@ export class DrawStackService {
     this.elements = new Stack<SVGElementInfos>();
     this.nextId = 0;
     this.isAdding = new BehaviorSubject<boolean>(false);
-    this.changeAt = new BehaviorSubject<number>(0);
-  }
-
-  addElement(toAdd: SVGGElement): void {
-    if(toAdd !== undefined) {
-      this.addElementWithInfos({
-        target: toAdd,
-        id: this.nextId
-      });
-      this.isAdding.next(true);
-    }
+    this.changeAt = new BehaviorSubject<number>(-1);
   }
 
   addElementWithInfos(toAdd: SVGElementInfos): void {
     if(toAdd !== undefined) {
-      if(toAdd.id + 1 !== this.nextId) {
+      if(toAdd.id !== this.nextId) {
         this.changeAt.next(toAdd.id);
       }
       this.elements.insert(toAdd, toAdd.id);
+      this.nextId++;
     }
   }
 
@@ -97,5 +88,5 @@ export class DrawStackService {
     return this.elements.getRoot();
   }
 
-  getNextID(): number { return this.nextId++; }
+  getNextID(): number { return this.nextId; }
 }

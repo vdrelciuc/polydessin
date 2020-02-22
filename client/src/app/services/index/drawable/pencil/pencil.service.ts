@@ -19,7 +19,6 @@ export class PencilService extends DrawableService {
   private previousY: number;
   thickness: number;
   isDrawing: BehaviorSubject<boolean>;
-  private subElement: SVGGElement;
   private line: SVGPathElement;
   private mousePointer: SVGCircleElement;
   private color: Color;
@@ -41,8 +40,8 @@ export class PencilService extends DrawableService {
     this.initializeProperties();
     this.isDrawing.subscribe(
       () => {
-        if(!this.isDrawing.value) {
-          drawStack.addElement(this.subElement);
+        if(!this.isDrawing.value && this.subElement !== undefined) {
+          this.pushElement();
         }
       }
     )
