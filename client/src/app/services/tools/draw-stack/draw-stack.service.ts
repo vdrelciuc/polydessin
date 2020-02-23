@@ -23,7 +23,7 @@ export class DrawStackService {
 
   addElementWithInfos(toAdd: SVGElementInfos): void {
     if(toAdd !== undefined) {
-      if(toAdd.id !== this.nextId) {
+      if(toAdd.id < this.nextId) {
         this.changeAt.next(toAdd.id);
       }
       this.elements.insert(toAdd, toAdd.id);
@@ -39,6 +39,7 @@ export class DrawStackService {
     for(const element of this.elements.getAll()) {
       if(element.id === toRemove) {
         this.elements.delete(element);
+        this.nextId--;
       }
     }
   }
@@ -53,7 +54,7 @@ export class DrawStackService {
   }
 
   isEmpty(): boolean {
-    return this.nextId === 0;
+    return this.elements.getAll().length === 0;
   }
 
   findTopElementAt(position: CoordinatesXY): SVGElementInfos | undefined {
@@ -81,6 +82,7 @@ export class DrawStackService {
         break;
       }
     }
+    this.nextId -= (toRemove.getAll().length - 1);
     return toRemove;
   }
 

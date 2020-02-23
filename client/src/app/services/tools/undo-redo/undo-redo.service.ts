@@ -50,9 +50,7 @@ export class UndoRedoService {
   }
 
   redo(): void{
-    console.log('redoing');
     this.toRedo = this.removed.pop_back();
-    console.log(this.toRedo);
     if(this.toRedo !== undefined) {
       this.drawStack.addElementWithInfos(this.toRedo);
       this.manipulator.appendChild(this.image.nativeElement, this.toRedo.target);
@@ -72,6 +70,7 @@ export class UndoRedoService {
   }
 
   private redrawStackFrom(from: number): void {
+    console.log('Redrawing stack');
     this.toRedraw = this.drawStack.removeElements(from);
     if(this.toRedo !== undefined) {
       for(const elementToRedraw of this.toRedraw.getAll()) {
@@ -84,7 +83,6 @@ export class UndoRedoService {
     if(this.toRedraw.getAll().length !== 0) {
       let elementToRedraw = this.toRedraw.pop_front();
       while(elementToRedraw !== undefined) {
-        console.log(elementToRedraw);
         this.manipulator.appendChild(this.image.nativeElement, elementToRedraw.target);
         this.drawStack.addFromUndo(elementToRedraw);
         elementToRedraw = this.toRedraw.pop_front();
