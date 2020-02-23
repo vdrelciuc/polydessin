@@ -26,6 +26,7 @@ export class DrawStackService {
       if(toAdd.id < this.nextId) {
         this.changeAt.next(toAdd.id);
       }
+      this.isAdding.next(true);
       this.elements.insert(toAdd, toAdd.id);
       this.nextId++;
     }

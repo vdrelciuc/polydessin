@@ -11,15 +11,17 @@ export class UndoRedoService {
   private removed: Stack<SVGElementInfos>;
   private toRedo: SVGElementInfos | undefined;
   private toRedraw: Stack<SVGElementInfos>;
+  private redoing: boolean;
 
   constructor(
     private drawStack: DrawStackService,
     private manipulator: Renderer2,
     private image: ElementRef<SVGElement>) { 
+      this.redoing = false;
       this.removed = new Stack<SVGElementInfos>();
       this.drawStack.isAdding.subscribe(
         () => {
-          if(this.drawStack.isAdding.value) {
+          if(this.drawStack.isAdding.value && !this.redoing) {
             this.removed = new Stack<SVGElementInfos>();
           }
         }
@@ -36,13 +38,11 @@ export class UndoRedoService {
     }
 
   undo(): void {
-    console.log('undoing');
     const toUndo = this.drawStack.removeLastElement();
     if(toUndo !== undefined) {
       this.removed.push_back(toUndo);
       this.manipulator.removeChild(this.image, toUndo.target);
     }
-    console.log(this.removed);
   }
 
   canUndo(): boolean {
@@ -51,9 +51,12 @@ export class UndoRedoService {
 
   redo(): void{
     this.toRedo = this.removed.pop_back();
+    this.redoing = true;
     if(this.toRedo !== undefined) {
+      this.redoing = true;
       this.drawStack.addElementWithInfos(this.toRedo);
       this.manipulator.appendChild(this.image.nativeElement, this.toRedo.target);
+      this.redoing = false;
     }
     if(this.toRedraw.getAll().length > 0) {
       this.redrawStack();
@@ -70,7 +73,6 @@ export class UndoRedoService {
   }
 
   private redrawStackFrom(from: number): void {
-    console.log('Redrawing stack');
     this.toRedraw = this.drawStack.removeElements(from);
     if(this.toRedo !== undefined) {
       for(const elementToRedraw of this.toRedraw.getAll()) {

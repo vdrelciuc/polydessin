@@ -94,6 +94,13 @@ export class EraserService extends DrawableService {
     }
   }
 
+  endTool(): void {
+    this.leftClick = false;
+    if(this.selectedElement !== undefined) {
+      this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+    }
+  }
+
   private deleteSelectedElement(): void {
     if(this.selectedElement !== undefined) {
       this.undoRedo.addToRemoved(this.selectedElement);
