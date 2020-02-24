@@ -55,5 +55,5 @@ export abstract class DrawableService {
   onClick(event: MouseEvent): void { /*To Override if needed*/}
   onKeyPressed(event: KeyboardEvent): void { /*To Override if needed*/}
   onKeyReleased(event: KeyboardEvent): void { /*To Override if needed*/}
-  // endTool(): void { /*To Override if needed*/}
+  endTool(): void { /*To Override if needed*/}
 }

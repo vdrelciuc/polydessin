@@ -65,9 +65,6 @@ export class BrushService extends DrawableService {
     this.attributes.thickness.subscribe((element: number) => {
       this.thickness = element;
     });
-
-    // Create a type for the 5 different textures
-    // Subscribe to that type (for changes and updates)
   }
 
   getThickness() {
@@ -135,6 +132,12 @@ export class BrushService extends DrawableService {
 
   onClick(event: MouseEvent): void {
     this.isDrawing.next(false);
+  }
+
+  endTool(): void {
+    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    this.isDrawing.next(false);
+    this.path = '';
   }
 
   private beginDraw(clientX: number, clientY: number) {

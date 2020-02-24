@@ -217,6 +217,13 @@ export class LineService extends DrawableService {
     }
   }
 
+  endTool(): void {
+    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    this.shiftPressed = false;
+    this.isStarted = false;
+    this.isDone = true;
+  }
+
   deleteLine(): void {
     this.isDone = true;
     this.isStarted = false;

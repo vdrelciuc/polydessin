@@ -115,6 +115,12 @@ export class PencilService extends DrawableService {
     }
   }
 
+  endTool(): void {
+    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    this.isDrawing.next(false);
+    this.path = '';
+  }
+
   private beginDraw(clientX: number, clientY: number) {
     this.previousX = clientX;
     this.previousY = clientY;

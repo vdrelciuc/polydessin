@@ -132,6 +132,11 @@ export abstract class ShapeService extends DrawableService {
     }
   }
 
+  endTool(): void {
+    this.shiftPressed = false;
+    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+  }
+
   protected updateSize(): void {
     let width = Math.abs(this.mousePosition.getX() - this.shapeOrigin.getX());
     let height = Math.abs(this.mousePosition.getY() - this.shapeOrigin.getY());
