@@ -5,11 +5,13 @@ import { Renderer2, ElementRef, Type } from '@angular/core';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import * as CONSTANTS from '../../../../classes/constants';
+import { UndoRedoService } from 'src/app/services/tools/undo-redo/undo-redo.service';
 
 describe('EraserService', () => {
   let service: EraserService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
+  const mockedSVGInfo = {id: 1, target: {firstChild: null} as unknown as SVGGElement};
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
@@ -41,6 +43,7 @@ describe('EraserService', () => {
                     };
                     return boundRect;
                 },
+                querySelectorAll: () => [],
                 clientHeight: 100,
             },
           },
@@ -61,9 +64,57 @@ describe('EraserService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should set default properties', () => {
+  it('#initializeProperties should set default properties', () => {
     service.initializeProperties();
     expect(service.thickness).toEqual(CONSTANTS.THICKNESS_MINIMUM_ERASER);
   });
-  
+
+  it('#onMouseMove should ', () => {
+    
+  });
+
+
+  it('#onMouseMove should ', () => {
+
+  });
+
+
+  it('#onMouseMove should ', () => {
+
+  });
+
+  it('#onClick should remove top element', () => {
+    service['selectedElement'] = mockedSVGInfo;
+    service.assignUndoRedo(new UndoRedoService(
+      service['drawStack'],
+      manipulator, 
+      image
+    ));
+    const spy1 = spyOn(service['undoRedo'], 'addToRemoved');
+    const spy2 = spyOn(service['drawStack'], 'removeElement');
+    service.onClick(new MouseEvent('mouseclick', {}));
+    expect(spy1).toHaveBeenCalledWith(mockedSVGInfo);
+    expect(spy2).toHaveBeenCalledWith(mockedSVGInfo.id);
+  });
+
+  it('#onMousePress should start removing elements', () => {
+    service['leftClick'] = false;
+    service.onMousePress(new MouseEvent('mousedown', {button: CONSTANTS.MOUSE_LEFT}));
+    expect(service['leftClick']).toBeTruthy();
+  });
+
+  it('#onMouseRelease should stop removing elements', () => {
+    service['leftClick'] = true;
+    service.onMouseRelease(new MouseEvent('mouseup', {button: CONSTANTS.MOUSE_LEFT}));
+    expect(service['leftClick']).not.toBeTruthy();
+  });
+
+  it('#endTool should end the tool', () => {
+    service['leftClick'] = true;
+    service['selectedElement'] = mockedSVGInfo;
+    const spy = spyOn(manipulator, 'setAttribute');
+    service.endTool();
+    expect(service['leftClick']).not.toBeTruthy();
+    expect(spy).toHaveBeenCalled();
+  });
 });
