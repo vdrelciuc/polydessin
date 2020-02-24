@@ -20,6 +20,7 @@ import { ColorPickerComponent } from './components/color-picker/color-picker.com
 import { ColorSliderComponent } from './components/color-slider/color-slider.component';
 import { CreateNewComponent } from './components/create-new/create-new.component';
 import { WarningDialogComponent } from './components/create-new/warning-dialog/warning-dialog.component';
+import { ExportComponent } from './components/export/export.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
 import { CrayonGuideComponent } from './components/guideTemplaates/crayon-guide/crayon-guide.component';
 import { LigneGuideComponent } from './components/guideTemplaates/ligne-guide/ligne-guide.component';
@@ -66,13 +67,15 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     ColorSliderComponent,
     RoutingComponents,
     ResizeObserverDirective,
-    WarningDialogComponent
+    WarningDialogComponent,
+    ExportComponent
   ],
   entryComponents: [
     ColorPickerComponent,
     CreateNewComponent,
     WarningDialogComponent,
-    UserGuideComponent
+    UserGuideComponent,
+    ExportComponent
   ],
   imports: [
     BrowserAnimationsModule,

@@ -6,6 +6,7 @@ import { Tools } from '../../enums/tools';
 import { ToolSelectorService } from '../../services/tools/tool-selector.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
+import { ExportComponent } from '../export/export.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,6 +17,7 @@ export class SidebarComponent implements OnInit {
   currentTool: Tools;
   private subscriptions: Subscription[] = [];
   private createNewDialog: MatDialogRef<CreateNewComponent>;
+  private exportDialog: MatDialogRef<ExportComponent>;
 
   constructor(
     public toolSelectorService: ToolSelectorService,
@@ -94,6 +96,15 @@ export class SidebarComponent implements OnInit {
       this.setupShortcuts();
     });
   }
+
+  exportProject(): void {
+    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+    this.exportDialog = this.dialog.open(ExportComponent, { disableClose: true });
+    this.exportDialog.afterClosed().subscribe( () => {
+      this.setupShortcuts();
+    });
+  }
+
   openDialog(): void {
     this.dialog.open(UserGuideComponent, {
       maxWidth: '100vw',
