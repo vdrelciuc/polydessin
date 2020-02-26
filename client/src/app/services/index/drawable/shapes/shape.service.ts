@@ -96,7 +96,12 @@ export abstract class ShapeService extends DrawableService {
       this.drawOnNextMove = false;
     } else {
       this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
-      this.drawStack.addElement(this.subElement);
+      const nextID = this.drawStack.getNextID();
+      this.drawStack.addElementWithInfos({
+        target: this.subElement,
+        id: nextID
+      });
+      this.manipulator.setAttribute(this.subElement, SVGProperties.title, nextID.toString());
     }
   }
 

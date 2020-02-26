@@ -21,6 +21,14 @@ export class Color {
       }
   }
 
+  static areVisuallyEqualForRed(color1: Color, color2: Color): boolean {
+    const redOfColor1HSL = color1.getRGB()[0] / 255;
+    const redOfColor2HSL = color2.getRGB()[0] / 255;
+    const difference = (redOfColor1HSL - redOfColor2HSL) * 100;
+    console.log('difference' + difference);
+    return difference < 15 && difference > -15;
+  }
+
   private static rgbToHex(value: number): string {
       let hex = Number(value).toString(CONSTANT.HEX_BASE);
       if (hex.length < 2) {

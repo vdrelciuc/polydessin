@@ -25,7 +25,6 @@ export class LineService extends DrawableService {
   private points: Stack<CoordinatesXY>;
   private circles: Stack<SVGCircleElement>;
   private line: SVGPolylineElement;
-  private subElement: SVGGElement;
   private shiftPressed: boolean;
   private pointerPosition: CoordinatesXY;
 
@@ -170,7 +169,7 @@ export class LineService extends DrawableService {
       this.points.clear();
       this.isStarted = false;
       this.isDone = true;
-      this.drawStack.addElement(this.subElement);
+      this.pushElement();
     }
   }
 
