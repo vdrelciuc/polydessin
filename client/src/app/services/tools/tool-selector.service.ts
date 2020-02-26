@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Tools } from '../../enums/tools'
+import { Tools } from '../../enums/tools';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { ColorSelectorService } from '../color-selector.service';
 import { BrushService } from '../index/drawable/brush/brush.service';
@@ -24,6 +24,7 @@ export class ToolSelectorService {
   private pencil: PencilService;
   private rectangle: RectangleService;
   private brush: BrushService;
+  private colorApplicator: ColorApplicatorService;
 
   constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
@@ -31,11 +32,13 @@ export class ToolSelectorService {
     this.pencil = new PencilService();
     this.rectangle = new RectangleService();
     this.brush = new BrushService();
+    this.colorApplicator = new ColorApplicatorService();
 
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
     this.tools.set(Tools.Rectangle, this.rectangle);
     this.tools.set(Tools.Brush, this.brush);
+    this.tools.set(Tools.ColorApplicator);
       // Initialize currentTool as the selector(mouse)
     // this.isHidden = true;
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);

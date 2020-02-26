@@ -129,7 +129,11 @@
     <div class="tool-group">
       <div class="left-column">
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('colorApplicator')"
+          <button mat-button
+                  [matTooltip]="this.toolSelectorService.getcolorApplicator().frenchName"
+                  matTooltipPosition="after"
+                  aria-label="line-tooltip"
+                  (click)="selectTool('colorApplicator')"
                   [ngClass]="{'clicked': currentTool === 'colorApplicator',
             'not-clicked': currentTool !== 'colorApplicator'}">
             <img src="../../../assets/icons/color-applicator.svg">
