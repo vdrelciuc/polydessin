@@ -67,6 +67,7 @@ export class ColorApplicatorService extends DrawableService {
         else if (event.button === 2) {
           if (actualColor !== 'none' ){
             this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.color, colorBorder);
+
             this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.colorOpacity, colorBorderOpacity);
 
           }
