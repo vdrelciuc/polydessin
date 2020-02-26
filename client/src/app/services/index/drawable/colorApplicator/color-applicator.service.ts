@@ -12,9 +12,6 @@ import { SVGProperties } from '../../../../classes/svg-properties';
 })
 export class ColorApplicatorService extends DrawableService {
 
-
-
-
   initialize(manipulator: Renderer2,
              image: ElementRef<SVGElement>,
              colorSelectorService: ColorSelectorService,
@@ -49,6 +46,8 @@ export class ColorApplicatorService extends DrawableService {
       event.clientY));
     const colorFill = this.colorSelectorService.primaryColor.getValue().getHex();
     const colorBorder = this.colorSelectorService.secondaryColor.getValue().getHex();
+    const colorFillOpacity = this.colorSelectorService.primaryTransparency.getValue() as unknown as string;
+    const colorBorderOpacity = this.colorSelectorService.secondaryTransparency.getValue() as unknown as string;
 
     if(elementOnTop !== undefined) {
       console.log(elementOnTop.target);
@@ -56,16 +55,20 @@ export class ColorApplicatorService extends DrawableService {
       console.log(elementOnTop.target.firstElementChild);
       const capturedSVG = elementOnTop.target.firstChild as SVGElement;
       const actualColor = capturedSVG.getAttribute(SVGProperties.fill);
-      //const actualBorder = capturedSVG.getAttribute(SVGProperties.color);
       const junction = capturedSVG.getAttribute(SVGProperties.joint);
       if (event.button === 0 && actualColor !== 'none'){
           this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.fill, colorFill);
-        } else if (event.button ===0 && junction === "round" ) {
+        this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.fillOpacity, colorFillOpacity);
+
+      } else if (event.button ===0 && junction === "round" ) {
         this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.color, colorFill);
+        this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.fillOpacity, colorFillOpacity);
       }
         else if (event.button === 2) {
           if (actualColor !== 'none' ){
             this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.color, colorBorder);
+            this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.colorOpacity, colorBorderOpacity);
+
           }
         }
     }
