@@ -1,4 +1,4 @@
 export interface SVGElementInfos {
-    target: SVGElement,
+    target: SVGGElement,
     id: number
 }
