@@ -10,6 +10,7 @@ import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
 import { DrawStackService } from './draw-stack/draw-stack.service';
 import { UndoRedoService } from './undo-redo/undo-redo.service';
+import { ColorApplicatorService } from '../index/drawable/colorApplicator/color-applicator.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class ToolSelectorService {
     this.tools.set(Tools.Pencil, this.pencil);
     this.tools.set(Tools.Rectangle, this.rectangle);
     this.tools.set(Tools.Brush, this.brush);
-    this.tools.set(Tools.ColorApplicator);
+    this.tools.set(Tools.ColorApplicator, this.colorApplicator);
       // Initialize currentTool as the selector(mouse)
     // this.isHidden = true;
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
@@ -57,6 +58,7 @@ export class ToolSelectorService {
   getPencil(): PencilService { return this.pencil; }
   getRectangle(): RectangleService { return this.rectangle; }
   getBrush(): BrushService { return this.brush; }
+  getColorApplicator(): ColorApplicatorService { return  this.colorApplicator};
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);

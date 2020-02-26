@@ -8,6 +8,16 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
   providedIn: 'root'
 })
 export class ColorApplicatorService extends DrawableService {
+  initialize(manipulator: Renderer2,
+             image: ElementRef<SVGElement>,
+             colorSelectorService: ColorSelectorService,
+             drawStack: DrawStackService): void {
+    this.initializeProperties();
+    this.assignParams(manipulator, image, colorSelectorService, drawStack);
+  }
+
+  initializeProperties(): void {}
+
   protected assignParams(
     manipulator: Renderer2,
     image: ElementRef<SVGElement>,
@@ -20,14 +30,14 @@ export class ColorApplicatorService extends DrawableService {
     this.attributes = new DrawablePropertiesService();
   }
 
-   initialize(
-    manipulator: Renderer2,
-    image: ElementRef<SVGElement>,
-    colorSelectorService: ColorSelectorService,
-    drawStack: DrawStackService
-  ): void;
-   initializeProperties(colorSelectorService: ColorSelectorService): void;
+
   constructor() {
     super();
+    this.frenchName = 'Applicateur De Couleur';
+  }
+
+  onClick(event: MouseEvent): void {
+
+
   }
 }
