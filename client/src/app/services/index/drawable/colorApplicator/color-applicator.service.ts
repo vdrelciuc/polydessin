@@ -6,6 +6,7 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
 import { CoordinatesXY } from '../../../../classes/coordinates-x-y';
 import { SVGProperties } from '../../../../classes/svg-properties';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -50,10 +51,20 @@ export class ColorApplicatorService extends DrawableService {
     const colorBorder = this.colorSelectorService.secondaryColor.getValue().getHex();
 
     if(elementOnTop !== undefined) {
-        if (event.button === 0 )
-        this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.fill, colorFill);
+      console.log(elementOnTop.target);
+      console.log(elementOnTop.target.firstChild);
+      console.log(elementOnTop.target.firstElementChild);
+      const capturedSVG = elementOnTop.target.firstChild as SVGElement;
+      const actualColor = capturedSVG.getAttribute(SVGProperties.fill);
+      //const actualBorder = capturedSVG.getAttribute(SVGProperties.color);
+      const junction = capturedSVG.getAttribute(SVGProperties.joint);
+      if (event.button === 0 && actualColor !== 'none'){
+          this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.fill, colorFill);
+        } else if (event.button ===0 && junction === "round" ) {
+        this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.color, colorFill);
+      }
         else if (event.button === 2) {
-          if (SVGProperties.color !==undefined ){
+          if (actualColor !== 'none' ){
             this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.color, colorBorder);
           }
         }

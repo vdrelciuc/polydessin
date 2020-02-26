@@ -38,6 +38,13 @@ export class SidebarComponent implements OnInit {
       )
     );
 
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'r', description: 'Selecting color applicator with shortcut' }).subscribe(
+      (event) => {
+        this.toolSelectorService.setCurrentTool(Tools.ColorApplicator);
+      }
+      )
+    );
+
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'c', description: 'Selecting pencil with shortcut' }).subscribe(
         (event) => {
           this.toolSelectorService.setCurrentTool(Tools.Pencil);
