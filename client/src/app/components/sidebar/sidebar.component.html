@@ -87,7 +87,11 @@
       </div>
       <div class="right-column">
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('ellipse')"
+          <button mat-button
+                  [matTooltip]="this.toolSelectorService.getEllipse().frenchName"
+                  matTooltipPosition="after"
+                  aria-label="ellipse-tooltip"
+                  (click)="selectTool('ellipse')"
                   [ngClass]="{'clicked': currentTool === 'ellipse',
             'not-clicked': currentTool !== 'ellipse'}">
             <img src="../../../assets/icons/ellipse.svg">
@@ -156,7 +160,7 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('eraser')"
+          <button mat-button (click)="selectTool('eraser')"
                   [ngClass]="{'clicked': currentTool === 'eraser',
             'not-clicked': currentTool !== 'eraser'}">
             <img src="../../../assets/icons/eraser.svg">
@@ -174,7 +178,7 @@
     <div class="bottom">
       <div class="left-column">
         <div class="icon">
-          <button mat-button disabled>
+          <button mat-button (click)="toolSelectorService.memory.undo()">
             <img src="../../../assets/icons/undo1.svg">
           </button>
         </div>
@@ -191,7 +195,7 @@
       </div>
       <div class="right-column">
         <div class="icon">
-          <button mat-button disabled>
+          <button mat-button (click)="toolSelectorService.memory.redo()">
             <img src="../../../assets/icons/redo.svg">
           </button>
         </div>

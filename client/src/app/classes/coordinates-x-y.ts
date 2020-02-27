@@ -98,4 +98,13 @@ export class CoordinatesXY {
     return isTop ? (isLeft ? 2 : 1) : (isLeft ? 3 : 4);
   }
 
+  inRadius(element: DOMRect | ClientRect): boolean {
+    return (
+     element.right > this.x && 
+     element.left < this.x &&
+     element.top < this.y &&
+     element.bottom > this.y
+    );
+  }
+
 }

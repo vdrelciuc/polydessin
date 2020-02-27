@@ -8,7 +8,7 @@ import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { ConsoleReporter } from 'jasmine';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
@@ -53,8 +53,8 @@ export class PolygonService extends DrawableService {
     };
   }
 
-  initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService): void {
-    this.assignParams(manipulator, image, colorSelectorService);
+  initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
+    this.assignParams(manipulator, image, colorSelectorService, drawStack);
   }
 
   initializeProperties(): void {
@@ -227,7 +227,7 @@ export class PolygonService extends DrawableService {
     this.manipulator.appendChild(this.subElement, this.perimeter);
     this.manipulator.appendChild(this.subElement, this.perimeterAlternative);
   }
-  cancelDraw(): void {
+  endTool(): void {
     if (this.isChanging) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
       this.isChanging = false;
