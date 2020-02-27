@@ -52,6 +52,12 @@ export class EventListenerService {
       }
     });
 
+     this.manipulator.listen(this.image.nativeElement, 'contextmenu', (event: MouseEvent) => {
+       if (this.currentTool !== undefined) {
+         this.currentTool.onClick(event);
+       }
+     });
+
     this.manipulator.listen(this.image.nativeElement, 'mousedown', (event: MouseEvent) => {
       if (this.currentTool !== undefined) {
         this.currentTool.onMousePress(event);
