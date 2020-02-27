@@ -134,7 +134,9 @@ export abstract class ShapeService extends DrawableService {
 
   endTool(): void {
     this.shiftPressed = false;
-    this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    if(this.drawOnNextMove) {
+      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    }
   }
 
   protected updateSize(): void {
