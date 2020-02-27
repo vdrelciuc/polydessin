@@ -13,6 +13,8 @@ import { Stack } from 'src/app/classes/stack';
 })
 export class SelectionService extends DrawableService {
 
+  readonly controlPointSize = 6;
+
   private mousePosition: CoordinatesXY;
   private selectionOrigin: CoordinatesXY;
   private isChanging: boolean;
@@ -24,6 +26,9 @@ export class SelectionService extends DrawableService {
   private selectionBox: DOMRect;
   private selectedElements: Stack<SVGElementInfos>;
   private selectionRect: SVGRectElement;
+  private selectionGroup: SVGGElement;
+
+  private controlPoints: SVGRectElement[];
 
   constructor() {
     super();
@@ -33,7 +38,6 @@ export class SelectionService extends DrawableService {
 
   initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
-    console.log("initialized");
   }
 
   initializeProperties(): void {
@@ -130,12 +134,27 @@ export class SelectionService extends DrawableService {
   private createSelectionRect() {
     if (this.subElement === undefined) {
       this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+      this.selectionGroup = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
       this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Selection);
       
+      // Creating selection rectangle
       this.selectionRect = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.fill, 'none');
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.thickness, '1');
-      this.manipulator.appendChild(this.subElement, this.selectionRect);
+      this.manipulator.appendChild(this.selectionGroup, this.selectionRect);
+
+      // Creating control points
+      this.controlPoints = new Array<SVGRectElement>(4);
+      for (let i = 0; i < 4; i++) {
+        this.controlPoints[i] = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+        this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.fill, 'white');
+        this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.color, 'black');
+        this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.thickness, '1');
+        this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.height, this.controlPointSize.toString());
+        this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.width, this.controlPointSize.toString());
+        this.manipulator.appendChild(this.selectionGroup, this.controlPoints[i]);
+      }
+      this.manipulator.appendChild(this.subElement, this.selectionGroup);
     }
 
     const backgroundColor = this.colorSelectorService.backgroundColor.getValue();
@@ -178,7 +197,6 @@ export class SelectionService extends DrawableService {
 
   selectAllElements() {
     this.cancelSelection();
-    console.log(this.drawStack.getAll());
     
     this.selectedElements = this.drawStack.getAll();
     this.createSelectionRect();
@@ -246,9 +264,20 @@ export class SelectionService extends DrawableService {
       // Set dimensions attributes for perimeter
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.width, (right - left).toString());
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.height, (bottom - top).toString());
+
+      // Set control points positions
+      this.manipulator.setAttribute(this.controlPoints[0], SVGProperties.x, ((right + left) / 2 - this.controlPointSize / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[0], SVGProperties.y, (top - this.controlPointSize / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[1], SVGProperties.x, ((right + left) / 2 - this.controlPointSize / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[1], SVGProperties.y, (bottom - this.controlPointSize / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[2], SVGProperties.x, (left - this.controlPointSize / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[2], SVGProperties.y, ((top + bottom) / 2 - this.controlPointSize / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[3], SVGProperties.x, (right - this.controlPointSize / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[3], SVGProperties.y, ((top + bottom) / 2 - this.controlPointSize / 2).toString());
+
+      this.manipulator.appendChild(this.subElement, this.selectionGroup);
     } else {
-      this.manipulator.setAttribute(this.selectionRect, SVGProperties.width, '0');
-      this.manipulator.setAttribute(this.selectionRect, SVGProperties.height, '0');
+      this.manipulator.removeChild(this.subElement, this.selectionGroup);
     }
   }
 }
