@@ -5,8 +5,8 @@ import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.servic
 import { Tools } from '../../enums/tools';
 import { ToolSelectorService } from '../../services/tools/tool-selector.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
-import { UserGuideComponent } from '../user-guide/user-guide.component';
 import { ExportComponent } from '../export/export.component';
+import { UserGuideComponent } from '../user-guide/user-guide.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -34,23 +34,35 @@ export class SidebarComponent implements OnInit {
 
   bypassBrowserShortcuts(): void{
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.e', description: 'block search tab' }).subscribe(
-      (event) => {
-      }
+      (event) => {}
       )
     );
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'bypass open to save from chrome' }).subscribe(
-      (event) => {
-      }
+      (event) => {}
       )
     );
   }
 
   setupShortcuts(): void {
     this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 's', description: 'Selecting selection with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Selection);
+        }
+      )
+    );
+
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'l', description: 'Selecting line with shortcut' }).subscribe(
         (event) => {
           this.toolSelectorService.setCurrentTool(Tools.Line);
         }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'r', description: 'Selecting color applicator with shortcut' }).subscribe(
+      (event) => {
+        this.toolSelectorService.setCurrentTool(Tools.ColorApplicator);
+      }
       )
     );
 
@@ -77,6 +89,13 @@ export class SidebarComponent implements OnInit {
       )
     );
 
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: '2', description: 'Selecting ellipse with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Ellipse);
+        }
+      )
+    );
+
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'w', description: 'Selecting brush with shortcut' }).subscribe(
         (event) => {
           this.toolSelectorService.setCurrentTool(Tools.Brush);
@@ -91,6 +110,12 @@ export class SidebarComponent implements OnInit {
     )
   );
 
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: '3', description: 'Selecting polygon with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Polygon);
+        }
+      )
+    );
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
         (event) => {
           this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );

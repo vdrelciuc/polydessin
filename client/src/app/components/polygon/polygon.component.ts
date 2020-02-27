@@ -1,45 +1,41 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { PolygonService } from 'src/app/services/index/drawable/polygon/polygon.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import { EllipseService } from 'src/app/services/index/drawable/ellipse/ellipse.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 
 @Component({
-  selector: 'app-ellipse',
-  templateUrl: './ellipse.component.html',
-  styleUrls: ['./ellipse.component.scss']
+  selector: 'app-polygon',
+  templateUrl: './polygon.component.html',
+  styleUrls: ['./polygon.component.scss']
 })
-export class EllipseComponent implements OnInit, OnDestroy {
+export class PolygonComponent implements OnInit {
 
-  readonly name: string = Tools.Ellipse;
+  readonly name: string = Tools.Polygon;
   readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
   readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
 
   constructor(
-    protected service: EllipseService,
+    protected service: PolygonService,
     private toolSelector: ToolSelectorService,
     protected attributes: DrawablePropertiesService,
     protected colorSelectorService: ColorSelectorService
     ) {
-    this.service = this.toolSelector.getEllipse();
+    this.service = this.toolSelector.getPolygon();
   }
 
   ngOnInit(): void {
     this.service.initializeProperties();
-  }
 
-  ngOnDestroy(): void {
-    this.service.cancelShapeIfOngoing();
   }
 
   updateBorder(): void {
-    this.service.updateTracingType('border');
+    this.service.shapeStyle.hasBorder = !this.service.shapeStyle.hasBorder;
   }
 
   updateFill(): void {
-    this.service.updateTracingType('fill');
+    this.service.shapeStyle.hasFill = !this.service.shapeStyle.hasFill;
   }
-
 }

@@ -36,9 +36,9 @@ export class BrushService extends DrawableService {
    }
 
   initialize(
-    manipulator: Renderer2, 
+    manipulator: Renderer2,
     image: ElementRef<SVGElement>,
-    colorSelectorService: ColorSelectorService, 
+    colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService): void {
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
     this.initializeProperties();
@@ -86,7 +86,6 @@ export class BrushService extends DrawableService {
       this.isDrawing.next(false);
     }
     this.manipulator.removeChild(this.image.nativeElement, this.previewCricle);
-    delete(this.previewCricle);
   }
   onMousePress(event: MouseEvent): void {
     this.isDrawing.next(true);
@@ -138,8 +137,12 @@ export class BrushService extends DrawableService {
     if(this.isDrawing.value) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
+    if(this.previewCricle !== undefined) {
+      this.manipulator.removeChild(this.image.nativeElement, this.previewCricle);
+    }
     this.isDrawing.next(false);
     this.path = '';
+    this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'visible');
   }
 
   private beginDraw(clientX: number, clientY: number) {
@@ -161,9 +164,11 @@ export class BrushService extends DrawableService {
   }
 
   updateCursor(clientX: number, clientY: number) {
+    if (this.previewCricle === undefined) {
+      this.previewCricle = this.createCircle(clientX, clientY);
+    }
     this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
     this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.globalOpacity, this.opacity.toString());
   }
   private createCircle(x: number, y: number): SVGCircleElement {
     let circle: SVGCircleElement;

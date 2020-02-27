@@ -91,7 +91,7 @@ export class PencilService extends DrawableService {
 
     this.manipulator.appendChild(this.subElement, this.line);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
-    
+
     this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
     this.addPath(event.clientX, event.clientY);
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'hidden');
@@ -99,10 +99,12 @@ export class PencilService extends DrawableService {
 
   onMouseRelease(event: MouseEvent): void {
     if (event.button === CONSTANTS.MOUSE_LEFT) { // 0 for the left mouse button
-      this.isDrawing.next(false);
-      this.endPath();
-      this.updateCursor(event.clientX, event.clientY);
-      this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
+      if (this.isDrawing.value) {
+        this.isDrawing.next(false);
+        this.endPath();
+        this.updateCursor(event.clientX, event.clientY);
+        this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
+      }
     }
   }
 
@@ -123,6 +125,7 @@ export class PencilService extends DrawableService {
     }
     this.isDrawing.next(false);
     this.path = '';
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
   }
 
   private beginDraw(clientX: number, clientY: number) {
@@ -153,6 +156,9 @@ export class PencilService extends DrawableService {
   }
 
   private updateCursor(clientX: number, clientY: number) {
+    if (this.mousePointer === undefined) {
+      this.createCircle(clientX, clientY);
+    }
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
   }

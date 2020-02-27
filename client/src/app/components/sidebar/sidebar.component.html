@@ -4,7 +4,10 @@
     <div class="tool-group">
       <div class="left-column">
         <div class="icon">
-          <button mat-button disabled
+          <button mat-button
+                  [matTooltip]="this.toolSelectorService.getSelection().frenchName"
+                  matTooltipPosition="after"
+                  aria-label="selection-tooltip"
                   (click)="selectTool('selection')"
                   [ngClass]="{'clicked': currentTool === 'selection',
             'not-clicked': currentTool !== 'selection'}">
@@ -74,7 +77,11 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('polygon')"
+          <button mat-button
+                  [matTooltip]="this.toolSelectorService.getPolygon().frenchName"
+                  matTooltipPosition="after"
+                  aria-label="polygon-tooltip"
+                  (click)="selectTool('polygon')"
                   [ngClass]="{'clicked': currentTool === 'polygon',
             'not-clicked': currentTool !== 'polygon'}">
             <img src="../../../assets/icons/polygon.svg">
@@ -133,7 +140,11 @@
     <div class="tool-group">
       <div class="left-column">
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('colorApplicator')"
+          <button mat-button
+                  [matTooltip]="this.toolSelectorService.getColorApplicator().frenchName"
+                  matTooltipPosition="after"
+                  aria-label="line-tooltip"
+                  (click)="selectTool('colorApplicator')"
                   [ngClass]="{'clicked': currentTool === 'colorApplicator',
             'not-clicked': currentTool !== 'colorApplicator'}">
             <img src="../../../assets/icons/color-applicator.svg">
@@ -156,7 +167,11 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button (click)="selectTool('eraser')"
+          <button mat-button
+                  [matTooltip]="this.toolSelectorService.getEraser().frenchName"
+                  matTooltipPosition="after"
+                  aria-label="eraser-tooltip"
+                  (click)="selectTool('eraser')"
                   [ngClass]="{'clicked': currentTool === 'eraser',
             'not-clicked': currentTool !== 'eraser'}">
             <img src="../../../assets/icons/eraser.svg">

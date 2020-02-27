@@ -35,6 +35,7 @@ import { RectangleComponent } from '../rectangle/rectangle.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { WorkspaceComponent } from '../workspace/workspace.component';
 import { WorkingAreaComponent } from './working-area.component';
+import { EllipseComponent } from '../ellipse/ellipse.component';
 
 describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
@@ -56,6 +57,7 @@ describe('WorkingAreaComponent', () => {
         LineComponent,
         PencilComponent,
         RectangleComponent,
+        EllipseComponent,
         WorkspaceComponent ],
       imports: [
         BrowserAnimationsModule,

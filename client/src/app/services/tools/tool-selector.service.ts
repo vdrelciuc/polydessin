@@ -12,6 +12,9 @@ import { DrawStackService } from './draw-stack/draw-stack.service';
 import { UndoRedoService } from './undo-redo/undo-redo.service';
 import { EllipseService } from '../index/drawable/ellipse/ellipse.service';
 import { EraserService } from '../index/drawable/eraser/eraser.service';
+import { PolygonService } from '../index/drawable/polygon/polygon.service';
+import { SelectionService } from '../index/drawable/selection/selection.service';
+import { ColorApplicatorService } from '../index/drawable/colorApplicator/color-applicator.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +29,11 @@ export class ToolSelectorService {
   private pencil: PencilService;
   private rectangle: RectangleService;
   private brush: BrushService;
+  private polygon: PolygonService;
+  private selection: SelectionService;
+  private colorApplicator: ColorApplicatorService;
+
+
   private ellipse: EllipseService;
   private eraser: EraserService;
 
@@ -37,14 +45,22 @@ export class ToolSelectorService {
     this.brush = new BrushService();
     this.ellipse = new EllipseService();
     this.eraser = new EraserService();
+    this.polygon = new PolygonService();
+    this.selection = new SelectionService();
+    this.colorApplicator = new ColorApplicatorService();
 
+    this.tools.set(Tools.ColorApplicator, this.colorApplicator);
+    this.tools.set(Tools.Polygon, this.polygon);
+    this.tools.set(Tools.Selection, this.selection);
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
     this.tools.set(Tools.Rectangle, this.rectangle);
     this.tools.set(Tools.Brush, this.brush);
     this.tools.set(Tools.Ellipse, this.ellipse);
     this.tools.set(Tools.Eraser, this.eraser);
-    this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
+    this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
+    this.setCurrentTool(Tools.Selection);
+
   }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
@@ -61,8 +77,11 @@ export class ToolSelectorService {
   getPencil(): PencilService { return this.pencil; }
   getRectangle(): RectangleService { return this.rectangle; }
   getBrush(): BrushService { return this.brush; }
+  getPolygon(): PolygonService { return this.polygon; }
   getEllipse(): EllipseService { return this.ellipse; }
   getEraser(): EraserService { return this.eraser; }
+  getSelection(): SelectionService { return this.selection; }
+  getColorApplicator(): ColorApplicatorService { return  this.colorApplicator};
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);

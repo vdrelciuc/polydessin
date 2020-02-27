@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 
-import { ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
+import { ElementRef, NO_ERRORS_SCHEMA, Renderer2, Type } from '@angular/core';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
@@ -59,7 +59,7 @@ describe('RectangleComponent', () => {
     .compileComponents();
     fixture = TestBed.createComponent(RectangleComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    component['service']['manipulator'] = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
   }));
 
   it('should create', () => {

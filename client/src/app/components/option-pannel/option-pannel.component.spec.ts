@@ -20,6 +20,7 @@ import { ColorSliderComponent } from '../color-slider/color-slider.component';
 import { LineComponent } from '../line/line.component';
 import { PencilComponent } from '../pencil/pencil.component';
 import { RectangleComponent } from '../rectangle/rectangle.component';
+import { EllipseComponent } from '../ellipse/ellipse.component';
 import { OptionPannelComponent } from './option-pannel.component';
 
 describe('OptionPannelComponent', () => {
@@ -34,6 +35,7 @@ describe('OptionPannelComponent', () => {
         LineComponent,
         PencilComponent,
         RectangleComponent,
+        EllipseComponent,
         BrushComponent,
         ColorPanelComponent,
       ],
