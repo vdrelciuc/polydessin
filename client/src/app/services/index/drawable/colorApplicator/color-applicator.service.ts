@@ -65,12 +65,9 @@ export class ColorApplicatorService extends DrawableService {
         this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.fillOpacity, colorFillOpacity);
       }
         else if (event.button === 2) {
-          if (actualColor !== 'none' ){
+          if (junction !== "round" )
             this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.color, colorBorder);
-
             this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.colorOpacity, colorBorderOpacity);
-
-          }
         }
     }
 
