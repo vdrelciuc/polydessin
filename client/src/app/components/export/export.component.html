@@ -1,0 +1,50 @@
+<div class="wrapper">
+  <div class="option-section">
+    <div class="left">
+      <div class="format">
+        <h5>Format d'exportation</h5>
+        <mat-radio-group>
+          <mat-radio-button value="jpeg">JPEG</mat-radio-button>
+          <mat-radio-button value="png">PNG</mat-radio-button>
+          <mat-radio-button value="svg">SVG</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="filters">
+        <h5>Filtres</h5>
+        <mat-radio-group>
+          <mat-radio-button class="filter-head" value="none">Aucun</mat-radio-button>
+          <mat-radio-button class="filter-head" value="black-and-white">Noir et blanc</mat-radio-button>
+          <mat-radio-button class="filter-head" value="vintage">Vintage</mat-radio-button>
+
+          <mat-radio-button class="filter-foot" value="contrast">Contraste</mat-radio-button>
+          <mat-radio-button class="filter-foot" value="sepia">Sépia</mat-radio-button>
+          <mat-radio-button class="filter-foot" value="blur">Estompé</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="type"></div>
+    </div>
+    <div class="right">
+      <div id="preview"></div>
+      <div class="details">
+        <form class="info">
+          <mat-form-field>
+            <mat-label class="text">Titre</mat-label>
+            <input matInput placeholder="Ex. Mon dessin">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label class="text">Auteur</mat-label>
+            <input matInput placeholder="Ex. John Doe">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label class="text">Courriel destinairaire</mat-label>
+            <input matInput placeholder="Ex. alice@test.com">
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="button-section">
+    <button mat-button id="cancel-button" (click)="onDialogClose()">Annuler</button>
+    <button mat-button id="confirm-button" (click)="onExport()">Exporter</button>
+  </div>
+</div>
