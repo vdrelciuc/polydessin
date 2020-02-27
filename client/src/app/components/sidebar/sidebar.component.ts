@@ -32,7 +32,21 @@ export class SidebarComponent implements OnInit {
     });
   }
 
+  bypassBrowserShortcuts(): void{
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.e', description: 'block search tab' }).subscribe(
+      (event) => {
+      }
+      )
+    );
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'bypass open to save from chrome' }).subscribe(
+      (event) => {
+      }
+      )
+    );
+  }
+
   setupShortcuts(): void {
+    this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'l', description: 'Selecting line with shortcut' }).subscribe(
         (event) => {
           this.toolSelectorService.setCurrentTool(Tools.Line);
@@ -44,6 +58,15 @@ export class SidebarComponent implements OnInit {
         (event) => {
           this.toolSelectorService.setCurrentTool(Tools.Pencil);
         }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.e', description: 'open export dialog' }).subscribe(
+      (event) => {
+        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+        this.dialog.closeAll();
+        this.exportProject();
+      }
       )
     );
 
@@ -98,7 +121,8 @@ export class SidebarComponent implements OnInit {
   }
 
   exportProject(): void {
-    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+    this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
+    this.bypassBrowserShortcuts();
     this.exportDialog = this.dialog.open(ExportComponent, { disableClose: true });
     this.exportDialog.afterClosed().subscribe( () => {
       this.setupShortcuts();
