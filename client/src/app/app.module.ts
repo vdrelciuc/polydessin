@@ -41,6 +41,7 @@ import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
 import { EllipseComponent } from './components/ellipse/ellipse.component';
 import { EraserComponent } from './components/eraser/eraser.component';
+import { SelectionComponent } from './components/selection/selection.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { EraserComponent } from './components/eraser/eraser.component';
     WarningDialogComponent,
     PolygonComponent,
     EllipseComponent,
-    EraserComponent
+    EraserComponent,
+    SelectionComponent
   ],
   entryComponents: [
     ColorPickerComponent,
