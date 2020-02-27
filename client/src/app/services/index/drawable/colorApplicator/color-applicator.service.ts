@@ -3,7 +3,7 @@ import { DrawableService } from '../drawable.service';
 import { ColorSelectorService } from '../../../color-selector.service';
 import { DrawStackService } from '../../../tools/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { CoordinatesXY } from '../../../../classes/coordinates-x-y';
+//import { CoordinatesXY } from '../../../../classes/coordinates-x-y';
 import { SVGProperties } from '../../../../classes/svg-properties';
 
 
@@ -41,33 +41,35 @@ export class ColorApplicatorService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    let elementOnTop = this.drawStack.findTopElementAt(new CoordinatesXY(
-      event.clientX,
-      event.clientY));
+    let elementOnTop = event.target as SVGElement;
     const colorFill = this.colorSelectorService.primaryColor.getValue().getHex();
     const colorBorder = this.colorSelectorService.secondaryColor.getValue().getHex();
     const colorFillOpacity = this.colorSelectorService.primaryTransparency.getValue() as unknown as string;
     const colorBorderOpacity = this.colorSelectorService.secondaryTransparency.getValue() as unknown as string;
 
     if(elementOnTop !== undefined) {
-      console.log(elementOnTop.target);
-      console.log(elementOnTop.target.firstChild);
-      console.log(elementOnTop.target.firstElementChild);
-      const capturedSVG = elementOnTop.target.firstChild as SVGElement;
+      console.log(elementOnTop);
+      console.log(elementOnTop.firstChild);
+      console.log(elementOnTop.firstElementChild);
+      const capturedSVG = elementOnTop ;
       const actualColor = capturedSVG.getAttribute(SVGProperties.fill);
-      const junction = capturedSVG.getAttribute(SVGProperties.joint);
       if (event.button === 0 && actualColor !== 'none'){
-          this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.fill, colorFill);
-        this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.fillOpacity, colorFillOpacity);
+          this.manipulator.setAttribute(elementOnTop, SVGProperties.fill, colorFill);
+        this.manipulator.setAttribute(elementOnTop, SVGProperties.fillOpacity, colorFillOpacity);
 
-      } else if (event.button ===0 && junction === "round" ) {
-        this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.color, colorFill);
-        this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.fillOpacity, colorFillOpacity);
+      } else if (capturedSVG.tagName === 'polyline'){
+        this.manipulator.setAttribute(elementOnTop, SVGProperties.color, colorFill);
+        this.manipulator.setAttribute(elementOnTop, SVGProperties.colorOpacity, colorFillOpacity);
+      }
+
+      else if (event.button === 0 && capturedSVG.tagName === 'path' ) {
+        this.manipulator.setAttribute(elementOnTop, SVGProperties.color, colorFill);
+        this.manipulator.setAttribute(elementOnTop, SVGProperties.fillOpacity, colorFillOpacity);
       }
         else if (event.button === 2) {
-          if (junction !== "round" )
-            this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.color, colorBorder);
-            this.manipulator.setAttribute(elementOnTop.target.firstChild, SVGProperties.colorOpacity, colorBorderOpacity);
+          if (capturedSVG.tagName !== 'path' )
+            this.manipulator.setAttribute(elementOnTop, SVGProperties.color, colorBorder);
+            this.manipulator.setAttribute(elementOnTop, SVGProperties.colorOpacity, colorBorderOpacity);
         }
     }
 
