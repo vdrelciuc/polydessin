@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
+import {WarningExportComponent} from "./warning-export/warning-export.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-export',
@@ -8,7 +10,9 @@ import { MatDialogRef } from '@angular/material';
 })
 export class ExportComponent implements OnInit {
 
-  constructor(private dialogRef: MatDialogRef<ExportComponent>) { }
+  constructor(private dialogRef: MatDialogRef<ExportComponent>,
+              private dialog: MatDialog
+  ) { }
 
   ngOnInit() {
   }
@@ -17,8 +21,20 @@ export class ExportComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onConfirm() {
-    this.onDialogClose();
+  exportConfirmation() {
+   this.onDialogClose();
+    // Export Confirmation logic goes here
+  }
+
+  onExport() {
+    const warning = this.dialog.open(WarningExportComponent, { disableClose: true });
+    if (warning !== undefined) {
+      warning.afterClosed().subscribe((result) => {
+        if (!result) {
+          this.exportConfirmation();
+        }
+      });
+    }
   }
 
 }

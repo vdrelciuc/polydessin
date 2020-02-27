@@ -77,7 +77,8 @@ import { WarningExportComponent } from './components/export/warning-export/warni
     CreateNewComponent,
     WarningDialogComponent,
     UserGuideComponent,
-    ExportComponent
+    ExportComponent,
+    WarningExportComponent
   ],
   imports: [
     BrowserAnimationsModule,
