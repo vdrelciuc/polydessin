@@ -73,6 +73,9 @@ export class ToolSelectorService {
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
     if (foundTool !== undefined) {
+      if(this.tool !== undefined) {
+        this.tool.endTool();
+      }
       this.tool = foundTool;
       this.$currentTool.next(tool);
       this.drawerService.updateDrawer(this.$currentTool.getValue());

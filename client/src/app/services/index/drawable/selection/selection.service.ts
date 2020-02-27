@@ -17,7 +17,7 @@ export class SelectionService extends DrawableService {
   private selectionOrigin: CoordinatesXY;
   private isChanging: boolean;
 
-  private subElement: SVGGElement;
+  //private subElement: SVGGElement;
   private perimeter: SVGRectElement;
   private perimeterAlternative: SVGRectElement;
 

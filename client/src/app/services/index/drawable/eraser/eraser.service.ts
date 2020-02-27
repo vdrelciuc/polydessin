@@ -8,6 +8,7 @@ import * as CONSTANTS from '../../../../classes/constants';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { UndoRedoService } from 'src/app/services/tools/undo-redo/undo-redo.service';
 import { Color } from 'src/app/classes/color';
+import { Stack } from 'src/app/classes/stack';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +19,13 @@ export class EraserService extends DrawableService {
   private selectedElement: SVGElementInfos;
   private oldBorder: string;
   private undoRedo: UndoRedoService;
+  private elements: Stack<SVGElementInfos>;
+  private leftClick: boolean;
 
   constructor() { 
     super();
     this.frenchName = 'Efface';
+    this.leftClick = false;
   }
 
   initialize(
@@ -31,6 +35,7 @@ export class EraserService extends DrawableService {
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
       this.initializeProperties();
+      this.updateSVGElements();
   }
 
   initializeProperties(): void {
@@ -45,9 +50,11 @@ export class EraserService extends DrawableService {
   }
 
   onMouseMove(event: MouseEvent): void {
-    let elementOnTop = this.drawStack.findTopElementAt(new CoordinatesXY(
+    this.updateSVGElements();
+    let elementOnTop = DrawStackService.findTopElementAt(new CoordinatesXY(
         event.clientX, 
-        event.clientY)
+        event.clientY),
+        this.elements
       );
     if(elementOnTop !== undefined) {      
       if(this.selectedElement === undefined) {
@@ -66,11 +73,36 @@ export class EraserService extends DrawableService {
         this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
       }
     }
+    if(this.leftClick) {
+      this.deleteSelectedElement();
+    }
   }
 
   onClick(event: MouseEvent): void {
+    this.deleteSelectedElement();
+  }
+
+  onMousePress(event: MouseEvent): void {
+    if(event.button === CONSTANTS.MOUSE_LEFT) {
+      this.leftClick = true;
+    }
+  }
+
+  onMouseRelease(event: MouseEvent): void {
+    if(event.button === CONSTANTS.MOUSE_LEFT) {
+      this.leftClick = false;
+    }
+  }
+
+  endTool(): void {
+    this.leftClick = false;
     if(this.selectedElement !== undefined) {
-      // this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+      this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+    }
+  }
+
+  private deleteSelectedElement(): void {
+    if(this.selectedElement !== undefined) {
       this.undoRedo.addToRemoved(this.selectedElement);
       this.drawStack.removeElement(this.selectedElement.id);
     }
@@ -85,5 +117,19 @@ export class EraserService extends DrawableService {
     if(color !== null) {
       this.oldBorder = color;
     }
+  }
+
+  private updateSVGElements(): void {
+    const inSVG = this.image.nativeElement.querySelectorAll('g');
+    this.elements = new Stack<SVGElementInfos>();
+    inSVG.forEach((element) => {
+      const id = element.getAttribute(SVGProperties.title);
+      if(id !== null) {
+        this.elements.push_back({
+          target: element,
+          id: Number(id)
+        })
+      }
+    });
   }
 }

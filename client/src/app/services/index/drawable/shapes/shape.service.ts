@@ -97,7 +97,13 @@ export abstract class ShapeService extends DrawableService {
     } else if (this.isChanging) {
       this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
       this.manipulator.removeChild(this.subElement, this.perimeter);
-      this.drawStack.addElement(this.subElement);
+      //this.drawStack.addElement(this.subElement);
+      const nextID = this.drawStack.getNextID();
+      this.drawStack.addElementWithInfos({
+        target: this.subElement,
+        id: nextID
+      });
+      this.manipulator.setAttribute(this.subElement, SVGProperties.title, nextID.toString());
     }
     this.isChanging = false;
   }
@@ -126,6 +132,13 @@ export abstract class ShapeService extends DrawableService {
       if (this.isChanging) {
         this.updateSize();
       }
+    }
+  }
+
+  endTool(): void {
+    this.shiftPressed = false;
+    if(this.drawOnNextMove) {
+      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
   }
 

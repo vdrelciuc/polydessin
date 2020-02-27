@@ -7,6 +7,7 @@ import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { BehaviorSubject } from 'rxjs';
+import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,6 @@ export class PencilService extends DrawableService {
   private previousY: number;
   thickness: number;
   isDrawing: BehaviorSubject<boolean>;
-  private subElement: SVGGElement;
   private line: SVGPathElement;
   private mousePointer: SVGCircleElement;
   private color: Color;
@@ -40,8 +40,8 @@ export class PencilService extends DrawableService {
     this.initializeProperties();
     this.isDrawing.subscribe(
       () => {
-        if(!this.isDrawing.value) {
-          drawStack.addElement(this.subElement);
+        if(!this.isDrawing.value && this.subElement !== undefined) {
+          this.pushElement();
         }
       }
     )
@@ -73,7 +73,6 @@ export class PencilService extends DrawableService {
   onMouseOutCanvas(event: MouseEvent): void {
     this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
     this.isDrawing.next(false);
-    delete(this.mousePointer);
   }
 
   onMousePress(event: MouseEvent): void {
@@ -99,7 +98,7 @@ export class PencilService extends DrawableService {
   }
 
   onMouseRelease(event: MouseEvent): void {
-    if (event.button === 0) { // 0 for the left mouse button
+    if (event.button === CONSTANTS.MOUSE_LEFT) { // 0 for the left mouse button
       this.isDrawing.next(false);
       this.endPath();
       this.updateCursor(event.clientX, event.clientY);
@@ -113,6 +112,17 @@ export class PencilService extends DrawableService {
     } else {
       this.updateCursor(event.clientX, event.clientY);
     }
+  }
+
+  endTool(): void {
+    if(this.isDrawing.value) {
+      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    }
+    if(this.mousePointer !== undefined) {
+      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+    }
+    this.isDrawing.next(false);
+    this.path = '';
   }
 
   private beginDraw(clientX: number, clientY: number) {

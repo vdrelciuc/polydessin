@@ -18,29 +18,24 @@ export class DrawStackService {
     this.elements = new Stack<SVGElementInfos>();
     this.nextId = 0;
     this.isAdding = new BehaviorSubject<boolean>(false);
-    this.changeAt = new BehaviorSubject<number>(0);
+    this.changeAt = new BehaviorSubject<number>(-1);
   }
 
   getAll(): Stack<SVGElementInfos> { return this.elements; }
 
-  addElement(toAdd: SVGGElement): void {
+  addElementWithInfos(toAdd: SVGElementInfos): void {
     if(toAdd !== undefined) {
-      this.addElementWithInfos({
-        target: toAdd,
-        id: this.nextId
-      });
-      this.nextId++; // Je sais je peux faire ++, GARDER CA LA
+      if(toAdd.id < this.nextId) {
+        this.changeAt.next(toAdd.id);
+      }
       this.isAdding.next(true);
+      this.elements.insert(toAdd, toAdd.id);
+      this.nextId++;
     }
   }
 
-  addElementWithInfos(toAdd: SVGElementInfos): void {
-    if(toAdd !== undefined) {
-      this.elements.insert(toAdd, toAdd.id);
-      if(toAdd.id !== this.nextId) {
-        this.changeAt.next(toAdd.id);
-      }
-    }
+  addFromUndo(toAdd: SVGElementInfos): void {
+    this.elements.insert(toAdd, toAdd.id);
   }
 
   removeElement(toRemove: number): void  {
@@ -48,7 +43,6 @@ export class DrawStackService {
       if(element.id === toRemove) {
         this.elements.delete(element);
         this.nextId--;
-        this.percolateDownIDs(toRemove);
       }
     }
   }
@@ -62,8 +56,23 @@ export class DrawStackService {
     return lastElement;
   }
 
+  removeElements(from: number): Stack<SVGElementInfos> {
+    let toRemove = new Stack<SVGElementInfos>();
+    let poped = this.elements.pop_back();
+    while(poped !== undefined) {
+      toRemove.push_front(poped);
+      poped = this.elements.pop_back();
+      if(poped !== undefined && poped.id < from) {
+        this.elements.push_back(poped);
+        break;
+      }
+    }
+    this.nextId -= (toRemove.getAll().length - 1);
+    return toRemove;
+  }
+
   isEmpty(): boolean {
-    return this.nextId === 0;
+    return this.elements.getAll().length === 0;
   }
 
   size(): number {
@@ -71,7 +80,11 @@ export class DrawStackService {
   }
 
   findTopElementAt(position: CoordinatesXY): SVGElementInfos | undefined {
-    const array = this.elements.getAll();
+    return DrawStackService.findTopElementAt(position, this.elements);
+  }
+
+  static findTopElementAt(position: CoordinatesXY, elements: Stack<SVGElementInfos>): SVGElementInfos | undefined {
+    const array = elements.getAll();
     for(let i: number = array.length - 1; i >= 0; i--) {
       if(position.inRadius(array[i].target.getBoundingClientRect())) {
         return array[i];
@@ -87,27 +100,10 @@ export class DrawStackService {
 
     return (isIncludedX && isIncludedY) ? this.elements.getAll()[elementID] : undefined;
   }
-
-  removeElements(from: number): SVGElementInfos[] {
-    let toRemove: SVGElementInfos[] = [];
-    let j = 0;
-    for(let i: number = this.elements.getAll().length - 1 ; i >= from; i--) {
-      const poped = this.elements.pop_back();
-      if(poped !== undefined) {
-        toRemove[j] = poped;
-      }
-    }
-    return toRemove;
+  
+  getRoot(): SVGElementInfos | undefined {
+    return this.elements.getRoot();
   }
 
-  private percolateDownIDs(from: number): void {
-    let newStack = new Stack<SVGElementInfos>();
-    for(const element of this.elements.getAll()) {
-      if(element.id >= from) {
-        element.id--;
-      }
-      newStack.push_back(element);
-    }
-    this.elements = newStack;
-  }
+  getNextID(): number { return this.nextId; }
 }

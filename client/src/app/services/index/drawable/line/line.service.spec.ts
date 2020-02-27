@@ -19,7 +19,7 @@ describe('LineService', () => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({

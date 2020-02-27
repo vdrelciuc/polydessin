@@ -9,15 +9,19 @@ import { Stack } from 'src/app/classes/stack';
 export class UndoRedoService {
 
   private removed: Stack<SVGElementInfos>;
+  private toRedo: SVGElementInfos | undefined;
+  private toRedraw: Stack<SVGElementInfos>;
+  private redoing: boolean;
 
   constructor(
     private drawStack: DrawStackService,
     private manipulator: Renderer2,
     private image: ElementRef<SVGElement>) { 
+      this.redoing = false;
       this.removed = new Stack<SVGElementInfos>();
       this.drawStack.isAdding.subscribe(
         () => {
-          if(this.drawStack.isAdding.value) {
+          if(this.drawStack.isAdding.value && !this.redoing) {
             this.removed = new Stack<SVGElementInfos>();
           }
         }
@@ -25,12 +29,12 @@ export class UndoRedoService {
       this.drawStack.changeAt.subscribe(
         () => {
           const changeValue = this.drawStack.changeAt.value;
-          if(changeValue !== 0) {
+          if(changeValue !== -1) {
             this.redrawStackFrom(changeValue);
           }
         }
-      )
-
+      );
+      this.toRedraw = new Stack<SVGElementInfos>();
     }
 
   undo(): void {
@@ -46,10 +50,16 @@ export class UndoRedoService {
   }
 
   redo(): void{
-    const toRedo = this.removed.pop_back();
-    if(toRedo !== undefined) {
-      this.drawStack.addElementWithInfos(toRedo);
-      this.manipulator.appendChild(this.image.nativeElement, toRedo.target);
+    this.toRedo = this.removed.pop_back();
+    this.redoing = true;
+    if(this.toRedo !== undefined) {
+      this.redoing = true;
+      this.drawStack.addElementWithInfos(this.toRedo);
+      this.manipulator.appendChild(this.image.nativeElement, this.toRedo.target);
+      this.redoing = false;
+    }
+    if(this.toRedraw.getAll().length > 0) {
+      this.redrawStack();
     }
   }
 
@@ -59,16 +69,26 @@ export class UndoRedoService {
 
   addToRemoved(toUndo: SVGElementInfos): void {
     this.removed.push_back(toUndo);
-    this.manipulator.removeChild(this.image, toUndo.target);
+    this.manipulator.removeChild(this.image.nativeElement, toUndo.target);
   }
 
   private redrawStackFrom(from: number): void {
-    const toRedraw = this.drawStack.removeElements(from);
-    for(const element of toRedraw) {
-      this.manipulator.removeChild(this.image, element.target);
+    this.toRedraw = this.drawStack.removeElements(from);
+    if(this.toRedo !== undefined) {
+      for(const elementToRedraw of this.toRedraw.getAll()) {
+        this.manipulator.removeChild(this.image.nativeElement, elementToRedraw.target);
+      }
     }
-    for(const element of toRedraw) {
-      this.manipulator.appendChild(this.image, element);
+  }
+
+  private redrawStack(): void {
+    if(this.toRedraw.getAll().length !== 0) {
+      let elementToRedraw = this.toRedraw.pop_front();
+      while(elementToRedraw !== undefined) {
+        this.manipulator.appendChild(this.image.nativeElement, elementToRedraw.target);
+        this.drawStack.addFromUndo(elementToRedraw);
+        elementToRedraw = this.toRedraw.pop_front();
+      }
     }
   }
 }

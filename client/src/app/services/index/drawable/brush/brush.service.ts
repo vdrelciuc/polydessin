@@ -8,6 +8,7 @@ import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { BehaviorSubject } from 'rxjs';
+import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,6 @@ export class BrushService extends DrawableService {
   previousY: number;
   thickness: number;
   isDrawing: BehaviorSubject<boolean>;
-  private subElement: SVGGElement;
   previewLine: SVGPathElement;
   previewCricle: SVGCircleElement;
   attributes: DrawablePropertiesService;
@@ -44,8 +44,8 @@ export class BrushService extends DrawableService {
     this.initializeProperties();
     this.isDrawing.subscribe(
       () => {
-        if(!this.isDrawing.value) {
-          drawStack.addElement(this.subElement);
+        if(!this.isDrawing.value && this.subElement !== undefined) {
+          this.pushElement();
         }
       }
     )
@@ -65,9 +65,6 @@ export class BrushService extends DrawableService {
     this.attributes.thickness.subscribe((element: number) => {
       this.thickness = element;
     });
-
-    // Create a type for the 5 different textures
-    // Subscribe to that type (for changes and updates)
   }
 
   getThickness() {
@@ -115,7 +112,7 @@ export class BrushService extends DrawableService {
     this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'hidden');
   }
   onMouseRelease(event: MouseEvent): void {
-    if (event.button === 0) { // 0 for the left mouse button
+    if (event.button === CONSTANTS.MOUSE_LEFT) { // 0 for the left mouse button
       if (this.isDrawing.value) {
         this.isDrawing.next(false);
         // this.addPath(event.clientX, event.clientY);
@@ -135,6 +132,14 @@ export class BrushService extends DrawableService {
 
   onClick(event: MouseEvent): void {
     this.isDrawing.next(false);
+  }
+
+  endTool(): void {
+    if(this.isDrawing.value) {
+      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    }
+    this.isDrawing.next(false);
+    this.path = '';
   }
 
   private beginDraw(clientX: number, clientY: number) {
