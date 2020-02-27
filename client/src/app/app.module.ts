@@ -73,7 +73,7 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     ResizeObserverDirective,
     WarningDialogComponent,
     ExportComponent,
-    WarningExportComponent
+    WarningExportComponent,
     EllipseComponent,
     EraserComponent
   ],
