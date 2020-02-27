@@ -7,11 +7,12 @@
   </div>
 
   <div class="option-panel" [ngSwitch]="currentTool">
-    <p *ngSwitchCase="'eraser'">Eraser is selected</p>
     <app-line *ngSwitchCase="'line'">Line Selected</app-line>
     <app-pencil *ngSwitchCase="'pencil'">Pencil Selected</app-pencil>
     <app-rectangle *ngSwitchCase="'rectangle'">Rectangle Selected</app-rectangle>
     <app-brush *ngSwitchCase="'brush'">Brush Selected</app-brush>
+    <app-ellipse *ngSwitchCase="'ellipse'">Ellipse Selected</app-ellipse>
+    <app-eraser *ngSwitchCase="'eraser'">Eraser Selected</app-eraser>
   </div>
 
 

@@ -10,6 +10,8 @@ import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
 import { DrawStackService } from './draw-stack/draw-stack.service';
 import { UndoRedoService } from './undo-redo/undo-redo.service';
+import { EllipseService } from '../index/drawable/ellipse/ellipse.service';
+import { EraserService } from '../index/drawable/eraser/eraser.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +26,8 @@ export class ToolSelectorService {
   private pencil: PencilService;
   private rectangle: RectangleService;
   private brush: BrushService;
+  private ellipse: EllipseService;
+  private eraser: EraserService;
 
   constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
@@ -31,13 +35,15 @@ export class ToolSelectorService {
     this.pencil = new PencilService();
     this.rectangle = new RectangleService();
     this.brush = new BrushService();
+    this.ellipse = new EllipseService();
+    this.eraser = new EraserService();
 
     this.tools.set(Tools.Line, this.line);
     this.tools.set(Tools.Pencil, this.pencil);
     this.tools.set(Tools.Rectangle, this.rectangle);
     this.tools.set(Tools.Brush, this.brush);
-      // Initialize currentTool as the selector(mouse)
-    // this.isHidden = true;
+    this.tools.set(Tools.Ellipse, this.ellipse);
+    this.tools.set(Tools.Eraser, this.eraser);
     this.$currentTool = new BehaviorSubject<Tools>(Tools.Selection);
   }
 
@@ -46,6 +52,7 @@ export class ToolSelectorService {
     for (const element of this.tools) {
       element[1].initialize(manipulator, image, colorSelectorService, drawStack);
     }
+    this.eraser.assignUndoRedo(this.memory);
   }
 
   getCurrentTool(): DrawableService | undefined { return this.tool; }
@@ -54,12 +61,16 @@ export class ToolSelectorService {
   getPencil(): PencilService { return this.pencil; }
   getRectangle(): RectangleService { return this.rectangle; }
   getBrush(): BrushService { return this.brush; }
+  getEllipse(): EllipseService { return this.ellipse; }
+  getEraser(): EraserService { return this.eraser; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
     if (foundTool !== undefined) {
+      if(this.tool !== undefined) {
+        this.tool.endTool();
+      }
       this.tool = foundTool;
-      // this.isHidden = false;
       this.$currentTool.next(tool);
       this.drawerService.updateDrawer(this.$currentTool.getValue());
     }

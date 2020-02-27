@@ -16,6 +16,10 @@ export class Stack<T> {
     }
   }
 
+  insert(toInsert: T, index: number): void {
+    this.stack.splice(index, 0, toInsert);
+  }
+
   push_back(toAdd: T): void {
     this.stack.push(toAdd);
   }

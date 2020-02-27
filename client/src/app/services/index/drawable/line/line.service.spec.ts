@@ -9,6 +9,7 @@ import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { LineService } from './line.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 describe('LineService', () => {
   let service: LineService;
@@ -18,7 +19,7 @@ describe('LineService', () => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -56,6 +57,7 @@ describe('LineService', () => {
             primaryTransparency: new BehaviorSubject<number>(1),
           },
         },
+        DrawStackService
       ],
     });
     service = getTestBed().get(LineService);
@@ -66,7 +68,9 @@ describe('LineService', () => {
     service['dotDiameter'] = 5;
     service['thickness'] = 10;
     service.attributes = new DrawablePropertiesService();
-    service.initialize(manipulator, image, getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>));
+    service.initialize(manipulator, image, 
+      getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
+      getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
   });
 
   it('should be created', () => {

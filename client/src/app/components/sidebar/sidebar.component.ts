@@ -84,6 +84,13 @@ export class SidebarComponent implements OnInit {
       )
     );
 
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'e', description: 'Selecting eraser with shortcut' }).subscribe(
+      (event) => {
+        this.toolSelectorService.setCurrentTool(Tools.Eraser);
+      }
+    )
+  );
+
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
         (event) => {
           this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
@@ -106,7 +113,7 @@ export class SidebarComponent implements OnInit {
         }
       )
     );
-}
+  }
 
   selectTool(tool: Tools): void {
     this.toolSelectorService.setCurrentTool(tool);
