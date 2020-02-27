@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
 import { DrawStackService } from './draw-stack.service';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { Stack } from 'src/app/classes/stack';
+import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 
 describe('DrawStackService', () => {
   let service: DrawStackService;
@@ -101,6 +104,28 @@ describe('DrawStackService', () => {
     expect(service.removeElements(1).getAll().length).toEqual(2);
     expect(service['elements'].getAll().length).toEqual(1);
   });
+
+  it('#findTopElementAt shouldn\'t find element, stack is empty', () => {
+    expect(service.findTopElementAt(new CoordinatesXY(10,10))).toEqual(undefined);
+  });
+
+  it('#findTopElementAt should find the element at the correct position', () => {
+    const mockedStack = new Stack<SVGElementInfos>();
+    const element1 = {getBoundingClientRect: () => new DOMRect(10,10,10,10)};
+    const element2 = {getBoundingClientRect: () => new DOMRect(1000,1000,10,10)};
+    mockedStack.push_back({target: element1 as unknown as SVGGElement, id: 0 });
+    mockedStack.push_back({target: element2 as unknown as SVGGElement, id: 1 });
+    const foundElement = DrawStackService.findTopElementAt(
+      new CoordinatesXY(5,5),
+      mockedStack
+    );
+    if(foundElement !== undefined) {
+      expect(foundElement.id).toEqual(0);
+    }
+    else {
+      expect(false).toBeTruthy();
+    }
+  });  
 
   it('#getRoot should get first as undefined, stack is empty', () => {
     expect(service.getRoot()).toEqual(undefined);

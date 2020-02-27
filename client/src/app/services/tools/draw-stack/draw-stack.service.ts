@@ -54,6 +54,21 @@ export class DrawStackService {
     return lastElement;
   }
 
+  removeElements(from: number): Stack<SVGElementInfos> {
+    let toRemove = new Stack<SVGElementInfos>();
+    let poped = this.elements.pop_back();
+    while(poped !== undefined) {
+      toRemove.push_front(poped);
+      poped = this.elements.pop_back();
+      if(poped !== undefined && poped.id < from) {
+        this.elements.push_back(poped);
+        break;
+      }
+    }
+    this.nextId -= (toRemove.getAll().length - 1);
+    return toRemove;
+  }
+
   isEmpty(): boolean {
     return this.elements.getAll().length === 0;
   }
@@ -70,21 +85,6 @@ export class DrawStackService {
       }
     }
     return undefined;
-  }
-
-  removeElements(from: number): Stack<SVGElementInfos> {
-    let toRemove = new Stack<SVGElementInfos>();
-    let poped = this.elements.pop_back();
-    while(poped !== undefined) {
-      toRemove.push_front(poped);
-      poped = this.elements.pop_back();
-      if(poped !== undefined && poped.id < from) {
-        this.elements.push_back(poped);
-        break;
-      }
-    }
-    this.nextId -= (toRemove.getAll().length - 1);
-    return toRemove;
   }
 
   getRoot(): SVGElementInfos | undefined {
