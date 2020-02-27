@@ -12,12 +12,13 @@
       <div class="filters">
         <h5>Filtres</h5>
         <mat-radio-group>
-          <mat-radio-button value="none">Aucun</mat-radio-button>
-          <mat-radio-button value="black-and-white">Noir et blanc</mat-radio-button>
-          <mat-radio-button value="vintage">Vintage</mat-radio-button>
-          <mat-radio-button value="contrast">Contraste</mat-radio-button>
-          <mat-radio-button value="sepia">Sépia</mat-radio-button>
-          <mat-radio-button value="blur">Estompé</mat-radio-button>
+          <mat-radio-button class="filter-head" value="none">Aucun</mat-radio-button>
+          <mat-radio-button class="filter-head" value="black-and-white">Noir et blanc</mat-radio-button>
+          <mat-radio-button class="filter-head" value="vintage">Vintage</mat-radio-button>
+
+          <mat-radio-button class="filter-foot" value="contrast">Contraste</mat-radio-button>
+          <mat-radio-button class="filter-foot" value="sepia">Sépia</mat-radio-button>
+          <mat-radio-button class="filter-foot" value="blur">Estompé</mat-radio-button>
         </mat-radio-group>
       </div>
       <div class="type"></div>
@@ -26,16 +27,16 @@
       <div id="preview"></div>
       <div class="details">
         <form class="info">
-          <mat-form-field class="example-full-width">
-            <mat-label>Titre</mat-label>
+          <mat-form-field>
+            <mat-label class="text">Titre</mat-label>
             <input matInput placeholder="Ex. Mon dessin">
           </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <mat-label>Auteur</mat-label>
+          <mat-form-field>
+            <mat-label class="text">Auteur</mat-label>
             <input matInput placeholder="Ex. John Doe">
           </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <mat-label>Courriel destinairaire</mat-label>
+          <mat-form-field>
+            <mat-label class="text">Courriel destinairaire</mat-label>
             <input matInput placeholder="Ex. alice@test.com">
           </mat-form-field>
         </form>
