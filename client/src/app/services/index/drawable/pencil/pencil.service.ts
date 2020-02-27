@@ -99,10 +99,12 @@ export class PencilService extends DrawableService {
 
   onMouseRelease(event: MouseEvent): void {
     if (event.button === CONSTANTS.MOUSE_LEFT) { // 0 for the left mouse button
-      this.isDrawing.next(false);
-      this.endPath();
-      this.updateCursor(event.clientX, event.clientY);
-      this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
+      if (this.isDrawing.value) {
+        this.isDrawing.next(false);
+        this.endPath();
+        this.updateCursor(event.clientX, event.clientY);
+        this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
+      }
     }
   }
 
