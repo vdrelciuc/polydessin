@@ -51,6 +51,8 @@
   </div>
   <div class="button-section">
     <button mat-button id="cancel-button" (click)="onDialogClose()">Annuler</button>
-    <button mat-button id="confirm-button" (click)="onExport()">Exporter</button>
+    <a #myDownload ><button mat-button id="confirm-button" (click)="exportConfirmation()">Exporter</button></a>
   </div>
 </div>
+
+<canvas #mydrawing height="0" width="0"></canvas>
