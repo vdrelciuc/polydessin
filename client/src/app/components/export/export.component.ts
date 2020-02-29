@@ -28,7 +28,7 @@ export class ExportComponent implements AfterViewInit {
 
   exportConfirmation() {
     this.onDialogClose();
-    this.exportation.svgToCanvas();
+    this.exportation.total();
   }
 
 
