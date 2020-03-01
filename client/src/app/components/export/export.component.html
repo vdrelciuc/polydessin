@@ -1,31 +1,34 @@
 <div class="wrapper">
   <div class="option-section">
     <div class="left">
-      <div class="format">
+      <div class="left-section">
         <h5>Format d'exportation</h5>
-        <mat-radio-group>
-          <mat-radio-button value="jpg">JPEG</mat-radio-button>
-          <mat-radio-button value="png">PNG</mat-radio-button>
-          <mat-radio-button value="svg">SVG</mat-radio-button>
+        <mat-radio-group name="formatList" [(ngModel)]="selectedFormat">
+          <mat-grid-list cols="3" rowHeight="30">
+            <mat-grid-tile *ngFor="let format of exportFormats">
+              <mat-radio-button [value]="format">{{ format }}</mat-radio-button>
+            </mat-grid-tile>
+          </mat-grid-list>
         </mat-radio-group>
       </div>
-      <div class="filters">
+      <div class="left-section">
         <h5>Filtres</h5>
-        <mat-radio-group>
-          <mat-radio-button class="filter-head" value="none">Aucun</mat-radio-button>
-          <mat-radio-button class="filter-head" value="sature">Saturé</mat-radio-button>
-          <mat-radio-button class="filter-head" value="negative">Negative</mat-radio-button>
-
-          <mat-radio-button class="filter-foot" value="contrast">Contraste</mat-radio-button>
-          <mat-radio-button class="filter-foot" value="sepia">Sépia</mat-radio-button>
-          <mat-radio-button class="filter-foot" value="grayScale">Grisé</mat-radio-button>
+        <mat-radio-group name="filterList" [(ngModel)]="selectedFilter">
+          <mat-grid-list cols="3" rowHeight="30">
+            <mat-grid-tile *ngFor="let filter of exportFilters">
+              <mat-radio-button  [value]="filter">{{ filter }}</mat-radio-button>
+            </mat-grid-tile>
+          </mat-grid-list>
         </mat-radio-group>
       </div>
-      <div class="type">
+      <div class="left-section">
         <h5>Type d'exportation</h5>
-        <mat-radio-group>
-          <mat-radio-button value="download">Téléchargement</mat-radio-button>
-          <mat-radio-button value="email">Courriel</mat-radio-button>
+        <mat-radio-group name="typeList" [(ngModel)]="selectedType">
+          <mat-grid-list cols="3" rowHeight="30">
+            <mat-grid-tile *ngFor="let type of exportTypes">
+              <mat-radio-button [value]="type">{{ type }}</mat-radio-button>
+            </mat-grid-tile>
+          </mat-grid-list>
         </mat-radio-group>
       </div>
     </div>
@@ -35,15 +38,15 @@
         <form class="info">
           <mat-form-field>
             <mat-label class="text">Titre</mat-label>
-            <input matInput placeholder="Ex. Mon dessin">
+            <input matInput>
           </mat-form-field>
           <mat-form-field>
             <mat-label class="text">Auteur</mat-label>
-            <input matInput placeholder="Ex. John Doe">
+            <input matInput>
           </mat-form-field>
           <mat-form-field>
             <mat-label class="text">Courriel destinairaire</mat-label>
-            <input matInput placeholder="Ex. alice@test.com">
+            <input matInput type="email">
           </mat-form-field>
         </form>
       </div>

@@ -7,40 +7,39 @@
   background-color: $dark-gray;
 }
 
-.option-selection {
+.left-section {
+  margin-bottom: 10px;
+}
+
+.details {
   display: flex;
+  flex-direction: column;
 }
 
-.filter-head {
-  grid-area: header;
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
+  color: whitesmoke !important;
 }
 
-.filter-foot {
-  grid-area: footer;
+::ng-deep .mat-form-field-ripple {
+  background-color: $vivid !important;
 }
 
-.filters{
-  display: grid;
-  grid-template-columns: 50px 50px 50px;
-  grid-template-rows: auto;
-  grid-template-areas:
-   "header header header"
-    "footer footer footer";
-
-
+::ng-deep .mat-input-element {
+  color: whitesmoke !important;
+  caret-color: whitesmoke !important;
 }
 
-.info {
-  display: block;
-
-  .text {
-    display: block;
-  }
+::ng-deep .mat-form-field-underline, .mat-form-field-underline.mat-focused {
+  background-color: whitesmoke !important;
 }
 
 h5 {
   color: whitesmoke;
   font-size: 1em;
+}
+
+::ng-deep .mat-grid-tile .mat-figure {
+  justify-content: left !important;
 }
 
 .mat-radio-button{
