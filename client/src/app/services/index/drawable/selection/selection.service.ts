@@ -4,6 +4,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { CursorProperties } from 'src/app/classes/cursor-properties';
 import { Tools } from 'src/app/enums/tools';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { Stack } from 'src/app/classes/stack';
@@ -153,6 +154,13 @@ export class SelectionService extends DrawableService {
         this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.height, this.controlPointSize.toString());
         this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.width, this.controlPointSize.toString());
         this.manipulator.appendChild(this.selectionGroup, this.controlPoints[i]);
+
+        // Cursor on hover
+        if (i < 2) {
+          this.manipulator.setAttribute(this.controlPoints[i], CursorProperties.cursor, CursorProperties.vertical);
+        } else {
+          this.manipulator.setAttribute(this.controlPoints[i], CursorProperties.cursor, CursorProperties.horizontal);
+        }
       }
       this.manipulator.appendChild(this.subElement, this.selectionGroup);
     }
@@ -265,13 +273,17 @@ export class SelectionService extends DrawableService {
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.width, (right - left).toString());
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.height, (bottom - top).toString());
 
-      // Set control points positions
+      // Set control points positions :
+      // Top
       this.manipulator.setAttribute(this.controlPoints[0], SVGProperties.x, ((right + left) / 2 - this.controlPointSize / 2).toString());
       this.manipulator.setAttribute(this.controlPoints[0], SVGProperties.y, (top - this.controlPointSize / 2).toString());
+      // Bottom
       this.manipulator.setAttribute(this.controlPoints[1], SVGProperties.x, ((right + left) / 2 - this.controlPointSize / 2).toString());
       this.manipulator.setAttribute(this.controlPoints[1], SVGProperties.y, (bottom - this.controlPointSize / 2).toString());
+      // Left
       this.manipulator.setAttribute(this.controlPoints[2], SVGProperties.x, (left - this.controlPointSize / 2).toString());
       this.manipulator.setAttribute(this.controlPoints[2], SVGProperties.y, ((top + bottom) / 2 - this.controlPointSize / 2).toString());
+      // Right
       this.manipulator.setAttribute(this.controlPoints[3], SVGProperties.x, (right - this.controlPointSize / 2).toString());
       this.manipulator.setAttribute(this.controlPoints[3], SVGProperties.y, ((top + bottom) / 2 - this.controlPointSize / 2).toString());
 
