@@ -73,6 +73,7 @@ export class SelectionService extends DrawableService {
     this.isChanging = false;
     this.manipulator.removeChild(this.subElement, this.perimeter);
     this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
+    this.manipulator.setAttribute(this.selectionRect, CursorProperties.cursor, CursorProperties.move);
     if (this.selectedElements.getAll().length === 0) {
       this.cancelSelection();
     }
@@ -140,7 +141,7 @@ export class SelectionService extends DrawableService {
       
       // Creating selection rectangle
       this.selectionRect = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
-      this.manipulator.setAttribute(this.selectionRect, SVGProperties.fill, 'none');
+      this.manipulator.setAttribute(this.selectionRect, SVGProperties.fillOpacity, '0');
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.thickness, '1');
       this.manipulator.appendChild(this.selectionGroup, this.selectionRect);
 
@@ -166,6 +167,7 @@ export class SelectionService extends DrawableService {
     }
 
     const backgroundColor = this.colorSelectorService.backgroundColor.getValue();
+    this.manipulator.setAttribute(this.selectionRect, CursorProperties.cursor, CursorProperties.default);
     this.manipulator.setAttribute(this.selectionRect, SVGProperties.color, backgroundColor.getInvertedColor(true).getHex());
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
   }
@@ -208,6 +210,7 @@ export class SelectionService extends DrawableService {
     
     this.selectedElements = this.drawStack.getAll();
     this.createSelectionRect();
+    this.manipulator.setAttribute(this.selectionRect, CursorProperties.cursor, CursorProperties.move);
     this.setGeneratedAreaBorders();
     if (this.selectedElements.getAll().length === 0) {
       this.cancelSelection();
