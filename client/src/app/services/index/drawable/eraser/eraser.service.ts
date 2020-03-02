@@ -58,22 +58,17 @@ export class EraserService extends DrawableService {
       this.manipulator.setAttribute(
         this.preview, 
         SVGProperties.x, 
-        CoordinatesXY.effectiveX(this.image, event.clientX).toString()
+        (CoordinatesXY.effectiveX(this.image, event.clientX) - this.thickness / 2).toString()
       );
       this.manipulator.setAttribute(
         this.preview, 
         SVGProperties.y, 
-        CoordinatesXY.effectiveY(this.image, event.clientY).toString()
+        (CoordinatesXY.effectiveY(this.image, event.clientY) - this.thickness / 2).toString()
       );
       if(this.selectedElement !== undefined)
       {
         const elementBounds = this.selectedElement.target.getBoundingClientRect();
-        if(
-          elementBounds.left   > event.clientX ||
-          elementBounds.right  < event.clientX ||
-          elementBounds.top    > event.clientY ||
-          elementBounds.bottom < event.clientY       
-          ) {
+        if(this.getInBounds(elementBounds, new CoordinatesXY(event.clientX, event.clientY))) {
           this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
           this.selectedElement = undefined as unknown as SVGElementInfos;
         }
@@ -130,6 +125,15 @@ export class EraserService extends DrawableService {
     this.preview.setAttribute(SVGProperties.y, '0');
     this.manipulator.appendChild(this.image.nativeElement, this.preview);
     this.updatePreview();
+  }
+
+  private getInBounds(elementBounds: DOMRect, mouse: CoordinatesXY): boolean {
+    return (    
+      elementBounds.left   > mouse.getX() ||
+      elementBounds.right  < mouse.getX() ||
+      elementBounds.top    > mouse.getY() ||
+      elementBounds.bottom < mouse.getY()   
+    );
   }
 
   private updatePreview(): void {

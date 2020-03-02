@@ -25,7 +25,6 @@ export class Color {
     const redOfColor1HSL = color1.getRGB()[0] / 255;
     const redOfColor2HSL = color2.getRGB()[0] / 255;
     const difference = (redOfColor1HSL - redOfColor2HSL) * 100;
-    console.log('difference' + difference);
     return difference < 15 && difference > -15;
   }
 
