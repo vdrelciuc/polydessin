@@ -57,20 +57,13 @@ export class EraserService extends DrawableService {
 
   onMouseMove(event: MouseEvent): void {
     if(this.canErase) {
-      this.manipulator.setAttribute(
-        this.preview, 
-        SVGProperties.x, 
-        (CoordinatesXY.effectiveX(this.image, event.clientX) - this.thickness.value / 2).toString()
-      );
-      this.manipulator.setAttribute(
-        this.preview, 
-        SVGProperties.y, 
-        (CoordinatesXY.effectiveY(this.image, event.clientY) - this.thickness.value / 2).toString()
-      );
+      this.movePreview(new CoordinatesXY(event.clientX, event.clientY));
+      console.log(event.clientX + ' ' + event.clientY);
       if(this.selectedElement !== undefined)
       {
         const elementBounds = this.selectedElement.target.getBoundingClientRect();
-        if(this.getInBounds(elementBounds, new CoordinatesXY(event.clientX, event.clientY))) {
+        console.log(elementBounds);
+        if(!this.getInBounds(elementBounds, new CoordinatesXY(event.clientX, event.clientY))) {
           this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
           this.selectedElement = undefined as unknown as SVGElementInfos;
         }
@@ -132,13 +125,24 @@ export class EraserService extends DrawableService {
   }
 
   private getInBounds(elementBounds: DOMRect, mouse: CoordinatesXY): boolean {
-    console.log(elementBounds);
-    console.log(mouse.getX());
     return (    
-      elementBounds.left   + this.thickness.value > mouse.getX() ||
-      elementBounds.right  - this.thickness.value < mouse.getX() ||
-      elementBounds.top    + this.thickness.value > mouse.getY() ||
-      elementBounds.bottom - this.thickness.value < mouse.getY()   
+      elementBounds.left   < mouse.getX() &&
+      elementBounds.right  > mouse.getX() &&
+      elementBounds.top    < mouse.getY() &&
+      elementBounds.bottom > mouse.getY()   
+    );
+  }
+
+  private movePreview(mouse: CoordinatesXY): void {
+    this.manipulator.setAttribute(
+      this.preview, 
+      SVGProperties.x, 
+      (CoordinatesXY.effectiveX(this.image, mouse.getX()) - this.thickness.value / 2).toString()
+    );
+    this.manipulator.setAttribute(
+      this.preview, 
+      SVGProperties.y, 
+      (CoordinatesXY.effectiveY(this.image, mouse.getY()) - this.thickness.value / 2).toString()
     );
   }
 
