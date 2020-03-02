@@ -21,6 +21,8 @@ export class DrawStackService {
     this.changeAt = new BehaviorSubject<number>(-1);
   }
 
+  getAll(): Stack<SVGElementInfos> { return this.elements; }
+
   addElementWithInfos(toAdd: SVGElementInfos): void {
     if(toAdd !== undefined) {
       if(toAdd.id < this.nextId) {
@@ -73,6 +75,10 @@ export class DrawStackService {
     return this.elements.getAll().length === 0;
   }
 
+  size(): number {
+    return this.elements.getAll().length;
+  }
+
   findTopElementAt(position: CoordinatesXY): SVGElementInfos | undefined {
     return DrawStackService.findTopElementAt(position, this.elements);
   }
@@ -87,6 +93,14 @@ export class DrawStackService {
     return undefined;
   }
 
+  hasElementIn(elementID: number, zone: DOMRect): SVGElementInfos | undefined {
+    const element = this.elements.getAll()[elementID].target.getBoundingClientRect();
+    const isIncludedX = zone.left <= element.right && zone.right >= element.left;
+    const isIncludedY = zone.top <= element.bottom && zone.bottom >= element.top;
+
+    return (isIncludedX && isIncludedY) ? this.elements.getAll()[elementID] : undefined;
+  }
+  
   getRoot(): SVGElementInfos | undefined {
     return this.elements.getRoot();
   }

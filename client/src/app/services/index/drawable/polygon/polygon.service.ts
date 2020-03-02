@@ -96,6 +96,13 @@ export class PolygonService extends DrawableService {
       }
       this.manipulator.removeChild(this.subElement, this.perimeter);
       this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
+
+      const nextID = this.drawStack.getNextID();
+      this.drawStack.addElementWithInfos({
+        target: this.subElement,
+        id: nextID
+      });
+      this.manipulator.setAttribute(this.subElement, SVGProperties.title, nextID.toString());
     }
   }
 

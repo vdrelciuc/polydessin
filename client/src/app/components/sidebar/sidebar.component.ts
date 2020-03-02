@@ -5,6 +5,7 @@ import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.servic
 import { Tools } from '../../enums/tools';
 import { ToolSelectorService } from '../../services/tools/tool-selector.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
+import { ExportComponent } from '../export/export.component';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
 
 @Component({
@@ -16,6 +17,7 @@ export class SidebarComponent implements OnInit {
   currentTool: Tools;
   private subscriptions: Subscription[] = [];
   private createNewDialog: MatDialogRef<CreateNewComponent>;
+  private exportDialog: MatDialogRef<ExportComponent>;
 
   constructor(
     public toolSelectorService: ToolSelectorService,
@@ -30,11 +32,37 @@ export class SidebarComponent implements OnInit {
     });
   }
 
+  bypassBrowserShortcuts(): void{
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.e', description: 'block search tab' }).subscribe(
+      (event) => {}
+      )
+    );
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'bypass open to save from chrome' }).subscribe(
+      (event) => {}
+      )
+    );
+  }
+
   setupShortcuts(): void {
+    this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 's', description: 'Selecting selection with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Selection);
+        }
+      )
+    );
+
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'l', description: 'Selecting line with shortcut' }).subscribe(
         (event) => {
           this.toolSelectorService.setCurrentTool(Tools.Line);
         }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'r', description: 'Selecting color applicator with shortcut' }).subscribe(
+      (event) => {
+        this.toolSelectorService.setCurrentTool(Tools.ColorApplicator);
+      }
       )
     );
 
@@ -45,9 +73,25 @@ export class SidebarComponent implements OnInit {
       )
     );
 
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.e', description: 'open export dialog' }).subscribe(
+      (event) => {
+        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+        this.dialog.closeAll();
+        this.exportProject();
+      }
+      )
+    );
+
     this.subscriptions.push(this.shortcut.addShortcut({ keys: '1', description: 'Selecting rectangle with shortcut' }).subscribe(
         (event) => {
           this.toolSelectorService.setCurrentTool(Tools.Rectangle);
+        }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: '2', description: 'Selecting ellipse with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Ellipse);
         }
       )
     );
@@ -107,6 +151,16 @@ export class SidebarComponent implements OnInit {
       this.setupShortcuts();
     });
   }
+
+  exportProject(): void {
+    this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
+    this.bypassBrowserShortcuts();
+    this.exportDialog = this.dialog.open(ExportComponent, { disableClose: true });
+    this.exportDialog.afterClosed().subscribe( () => {
+      this.setupShortcuts();
+    });
+  }
+
   openDialog(): void {
     this.dialog.open(UserGuideComponent, {
       maxWidth: '100vw',
