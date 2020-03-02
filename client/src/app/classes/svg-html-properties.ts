@@ -9,11 +9,12 @@ export enum SVGProperties {
   fillOpacity = 'fill-opacity',
   borderOpacity = 'stroke-opacity',
   thickness = 'stroke-width',
+  dashedBorder = 'stroke-dasharray',
+  dashedBorderOffset = 'stroke-dashoffset',
   topLeftCornerCoordinates = 'viewBox',
   width = 'width',
   title = 'title',
   visibility = 'visibility',
-
   // Circle and Ellipse
   centerX = 'cx',
   centerY = 'cy',
@@ -42,6 +43,7 @@ export enum SVGProperties {
   typeOfLine = 'stroke-linejoin',
   endOfLine = 'stroke-linecap',
 
-  // Patern
-  pattern= 'pattern',
+  // Polygon
+  polygon = 'polygon',
+  points = 'points'
 }

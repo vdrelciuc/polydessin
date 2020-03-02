@@ -25,7 +25,6 @@ export class LineService extends DrawableService {
   private points: Stack<CoordinatesXY>;
   private circles: Stack<SVGCircleElement>;
   private line: SVGPolylineElement;
-  private subElement: SVGGElement;
   private shiftPressed: boolean;
   private pointerPosition: CoordinatesXY;
 
@@ -34,13 +33,13 @@ export class LineService extends DrawableService {
     this.frenchName = 'Ligne';
     this.points = new Stack<CoordinatesXY>();
     this.circles = new Stack<SVGCircleElement>();
-    
+
   }
 
   static getName(): Tools { return Tools.Line; }
 
   initialize(
-    manipulator: Renderer2, 
+    manipulator: Renderer2,
     image: ElementRef<SVGElement>,
     colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService): void {
@@ -170,7 +169,7 @@ export class LineService extends DrawableService {
       this.points.clear();
       this.isStarted = false;
       this.isDone = true;
-      this.drawStack.addElement(this.subElement);
+      this.pushElement();
     }
   }
 
@@ -216,6 +215,15 @@ export class LineService extends DrawableService {
     if (recoverShiftPressed) {
       this.shiftPressed = true;
     }
+  }
+
+  endTool(): void {
+    if(this.isStarted && !this.isDone) {
+      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    }
+    this.shiftPressed = false;
+    this.isStarted = false;
+    this.isDone = true;
   }
 
   deleteLine(): void {

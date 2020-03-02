@@ -35,19 +35,19 @@ export class EllipseService extends ShapeService {
 
   // Width and height are not needed for the SVG rectangle element, but is needed for other shapes
 
-  protected setShapeOriginFromRightQuadrants(width: number): void {
-    this.manipulator.setAttribute(this.shape, SVGProperties.centerX, (this.shapeOrigin.getX() + width / 2).toString());
+  protected setShapeOriginFromRightQuadrants(width: number, thicknessOffset: number): void {
+    this.manipulator.setAttribute(this.shape, SVGProperties.centerX, (this.shapeOrigin.getX() + width / 2 + thicknessOffset).toString());
   }
 
-  protected setShapeOriginFromLeftQuadrants(width: number): void {
-    this.manipulator.setAttribute(this.shape, SVGProperties.centerX, (this.mousePosition.getX() + width / 2).toString());
+  protected setShapeOriginFromLeftQuadrants(width: number, thicknessOffset: number): void {
+    this.manipulator.setAttribute(this.shape, SVGProperties.centerX, (this.mousePosition.getX() + width / 2 + thicknessOffset).toString());
   }
 
-  protected setShapeOriginFromLowerQuadrants(height: number): void {
-    this.manipulator.setAttribute(this.shape, SVGProperties.centerY, (this.shapeOrigin.getY() + height / 2).toString());
+  protected setShapeOriginFromLowerQuadrants(height: number, thicknessOffset: number): void {
+    this.manipulator.setAttribute(this.shape, SVGProperties.centerY, (this.shapeOrigin.getY() + height / 2 + thicknessOffset).toString());
   }
 
-  protected setShapeOriginFromUpperQuadrants(height: number): void {
-    this.manipulator.setAttribute(this.shape, SVGProperties.centerY, (this.mousePosition.getY() + height / 2).toString());
+  protected setShapeOriginFromUpperQuadrants(height: number, thicknessOffset: number): void {
+    this.manipulator.setAttribute(this.shape, SVGProperties.centerY, (this.mousePosition.getY() + height / 2 + thicknessOffset).toString());
   }
 }

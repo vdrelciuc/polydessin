@@ -110,7 +110,7 @@ describe('PencilService', () => {
   it('#onMousePress should remove mouse pointer', () => {
     const spy = spyOn(manipulator, 'setAttribute');
     service.onMousePress(eventMocker('mousepress', 0));
-    expect(spy).toHaveBeenCalledTimes(9);
+    expect(spy).toHaveBeenCalledTimes(10);
     expect(service['previousX']).toEqual(10);
     expect(service['previousY']).toEqual(10);
   });
