@@ -9,13 +9,14 @@ import { UndoRedoService } from 'src/app/services/tools/undo-redo/undo-redo.serv
 import { Color } from 'src/app/classes/color';
 import { Stack } from 'src/app/classes/stack';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EraserService extends DrawableService {
 
-  thickness: number;
+  thickness: BehaviorSubject<number>;
   private selectedElement: SVGElementInfos;
   private oldBorder: string;
   private undoRedo: UndoRedoService;
@@ -29,6 +30,7 @@ export class EraserService extends DrawableService {
     this.frenchName = 'Efface';
     this.leftClick = false;
     this.canErase = true;
+    this.thickness = new BehaviorSubject(CONSTANTS.THICKNESS_DEFAULT);
   }
 
   initialize(
@@ -42,9 +44,10 @@ export class EraserService extends DrawableService {
   }
 
   initializeProperties(): void {
-    this.thickness = this.attributes.thickness.value;
-    this.attributes.thickness.subscribe((element: number) => {
-      this.thickness = element;
+    this.thickness.subscribe(() => {
+      if(this.preview !== undefined) {
+        this.updatePreview();
+      }
     });
   }
 
@@ -54,16 +57,15 @@ export class EraserService extends DrawableService {
 
   onMouseMove(event: MouseEvent): void {
     if(this.canErase) {
-      this.updatePreview();
       this.manipulator.setAttribute(
         this.preview, 
         SVGProperties.x, 
-        (CoordinatesXY.effectiveX(this.image, event.clientX) - this.thickness / 2).toString()
+        (CoordinatesXY.effectiveX(this.image, event.clientX) - this.thickness.value / 2).toString()
       );
       this.manipulator.setAttribute(
         this.preview, 
         SVGProperties.y, 
-        (CoordinatesXY.effectiveY(this.image, event.clientY) - this.thickness / 2).toString()
+        (CoordinatesXY.effectiveY(this.image, event.clientY) - this.thickness.value / 2).toString()
       );
       if(this.selectedElement !== undefined)
       {
@@ -118,27 +120,31 @@ export class EraserService extends DrawableService {
         this.selectElement(element.target.parentElement as SVGGElement);
       });
     }
-    this.preview = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
-    this.preview.setAttribute(SVGProperties.color, 'white');
-    this.preview.setAttribute(SVGProperties.color, 'black');
-    this.preview.setAttribute(SVGProperties.x, '0');
-    this.preview.setAttribute(SVGProperties.y, '0');
+    if(this.preview === undefined) {
+      this.preview = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+      this.preview.setAttribute(SVGProperties.color, 'white');
+      this.preview.setAttribute(SVGProperties.color, 'black');
+      this.preview.setAttribute(SVGProperties.x, '0');
+      this.preview.setAttribute(SVGProperties.y, '0');
+    }
     this.manipulator.appendChild(this.image.nativeElement, this.preview);
     this.updatePreview();
   }
 
   private getInBounds(elementBounds: DOMRect, mouse: CoordinatesXY): boolean {
+    console.log(elementBounds);
+    console.log(mouse.getX());
     return (    
-      elementBounds.left   > mouse.getX() ||
-      elementBounds.right  < mouse.getX() ||
-      elementBounds.top    > mouse.getY() ||
-      elementBounds.bottom < mouse.getY()   
+      elementBounds.left   + this.thickness.value > mouse.getX() ||
+      elementBounds.right  - this.thickness.value < mouse.getX() ||
+      elementBounds.top    + this.thickness.value > mouse.getY() ||
+      elementBounds.bottom - this.thickness.value < mouse.getY()   
     );
   }
 
   private updatePreview(): void {
-    this.manipulator.setAttribute(this.preview, SVGProperties.height, this.thickness.toString());
-    this.manipulator.setAttribute(this.preview, SVGProperties.width, this.thickness.toString());
+    this.manipulator.setAttribute(this.preview, SVGProperties.height, this.thickness.value.toString());
+    this.manipulator.setAttribute(this.preview, SVGProperties.width, this.thickness.value.toString());
   }
 
   private selectElement(element: SVGGElement): void {
