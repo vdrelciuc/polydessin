@@ -19,7 +19,7 @@ export class ExportComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit(){
-    this.exportation.canvas = this.canvas.nativeElement as HTMLCanvasElement
+    this.exportation.canvas = this.canvas.nativeElement as HTMLCanvasElement;
     this.exportation.myDownload = this.myDownload as ElementRef;
   }
   onDialogClose() {
@@ -28,8 +28,6 @@ export class ExportComponent implements AfterViewInit {
 
   exportConfirmation() {
     this.onDialogClose();
-    this.exportation.total();
+    this.exportation.export();
   }
-
-
 }
