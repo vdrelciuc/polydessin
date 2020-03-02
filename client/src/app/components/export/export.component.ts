@@ -28,6 +28,6 @@ export class ExportComponent implements AfterViewInit {
 
   exportConfirmation() {
     this.onDialogClose();
-    this.exportation.export();
+    this.exportation.export(true);
   }
 }

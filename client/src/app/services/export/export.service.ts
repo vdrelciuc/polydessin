@@ -4,30 +4,13 @@ import {ElementRef, Injectable} from '@angular/core';
   providedIn: 'root'
 })
 export class ExportService {
-  canvas: HTMLCanvasElement; // where i bind my preview
+  cloneSVG: ElementRef<SVGElement>; // copy of SVG element to set filters on it
+  canvas: HTMLCanvasElement; // where i bind my preview for canvas
   myDownload: ElementRef; // where i mimic the download click
-  private image: ElementRef<SVGElement>; // my actual svg
-  private imageAfterDeserialization: HTMLImageElement; // transformed xml blablabla
+  private image: ElementRef<SVGElement>; // My actual svg
+  private imageAfterDeserialization: HTMLImageElement; // transformed image through formula
 
-
-  private cloneImageAfterDeserialization: HTMLImageElement;
-  clone: SVGElement;
-
-  initialize(image: ElementRef<SVGElement>): void {
-    this.image = image; // my actual SVG Element
-  }
-
-  export() {
-    let context = this.canvas.getContext('2d');
-    if (context !==null){
-      this.applyFilterFromCanvas(context, '');
-      this.downloadCorrectType('png');
-    }
-    //this.applyFilterFomSvg('');
-   // this.downloadSVG();
-
-  }
-
+  // formula of conversion from https://spin.atomicobject.com/2014/01/21/convert-svg-to-png/
   deserializeImage() {
     let xml;
     this.imageAfterDeserialization = new Image();
@@ -35,11 +18,22 @@ export class ExportService {
     let svg64 = btoa(xml);
     let b64Start = 'data:image/svg+xml;base64,';
     let image64 = b64Start + svg64;
-
     this.imageAfterDeserialization.src = image64;
   }
 
-  // formula of conversion from https://spin.atomicobject.com/2014/01/21/convert-svg-to-png/
+  export(isSvg: boolean) {
+    if (!isSvg) {
+      let context = this.canvas.getContext('2d');
+      if (context !== null) {
+        this.applyFilterFromCanvas(context, '');
+        this.downloadCorrectType('png');
+      }
+    } else {
+      this.applyFilterFomSvg('');
+      this.downloadSVG();
+    }
+  }
+
   async SVGToCanvas() {
     this.deserializeImage();
     this.imageAfterDeserialization.onload = () => {
@@ -54,17 +48,10 @@ export class ExportService {
   }
 
   applyFilterFromCanvas(ctx: CanvasRenderingContext2D, filterFromMap: string) {
-    // saturate(0.3)'
-    //'invert(0.5)'
-    //'sepia(1)'
-    //'grayscale(0.5)'
-    //'contrast(0.4)'
-    //''
+    //let filters = ['saturate(0.3)', 'invert(0.5)', 'sepia(1)', 'grayscale(0.5)' , 'contrast(0.4)' , '' ];
     ctx.filter = filterFromMap;
     ctx.drawImage(this.imageAfterDeserialization, 0, 0);
   }
-
-
 
   downloadCorrectType(type: string) {
     if (type === 'jpg') {
@@ -78,39 +65,34 @@ export class ExportService {
     this.myDownload.nativeElement.setAttribute('download', finalString);
   }
 
-
-
-
-
-
-
-
-
-
-
-
-  deserializeImageToSvg() {
+  // formula of conversion from https://spin.atomicobject.com/2014/01/21/convert-svg-to-png/
+  deserializeImageToSvg() :string {
     let xml;
-    this.cloneImageAfterDeserialization = new Image();
-    xml = new XMLSerializer().serializeToString(this.clone);
+    let cloneImageAfterDeserialization = new Image();
+    xml = new XMLSerializer().serializeToString(this.cloneSVG.nativeElement);
     let svg64 = btoa(xml);
     let b64Start = 'data:image/svg+xml;base64,';
     let image64 = b64Start + svg64;
 
-    this.cloneImageAfterDeserialization.src = image64;
+    return cloneImageAfterDeserialization.src = image64;
 
   }
-  applyFilterFomSvg(filter: string) {
 
-    this.clone.setAttribute('filter', 'invert(1)');
+  applyFilterFomSvg(filter: string) {
+    this.cloneSVG = new ElementRef<SVGElement>(this.image.nativeElement);
+    (this.cloneSVG.nativeElement as Node ) = this.image.nativeElement.cloneNode(true);
+    this.cloneSVG.nativeElement.setAttribute('filter', 'blur(5px)');
   }
 
 
   downloadSVG() {
-    this.deserializeImageToSvg();
-    this.myDownload.nativeElement.setAttribute('href', this.cloneImageAfterDeserialization.src);
+    this.myDownload.nativeElement.setAttribute('href', this.deserializeImageToSvg());
     let finalString = 'img.svg';
     this.myDownload.nativeElement.setAttribute('download', finalString);
+  }
+
+  initialize(image: ElementRef<SVGElement>): void {
+    this.image = image; // my actual SVG Element
   }
 
 }
