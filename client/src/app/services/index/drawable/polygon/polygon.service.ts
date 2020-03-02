@@ -4,11 +4,10 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ShapeStyle } from 'src/app/classes/shape-style';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
@@ -162,7 +161,7 @@ export class PolygonService extends DrawableService {
 
     let angle = -Math.PI / 2;
     for (let i = 0; i < this.nSides; i++) {
-      points += `${this.shapeOrigin.getX() + this.radius * Math.cos(angle)},${this.shapeOrigin.getY() + this.radius * Math.sin(angle)} `
+      points += `${this.shapeOrigin.getX() + this.radius * Math.cos(angle)},${this.shapeOrigin.getY() + this.radius * Math.sin(angle)} `;
       angle += this.theta;
     }
     let perimeterPoints = `${this.shapeCorner.getX()},${this.shapeCorner.getY()} `;
