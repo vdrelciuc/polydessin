@@ -118,7 +118,7 @@ export class PolygonService extends DrawableService {
         width = height / this.ratioYX;
       }
 
-      this.radius = height / (this.nSides % 2 ? 1 + Math.cos(this.theta / 2) : 2 * Math.cos(this.theta / 2));
+      this.radius = height / (this.nSides % 2 ? 1 + Math.cos(this.theta / 2) : 2);
       let originX: number;
       let originY: number;
       originX = this.shapeCorner.getX() + ((quadrant === 1 || quadrant === 4) ? width / 2 : -width / 2);
@@ -135,7 +135,7 @@ export class PolygonService extends DrawableService {
   }
 
   calculateRatioYX(): void {
-    let angle = ((Math.PI / 2) - (this.theta / 2));
+    let angle = (Math.PI / 2);
     while (true) {
       if (Math.cos(angle) < Math.cos(angle - this.theta)) {
         angle -= this.theta;
@@ -145,7 +145,7 @@ export class PolygonService extends DrawableService {
     }
 
     const width = 2 * Math.cos(angle);
-    const height = ((this.nSides % 2) ? 1 + Math.cos(this.theta / 2) : 2 * Math.cos(this.theta / 2));
+    const height = ((this.nSides % 2) ? 1 + Math.cos(this.theta / 2) : 2);
 
     this.ratioYX = height / width;
     console.log(this.ratioYX);
@@ -165,7 +165,7 @@ export class PolygonService extends DrawableService {
     }
     let points = '';
 
-    let angle = this.theta / 2 + Math.PI / 2;
+    let angle = -Math.PI / 2;
     for (let i = 0; i < this.nSides; i++) {
       points += `${this.shapeOrigin.getX() + this.radius * Math.cos(angle)},${this.shapeOrigin.getY() + this.radius * Math.sin(angle)} `
       angle += this.theta;
