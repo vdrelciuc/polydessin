@@ -74,6 +74,9 @@ import { PipetteComponent } from './components/pipette/pipette.component';
     RoutingComponents,
     ResizeObserverDirective,
     WarningDialogComponent,
+    ExportComponent,
+
+    PolygonComponent,
     EllipseComponent,
     EraserComponent,
     SelectionComponent,
@@ -85,7 +88,8 @@ import { PipetteComponent } from './components/pipette/pipette.component';
     ColorPickerComponent,
     CreateNewComponent,
     WarningDialogComponent,
-    UserGuideComponent
+    UserGuideComponent,
+    ExportComponent
   ],
   imports: [
     BrowserAnimationsModule,

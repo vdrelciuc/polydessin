@@ -7,6 +7,7 @@ import { ToolSelectorService } from '../../services/tools/tool-selector.service'
 import { CreateNewComponent } from '../create-new/create-new.component';
 import { ExportComponent } from '../export/export.component';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
+import {ExportService} from "../../services/export/export.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -22,6 +23,7 @@ export class SidebarComponent implements OnInit {
   constructor(
     public toolSelectorService: ToolSelectorService,
     private shortcut: HotkeysService,
+    private exportService : ExportService,
     protected dialog: MatDialog) {
     this.setupShortcuts();
   }
@@ -153,11 +155,13 @@ export class SidebarComponent implements OnInit {
   }
 
   exportProject(): void {
-    this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
-    this.bypassBrowserShortcuts();
-    this.exportDialog = this.dialog.open(ExportComponent, { disableClose: true });
-    this.exportDialog.afterClosed().subscribe( () => {
-      this.setupShortcuts();
+    this.exportService.SVGToCanvas().then(() => {
+      this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
+      this.bypassBrowserShortcuts();
+      this.exportDialog = this.dialog.open(ExportComponent, { disableClose: true });
+      this.exportDialog.afterClosed().subscribe( () => {
+        this.setupShortcuts();
+      });
     });
   }
 

@@ -4,7 +4,7 @@
       <div class="format">
         <h5>Format d'exportation</h5>
         <mat-radio-group>
-          <mat-radio-button value="jpeg">JPEG</mat-radio-button>
+          <mat-radio-button value="jpg">JPEG</mat-radio-button>
           <mat-radio-button value="png">PNG</mat-radio-button>
           <mat-radio-button value="svg">SVG</mat-radio-button>
         </mat-radio-group>
@@ -13,15 +13,21 @@
         <h5>Filtres</h5>
         <mat-radio-group>
           <mat-radio-button class="filter-head" value="none">Aucun</mat-radio-button>
-          <mat-radio-button class="filter-head" value="black-and-white">Noir et blanc</mat-radio-button>
-          <mat-radio-button class="filter-head" value="vintage">Vintage</mat-radio-button>
+          <mat-radio-button class="filter-head" value="sature">Saturé</mat-radio-button>
+          <mat-radio-button class="filter-head" value="negative">Negative</mat-radio-button>
 
           <mat-radio-button class="filter-foot" value="contrast">Contraste</mat-radio-button>
           <mat-radio-button class="filter-foot" value="sepia">Sépia</mat-radio-button>
-          <mat-radio-button class="filter-foot" value="blur">Estompé</mat-radio-button>
+          <mat-radio-button class="filter-foot" value="grayScale">Grisé</mat-radio-button>
         </mat-radio-group>
       </div>
-      <div class="type"></div>
+      <div class="type">
+        <h5>Type d'exportation</h5>
+        <mat-radio-group>
+          <mat-radio-button value="download">Téléchargement</mat-radio-button>
+          <mat-radio-button value="email">Courriel</mat-radio-button>
+        </mat-radio-group>
+      </div>
     </div>
     <div class="right">
       <div id="preview"></div>
@@ -45,6 +51,8 @@
   </div>
   <div class="button-section">
     <button mat-button id="cancel-button" (click)="onDialogClose()">Annuler</button>
-    <button mat-button id="confirm-button" (click)="onExport()">Exporter</button>
+    <a #myDownload ><button mat-button id="confirm-button" (click)="exportConfirmation()">Exporter</button></a>
   </div>
 </div>
+
+<canvas #mydrawing hidden height="0" width="0"></canvas>

@@ -1,40 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import {WarningExportComponent} from "./warning-export/warning-export.component";
-import {MatDialog} from "@angular/material/dialog";
+import {ExportService} from "../../services/export/export.service";
+
 
 @Component({
   selector: 'app-export',
   templateUrl: './export.component.html',
   styleUrls: ['./export.component.scss']
 })
-export class ExportComponent implements OnInit {
+
+export class ExportComponent implements AfterViewInit {
+
+  @ViewChild('mydrawing',{static:false}) canvas : ElementRef;
+  @ViewChild('myDownload', {static : false}) myDownload: ElementRef;
 
   constructor(private dialogRef: MatDialogRef<ExportComponent>,
-              private dialog: MatDialog
+              private exportation : ExportService
   ) { }
 
-  ngOnInit() {
+  ngAfterViewInit(){
+    this.exportation.canvas = this.canvas.nativeElement as HTMLCanvasElement;
+    this.exportation.myDownload = this.myDownload as ElementRef;
   }
-
   onDialogClose() {
     this.dialogRef.close();
   }
 
   exportConfirmation() {
-   this.onDialogClose();
-    // Export Confirmation logic goes here
+    this.onDialogClose();
+    this.exportation.export(true);
   }
-
-  onExport() {
-    const warning = this.dialog.open(WarningExportComponent, { disableClose: true });
-    if (warning !== undefined) {
-      warning.afterClosed().subscribe((result) => {
-        if (!result) {
-          this.exportConfirmation();
-        }
-      });
-    }
-  }
-
 }
