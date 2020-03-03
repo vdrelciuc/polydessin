@@ -8,7 +8,7 @@ import { CursorProperties } from 'src/app/classes/cursor-properties';
 import { Tools } from 'src/app/enums/tools';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { Stack } from 'src/app/classes/stack';
-import { InvertedElement } from 'src/app/interfaces/InvertedElement';
+//import { InvertedElement } from 'src/app/interfaces/InvertedElement';
 
 @Injectable({
   providedIn: 'root'
@@ -33,13 +33,15 @@ export class SelectionService extends DrawableService {
 
   private controlPoints: SVGRectElement[];
   
-  private elementsToInvert: Stack<InvertedElement>;
+  private elementsToInvert: Stack<SVGElementInfos>;
+  private addedElements: Stack<SVGElementInfos>;
+  private removedElements: Stack<SVGElementInfos>;
 
   constructor() {
     super();
     this.frenchName = 'Sélection';
     this.selectedElements = new Stack<SVGElementInfos>();
-    //this.elementsToInvert = new Stack<InvertedElement>();
+    this.elementsToInvert = new Stack<SVGElementInfos>();
   }
 
   initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
@@ -67,7 +69,9 @@ export class SelectionService extends DrawableService {
       this.isChanging = true;
       this.isSingleClick = true;
       this.isLeftClick = event.which === 1 || this.selectedElements.size() === 0;
-      this.elementsToInvert = new Stack<InvertedElement>();
+      this.elementsToInvert = new Stack<SVGElementInfos>();
+      this.addedElements = new Stack<SVGElementInfos>();
+      this.removedElements = new Stack<SVGElementInfos>();
 
       this.selectionOrigin = CoordinatesXY.getEffectiveCoords(this.image, event);
       this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event);
@@ -240,52 +244,30 @@ export class SelectionService extends DrawableService {
   }
 
   private invertEachElement() {
-    /*
-    for (let i = 0; i < this.drawStack.size(); i++) {
-      const element = this.drawStack.hasElementIn(i, this.selectionBox);
-      if (element === undefined) {
-        
-      }
-
-      //if (element !== undefined ) console.log("Element id: " + element.id);
-      //console.log("Last id: " + this.lastInvertedElementId);
-      console.log(this.previousSelectedElements);
-
-      if (element !== undefined && this.previousSelectedElements.getAll().indexOf(element) < 0) {
-        const isAlreadySelected = this.selectedElements.getAll().indexOf(element) >= 0;
-        isAlreadySelected ? this.selectedElements.delete(element) : this.selectedElements.push_back(element);
-        console.log("We're in bois");
-        this.previousSelectedElements.push_back(element);
-      }
-    }*/
+    this.elementsToInvert = new Stack<SVGElementInfos>();
 
     for (let i = 0; i < this.drawStack.size(); i++) {
       const element = this.drawStack.hasElementIn(i, this.selectionBox);
       if (element !== undefined) {
-        const isAlreadySelected = this.selectedElements.getAll().indexOf(element) >= 0; // let'S say it was in selection
-        const elementToCheck: InvertedElement = {
-          element: element,
-          wasAdded: isAlreadySelected // this means that it was added previously
-        };
-        const isAlreadyInverted = this.elementsToInvert.getAll().indexOf(elementToCheck) >= 0; // we check if it was indeed added
+        this.elementsToInvert.push_back(element);
 
-        // if it was, we do nothing
-        // if it wasn't, we add it
+        const isAlreadySelected = this.selectedElements.getAll().indexOf(element) >= 0;
+        const isAlreadyRemovedOrAdded = isAlreadySelected ? this.addedElements.getAll().indexOf(element) >= 0 : this.removedElements.getAll().indexOf(element) >= 0;
 
-        if (!isAlreadyInverted) {
-          const invertedElement: InvertedElement = {
-            element: element,
-            wasAdded: !isAlreadySelected // we want to remove it
-          };
-
-          this.elementsToInvert.push_back(invertedElement);
-
+        if (!isAlreadyRemovedOrAdded) {
           isAlreadySelected ? this.selectedElements.delete(element) : this.selectedElements.push_back(element);
+          isAlreadySelected ? this.removedElements.push_back(element) : this.addedElements.push_back(element);
         }
+      }
+    }
 
-        
-
-        
+    for (let element of this.drawStack.getAll().getAll()) {
+      if (this.addedElements.getAll().indexOf(element) >= 0 && this.elementsToInvert.getAll().indexOf(element) < 0) {
+        this.addedElements.delete(element);
+        this.selectedElements.delete(element);
+      } else if (this.removedElements.getAll().indexOf(element) >= 0 && this.elementsToInvert.getAll().indexOf(element) < 0) {
+        this.removedElements.delete(element);
+        this.selectedElements.push_back(element);
       }
     }
   }
