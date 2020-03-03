@@ -4,17 +4,18 @@ import { Tools } from '../../enums/tools'
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { ColorSelectorService } from '../color-selector.service';
 import { BrushService } from '../index/drawable/brush/brush.service';
+import { ColorApplicatorService } from '../index/drawable/colorApplicator/color-applicator.service';
 import { DrawableService } from '../index/drawable/drawable.service';
-import { LineService } from '../index/drawable/line/line.service';
-import { PencilService } from '../index/drawable/pencil/pencil.service';
-import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
-import { DrawStackService } from './draw-stack/draw-stack.service';
-import { UndoRedoService } from './undo-redo/undo-redo.service';
 import { EllipseService } from '../index/drawable/ellipse/ellipse.service';
 import { EraserService } from '../index/drawable/eraser/eraser.service';
+import { LineService } from '../index/drawable/line/line.service';
+import { PencilService } from '../index/drawable/pencil/pencil.service';
 import { PolygonService } from '../index/drawable/polygon/polygon.service';
+import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
 import { SelectionService } from '../index/drawable/selection/selection.service';
-import { ColorApplicatorService } from '../index/drawable/colorApplicator/color-applicator.service';
+import { SprayService } from '../index/drawable/spray/spray.service';
+import { DrawStackService } from './draw-stack/draw-stack.service';
+import { UndoRedoService } from './undo-redo/undo-redo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,7 @@ export class ToolSelectorService {
   private polygon: PolygonService;
   private selection: SelectionService;
   private colorApplicator: ColorApplicatorService;
+  private spray: SprayService;
 
 
   private ellipse: EllipseService;
@@ -48,7 +50,9 @@ export class ToolSelectorService {
     this.polygon = new PolygonService();
     this.selection = new SelectionService();
     this.colorApplicator = new ColorApplicatorService();
+    this.spray = new SprayService();
 
+    this.tools.set(Tools.spray, this.spray);
     this.tools.set(Tools.ColorApplicator, this.colorApplicator);
     this.tools.set(Tools.Polygon, this.polygon);
     this.tools.set(Tools.Selection, this.selection);
@@ -82,6 +86,7 @@ export class ToolSelectorService {
   getEraser(): EraserService { return this.eraser; }
   getSelection(): SelectionService { return this.selection; }
   getColorApplicator(): ColorApplicatorService { return  this.colorApplicator};
+  getSpray(): SprayService { return  this.spray};
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
