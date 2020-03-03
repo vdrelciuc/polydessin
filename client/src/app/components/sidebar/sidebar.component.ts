@@ -145,6 +145,12 @@ export class SidebarComponent implements OnInit {
   selectTool(tool: Tools): void {
     this.toolSelectorService.setCurrentTool(tool);
   }
+  selectToolAndLoadCanvas(tool: Tools) : void {
+    this.exportService.SVGToCanvas().then(() => {
+      this.selectTool(tool);
+      console.log('hrllo');
+    })
+  }
 
   createNewProject(): void {
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
