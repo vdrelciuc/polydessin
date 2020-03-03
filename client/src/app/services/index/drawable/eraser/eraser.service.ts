@@ -99,7 +99,11 @@ export class EraserService extends DrawableService {
     this.leftClick = false;
     this.manipulator.removeChild(this.image, this.preview);
     if(this.selectedElement !== undefined) {
+      console.log('here');
+      console.log(this.selectedElement.target.firstChild);
+      console.log(this.oldBorder);
       this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+      this.selectedElement = undefined as unknown as SVGElementInfos;
     }
     for(let element of this.elements.getAll()) {
       element.target.removeEventListener('mouseover', () => {} );
