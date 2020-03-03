@@ -94,6 +94,10 @@ export class SelectionService extends DrawableService {
 
   onMouseMove(event: MouseEvent): void {
     if (this.isChanging) {
+      if (this.isSingleClick && !this.isLeftClick) {
+        // This case happens if a right click drag is initiated directly on an element
+        this.invertTopElement();
+      }
       this.isSingleClick = false;
       this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
       this.updateSize();
@@ -231,7 +235,7 @@ export class SelectionService extends DrawableService {
       this.mousePosition.getY() + this.image.nativeElement.getBoundingClientRect().top
     );
     const topElement = this.drawStack.findTopElementAt(absoluteMousePosition);
-    
+
     if (topElement !== undefined) {
       this.selectedElements.push_back(topElement);
     }
