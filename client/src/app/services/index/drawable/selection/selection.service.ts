@@ -225,11 +225,30 @@ export class SelectionService extends DrawableService {
 
   private addTopElement() {
     this.selectedElements = new Stack<SVGElementInfos>();
-    // use findTopElement() and push into stack
+
+    const absoluteMousePosition = new CoordinatesXY(
+      this.mousePosition.getX() + this.image.nativeElement.getBoundingClientRect().left,
+      this.mousePosition.getY() + this.image.nativeElement.getBoundingClientRect().top
+    );
+    const topElement = this.drawStack.findTopElementAt(absoluteMousePosition);
+    
+    if (topElement !== undefined) {
+      this.selectedElements.push_back(topElement);
+    }
   }
 
   private invertTopElement() {
-    
+    const absoluteMousePosition = new CoordinatesXY(
+      this.mousePosition.getX() + this.image.nativeElement.getBoundingClientRect().left,
+      this.mousePosition.getY() + this.image.nativeElement.getBoundingClientRect().top
+    );
+    const topElement = this.drawStack.findTopElementAt(absoluteMousePosition);
+
+    if (topElement !== undefined && this.selectedElements.getAll().indexOf(topElement) < 0) {
+      this.selectedElements.push_back(topElement);
+    } else if (topElement !== undefined) {
+      this.selectedElements.delete(topElement);
+    }
   }
 
   private addEachElement() {
