@@ -57,6 +57,8 @@ export class Stack<T> {
 
   getAll(): T[] { return this.stack; }
 
+  size(): number { return this.stack.length; }
+
   getLast(): T | undefined {
     if (this.stack.length > 0) {
       return this.stack[this.stack.length - 1];

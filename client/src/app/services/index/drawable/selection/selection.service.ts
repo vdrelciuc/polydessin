@@ -8,6 +8,7 @@ import { CursorProperties } from 'src/app/classes/cursor-properties';
 import { Tools } from 'src/app/enums/tools';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { Stack } from 'src/app/classes/stack';
+import { InvertedElement } from 'src/app/interfaces/InvertedElement';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,9 @@ export class SelectionService extends DrawableService {
   private mousePosition: CoordinatesXY;
   private selectionOrigin: CoordinatesXY;
   private isChanging: boolean;
+  private isSingleClick: boolean;
+  private isLeftClick: boolean;
 
-  //private subElement: SVGGElement;
   private perimeter: SVGRectElement;
   private perimeterAlternative: SVGRectElement;
 
@@ -30,11 +32,14 @@ export class SelectionService extends DrawableService {
   private selectionGroup: SVGGElement;
 
   private controlPoints: SVGRectElement[];
+  
+  private elementsToInvert: Stack<InvertedElement>;
 
   constructor() {
     super();
     this.frenchName = 'Sélection';
     this.selectedElements = new Stack<SVGElementInfos>();
+    //this.elementsToInvert = new Stack<InvertedElement>();
   }
 
   initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
@@ -58,15 +63,19 @@ export class SelectionService extends DrawableService {
       if (this.subElement !== undefined) {
         this.manipulator.removeChild(this.image.nativeElement, this.subElement);
       }
+
+      this.isChanging = true;
+      this.isSingleClick = true;
+      this.isLeftClick = event.which === 1 || this.selectedElements.size() === 0;
+      this.elementsToInvert = new Stack<InvertedElement>();
+
       this.selectionOrigin = CoordinatesXY.getEffectiveCoords(this.image, event);
       this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event);
       this.selectionBox = new DOMRect(this.selectionOrigin.getX() + this.image.nativeElement.getBoundingClientRect().left, this.selectionOrigin.getY() + this.image.nativeElement.getBoundingClientRect().top);
-      //this.updateSelectedElements();
       this.setupProperties();
       this.updateSize();
-      this.isChanging = true;
-    }
 
+    }
   }
 
   onMouseRelease(event: MouseEvent): void {
@@ -74,13 +83,14 @@ export class SelectionService extends DrawableService {
     this.manipulator.removeChild(this.subElement, this.perimeter);
     this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
     this.manipulator.setAttribute(this.selectionRect, CursorProperties.cursor, CursorProperties.move);
-    if (this.selectedElements.getAll().length === 0) {
+    if (this.selectedElements.size() === 0) {
       this.cancelSelection();
     }
   }
 
   onMouseMove(event: MouseEvent): void {
     if (this.isChanging) {
+      this.isSingleClick = false;
       this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
       this.updateSize();
     }
@@ -109,13 +119,12 @@ export class SelectionService extends DrawableService {
     // Creating selection
     this.createSelectionRect();
     if (this.perimeter === undefined) {
-
       // Creating perimeter
       this.perimeter = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
       this.perimeterAlternative = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
       
       // Adding perimeter properties
-      this.manipulator.setAttribute(this.perimeter, SVGProperties.fill, 'none');
+      this.manipulator.setAttribute(this.perimeter, SVGProperties.fillOpacity, '10%');
       this.manipulator.setAttribute(this.perimeter, SVGProperties.thickness, '1');
       this.manipulator.setAttribute(this.perimeter, SVGProperties.dashedBorder, '4, 4');
       
@@ -126,6 +135,7 @@ export class SelectionService extends DrawableService {
     }
     const backgroundColor = this.colorSelectorService.backgroundColor.getValue();
     this.manipulator.setAttribute(this.perimeter, SVGProperties.color, backgroundColor.getInvertedColor(true).getHex());
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.fill, backgroundColor.getInvertedColor(false).getHex());
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.color, backgroundColor.getHex());
 
     // Adding perimeter to DOM
@@ -193,16 +203,91 @@ export class SelectionService extends DrawableService {
   }
 
   private updateSelectedElements(): void {
+    if (this.isSingleClick && this.isLeftClick) {
+      // Left single click
+      this.addTopElement();
+    } else if (this.isSingleClick) {
+      // Right single click
+      this.invertTopElement();
+    } else if (this.isLeftClick) {
+      // Left click drag
+      this.addEachElement();
+    } else {
+      // Right click drag
+      this.invertEachElement();
+    }
+    this.setGeneratedAreaBorders();
+  }
+
+  private addTopElement() {
     this.selectedElements = new Stack<SVGElementInfos>();
+    // use findTopElement() and push into stack
+  }
+
+  private invertTopElement() {
     
+  }
+
+  private addEachElement() {
+    this.selectedElements = new Stack<SVGElementInfos>();
+
     for (let i = 0; i < this.drawStack.size(); i++) {
       const element = this.drawStack.hasElementIn(i, this.selectionBox);
       if (element !== undefined) {
         this.selectedElements.push_back(element);
       }
     }
+  }
 
-    this.setGeneratedAreaBorders();
+  private invertEachElement() {
+    /*
+    for (let i = 0; i < this.drawStack.size(); i++) {
+      const element = this.drawStack.hasElementIn(i, this.selectionBox);
+      if (element === undefined) {
+        
+      }
+
+      //if (element !== undefined ) console.log("Element id: " + element.id);
+      //console.log("Last id: " + this.lastInvertedElementId);
+      console.log(this.previousSelectedElements);
+
+      if (element !== undefined && this.previousSelectedElements.getAll().indexOf(element) < 0) {
+        const isAlreadySelected = this.selectedElements.getAll().indexOf(element) >= 0;
+        isAlreadySelected ? this.selectedElements.delete(element) : this.selectedElements.push_back(element);
+        console.log("We're in bois");
+        this.previousSelectedElements.push_back(element);
+      }
+    }*/
+
+    for (let i = 0; i < this.drawStack.size(); i++) {
+      const element = this.drawStack.hasElementIn(i, this.selectionBox);
+      if (element !== undefined) {
+        const isAlreadySelected = this.selectedElements.getAll().indexOf(element) >= 0; // let'S say it was in selection
+        const elementToCheck: InvertedElement = {
+          element: element,
+          wasAdded: isAlreadySelected // this means that it was added previously
+        };
+        const isAlreadyInverted = this.elementsToInvert.getAll().indexOf(elementToCheck) >= 0; // we check if it was indeed added
+
+        // if it was, we do nothing
+        // if it wasn't, we add it
+
+        if (!isAlreadyInverted) {
+          const invertedElement: InvertedElement = {
+            element: element,
+            wasAdded: !isAlreadySelected // we want to remove it
+          };
+
+          this.elementsToInvert.push_back(invertedElement);
+
+          isAlreadySelected ? this.selectedElements.delete(element) : this.selectedElements.push_back(element);
+        }
+
+        
+
+        
+      }
+    }
   }
 
   selectAllElements() {
@@ -212,7 +297,7 @@ export class SelectionService extends DrawableService {
     this.createSelectionRect();
     this.manipulator.setAttribute(this.selectionRect, CursorProperties.cursor, CursorProperties.move);
     this.setGeneratedAreaBorders();
-    if (this.selectedElements.getAll().length === 0) {
+    if (this.selectedElements.size() === 0) {
       this.cancelSelection();
     }
   }

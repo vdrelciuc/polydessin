@@ -23,7 +23,7 @@ export class SelectionComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.service.cancelSelection();
+    //this.service.cancelSelection();
   }
 
   setupShortcuts(): void {
