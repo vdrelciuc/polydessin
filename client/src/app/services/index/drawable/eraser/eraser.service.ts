@@ -106,16 +106,25 @@ export class EraserService extends DrawableService {
       this.selectedElement = undefined as unknown as SVGElementInfos;
     }
     for(let element of this.elements.getAll()) {
-      element.target.removeEventListener('mouseover', () => {} );
+      element.target.onmouseover = null;
     }
   }
+
+  addingMouseMoveEvent(element : any){
+    this.selectElement(element.target.parentElement as SVGGElement);
+  }
+
+
 
   onSelect(): void {
     this.updateSVGElements();
     for(let element of this.elements.getAll()) {
-      this.manipulator.listen(element.target, 'mouseover', (element) => {
-        this.selectElement(element.target.parentElement as SVGGElement);
-      });
+      element.target.onmouseover = (element) => {
+        if (element.target !== null){
+          this.addingMouseMoveEvent(element);
+        }
+
+      }
     }
     if(this.preview === undefined) {
       this.preview = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
