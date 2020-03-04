@@ -44,6 +44,8 @@ export class SelectionService extends DrawableService {
   //private translationX: number;
   //private translationY: number;
 
+  private oldPointerOnMove: CoordinatesXY;
+
   constructor() {
     super();
     this.frenchName = 'Sélection';
@@ -103,6 +105,7 @@ export class SelectionService extends DrawableService {
     
         if (topElement !== undefined && this.selectedElements.getAll().indexOf(topElement) >= 0) {
           // Move selection
+          this.oldPointerOnMove = CoordinatesXY.getEffectiveCoords(this.image, event);
           this.selectionIsMoving = true;
         }
       } else if (!this.isLeftClick || (this.clickedElement !== null && this.clickedElement.getAttribute('title') !== 'selection-area')) {
@@ -170,14 +173,14 @@ export class SelectionService extends DrawableService {
     this.isSingleClick = false;
     //const oldTranslationX = 0;
     //const oldTranslationY = 0;
-    const translationX = this.mousePosition.getX() - this.selectionOrigin.getX();
-    const translationY = this.mousePosition.getY() - this.selectionOrigin.getY();
+    const translationX = this.mousePosition.getX() - this.oldPointerOnMove.getX();
+    const translationY = this.mousePosition.getY() - this.oldPointerOnMove.getY();
     //console.log(translationX);
     //console.log(translationY);
     for (let i = 0; i < this.selectedElements.size(); i++) {
       //const initialElementTransform = this.selectedElements.getAll()[i].target.getAttribute(SVGProperties.transform);
-      let oldTranslationX = '0';
-      let oldTranslationY = '0';
+      //let oldTranslationX = '0';
+      //let oldTranslationY = '0';
       /*if (initialElementTransform !== null) {
         const oldTranslate = initialElementTransform.substring(initialElementTransform.indexOf("(") + 1, initialElementTransform.indexOf(")"));
         oldTranslationX = oldTranslate.split(',')[0];
@@ -186,9 +189,10 @@ export class SelectionService extends DrawableService {
         console.log('y: ' + oldTranslationY);
       }*/
 
-      this.manipulator.setAttribute(this.selectedElements.getAll()[i].target, SVGProperties.transform, `translate(${+oldTranslationX + translationX}, ${+oldTranslationY + translationY})`);
-      this.manipulator.setAttribute(this.selectionGroup, SVGProperties.transform, `translate(${+oldTranslationX + translationX}, ${+oldTranslationY + translationY})`);
+      this.manipulator.setAttribute(this.selectedElements.getAll()[i].target, SVGProperties.transform, `translate(${translationX}, ${translationY})`);
+      this.manipulator.setAttribute(this.selectionGroup, SVGProperties.transform, `translate(${translationX}, ${translationY})`);
     }
+    this.oldPointerOnMove = new CoordinatesXY(this.mousePosition.getX(), this.mousePosition.getY())
   }
 
   private resizeOnMove(): void {
