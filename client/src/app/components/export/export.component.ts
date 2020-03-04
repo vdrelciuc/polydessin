@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import {ExportService} from "../../services/export/export.service";
-
+import { ExportService } from '../../services/export/export.service';
 
 @Component({
   selector: 'app-export',
@@ -11,16 +10,26 @@ import {ExportService} from "../../services/export/export.service";
 
 export class ExportComponent implements AfterViewInit {
 
-  @ViewChild('mydrawing',{static:false}) canvas : ElementRef;
+  exportFormats = ['JPEG', 'PNG', 'SVG'];
+  selectedFormat: string;
+  exportFilters = ['Aucun', 'Saturé', 'Négatif', 'Constraste', 'Sépia', 'Gris'];
+  selectedFilter: string;
+  exportTypes = ['Téléchargement', 'Courriel'];
+  selectedType: string;
+
+  @ViewChild('mydrawing', {static: false}) canvas: ElementRef;
   @ViewChild('myDownload', {static : false}) myDownload: ElementRef;
 
   constructor(private dialogRef: MatDialogRef<ExportComponent>,
-              private exportation : ExportService
+              private exportation: ExportService
   ) { }
 
   ngAfterViewInit(){
     this.exportation.canvas = this.canvas.nativeElement as HTMLCanvasElement;
     this.exportation.myDownload = this.myDownload as ElementRef;
+    this.selectedFormat = this.exportFormats[0];
+    this.selectedFilter = this.exportFilters[0];
+    this.selectedType = this.exportTypes[0];
   }
   onDialogClose() {
     this.dialogRef.close();
@@ -30,4 +39,6 @@ export class ExportComponent implements AfterViewInit {
     this.onDialogClose();
     this.exportation.export(true);
   }
+
+
 }
