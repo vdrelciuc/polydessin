@@ -4,7 +4,6 @@ import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { BehaviorSubject } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
@@ -18,7 +17,7 @@ export class SprayService extends DrawableService {
   private readonly DEFAULT_RADIUS: number = 5;
   private readonly DEFAULT_FREQUENCY: number = 4;
   private readonly MS_PER_S: number = 1000;
-  private spraying = false;
+  private spraying: boolean = false;
   private color: Color;
   private opacity: number;
   private mousePosition: CoordinatesXY;
@@ -63,9 +62,6 @@ export class SprayService extends DrawableService {
 
   }
 
-  onMouseInCanvas(event: MouseEvent): void {
-
-  }
   onMouseOutCanvas(event: MouseEvent): void {
     if (this.isDrawing.value) {
       this.isDrawing.next(false);
