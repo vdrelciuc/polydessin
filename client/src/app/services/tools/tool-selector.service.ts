@@ -96,6 +96,7 @@ export class ToolSelectorService {
         this.tool.endTool();
       }
       this.tool = foundTool;
+      this.tool.onSelect();
       this.$currentTool.next(tool);
       this.drawerService.updateDrawer(this.$currentTool.getValue());
     }
