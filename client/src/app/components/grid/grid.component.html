@@ -1,0 +1,37 @@
+<div id="container">
+    <form id="grid-form">
+      <div class="head-group">
+        <label class="title" id="thickness">Largeur des carres</label>
+        <mat-slider
+          id="thickness-slider"
+          name="thickness-slider"
+          disabled="false"
+          [min]="THICKNESS_SLIDER_MINIMUM"
+          [max]="THICKNESS_SLIDER_MAXIMUM"
+          step="5"
+          thumbLabel="true"
+          tickInterval="false"
+          [value]="service.thickness.value"
+          (change)="setThickness($event)"
+          vertical="false">
+        </mat-slider>
+      </div>
+      <div class="head-group">
+        <label class="title" id="opacity">Opacite</label>
+        <mat-slider
+          id="opacity-slider"
+          name="opacity-slider"
+          disabled="false"
+          [min]="OPACITY_SLIDER_MINIMUM"
+          [max]="OPACITY_SLIDER_MAXIMUM"
+          step="0.1"
+          thumbLabel="true"
+          tickInterval="false"
+          [value]="service.opacity.value"
+          (change)="setOpacity($event)"
+          vertical="false">
+        </mat-slider>
+      </div>
+    </form>
+  </div>
+  

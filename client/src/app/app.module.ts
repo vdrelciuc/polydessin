@@ -44,6 +44,7 @@ import { ResizeObserverDirective } from './components/workspace/resize-observer.
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
+import { GridComponent } from './components/grid/grid.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     PolygonComponent,
     EllipseComponent,
     EraserComponent,
-    SelectionComponent
+    SelectionComponent,
+    GridComponent
   ],
   entryComponents: [
     ColorPickerComponent,

@@ -44,8 +44,8 @@ export abstract class DrawableService {
     colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService
     ): void;
-  abstract initializeProperties(): void;
-
+    
+  initializeProperties(): void { /*To Override if needed*/};
   onMouseInCanvas(event: MouseEvent): void { /*To Override if needed*/}
   onMouseOutCanvas(event: MouseEvent): void { /*To Override if needed*/}
   onMousePress(event: MouseEvent): void { /*To Override if needed*/}

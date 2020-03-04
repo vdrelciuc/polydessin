@@ -38,3 +38,9 @@ export const ERASER_OUTLINE_RED_ELEMENTS = '#8B0000';
 
 // MouseEvents
 export const MOUSE_LEFT = 0;
+
+// Grid
+export const GRID_MINIMUM    = 5;
+export const GRID_MAXIMUM    = 100;
+export const OPACITY_MINIMUM = 0.5;
+export const OPACITY_MAXIMUM = 1;

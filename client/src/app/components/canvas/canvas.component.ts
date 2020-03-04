@@ -17,6 +17,7 @@ import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.s
 })
 export class CanvasComponent implements OnInit {
   @ViewChild('drawing', { static: true }) image: ElementRef<SVGElement>;
+  @ViewChild('grid', { static: true }) patern: ElementRef<SVGGElement>;
   filters: string;
   width: number;
   height: number;
@@ -36,6 +37,7 @@ export class CanvasComponent implements OnInit {
   ngOnInit() {
     this.filters = this.image.nativeElement.innerHTML;
     this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack);
+    this.toolSelector.setGrid(this.patern);
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
     this.eventListener.initializeEvents();
 
@@ -58,7 +60,6 @@ export class CanvasComponent implements OnInit {
       this.canvasService.layerCount = (this.image.nativeElement.children.length - 1);
       }
     })
-
   }
 
   resetCanvas() {

@@ -1,8 +1,8 @@
 <svg
+  #drawing
   (contextmenu)="false"
-    #drawing
-    [attr.width]="0"
-    [attr.height]="0"
+  [attr.width]="0"
+  [attr.height]="0"
 >
   <defs>
     <filter id="filter0" x="-50" y="-50" width="100" height="100">
@@ -74,5 +74,13 @@
     </filter>
   </defs>
 
+ 
+  <g id="grid" #grid>
+    <defs>
+      <pattern #gridPattern id="grid-pattern" width="5" height="5" patternUnits="userSpaceOnUse">
+        <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid-pattern)"/>
+  </g>
 </svg>
-

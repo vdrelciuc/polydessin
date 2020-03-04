@@ -15,6 +15,7 @@ import { EraserService } from '../index/drawable/eraser/eraser.service';
 import { PolygonService } from '../index/drawable/polygon/polygon.service';
 import { SelectionService } from '../index/drawable/selection/selection.service';
 import { ColorApplicatorService } from '../index/drawable/colorApplicator/color-applicator.service';
+import { GridService } from '../index/grid/grid.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,7 @@ export class ToolSelectorService {
   private polygon: PolygonService;
   private selection: SelectionService;
   private colorApplicator: ColorApplicatorService;
+  private grid: GridService;
 
 
   private ellipse: EllipseService;
@@ -48,6 +50,7 @@ export class ToolSelectorService {
     this.polygon = new PolygonService();
     this.selection = new SelectionService();
     this.colorApplicator = new ColorApplicatorService();
+    this.grid = new GridService();
 
     this.tools.set(Tools.ColorApplicator, this.colorApplicator);
     this.tools.set(Tools.Polygon, this.polygon);
@@ -58,6 +61,7 @@ export class ToolSelectorService {
     this.tools.set(Tools.Brush, this.brush);
     this.tools.set(Tools.Ellipse, this.ellipse);
     this.tools.set(Tools.Eraser, this.eraser);
+    this.tools.set(Tools.Grid, this.grid);
     this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
     this.setCurrentTool(Tools.Selection);
 
@@ -71,6 +75,10 @@ export class ToolSelectorService {
     this.eraser.assignUndoRedo(this.memory);
   }
 
+  setGrid(patern: ElementRef<SVGGElement>) : void {
+    this.grid.initializeGrid(patern);
+  }
+
   getCurrentTool(): DrawableService | undefined { return this.tool; }
 
   getLine(): LineService { return this.line; }
@@ -82,6 +90,7 @@ export class ToolSelectorService {
   getEraser(): EraserService { return this.eraser; }
   getSelection(): SelectionService { return this.selection; }
   getColorApplicator(): ColorApplicatorService { return  this.colorApplicator};
+  getGrid(): GridService { return this.grid; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);

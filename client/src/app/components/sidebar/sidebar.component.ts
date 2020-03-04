@@ -138,6 +138,13 @@ export class SidebarComponent implements OnInit {
         }
       )
     );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'g', description: 'Display/Undisplay grid' }).subscribe(
+      (event) => {
+        this.toolSelectorService.getGrid().toggle();
+      }
+    )
+  );
   }
 
   selectTool(tool: Tools): void {
