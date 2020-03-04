@@ -41,11 +41,16 @@ export class SelectionService extends DrawableService {
   private addedElements: Stack<SVGElementInfos>;
   private removedElements: Stack<SVGElementInfos>;
 
+  //private translationX: number;
+  //private translationY: number;
+
   constructor() {
     super();
     this.frenchName = 'Sélection';
     this.selectedElements = new Stack<SVGElementInfos>();
     this.elementsToInvert = new Stack<SVGElementInfos>();
+    //this.translationX = 0;
+    //this.translationY = 0;
   }
 
   initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
@@ -102,6 +107,14 @@ export class SelectionService extends DrawableService {
         }
       } else if (!this.isLeftClick || (this.clickedElement !== null && this.clickedElement.getAttribute('title') !== 'selection-area')) {
         // Selection of elements if not in selection area
+        //
+        console.log(this.clickedElement.parentNode);
+        if (this.clickedElement.parentNode !== null) {
+          const initialElementTransform = (this.clickedElement.parentNode as SVGGElement).getAttribute(SVGProperties.transform);
+          this.manipulator.setAttribute(this.selectionGroup, SVGProperties.transform, initialElementTransform !== null ? initialElementTransform : 'translate(0, 0)');
+        }
+        //
+        
         this.isLeftClick ? this.addTopElement() : this.invertTopElement();
         this.setGeneratedAreaBorders();
       }
@@ -111,6 +124,7 @@ export class SelectionService extends DrawableService {
 
   onMouseRelease(event: MouseEvent): void {
     if (this.isSingleClick && this.isLeftClick && this.clickedElement !== null && this.clickedElement.getAttribute('title') === 'selection-area') {
+      //this.manipulator.setAttribute(this.selectionGroup, SVGProperties.transform, `translate(0 0)`);
       this.addTopElement();
       this.setGeneratedAreaBorders();
     }
@@ -154,6 +168,27 @@ export class SelectionService extends DrawableService {
 
   private changePositionOnMove(): void {
     this.isSingleClick = false;
+    //const oldTranslationX = 0;
+    //const oldTranslationY = 0;
+    const translationX = this.mousePosition.getX() - this.selectionOrigin.getX();
+    const translationY = this.mousePosition.getY() - this.selectionOrigin.getY();
+    //console.log(translationX);
+    //console.log(translationY);
+    for (let i = 0; i < this.selectedElements.size(); i++) {
+      //const initialElementTransform = this.selectedElements.getAll()[i].target.getAttribute(SVGProperties.transform);
+      let oldTranslationX = '0';
+      let oldTranslationY = '0';
+      /*if (initialElementTransform !== null) {
+        const oldTranslate = initialElementTransform.substring(initialElementTransform.indexOf("(") + 1, initialElementTransform.indexOf(")"));
+        oldTranslationX = oldTranslate.split(',')[0];
+        oldTranslationY = oldTranslate.substr(oldTranslate.indexOf(' ') + 1);
+        console.log('x: ' + oldTranslationX);
+        console.log('y: ' + oldTranslationY);
+      }*/
+
+      this.manipulator.setAttribute(this.selectedElements.getAll()[i].target, SVGProperties.transform, `translate(${+oldTranslationX + translationX}, ${+oldTranslationY + translationY})`);
+      this.manipulator.setAttribute(this.selectionGroup, SVGProperties.transform, `translate(${+oldTranslationX + translationX}, ${+oldTranslationY + translationY})`);
+    }
   }
 
   private resizeOnMove(): void {
@@ -345,6 +380,8 @@ export class SelectionService extends DrawableService {
     for (let i = 0; i < this.drawStack.size(); i++) {
       const element = this.drawStack.hasElementIn(i, this.selectionBox);
       if (element !== undefined) {
+        /*const initialElementTransform = element.target.getAttribute(SVGProperties.transform);
+        this.manipulator.setAttribute(this.selectionGroup, SVGProperties.transform, initialElementTransform !== null ? initialElementTransform : 'translate(0, 0)');*/
         this.selectedElements.push_back(element);
       }
     }
