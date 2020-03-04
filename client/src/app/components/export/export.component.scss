@@ -12,6 +12,26 @@
   margin-bottom: 10px;
 }
 
+.option-selection {
+  display: flex;
+  flex-direction: row;
+
+  .left {
+    width: 70%;
+    float: left;
+  }
+
+  .right {
+    width: 30%;
+    float: left;
+  }
+}
+
+#preview {
+  max-width: 300px;
+  max-height: 250px;
+}
+
 .details {
   display: flex;
   flex-direction: column;
