@@ -19,8 +19,8 @@ export class ExportComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit(){
-    this.exportation.canvas = this.canvas.nativeElement as HTMLCanvasElement;
-    this.exportation.myDownload = this.myDownload as ElementRef;
+    this.exportation.canvas = this.canvas.nativeElement;
+    this.exportation.myDownload = this.myDownload;
   }
   onDialogClose() {
     this.dialogRef.close();
