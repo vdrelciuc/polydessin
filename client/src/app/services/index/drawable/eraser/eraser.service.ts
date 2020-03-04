@@ -63,7 +63,7 @@ export class EraserService extends DrawableService {
       {
         const elementBounds = this.selectedElement.target.getBoundingClientRect();
         console.log(elementBounds);
-        if(!this.getInBounds(elementBounds, new CoordinatesXY(event.clientX, event.clientY))) {
+        if(!this.getInBounds(elementBounds as DOMRect, new CoordinatesXY(event.clientX, event.clientY))) {
           this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
           this.selectedElement = undefined as unknown as SVGElementInfos;
         }

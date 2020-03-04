@@ -21,6 +21,10 @@ export class PipetteService extends DrawableService {
     super();
   }
 
+  onSelect(): void {
+    this.getColorAtPosition(new CoordinatesXY(1,1));
+  }
+
   setupCanvas(hiddenCanvas: ElementRef) {
     this.hiddenCanvas = hiddenCanvas;
   }
