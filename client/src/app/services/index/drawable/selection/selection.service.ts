@@ -36,7 +36,7 @@ export class SelectionService extends DrawableService {
   private selectionGroup: SVGGElement;
 
   private controlPoints: SVGRectElement[];
-  
+
   private elementsToInvert: Stack<SVGElementInfos>;
   private addedElements: Stack<SVGElementInfos>;
   private removedElements: Stack<SVGElementInfos>;
@@ -72,6 +72,7 @@ export class SelectionService extends DrawableService {
       this.onMouseRelease(event);
     } else {
       if (this.subElement !== undefined) {
+
         this.manipulator.removeChild(this.image.nativeElement, this.subElement);
       }
 
@@ -87,6 +88,7 @@ export class SelectionService extends DrawableService {
       //this.clickedElement = (event.target as SVGGElement).parentNode as SVGGElement;
       this.clickedElement = event.target as SVGElement;
 
+
       this.selectionBox = new DOMRect(this.selectionOrigin.getX() + this.image.nativeElement.getBoundingClientRect().left, this.selectionOrigin.getY() + this.image.nativeElement.getBoundingClientRect().top);
       this.setupProperties();
 
@@ -98,23 +100,22 @@ export class SelectionService extends DrawableService {
         const absoluteMousePosition = new CoordinatesXY(
           this.mousePosition.getX() + this.image.nativeElement.getBoundingClientRect().left,
           this.mousePosition.getY() + this.image.nativeElement.getBoundingClientRect().top
-        );
-        const topElement = this.drawStack.findTopElementAt(absoluteMousePosition);
-    
-        if (topElement !== undefined && this.selectedElements.getAll().indexOf(topElement) >= 0) {
-          // Move selection
-          this.selectionIsMoving = true;
-        }
-      } else if (!this.isLeftClick || (this.clickedElement !== null && this.clickedElement.getAttribute('title') !== 'selection-area')) {
-        // Selection of elements if not in selection area
+          );
+          const topElement = this.drawStack.findTopElementAt(absoluteMousePosition);
+
+          if (topElement !== undefined && this.selectedElements.getAll().indexOf(topElement) >= 0) {
+            // Move selection
+            this.selectionIsMoving = true;
+          }
+        } else if (!this.isLeftClick || (this.clickedElement !== null && this.clickedElement.getAttribute('title') !== 'selection-area')) {
+          // Selection of elements if not in selection area
+          //
+          if (this.clickedElement.parentNode !== null) {
+            const initialElementTransform = (this.clickedElement.parentNode as SVGGElement).getAttribute(SVGProperties.transform);
+            this.manipulator.setAttribute(this.selectionGroup, SVGProperties.transform, initialElementTransform !== null ? initialElementTransform : 'translate(0, 0)');
+          }
         //
-        console.log(this.clickedElement.parentNode);
-        if (this.clickedElement.parentNode !== null) {
-          const initialElementTransform = (this.clickedElement.parentNode as SVGGElement).getAttribute(SVGProperties.transform);
-          this.manipulator.setAttribute(this.selectionGroup, SVGProperties.transform, initialElementTransform !== null ? initialElementTransform : 'translate(0, 0)');
-        }
-        //
-        
+
         this.isLeftClick ? this.addTopElement() : this.invertTopElement();
         this.setGeneratedAreaBorders();
       }
@@ -143,7 +144,7 @@ export class SelectionService extends DrawableService {
   onMouseMove(event: MouseEvent): void {
     if (this.isChanging) {
       this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
-      
+
       if (this.selectionIsMoving) {
         // Moving selection
         this.changePositionOnMove();
@@ -221,12 +222,12 @@ export class SelectionService extends DrawableService {
       // Creating perimeter
       this.perimeter = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
       this.perimeterAlternative = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
-      
+
       // Adding perimeter properties
       this.manipulator.setAttribute(this.perimeter, SVGProperties.fillOpacity, '10%');
       this.manipulator.setAttribute(this.perimeter, SVGProperties.thickness, '1');
       this.manipulator.setAttribute(this.perimeter, SVGProperties.dashedBorder, '4, 4');
-      
+
       this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.fill, 'none');
       this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.thickness, '1');
       this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.dashedBorder, '4, 4');
@@ -253,7 +254,7 @@ export class SelectionService extends DrawableService {
       this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
       this.selectionGroup = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
       this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Selection);
-      
+
       // Creating selection rectangle
       this.selectionRect = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.fillOpacity, '0');
@@ -341,7 +342,7 @@ export class SelectionService extends DrawableService {
         console.log(this.clickedElement);
         const topElement: SVGElementInfos = { target: this.clickedElement, id: parseInt(id) };
         this.selectedElements.push_back(topElement);
-      } 
+      }
     }*/
   }
 
@@ -370,7 +371,7 @@ export class SelectionService extends DrawableService {
         } else {
           this.selectedElements.delete(topElement);
         }
-      } 
+      }
     }*/
   }
 
@@ -418,7 +419,7 @@ export class SelectionService extends DrawableService {
 
   selectAllElements(): void {
     this.cancelSelection();
-    
+
     //this.selectedElements = this.drawStack.getAll();
     this.selectedElements = new Stack<SVGElementInfos>();
     for (let i = 0; i < this.drawStack.size(); i++) {
@@ -460,33 +461,24 @@ export class SelectionService extends DrawableService {
       this.generatedArea.bottom = elementBorder.bottom + borderThickness;
     }*/
     const selection = this.selectedElements.getAll();
-    
-    if (selection.length !== 0) {
-      const firstElement = selection[0].target.getBBox();
-      let left = firstElement.x;
-      let right = firstElement.width + left;
-      let top = firstElement.y;
-      let bottom = firstElement.height + top;
+
+    if (selection.length > 0) {
+      const firstElement = selection[0].target.getBoundingClientRect();
+      let left = CoordinatesXY.effectiveX(this.image, firstElement.left);
+      let right = CoordinatesXY.effectiveX(this.image, firstElement.right);
+      let top = CoordinatesXY.effectiveY(this.image, firstElement.top);
+      let bottom = CoordinatesXY.effectiveY(this.image, firstElement.bottom);
 
       for (let i = 1; i < selection.length; i++) {
-        const boundingBox = selection[i].target.getBBox();
-        if (boundingBox.x < left) {
-          left = boundingBox.x;
-        }
-        if (boundingBox.width + boundingBox.x > right) {
-          right = boundingBox.width + boundingBox.x;
-        }
-        if (boundingBox.y < top) {
-          top = boundingBox.y;
-        }
-        if (boundingBox.height + boundingBox.y > bottom) {
-          bottom = boundingBox.height + boundingBox.y;
-        }
+        const boundingBox = selection[i].target.getBoundingClientRect();
+        left = Math.min(left, CoordinatesXY.effectiveX(this.image, boundingBox.left));
+        right = Math.max(right, CoordinatesXY.effectiveX(this.image, boundingBox.right));
+        top = Math.min(top, CoordinatesXY.effectiveY(this.image, boundingBox.top));
+        bottom = Math.max(bottom, CoordinatesXY.effectiveY(this.image, boundingBox.bottom));
       }
       // Set origin for perimeter
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.x, left.toString());
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.y, top.toString());
-
       // Set dimensions attributes for perimeter
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.width, (right - left).toString());
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.height, (bottom - top).toString());
