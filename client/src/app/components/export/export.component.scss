@@ -5,6 +5,7 @@
   flex-direction: column;
   padding: 16px;
   background-color: $dark-gray;
+  min-width: 500px;
 }
 
 .left-section {
@@ -20,6 +21,10 @@
   color: whitesmoke !important;
 }
 
+::ng-deep .mat-ripple-element{
+  display: none !important;
+}
+
 ::ng-deep .mat-form-field-ripple {
   background-color: $vivid !important;
 }
@@ -27,6 +32,10 @@
 ::ng-deep .mat-input-element {
   color: whitesmoke !important;
   caret-color: whitesmoke !important;
+}
+
+.disabled {
+  color: red;
 }
 
 ::ng-deep .mat-form-field-underline, .mat-form-field-underline.mat-focused {

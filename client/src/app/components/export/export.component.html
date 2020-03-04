@@ -26,7 +26,7 @@
         <mat-radio-group name="typeList" [(ngModel)]="selectedType">
           <mat-grid-list cols="3" rowHeight="30">
             <mat-grid-tile *ngFor="let type of exportTypes">
-              <mat-radio-button [value]="type">{{ type }}</mat-radio-button>
+              <mat-radio-button *ngIf="type === 'Téléchargement'" [value]="type">{{ type }}</mat-radio-button> <!--TODO: REMOVE NGIF-->
             </mat-grid-tile>
           </mat-grid-list>
         </mat-radio-group>
@@ -40,14 +40,15 @@
             <mat-label class="text">Titre</mat-label>
             <input matInput>
           </mat-form-field>
+          <!--
           <mat-form-field>
             <mat-label class="text">Auteur</mat-label>
-            <input matInput>
+            <input matInput [disabled]="true">
           </mat-form-field>
           <mat-form-field>
             <mat-label class="text">Courriel destinairaire</mat-label>
-            <input matInput type="email">
-          </mat-form-field>
+            <input matInput type="email" [disabled]="true">
+          </mat-form-field>-->
         </form>
       </div>
     </div>
