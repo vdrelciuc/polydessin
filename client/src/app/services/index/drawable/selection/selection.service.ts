@@ -19,9 +19,13 @@ export class SelectionService extends DrawableService {
 
   private mousePosition: CoordinatesXY;
   private selectionOrigin: CoordinatesXY;
+  //private clickedElement: SVGGElement | null;
+  private clickedElement: SVGElement | null;
   private isChanging: boolean;
   private isSingleClick: boolean;
   private isLeftClick: boolean;
+  private selectionIsMoving: boolean;
+  private isResizing: boolean;
 
   private perimeter: SVGRectElement;
   private perimeterAlternative: SVGRectElement;
@@ -75,15 +79,45 @@ export class SelectionService extends DrawableService {
 
       this.selectionOrigin = CoordinatesXY.getEffectiveCoords(this.image, event);
       this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event);
+      //this.clickedElement = (event.target as SVGGElement).parentNode as SVGGElement;
+      this.clickedElement = event.target as SVGElement;
+
       this.selectionBox = new DOMRect(this.selectionOrigin.getX() + this.image.nativeElement.getBoundingClientRect().left, this.selectionOrigin.getY() + this.image.nativeElement.getBoundingClientRect().top);
       this.setupProperties();
-      this.updateSize();
+
+      if (this.clickedElement !== null && this.clickedElement.getAttribute('title') === 'control-point' && this.isLeftClick) {
+        // Resize -> Sprint 3
+        this.isResizing = true;
+        this.isSingleClick = false;
+      } else if (this.clickedElement !== null && this.clickedElement.getAttribute('title') === 'selection-area' && this.isLeftClick) {
+        const absoluteMousePosition = new CoordinatesXY(
+          this.mousePosition.getX() + this.image.nativeElement.getBoundingClientRect().left,
+          this.mousePosition.getY() + this.image.nativeElement.getBoundingClientRect().top
+        );
+        const topElement = this.drawStack.findTopElementAt(absoluteMousePosition);
+    
+        if (topElement !== undefined && this.selectedElements.getAll().indexOf(topElement) >= 0) {
+          // Move selection
+          this.selectionIsMoving = true;
+        }
+      } else if (!this.isLeftClick || (this.clickedElement !== null && this.clickedElement.getAttribute('title') !== 'selection-area')) {
+        // Selection of elements if not in selection area
+        this.isLeftClick ? this.addTopElement() : this.invertTopElement();
+        this.setGeneratedAreaBorders();
+      }
 
     }
   }
 
   onMouseRelease(event: MouseEvent): void {
+    if (this.isSingleClick && this.isLeftClick && this.clickedElement !== null && this.clickedElement.getAttribute('title') === 'selection-area') {
+      this.addTopElement();
+      this.setGeneratedAreaBorders();
+    }
+
     this.isChanging = false;
+    this.selectionIsMoving = false;
+    this.isResizing = false;
     this.manipulator.removeChild(this.subElement, this.perimeter);
     this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
     this.manipulator.setAttribute(this.selectionRect, CursorProperties.cursor, CursorProperties.move);
@@ -94,14 +128,36 @@ export class SelectionService extends DrawableService {
 
   onMouseMove(event: MouseEvent): void {
     if (this.isChanging) {
-      if (this.isSingleClick && !this.isLeftClick) {
-        // This case happens if a right click drag is initiated directly on an element
-        this.invertTopElement();
-      }
-      this.isSingleClick = false;
       this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
-      this.updateSize();
+      
+      if (this.selectionIsMoving) {
+        // Moving selection
+        this.changePositionOnMove();
+      } else if (this.isResizing) {
+        // Resizing selection
+        this.resizeOnMove();
+      } else {
+        // Selection of elements
+        this.changeSelectionPerimeterOnMove();
+      }
     }
+  }
+
+  private changeSelectionPerimeterOnMove(): void {
+    if (this.isSingleClick && !this.isLeftClick) {
+      // This case happens if a right click drag is initiated directly on an element
+      this.invertTopElement();
+    }
+    this.isSingleClick = false;
+    this.updateSize();
+  }
+
+  private changePositionOnMove(): void {
+    this.isSingleClick = false;
+  }
+
+  private resizeOnMove(): void {
+    // TODO: Sprint 3
   }
 
   private updateSize(): void {
@@ -146,12 +202,18 @@ export class SelectionService extends DrawableService {
     this.manipulator.setAttribute(this.perimeter, SVGProperties.fill, backgroundColor.getInvertedColor(false).getHex());
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.color, backgroundColor.getHex());
 
+    // Reset dimensions attributes for perimeter
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.width, '0');
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.height, '0');
+    this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.width, '0');
+    this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.height, '0');
+
     // Adding perimeter to DOM
     this.manipulator.appendChild(this.subElement, this.perimeter);
     this.manipulator.appendChild(this.subElement, this.perimeterAlternative);
   }
 
-  private createSelectionRect() {
+  private createSelectionRect(): void {
     if (this.subElement === undefined) {
       this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
       this.selectionGroup = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
@@ -161,6 +223,7 @@ export class SelectionService extends DrawableService {
       this.selectionRect = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.fillOpacity, '0');
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.thickness, '1');
+      this.manipulator.setAttribute(this.selectionRect, SVGProperties.title, 'selection-area');
       this.manipulator.appendChild(this.selectionGroup, this.selectionRect);
 
       // Creating control points
@@ -170,6 +233,7 @@ export class SelectionService extends DrawableService {
         this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.fill, 'white');
         this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.color, 'black');
         this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.thickness, '1');
+        this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.title, 'control-point');
         this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.height, this.controlPointSize.toString());
         this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.width, this.controlPointSize.toString());
         this.manipulator.appendChild(this.selectionGroup, this.controlPoints[i]);
@@ -211,13 +275,7 @@ export class SelectionService extends DrawableService {
   }
 
   private updateSelectedElements(): void {
-    if (this.isSingleClick && this.isLeftClick) {
-      // Left single click
-      this.addTopElement();
-    } else if (this.isSingleClick) {
-      // Right single click
-      this.invertTopElement();
-    } else if (this.isLeftClick) {
+    if (this.isLeftClick) {
       // Left click drag
       this.addEachElement();
     } else {
@@ -227,7 +285,7 @@ export class SelectionService extends DrawableService {
     this.setGeneratedAreaBorders();
   }
 
-  private addTopElement() {
+  private addTopElement(): void {
     this.selectedElements = new Stack<SVGElementInfos>();
 
     const absoluteMousePosition = new CoordinatesXY(
@@ -239,9 +297,20 @@ export class SelectionService extends DrawableService {
     if (topElement !== undefined) {
       this.selectedElements.push_back(topElement);
     }
+
+    /*
+    // Avec event.target
+    if (this.clickedElement !== null) {
+      const id = this.clickedElement.getAttribute('title');
+      if (id !== null && this.clickedElement.tagName === 'g') {
+        console.log(this.clickedElement);
+        const topElement: SVGElementInfos = { target: this.clickedElement, id: parseInt(id) };
+        this.selectedElements.push_back(topElement);
+      } 
+    }*/
   }
 
-  private invertTopElement() {
+  private invertTopElement(): void {
     const absoluteMousePosition = new CoordinatesXY(
       this.mousePosition.getX() + this.image.nativeElement.getBoundingClientRect().left,
       this.mousePosition.getY() + this.image.nativeElement.getBoundingClientRect().top
@@ -253,9 +322,24 @@ export class SelectionService extends DrawableService {
     } else if (topElement !== undefined) {
       this.selectedElements.delete(topElement);
     }
+
+    /*
+    // Avec event.target
+    if (this.clickedElement !== null) {
+      const id = this.clickedElement.getAttribute('title');
+      if (id !== null && this.clickedElement.tagName === 'g') {
+        console.log(this.clickedElement);
+        const topElement: SVGElementInfos = { target: this.clickedElement, id: parseInt(id) };
+        if (this.selectedElements.getAll().indexOf(topElement) < 0) {
+          this.selectedElements.push_back(topElement);
+        } else {
+          this.selectedElements.delete(topElement);
+        }
+      } 
+    }*/
   }
 
-  private addEachElement() {
+  private addEachElement(): void {
     this.selectedElements = new Stack<SVGElementInfos>();
 
     for (let i = 0; i < this.drawStack.size(); i++) {
@@ -266,7 +350,7 @@ export class SelectionService extends DrawableService {
     }
   }
 
-  private invertEachElement() {
+  private invertEachElement(): void {
     this.elementsToInvert = new Stack<SVGElementInfos>();
 
     for (let i = 0; i < this.drawStack.size(); i++) {
@@ -295,10 +379,14 @@ export class SelectionService extends DrawableService {
     }
   }
 
-  selectAllElements() {
+  selectAllElements(): void {
     this.cancelSelection();
     
-    this.selectedElements = this.drawStack.getAll();
+    //this.selectedElements = this.drawStack.getAll();
+    this.selectedElements = new Stack<SVGElementInfos>();
+    for (let i = 0; i < this.drawStack.size(); i++) {
+      this.selectedElements.push_back(this.drawStack.getAll().getAll()[i]);
+    }
     this.createSelectionRect();
     this.manipulator.setAttribute(this.selectionRect, CursorProperties.cursor, CursorProperties.move);
     this.setGeneratedAreaBorders();
