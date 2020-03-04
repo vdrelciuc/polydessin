@@ -116,6 +116,12 @@ export class SidebarComponent implements OnInit {
         }
       )
     );
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'A', description: 'Selecting spray with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Spray);
+        }
+      )
+    );
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
         (event) => {
           this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );

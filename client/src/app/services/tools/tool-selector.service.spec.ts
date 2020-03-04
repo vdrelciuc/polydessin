@@ -50,7 +50,7 @@ describe('ToolSelectorService', () => {
   });
 
   it('shouldn\'t find non existant tool in map', () => {
-    expect(service.getTool(Tools.spray)).toEqual(undefined);
+    expect(service.getTool(Tools.Spray)).toEqual(undefined);
   });
 
   // it('should get french name of some tools', () => {

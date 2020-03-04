@@ -52,7 +52,7 @@ export class ToolSelectorService {
     this.colorApplicator = new ColorApplicatorService();
     this.spray = new SprayService();
 
-    this.tools.set(Tools.spray, this.spray);
+    this.tools.set(Tools.Spray, this.spray);
     this.tools.set(Tools.ColorApplicator, this.colorApplicator);
     this.tools.set(Tools.Polygon, this.polygon);
     this.tools.set(Tools.Selection, this.selection);
@@ -85,8 +85,8 @@ export class ToolSelectorService {
   getEllipse(): EllipseService { return this.ellipse; }
   getEraser(): EraserService { return this.eraser; }
   getSelection(): SelectionService { return this.selection; }
-  getColorApplicator(): ColorApplicatorService { return  this.colorApplicator};
-  getSpray(): SprayService { return  this.spray};
+  getColorApplicator(): ColorApplicatorService { return  this.colorApplicator; }
+  getSpray(): SprayService { return  this.spray; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
