@@ -3,7 +3,7 @@ import { Tools } from 'src/app/enums/tools';
 import * as CONSTANT from 'src/app/classes/constants';
 import { MatSliderChange } from '@angular/material';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { GridService } from 'src/app/services/index/grid/grid.service';
+import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
 
 @Component({
   selector: 'app-grid',

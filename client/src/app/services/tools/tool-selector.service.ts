@@ -15,7 +15,7 @@ import { EraserService } from '../index/drawable/eraser/eraser.service';
 import { PolygonService } from '../index/drawable/polygon/polygon.service';
 import { SelectionService } from '../index/drawable/selection/selection.service';
 import { ColorApplicatorService } from '../index/drawable/colorApplicator/color-applicator.service';
-import { GridService } from '../index/grid/grid.service';
+import { GridService } from '../index/drawable/grid/grid.service';
 
 @Injectable({
   providedIn: 'root'

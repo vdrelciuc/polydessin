@@ -11,7 +11,7 @@ import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.s
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { GridService } from 'src/app/services/index/grid/grid.service';
+import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
 
 @Component({
   selector: 'app-canvas',

@@ -1,9 +1,9 @@
 import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { DrawableService } from '../drawable/drawable.service';
+import { DrawableService } from '../drawable.service';
 import * as CONSTANT from 'src/app/classes/constants';
-import { ColorSelectorService } from '../../color-selector.service';
-import { DrawStackService } from '../../tools/draw-stack/draw-stack.service';
+import { ColorSelectorService } from '../../../color-selector.service';
+import { DrawStackService } from '../../../tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
