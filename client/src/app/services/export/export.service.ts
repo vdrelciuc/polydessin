@@ -1,4 +1,8 @@
-import {ElementRef, Injectable} from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { ImageFilter } from 'src/app/enums/color-filter';
+import { ImageExportType } from 'src/app/enums/export-type';
+import { ImageFormat } from 'src/app/enums/image-format';
 
 @Injectable({
   providedIn: 'root'
@@ -6,88 +10,144 @@ import {ElementRef, Injectable} from '@angular/core';
 export class ExportService {
   cloneSVG: ElementRef<SVGElement>; // copy of SVG element to set filters on it
   canvas: HTMLCanvasElement; // where i bind my preview for canvas
+  originalCanvas: HTMLCanvasElement;
   myDownload: ElementRef; // where i mimic the download click
   private image: ElementRef<SVGElement>; // My actual svg
-  private imageAfterDeserialization: HTMLImageElement; // transformed image through formula
+  imageAfterDeserialization: HTMLImageElement; // transformed image through formula
+
+  currentFormat: BehaviorSubject<ImageFormat>;
+  currentFilter: BehaviorSubject<ImageFilter>;
+  currentExportType: BehaviorSubject<ImageExportType>;
+  filtersMap: Map<ImageFilter, string>;
+
+  constructor() {
+    this.currentFormat = new BehaviorSubject<ImageFormat>(ImageFormat.JPEG);
+    this.currentFilter = new BehaviorSubject<ImageFilter>(ImageFilter.Aucun);
+    this.currentExportType = new BehaviorSubject<ImageExportType>(ImageExportType.Téléchargement);
+    this.initializeMap();
+  }
+
+  private initializeMap(): void {
+    this.filtersMap = new Map();
+    this.filtersMap.set(ImageFilter.Aucun, 'none');
+    this.filtersMap.set(ImageFilter.Constraste, 'contrast(0.3)');
+    this.filtersMap.set(ImageFilter.Teinté, 'hue-rotate(140deg)');
+    this.filtersMap.set(ImageFilter.Négatif, 'invert(1)');
+    this.filtersMap.set(ImageFilter.Sombre, 'grayscale(0.5)');
+    this.filtersMap.set(ImageFilter.Sépia, 'sepia(5)');
+  }
 
   // formula of conversion from https://spin.atomicobject.com/2014/01/21/convert-svg-to-png/
-  deserializeImage() {
+  deserializeImage(): void {
     let xml;
     this.imageAfterDeserialization = new Image();
     xml = new XMLSerializer().serializeToString(this.image.nativeElement);
-    let svg64 = btoa(xml);
-    let b64Start = 'data:image/svg+xml;base64,';
-    let image64 = b64Start + svg64;
+    const svg64 = btoa(xml);
+    const b64Start = 'data:image/svg+xml;base64,';
+    const image64 = b64Start + svg64;
     this.imageAfterDeserialization.src = image64;
   }
 
-  export(isSvg: boolean) {
-    if (!isSvg) {
-      let context = this.canvas.getContext('2d');
-      if (context !== null) {
-        this.applyFilterFromCanvas(context, '');
-        this.downloadCorrectType('png');
-      }
-    } else {
-      this.applyFilterFomSvg('');
+  export(): void {
+    if (this.currentFormat.getValue() === ImageFormat.SVG) {
+      this.applyFilterFomSvg();
       this.downloadSVG();
+    } else {
+      const context = this.originalCanvas.getContext('2d');
+      if (context !== null) {
+        this.applyFilterFromCanvas(context);
+        this.downloadCorrectType();
+      }
+    }
+  }
+
+  drawPreview(firstCall: boolean){
+    let contextBinded = this.canvas.getContext('2d');
+    if (contextBinded !==null){
+      contextBinded.clearRect(0,0,contextBinded.canvas.width,contextBinded.canvas.height);
+      this.applyFilterForPreview(contextBinded);
+      let scaleX = 300 /this.originalCanvas.width;
+      let scaleY = (270 /this.originalCanvas.height)/2;
+      if (scaleX > 1){
+        scaleX =1;
+      }
+      if (scaleY > 1){
+        scaleY =1;
+      }
+      if (firstCall){
+        contextBinded.scale(scaleX, scaleY);
+      }
+      contextBinded.drawImage(this.originalCanvas,0,0);
     }
   }
 
   async SVGToCanvas() {
     this.deserializeImage();
     this.imageAfterDeserialization.onload = () => {
-      this.canvas.width = this.imageAfterDeserialization.width;
-      this.canvas.height = this.imageAfterDeserialization.height;
-      let context = this.canvas.getContext('2d');
+      this.originalCanvas.width = this.imageAfterDeserialization.width;
+      this.originalCanvas.height = this.imageAfterDeserialization.height;
+      const context = this.originalCanvas.getContext('2d');
       if (context !== null) {
         context.drawImage(this.imageAfterDeserialization, 0, 0);
       }
+      this.drawPreview(true);
     }
 
   }
 
-  applyFilterFromCanvas(ctx: CanvasRenderingContext2D, filterFromMap: string) {
-    //let filters = ['saturate(0.3)', 'invert(0.5)', 'sepia(1)', 'grayscale(0.5)' , 'contrast(0.4)' , '' ];
-    ctx.filter = filterFromMap;
-    ctx.drawImage(this.imageAfterDeserialization, 0, 0);
+  applyFilterForPreview(ctx:CanvasRenderingContext2D): void{
+    const tempFilter = this.filtersMap.get(this.currentFilter.getValue());
+    if (tempFilter !== undefined) {
+      ctx.filter = tempFilter;
+    }
   }
 
-  downloadCorrectType(type: string) {
-    if (type === 'jpg') {
-      this.imageAfterDeserialization.src = this.canvas.toDataURL('image/jpeg');
-    } else if (type === 'png') {
-      this.imageAfterDeserialization.src = this.canvas.toDataURL('image/png');
+  applyFilterFromCanvas(ctx: CanvasRenderingContext2D): void {
+    const tempFilter = this.filtersMap.get(this.currentFilter.getValue());
+    if (tempFilter !== undefined) {
+      ctx.filter = tempFilter;
+      ctx.drawImage(this.imageAfterDeserialization, 0, 0);
     }
-    // theory from https://stackoverflow.com/questions/17527713/force-browser-to-download-image-files-on-click
+  }
+
+  // theory from https://stackoverflow.com/questions/17527713/force-browser-to-download-image-files-on-click
+  downloadCorrectType(): void {
+    if (this.currentFormat.getValue() === ImageFormat.JPEG) {
+      this.imageAfterDeserialization.src = this.originalCanvas.toDataURL('image/jpeg');
+    } else if (this.currentFormat.getValue() === ImageFormat.PNG) {
+      this.imageAfterDeserialization.src = this.originalCanvas.toDataURL('image/png');
+    }
+
     this.myDownload.nativeElement.setAttribute('href', this.imageAfterDeserialization.src);
-    let finalString = 'img.' + type;
+    const finalString = 'img.' + this.currentFormat.getValue().toString();
     this.myDownload.nativeElement.setAttribute('download', finalString);
   }
 
   // formula of conversion from https://spin.atomicobject.com/2014/01/21/convert-svg-to-png/
-  deserializeImageToSvg() :string {
+  deserializeImageToSvg(): string {
     let xml;
-    let cloneImageAfterDeserialization = new Image();
+    const cloneImageAfterDeserialization = new Image();
     xml = new XMLSerializer().serializeToString(this.cloneSVG.nativeElement);
-    let svg64 = btoa(xml);
-    let b64Start = 'data:image/svg+xml;base64,';
-    let image64 = b64Start + svg64;
+    const svg64 = btoa(xml);
+    const b64Start = 'data:image/svg+xml;base64,';
+    const image64 = b64Start + svg64;
 
     return cloneImageAfterDeserialization.src = image64;
 
   }
 
-  applyFilterFomSvg(filter: string) {
+  applyFilterFomSvg(): void {
     this.cloneSVG = new ElementRef<SVGElement>(this.image.nativeElement);
     (this.cloneSVG.nativeElement as Node ) = this.image.nativeElement.cloneNode(true);
-    this.cloneSVG.nativeElement.setAttribute('filter', 'blur(5px)');
+    const tempFilter = this.filtersMap.get(this.currentFilter.getValue());
+    if (tempFilter !== undefined) {
+      this.cloneSVG.nativeElement.setAttribute('filter', tempFilter);
+    }
   }
 
-
-  downloadSVG() {
+  downloadSVG(): void {
     this.myDownload.nativeElement.setAttribute('href', this.deserializeImageToSvg());
-    let finalString = 'img.svg';
+    const finalString = 'img.svg';
     this.myDownload.nativeElement.setAttribute('download', finalString);
   }
 
