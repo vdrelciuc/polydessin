@@ -10,6 +10,7 @@ import { ImageFormat } from 'src/app/enums/image-format';
 export class ExportService {
   cloneSVG: ElementRef<SVGElement>; // copy of SVG element to set filters on it
   canvas: HTMLCanvasElement; // where i bind my preview for canvas
+  originalCanvas: HTMLCanvasElement;
   myDownload: ElementRef; // where i mimic the download click
   private image: ElementRef<SVGElement>; // My actual svg
   imageAfterDeserialization: HTMLImageElement; // transformed image through formula
@@ -52,23 +53,41 @@ export class ExportService {
       this.applyFilterFomSvg();
       this.downloadSVG();
     } else {
-      const context = this.canvas.getContext('2d');
+      const context = this.originalCanvas.getContext('2d');
       if (context !== null) {
         this.applyFilterFromCanvas(context);
+        this.drawPreview();
         this.downloadCorrectType();
       }
+    }
+  }
+
+  drawPreview(){
+    let contextBinded = this.canvas.getContext('2d');
+    if (contextBinded !==null){
+      let scaleX = 300 /this.originalCanvas.width;
+      let scaleY = (270 /this.originalCanvas.height)/2;
+      if (scaleX > 1){
+        scaleX =1;
+      }
+      if (scaleY > 1){
+        scaleY =1;
+      }
+      contextBinded.scale(scaleX, scaleY);
+      contextBinded.drawImage(this.originalCanvas,0,0);
     }
   }
 
   async SVGToCanvas() {
     this.deserializeImage();
     this.imageAfterDeserialization.onload = () => {
-      this.canvas.width = this.imageAfterDeserialization.width;
-      this.canvas.height = this.imageAfterDeserialization.height;
-      const context = this.canvas.getContext('2d');
+      this.originalCanvas.width = this.imageAfterDeserialization.width;
+      this.originalCanvas.height = this.imageAfterDeserialization.height;
+      const context = this.originalCanvas.getContext('2d');
       if (context !== null) {
         context.drawImage(this.imageAfterDeserialization, 0, 0);
       }
+      this.drawPreview();
     }
 
   }
@@ -85,9 +104,9 @@ export class ExportService {
   // theory from https://stackoverflow.com/questions/17527713/force-browser-to-download-image-files-on-click
   downloadCorrectType(): void {
     if (this.currentFormat.getValue() === ImageFormat.JPEG) {
-      this.imageAfterDeserialization.src = this.canvas.toDataURL('image/jpeg');
+      this.imageAfterDeserialization.src = this.originalCanvas.toDataURL('image/jpeg');
     } else if (this.currentFormat.getValue() === ImageFormat.PNG) {
-      this.imageAfterDeserialization.src = this.canvas.toDataURL('image/png');
+      this.imageAfterDeserialization.src = this.originalCanvas.toDataURL('image/png');
     }
 
     this.myDownload.nativeElement.setAttribute('href', this.imageAfterDeserialization.src);
