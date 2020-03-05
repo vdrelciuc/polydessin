@@ -59,6 +59,8 @@ export class Stack<T> {
 
   size(): number { return this.stack.length; }
 
+  contains(element: T): boolean { return this.stack.indexOf(element) >= 0; }
+
   getLast(): T | undefined {
     if (this.stack.length > 0) {
       return this.stack[this.stack.length - 1];

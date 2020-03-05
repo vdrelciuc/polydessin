@@ -69,7 +69,6 @@ export class SelectionService extends DrawableService {
       this.onMouseRelease(event);
     } else {
       if (this.subElement !== undefined) {
-
         this.manipulator.removeChild(this.image.nativeElement, this.subElement);
       }
 
@@ -100,7 +99,7 @@ export class SelectionService extends DrawableService {
         );
         const topElement = this.drawStack.findTopElementAt(absoluteMousePosition);
 
-        if (topElement !== undefined && this.selectedElements.getAll().indexOf(topElement) >= 0) {
+        if (topElement !== undefined && this.selectedElements.contains(topElement)) {
           // Move selection
           this.oldPointerOnMove = CoordinatesXY.getEffectiveCoords(this.image, event);
           this.selectionIsMoving = true;
@@ -298,13 +297,7 @@ export class SelectionService extends DrawableService {
   }
 
   private updateSelectedElements(): void {
-    if (this.isLeftClick) {
-      // Left click drag
-      this.addEachElement();
-    } else {
-      // Right click drag
-      this.invertEachElement();
-    }
+    this.isLeftClick ? /* Left click drag */ this.addEachElement() : /* Right click drag */ this.invertEachElement();
     this.setGeneratedAreaBorders();
   }
 
@@ -340,7 +333,7 @@ export class SelectionService extends DrawableService {
     );
     const topElement = this.drawStack.findTopElementAt(absoluteMousePosition);
 
-    if (topElement !== undefined && this.selectedElements.getAll().indexOf(topElement) < 0) {
+    if (topElement !== undefined && !this.selectedElements.contains(topElement)) {
       this.selectedElements.push_back(topElement);
     } else if (topElement !== undefined) {
       this.selectedElements.delete(topElement);
@@ -353,7 +346,7 @@ export class SelectionService extends DrawableService {
       if (id !== null && this.clickedElement.tagName === 'g') {
         console.log(this.clickedElement);
         const topElement: SVGElementInfos = { target: this.clickedElement, id: parseInt(id) };
-        if (this.selectedElements.getAll().indexOf(topElement) < 0) {
+        if (!this.selectedElements.contains(topElement)) {
           this.selectedElements.push_back(topElement);
         } else {
           this.selectedElements.delete(topElement);
@@ -381,8 +374,8 @@ export class SelectionService extends DrawableService {
       if (element !== undefined) {
         this.elementsToInvert.push_back(element);
 
-        const isAlreadySelected = this.selectedElements.getAll().indexOf(element) >= 0;
-        const isAlreadyRemovedOrAdded = isAlreadySelected ? this.addedElements.getAll().indexOf(element) >= 0 : this.removedElements.getAll().indexOf(element) >= 0;
+        const isAlreadySelected = this.selectedElements.contains(element);
+        const isAlreadyRemovedOrAdded = isAlreadySelected ? this.addedElements.contains(element) : this.removedElements.contains(element);
 
         if (!isAlreadyRemovedOrAdded) {
           isAlreadySelected ? this.selectedElements.delete(element) : this.selectedElements.push_back(element);
@@ -392,10 +385,10 @@ export class SelectionService extends DrawableService {
     }
 
     for (let element of this.drawStack.getAll().getAll()) {
-      if (this.addedElements.getAll().indexOf(element) >= 0 && this.elementsToInvert.getAll().indexOf(element) < 0) {
+      if (this.addedElements.contains(element) && !this.elementsToInvert.contains(element)) {
         this.addedElements.delete(element);
         this.selectedElements.delete(element);
-      } else if (this.removedElements.getAll().indexOf(element) >= 0 && this.elementsToInvert.getAll().indexOf(element) < 0) {
+      } else if (this.removedElements.contains(element) && !this.elementsToInvert.contains(element)) {
         this.removedElements.delete(element);
         this.selectedElements.push_back(element);
       }
