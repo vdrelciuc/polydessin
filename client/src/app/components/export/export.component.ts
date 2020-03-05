@@ -55,7 +55,7 @@ export class ExportComponent implements AfterViewInit {
 
     this.filtersMap = new Map();
     this.filtersMap.set('Aucun', ImageFilter.Aucun);
-    this.filtersMap.set('Brouillard', ImageFilter.Brouillard);
+    this.filtersMap.set('Sombre', ImageFilter.Sombre);
     this.filtersMap.set('Négatif', ImageFilter.Négatif);
     this.filtersMap.set('Constraste', ImageFilter.Constraste);
     this.filtersMap.set('Sépia', ImageFilter.Sépia);
@@ -79,12 +79,11 @@ export class ExportComponent implements AfterViewInit {
     }
   }
 
-  onFilterUpdate(newFilterString: string) {
+   onFilterUpdate(newFilterString: string) {
     const newFilter = this.filtersMap.get(newFilterString);
     if (newFilter !== undefined) {
-      console.log(newFilter.toString());
-      //this.exportation.drawPreview();
       this.exportation.currentFilter.next(newFilter);
+      this.exportation.drawPreview(false);
     }
   }
 

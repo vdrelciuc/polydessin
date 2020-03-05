@@ -29,11 +29,11 @@ export class ExportService {
 
   private initializeMap(): void {
     this.filtersMap = new Map();
-    this.filtersMap.set(ImageFilter.Aucun, '');
+    this.filtersMap.set(ImageFilter.Aucun, 'none');
     this.filtersMap.set(ImageFilter.Constraste, 'contrast(0.3)');
     this.filtersMap.set(ImageFilter.Teinté, 'hue-rotate(140deg)');
     this.filtersMap.set(ImageFilter.Négatif, 'invert(1)');
-    this.filtersMap.set(ImageFilter.Brouillard, 'blur(5px)');
+    this.filtersMap.set(ImageFilter.Sombre, 'grayscale(0.5)');
     this.filtersMap.set(ImageFilter.Sépia, 'sepia(5)');
   }
 
@@ -56,15 +56,16 @@ export class ExportService {
       const context = this.originalCanvas.getContext('2d');
       if (context !== null) {
         this.applyFilterFromCanvas(context);
-        this.drawPreview();
         this.downloadCorrectType();
       }
     }
   }
 
-  drawPreview(){
+  drawPreview(firstCall: boolean){
     let contextBinded = this.canvas.getContext('2d');
     if (contextBinded !==null){
+      contextBinded.clearRect(0,0,contextBinded.canvas.width,contextBinded.canvas.height);
+      this.applyFilterForPreview(contextBinded);
       let scaleX = 300 /this.originalCanvas.width;
       let scaleY = (270 /this.originalCanvas.height)/2;
       if (scaleX > 1){
@@ -73,7 +74,9 @@ export class ExportService {
       if (scaleY > 1){
         scaleY =1;
       }
-      contextBinded.scale(scaleX, scaleY);
+      if (firstCall){
+        contextBinded.scale(scaleX, scaleY);
+      }
       contextBinded.drawImage(this.originalCanvas,0,0);
     }
   }
@@ -87,16 +90,22 @@ export class ExportService {
       if (context !== null) {
         context.drawImage(this.imageAfterDeserialization, 0, 0);
       }
-      this.drawPreview();
+      this.drawPreview(true);
     }
 
+  }
+
+  applyFilterForPreview(ctx:CanvasRenderingContext2D): void{
+    const tempFilter = this.filtersMap.get(this.currentFilter.getValue());
+    if (tempFilter !== undefined) {
+      ctx.filter = tempFilter;
+    }
   }
 
   applyFilterFromCanvas(ctx: CanvasRenderingContext2D): void {
     const tempFilter = this.filtersMap.get(this.currentFilter.getValue());
     if (tempFilter !== undefined) {
       ctx.filter = tempFilter;
-      console.log(tempFilter);
       ctx.drawImage(this.imageAfterDeserialization, 0, 0);
     }
   }

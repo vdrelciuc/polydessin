@@ -1,6 +1,6 @@
 export enum ImageFilter {
   Aucun = 'Aucun',
-  Brouillard = 'Brouillard',
+  Sombre = 'Sombre',
   Négatif = 'Négatif',
   Constraste = 'Constraste',
   Sépia = 'Sépia',
