@@ -32,8 +32,7 @@ export class GridService extends DrawableService{
     this.patern = grid.nativeElement.querySelector('#grid-pattern');
     this.thickness.subscribe( () => {
       if(this.patern !== null) {
-        console.log('bla');
-        this.manipulator.removeChild(this.image.nativeElement, this.grid.nativeElement);
+        this.manipulator.setAttribute(this.grid.nativeElement, SVGProperties.width, this.thickness.value.toString());
       }
     });
   }

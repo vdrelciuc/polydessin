@@ -23,7 +23,6 @@ import { WarningDialogComponent } from './components/create-new/warning-dialog/w
 import { EllipseComponent } from './components/ellipse/ellipse.component';
 import { EraserComponent } from './components/eraser/eraser.component';
 import { ExportComponent } from './components/export/export.component';
-import { WarningExportComponent } from './components/export/warning-export/warning-export.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
 import { CrayonGuideComponent } from './components/guideTemplaates/crayon-guide/crayon-guide.component';
 import { LigneGuideComponent } from './components/guideTemplaates/ligne-guide/ligne-guide.component';
@@ -76,7 +75,7 @@ import { GridComponent } from './components/grid/grid.component';
     ResizeObserverDirective,
     WarningDialogComponent,
     ExportComponent,
-    WarningExportComponent,
+
     PolygonComponent,
     EllipseComponent,
     EraserComponent,
@@ -88,8 +87,7 @@ import { GridComponent } from './components/grid/grid.component';
     CreateNewComponent,
     WarningDialogComponent,
     UserGuideComponent,
-    ExportComponent,
-    WarningExportComponent
+    ExportComponent
   ],
   imports: [
     BrowserAnimationsModule,
