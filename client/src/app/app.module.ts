@@ -44,6 +44,7 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
 import { EllipseComponent } from './components/ellipse/ellipse.component';
 import { EraserComponent } from './components/eraser/eraser.component';
 import { PipetteComponent } from './components/pipette/pipette.component';
+import { SaveServerComponent } from './components/save-server/save-server.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { PipetteComponent } from './components/pipette/pipette.component';
     SelectionComponent,
     PolygonComponent,
     ExportComponent,
-    PipetteComponent
+    PipetteComponent,
+    SaveServerComponent
   ],
   entryComponents: [
     ColorPickerComponent,
