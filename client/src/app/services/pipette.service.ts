@@ -74,7 +74,6 @@ export class PipetteService extends DrawableService {
     };
 
     const imageData = ctx.getImageData(coordinates.getX(), coordinates.getY(), 1, 1).data;
-    console.log(imageData);
     const hexValue = '#'
       + this.correctDigits(imageData[0].toString(CONSTANTS.HEX_BASE))
       + this.correctDigits(imageData[1].toString(CONSTANTS.HEX_BASE))

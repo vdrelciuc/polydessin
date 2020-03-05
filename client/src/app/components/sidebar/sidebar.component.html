@@ -154,7 +154,7 @@
           <button mat-button
                   matTooltipPosition="after"
                   aria-label="pencil-tooltip"
-                  (click)="selectToolAndLoadCanvas('pipette')"
+                  (click)="selectTool('pipette')"
                   [matTooltip]="this.toolSelectorService.getPipette().frenchName"
                   [ngClass]="{'clicked': currentTool === 'pipette',
             'not-clicked': currentTool !== 'pipette'}">

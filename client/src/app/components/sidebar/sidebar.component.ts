@@ -118,6 +118,15 @@ export class SidebarComponent implements OnInit {
         }
       )
     );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'i', description: 'Selecting pipette with shortcut' }).subscribe(
+      (event) => {
+        this.toolSelectorService.setCurrentTool(Tools.Pipette);
+      }
+      )
+    );
+
+
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
         (event) => {
           this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
@@ -145,12 +154,7 @@ export class SidebarComponent implements OnInit {
   selectTool(tool: Tools): void {
     this.toolSelectorService.setCurrentTool(tool);
   }
-  selectToolAndLoadCanvas(tool: Tools) : void {
-    this.exportService.SVGToCanvas().then(() => {
-      this.selectTool(tool);
-      console.log('hrllo');
-    })
-  }
+
 
   createNewProject(): void {
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
