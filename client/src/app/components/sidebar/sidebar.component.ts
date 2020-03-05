@@ -142,8 +142,28 @@ export class SidebarComponent implements OnInit {
     );
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'g', description: 'Display/Undisplay grid' }).subscribe(
+        (event) => {
+          this.toolSelectorService.getGrid().toggle();
+        }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: '+', description: 'Grid size ++' }).subscribe(
+        (event) => {
+          let grid = this.toolSelectorService.getGrid();
+          if(grid.visible) {
+            grid.incrementThickness();
+          }
+        }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: '-', description: 'Grid size --' }).subscribe(
       (event) => {
-        this.toolSelectorService.getGrid().toggle();
+        let grid = this.toolSelectorService.getGrid();
+        if(grid.visible) {
+          grid.decrementThickness();
+        }
       }
     )
   );

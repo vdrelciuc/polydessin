@@ -1,6 +1,9 @@
 <div id="container">
     <form id="grid-form">
       <div class="head-group">
+        <div class="group">
+          <mat-slide-toggle id="toggleCheckbox" (change)="service.toggle()">Visible</mat-slide-toggle>
+       </div>
         <label class="title" id="thickness">Largeur des carres</label>
         <mat-slider
           id="thickness-slider"

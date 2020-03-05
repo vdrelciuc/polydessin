@@ -42,5 +42,7 @@ export const MOUSE_LEFT = 0;
 // Grid
 export const GRID_MINIMUM    = 5;
 export const GRID_MAXIMUM    = 100;
-export const OPACITY_MINIMUM = 0.5;
+export const OPACITY_MINIMUM = 0.1;
 export const OPACITY_MAXIMUM = 1;
+export const THICKNESS_STEP = 5;
+// export const OPACITY_STEP = 0.1;

@@ -64,7 +64,6 @@ export class ToolSelectorService {
     this.tools.set(Tools.Grid, this.grid);
     this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
     this.setCurrentTool(Tools.Selection);
-
   }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
@@ -73,10 +72,6 @@ export class ToolSelectorService {
       element[1].initialize(manipulator, image, colorSelectorService, drawStack);
     }
     this.eraser.assignUndoRedo(this.memory);
-  }
-
-  setGrid(patern: ElementRef<SVGGElement>) : void {
-    this.grid.initializeGrid(patern);
   }
 
   getCurrentTool(): DrawableService | undefined { return this.tool; }

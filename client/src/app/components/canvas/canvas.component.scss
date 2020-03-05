@@ -2,3 +2,12 @@
   margin: 0;
   user-select: none; // So that [Shape] doesn't turn blue
 }
+
+.grid {
+  pointer-events: none;
+}
+
+svg {
+  position: absolute;
+  top: 0px;
+}
