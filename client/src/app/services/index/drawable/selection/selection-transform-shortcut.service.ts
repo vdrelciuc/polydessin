@@ -5,6 +5,10 @@ import { Injectable, Renderer2 } from '@angular/core';
 })
 export class SelectionTransformShortcutService {
 
+  readonly firstDelay = 500;
+  readonly moveDelay = 100;
+  readonly unitMove = 3;
+
   readonly left = 'ArrowLeft';
   readonly down = 'ArrowDown';
   readonly right = 'ArrowRight';
@@ -98,5 +102,20 @@ export class SelectionTransformShortcutService {
     }
 
     this.lastKeyPressed = '';
+  }
+
+  async autoMove(): Promise<void> {
+    if (this.isMoving) {
+      this.translate();
+      setTimeout(() => this.autoMove(), this.hasWaitedHalfSec ? this.moveDelay : this.firstDelay);
+      this.hasWaitedHalfSec = true;
+    } else {
+      this.hasWaitedHalfSec = false;
+    }
+  }
+
+  private translate() {
+    const translateX = (this.leftArrowIsPressed ? - this.unitMove : 0) + (this.rightArrowIsPressed ? this.unitMove : 0);
+    const translateY = (this.upArrowIsPressed ? - this.unitMove : 0) + (this.downArrowIsPressed ? this.unitMove : 0);
   }
 }
