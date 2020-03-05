@@ -8,6 +8,7 @@ import { CursorProperties } from 'src/app/classes/cursor-properties';
 import { Tools } from 'src/app/enums/tools';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { Stack } from 'src/app/classes/stack';
+import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
 //import { InvertedElement } from 'src/app/interfaces/InvertedElement';
 
 @Injectable({
@@ -43,11 +44,14 @@ export class SelectionService extends DrawableService {
 
   private oldPointerOnMove: CoordinatesXY;
 
+  private transFormShortcuts: SelectionTransformShortcutService;
+
   constructor() {
     super();
     this.frenchName = 'Sélection';
     this.selectedElements = new Stack<SVGElementInfos>();
     this.elementsToInvert = new Stack<SVGElementInfos>();
+    this.transFormShortcuts = new SelectionTransformShortcutService();
   }
 
   initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
@@ -61,6 +65,7 @@ export class SelectionService extends DrawableService {
     if (this.subElement !== undefined) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
+    this.transFormShortcuts.deleteShortcuts();
   }
 
   onMousePress(event: MouseEvent): void {
@@ -125,6 +130,7 @@ export class SelectionService extends DrawableService {
     this.manipulator.removeChild(this.subElement, this.perimeter);
     this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
     this.manipulator.setAttribute(this.selectionRect, CursorProperties.cursor, CursorProperties.move);
+    this.transFormShortcuts.setupShortcuts(this.manipulator);
     if (this.selectedElements.isEmpty()) {
       this.cancelSelection();
     }
@@ -407,6 +413,7 @@ export class SelectionService extends DrawableService {
     if (this.selectedElements.isEmpty()) {
       this.cancelSelection();
     }
+    this.transFormShortcuts.setupShortcuts(this.manipulator);
   }
 
   private setGeneratedAreaBorders(): void {
