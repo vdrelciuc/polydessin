@@ -74,7 +74,7 @@ export class SelectionService extends DrawableService {
 
       this.isChanging = true;
       this.isSingleClick = true;
-      this.isLeftClick = event.which === 1 || this.selectedElements.size() === 0;
+      this.isLeftClick = event.button === 0 || this.selectedElements.isEmpty();
       this.elementsToInvert = new Stack<SVGElementInfos>();
       this.addedElements = new Stack<SVGElementInfos>();
       this.removedElements = new Stack<SVGElementInfos>();
@@ -125,7 +125,7 @@ export class SelectionService extends DrawableService {
     this.manipulator.removeChild(this.subElement, this.perimeter);
     this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
     this.manipulator.setAttribute(this.selectionRect, CursorProperties.cursor, CursorProperties.move);
-    if (this.selectedElements.size() === 0) {
+    if (this.selectedElements.isEmpty()) {
       this.cancelSelection();
     }
   }
@@ -168,8 +168,6 @@ export class SelectionService extends DrawableService {
         const oldTranslate = initialElementTransform.substring(initialElementTransform.indexOf("(") + 1, initialElementTransform.indexOf(")"));
         oldTranslationX = oldTranslate.split(',')[0];
         oldTranslationY = oldTranslate.substr(oldTranslate.indexOf(' ') + 1);
-        console.log('x: ' + oldTranslationX);
-        console.log('y: ' + oldTranslationY);
       }
 
       this.manipulator.setAttribute(this.selectedElements.getAll()[i].target, SVGProperties.transform, `translate(${+oldTranslationX + translationX}, ${+oldTranslationY + translationY})`);
@@ -406,7 +404,7 @@ export class SelectionService extends DrawableService {
     this.createSelectionRect();
     this.manipulator.setAttribute(this.selectionRect, CursorProperties.cursor, CursorProperties.move);
     this.setGeneratedAreaBorders();
-    if (this.selectedElements.size() === 0) {
+    if (this.selectedElements.isEmpty()) {
       this.cancelSelection();
     }
   }
