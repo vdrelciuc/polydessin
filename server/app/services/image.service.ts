@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { Collection, MongoClient, MongoClientOptions } from 'mongodb';
+import { Collection, MongoClient, MongoClientOptions, ObjectId } from 'mongodb';
 import { Image } from './../interfaces/image'
 
 const DATABASE_URL = 'mongodb+srv://polyUser:2S9bKFzIPaMdTHHT!@projects-3dncm.mongodb.net/test?retryWrites=true&w=majority';
@@ -37,6 +37,19 @@ export class ImageService {
             })
     }
 
+    async getImage(idImage: string): Promise<Image> {
+        return  this.collection.findOne({ _id: new ObjectId(idImage) })
+                .then((image: Image) => {
+                    if (image === null) {
+                        throw new Error('Image not in database');
+                    }
+                    return image;
+                })
+                .catch((error: Error) => {
+                    throw error;
+                });
+    }
+
     async addImage(image: Image): Promise<void> {
         if (this.validateImage(image)) {
             this.collection.insertOne(image).catch((error: Error) => {
@@ -48,6 +61,18 @@ export class ImageService {
     }
 
     private validateImage(image: Image): boolean {
-        return image !== null && image.title !== null && image.title !== '';
+        const containsTitle = image.title !== null && image.title !== '';
+        const containsSerial = image.serial !== null && image.serial !== '';
+        const containsInnerHtml = image.innerHtml !== null && image.innerHtml !== '';
+        return image !== null && containsTitle && containsSerial && containsInnerHtml;
+    }
+
+    async deleteImage(idImage: string): Promise<void> {
+        return this.collection
+            .findOneAndDelete({ _id: new ObjectId(idImage) })
+        .then(() => { })
+        .catch((error: Error) => {
+            throw new Error('Failed to delete image');
+        });
     }
 }

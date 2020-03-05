@@ -26,10 +26,30 @@ export class ImageController {
             });
         });
 
+        this.router.get('/:imageId', async (req: Request, res: Response, next: NextFunction) => {
+            this.imageService.getImage(req.params.imageId)
+                .then((image: Image) => {
+                    res.json(image);
+                })
+                .catch((error: Error) => {
+                    res.status(Httpstatus.NOT_FOUND).send(error.message);
+                });
+        });
+
         this.router.post('/', async (req: Request, res: Response, next: NextFunction) => {
             this.imageService.addImage(req.body)
                 .then(() => {
                     res.sendStatus(Httpstatus.CREATED).send();
+                })
+                .catch((error: Error) => {
+                    res.status(Httpstatus.NOT_FOUND).send(error.message);
+                });
+        });
+
+        this.router.delete('/:imageId', async (req: Request, res: Response, next: NextFunction) => {
+            this.imageService.deleteImage(req.params.imageId)
+                .then(() => {
+                    res.sendStatus(Httpstatus.NO_CONTENT).send();
                 })
                 .catch((error: Error) => {
                     res.status(Httpstatus.NOT_FOUND).send(error.message);
