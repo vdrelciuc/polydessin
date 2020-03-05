@@ -45,6 +45,7 @@ import { EllipseComponent } from './components/ellipse/ellipse.component';
 import { EraserComponent } from './components/eraser/eraser.component';
 import { PipetteComponent } from './components/pipette/pipette.component';
 import { SaveServerComponent } from './components/save-server/save-server.component';
+import { ErrorOnSaveComponent } from './components/save-server/error-on-save/error-on-save.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { SaveServerComponent } from './components/save-server/save-server.compon
     PolygonComponent,
     ExportComponent,
     PipetteComponent,
-    SaveServerComponent
+    SaveServerComponent,
+    ErrorOnSaveComponent
   ],
   entryComponents: [
     ColorPickerComponent,
