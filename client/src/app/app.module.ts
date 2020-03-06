@@ -1,16 +1,16 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatExpansionModule } from '@angular/material/expansion';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
+import {MatListModule} from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { AppRoutingModule, RoutingComponents } from './components/app/app-routing.module';
+import {AppRoutingModule, RoutingComponents} from './components/app/app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { BrushComponent } from './components/brush/brush.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
@@ -44,6 +44,7 @@ import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
 import { GridComponent } from './components/grid/grid.component';
+import { PipetteComponent } from './components/pipette/pipette.component';
 
 @NgModule({
   declarations: [
@@ -76,11 +77,13 @@ import { GridComponent } from './components/grid/grid.component';
     WarningDialogComponent,
     ExportComponent,
 
-    PolygonComponent,
     EllipseComponent,
     EraserComponent,
     SelectionComponent,
-    GridComponent
+    GridComponent,
+    PolygonComponent,
+    ExportComponent,
+    PipetteComponent
   ],
   entryComponents: [
     ColorPickerComponent,

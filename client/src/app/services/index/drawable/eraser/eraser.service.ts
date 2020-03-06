@@ -25,7 +25,7 @@ export class EraserService extends DrawableService {
   private preview: SVGRectElement;
   private canErase: boolean;
 
-  constructor() { 
+  constructor() {
     super();
     this.frenchName = 'Efface';
     this.leftClick = false;
@@ -34,9 +34,9 @@ export class EraserService extends DrawableService {
   }
 
   initialize(
-    manipulator: Renderer2, 
-    image:ElementRef<SVGElement>, 
-    colorSelectorService: ColorSelectorService, 
+    manipulator: Renderer2,
+    image:ElementRef<SVGElement>,
+    colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
       this.initializeProperties();
@@ -138,23 +138,23 @@ export class EraserService extends DrawableService {
   }
 
   private getInBounds(elementBounds: DOMRect, mouse: CoordinatesXY): boolean {
-    return (    
+    return (
       elementBounds.left   < mouse.getX() &&
       elementBounds.right  > mouse.getX() &&
       elementBounds.top    < mouse.getY() &&
-      elementBounds.bottom > mouse.getY()   
+      elementBounds.bottom > mouse.getY()
     );
   }
 
   private movePreview(mouse: CoordinatesXY): void {
     this.manipulator.setAttribute(
-      this.preview, 
-      SVGProperties.x, 
+      this.preview,
+      SVGProperties.x,
       (CoordinatesXY.effectiveX(this.image, mouse.getX()) - this.thickness.value / 2).toString()
     );
     this.manipulator.setAttribute(
-      this.preview, 
-      SVGProperties.y, 
+      this.preview,
+      SVGProperties.y,
       (CoordinatesXY.effectiveY(this.image, mouse.getY()) - this.thickness.value / 2).toString()
     );
   }
@@ -166,7 +166,7 @@ export class EraserService extends DrawableService {
 
   private selectElement(element: SVGGElement): void {
     const elementOnTop = { target: element, id: Number(element.getAttribute(SVGProperties.title))};
-    if(elementOnTop.target !== undefined) {      
+    if(elementOnTop.target !== undefined) {
       if(this.selectedElement === undefined) {
         this.selectedElement = elementOnTop;
         this.getColor();
@@ -176,7 +176,7 @@ export class EraserService extends DrawableService {
         this.selectedElement = elementOnTop;
         this.getColor();
       }
-      this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ? 
+      this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ?
           CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
     }
     if(this.leftClick) {

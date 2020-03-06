@@ -26,6 +26,9 @@ export class ExportComponent implements AfterViewInit {
 
   @ViewChild('mydrawing', {static: false}) canvas: ElementRef;
   @ViewChild('myDownload', {static : false}) myDownload: ElementRef;
+  @ViewChild('proccessingCanas', {static : false}) proccessingCanas: ElementRef;
+
+
 
   constructor(private dialogRef: MatDialogRef<ExportComponent>, private exportation: ExportService) {
     this.exportation.currentFilter.subscribe((filter: ImageFilter) => {
@@ -52,7 +55,7 @@ export class ExportComponent implements AfterViewInit {
 
     this.filtersMap = new Map();
     this.filtersMap.set('Aucun', ImageFilter.Aucun);
-    this.filtersMap.set('Brouillard', ImageFilter.Brouillard);
+    this.filtersMap.set('Sombre', ImageFilter.Sombre);
     this.filtersMap.set('Négatif', ImageFilter.Négatif);
     this.filtersMap.set('Constraste', ImageFilter.Constraste);
     this.filtersMap.set('Sépia', ImageFilter.Sépia);
@@ -66,6 +69,7 @@ export class ExportComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.exportation.canvas = this.canvas.nativeElement as HTMLCanvasElement;
     this.exportation.myDownload = this.myDownload as ElementRef;
+    this.exportation.originalCanvas = this.proccessingCanas.nativeElement;
   }
 
   onFormatUpdate(newFormatString: string) {
@@ -78,8 +82,8 @@ export class ExportComponent implements AfterViewInit {
   onFilterUpdate(newFilterString: string) {
     const newFilter = this.filtersMap.get(newFilterString);
     if (newFilter !== undefined) {
-      console.log(newFilter.toString());
       this.exportation.currentFilter.next(newFilter);
+      this.exportation.drawPreview(false);
     }
   }
 

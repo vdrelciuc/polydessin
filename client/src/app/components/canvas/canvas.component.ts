@@ -5,13 +5,13 @@ import { CanvasService } from 'src/app/services/canvas.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { CreateNewService } from 'src/app/services/create-new.service';
 import { EventListenerService } from 'src/app/services/events/event-listener.service';
-// import { ExportService } from 'src/app/services/export/export.service';
+import { ExportService } from 'src/app/services/export/export.service';
 import { SVGService } from 'src/app/services/index/svg/svg.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Component({
   selector: 'app-canvas',
@@ -22,6 +22,7 @@ export class CanvasComponent implements OnInit {
   @ViewChild('drawing', { static: true }) image: ElementRef<SVGElement>;
   @ViewChild('grid', { static: true }) grid: ElementRef<SVGElement>;
   @ViewChild('rect', { static: true }) rectangle: ElementRef<SVGRectElement>;
+  @ViewChild('canvas', { static: true }) invisibleCanvas: ElementRef<HTMLCanvasElement>;
   filters: string;
   width: number;
   height: number;
@@ -32,7 +33,6 @@ export class CanvasComponent implements OnInit {
   visible: boolean;
   private eventListener: EventListenerService;
 
-
   constructor(
     private manipulator: Renderer2,
     private toolSelector: ToolSelectorService,
@@ -41,15 +41,15 @@ export class CanvasComponent implements OnInit {
     private drawStack: DrawStackService,
     private canvasService: CanvasService,
     private workspaceService: WorkspaceService,
-    // private exportService: ExportService
-    ) { 
+    private exportService: ExportService
+    ) {
       this.visible = true;
     }
 
   ngOnInit() {
     this.filters = this.image.nativeElement.innerHTML;
-    this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack);
-
+    this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack,this.invisibleCanvas);
+    this.exportService.initialize(this.image);
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
     this.eventListener.initializeEvents();
     this.gridService = this.toolSelector.getGrid();
@@ -71,9 +71,9 @@ export class CanvasComponent implements OnInit {
       this.manipulator.setAttribute(this.rectangle.nativeElement , SVGProperties.height, `${canvasSize.getY()}`);
       this.resetCanvas();
     });
-    
+
     this.gridService.thickness.subscribe( (value) => {
-      this.thickness = value; 
+      this.thickness = value;
     });
 
     this.gridService.opacity.subscribe ( (value) => {
