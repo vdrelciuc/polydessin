@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {MatDialogRef} from "@angular/material/dialog";
 
 @Component({
@@ -6,12 +6,17 @@ import {MatDialogRef} from "@angular/material/dialog";
   templateUrl: './save-server.component.html',
   styleUrls: ['./save-server.component.scss']
 })
-export class SaveServerComponent implements OnInit {
+export class SaveServerComponent {
 
-  constructor(private dialogRef: MatDialogRef<SaveServerComponent>) { }
+  title: string;
+  tags : Set<string>;
+  tagName : string;
 
-  ngOnInit() {
+  constructor(private dialogRef: MatDialogRef<SaveServerComponent>) {
+    this.tags = new  Set<string>();
   }
+
+
 
   onDialogClose() {
     this.dialogRef.close();
@@ -19,7 +24,16 @@ export class SaveServerComponent implements OnInit {
 
   saveConfirmation() {
     this.onDialogClose();
+    console.log(this.title);
     // saving logic
   }
 
+  addTag(etiquette : string): void{
+    this.tags.add(etiquette);
+    // todo add warning if has ettiquette
+  }
+
+  removeTag(etiquette : string): void{
+    this.tags.delete(etiquette);
+  }
 }
