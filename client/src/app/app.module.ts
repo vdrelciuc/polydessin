@@ -91,6 +91,7 @@ import { ErrorOnSaveComponent } from './components/save-server/error-on-save/err
   entryComponents: [
     ColorPickerComponent,
     CreateNewComponent,
+    SaveServerComponent,
     WarningDialogComponent,
     UserGuideComponent,
     ExportComponent

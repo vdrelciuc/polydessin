@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-save-server',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SaveServerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dialogRef: MatDialogRef<SaveServerComponent>) { }
 
   ngOnInit() {
+  }
+
+  onDialogClose() {
+    this.dialogRef.close();
+  }
+
+  saveConfirmation() {
+    this.onDialogClose();
+    // saving logic
   }
 
 }

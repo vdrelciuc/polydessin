@@ -8,6 +8,7 @@ import { CreateNewComponent } from '../create-new/create-new.component';
 import { ExportComponent } from '../export/export.component';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
 import {ExportService} from "../../services/export/export.service";
+import {SaveServerComponent} from "../save-server/save-server.component";
 
 @Component({
   selector: 'app-sidebar',
@@ -19,6 +20,7 @@ export class SidebarComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   private createNewDialog: MatDialogRef<CreateNewComponent>;
   private exportDialog: MatDialogRef<ExportComponent>;
+  private saveServerDialog: MatDialogRef<SaveServerComponent>;
 
   constructor(
     public toolSelectorService: ToolSelectorService,
@@ -109,8 +111,8 @@ export class SidebarComponent implements OnInit {
       (event) => {
         this.toolSelectorService.setCurrentTool(Tools.Eraser);
       }
-    )
-  );
+      )
+    );
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: '3', description: 'Selecting polygon with shortcut' }).subscribe(
         (event) => {
@@ -136,6 +138,16 @@ export class SidebarComponent implements OnInit {
       )
     );
 
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.s', description: 'Opening Save on Server' }).subscribe(
+      (event) => {
+        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+        this.dialog.closeAll();
+        this.saveServerProject();
+      }
+      )
+    );
+
+
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.z', description: 'Undo' }).subscribe(
         (event) => {
           this.toolSelectorService.memory.undo();
@@ -149,12 +161,21 @@ export class SidebarComponent implements OnInit {
         }
       )
     );
+
   }
 
   selectTool(tool: Tools): void {
     this.toolSelectorService.setCurrentTool(tool);
   }
 
+  saveServerProject(): void {
+    this.subscriptions.forEach((subscription) => subscription.remove(subscription));
+    this.bypassBrowserShortcuts();
+    this.saveServerDialog = this.dialog.open(SaveServerComponent, {disableClose: true});
+    this.saveServerDialog.afterClosed().subscribe(() => {
+      this.setupShortcuts();
+    });
+  }
 
   createNewProject(): void {
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
@@ -174,6 +195,7 @@ export class SidebarComponent implements OnInit {
       });
     });
   }
+
 
   openDialog(): void {
     this.dialog.open(UserGuideComponent, {
