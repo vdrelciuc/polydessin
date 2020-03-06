@@ -9,7 +9,7 @@ import { Tools } from 'src/app/enums/tools';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { Stack } from 'src/app/classes/stack';
 import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
-import { SelectionTransformService } from './selection-transform.service';
+import { Transform } from 'src/app/classes/transformations';
 //import { InvertedElement } from 'src/app/interfaces/InvertedElement';
 
 @Injectable({
@@ -46,21 +46,19 @@ export class SelectionService extends DrawableService {
   private oldPointerOnMove: CoordinatesXY;
 
   private transFormShortcuts: SelectionTransformShortcutService;
-  private transformService: SelectionTransformService;
   constructor() {
     super();
     this.frenchName = 'Sélection';
     this.selectedElements = new Stack<SVGElementInfos>();
     this.elementsToInvert = new Stack<SVGElementInfos>();
     this.transFormShortcuts = new SelectionTransformShortcutService();
-    this.transformService = new SelectionTransformService();
   }
 
   initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
     this.setupProperties();
 
-    SelectionTransformService.needsUpdate.subscribe(
+    Transform.needsUpdate.subscribe(
       () => { this.setGeneratedAreaBorders(); }
     );
   }
@@ -173,20 +171,8 @@ export class SelectionService extends DrawableService {
     this.isSingleClick = false;
     const translationX = this.mousePosition.getX() - this.oldPointerOnMove.getX();
     const translationY = this.mousePosition.getY() - this.oldPointerOnMove.getY();
-    for (let i = 0; i < this.selectedElements.size(); i++) {
-      const initialElementTransform = this.selectedElements.getAll()[i].target.getAttribute(SVGProperties.transform);
-      let oldTranslationX = '0';
-      let oldTranslationY = '0';
-      if (initialElementTransform !== null) {
-        const oldTranslate = initialElementTransform.substring(initialElementTransform.indexOf("(") + 1, initialElementTransform.indexOf(")"));
-        oldTranslationX = oldTranslate.split(',')[0];
-        oldTranslationY = oldTranslate.substr(oldTranslate.indexOf(' ') + 1);
-      }
-
-      this.manipulator.setAttribute(this.selectedElements.getAll()[i].target, SVGProperties.transform, `translate(${+oldTranslationX + translationX}, ${+oldTranslationY + translationY})`);
-    }
-    this.oldPointerOnMove = new CoordinatesXY(this.mousePosition.getX(), this.mousePosition.getY())
-    this.setGeneratedAreaBorders();
+    Transform.translate(translationX, translationY);
+    this.oldPointerOnMove = new CoordinatesXY(this.mousePosition.getX(), this.mousePosition.getY());
   }
 
   private resizeOnMove(): void {
@@ -489,7 +475,7 @@ export class SelectionService extends DrawableService {
 
       this.manipulator.appendChild(this.subElement, this.selectionGroup);
 
-      this.transformService.setElements(this.selectedElements, this.manipulator);
+      Transform.setElements(this.selectedElements, this.manipulator);
     } else {
       this.manipulator.removeChild(this.subElement, this.selectionGroup);
     }

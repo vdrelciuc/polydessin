@@ -1,5 +1,5 @@
 import { Injectable, Renderer2 } from '@angular/core';
-import { SelectionTransformService } from './selection-transform.service';
+import { Transform } from 'src/app/classes/transformations';
 
 @Injectable({
   providedIn: 'root'
@@ -25,12 +25,11 @@ export class SelectionTransformShortcutService {
   private isMoving: boolean;
   private hasWaitedHalfSec: boolean;
 
+  private autoMoveHasInstance: boolean;
+
   private shortcutListener: (() => void)[] = [];
 
-  private selectionTransform: SelectionTransformService;
-  constructor() {
-    this.selectionTransform = new SelectionTransformService();
-  }
+  constructor() { }
 
   setupShortcuts(manipulator: Renderer2): void {
     this.deleteShortcuts();
@@ -55,26 +54,25 @@ export class SelectionTransformShortcutService {
       case this.left:
         this.leftArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          // Move
-          this.selectionTransform.translate(-this.unitMove, 0);
+          Transform.translate(-this.unitMove, 0);
         }
         break;
       case this.right:
         this.rightArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          // Move
+          Transform.translate(this.unitMove, 0);
         }
         break;
       case this.up:
         this.upArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          // Move
+          Transform.translate(0, -this.unitMove);
         }
         break;
       case this.down:
         this.downArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          // Move
+          Transform.translate(0, this.unitMove);
         }
         break;
       default:
@@ -82,6 +80,12 @@ export class SelectionTransformShortcutService {
     }
 
     this.isMoving = true;
+    if (!this.autoMoveHasInstance) {
+      this.autoMoveHasInstance = true;
+      this.autoMove();
+    }
+
+    this.lastKeyPressed = keyPressed;
   }
 
   private onKeyUp(keyReleased: string): void {
@@ -109,18 +113,26 @@ export class SelectionTransformShortcutService {
     this.lastKeyPressed = '';
   }
 
-  async autoMove(): Promise<void> {
+  private async autoMove(): Promise<void> {
     if (this.isMoving) {
-      this.translate();
-      setTimeout(() => this.autoMove(), this.hasWaitedHalfSec ? this.moveDelay : this.firstDelay);
-      this.hasWaitedHalfSec = true;
+      
+      if (this.hasWaitedHalfSec) {
+        this.translate();
+        setTimeout(() => this.autoMove(), this.moveDelay);
+      } else {
+        this.hasWaitedHalfSec = true;
+        setTimeout(() => this.autoMove(), this.firstDelay);
+      }
     } else {
       this.hasWaitedHalfSec = false;
+      this.autoMoveHasInstance = false;
     }
   }
 
   private translate() {
     const translateX = (this.leftArrowIsPressed ? - this.unitMove : 0) + (this.rightArrowIsPressed ? this.unitMove : 0);
     const translateY = (this.upArrowIsPressed ? - this.unitMove : 0) + (this.downArrowIsPressed ? this.unitMove : 0);
+
+    Transform.translate(translateX, translateY);
   }
 }
