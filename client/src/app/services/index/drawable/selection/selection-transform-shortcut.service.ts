@@ -1,4 +1,5 @@
 import { Injectable, Renderer2 } from '@angular/core';
+import { SelectionTransformService } from './selection-transform.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,10 @@ export class SelectionTransformShortcutService {
 
   private shortcutListener: (() => void)[] = [];
 
-  constructor() { }
+  private selectionTransform: SelectionTransformService;
+  constructor() {
+    this.selectionTransform = new SelectionTransformService();
+  }
 
   setupShortcuts(manipulator: Renderer2): void {
     this.deleteShortcuts();
@@ -52,6 +56,7 @@ export class SelectionTransformShortcutService {
         this.leftArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
           // Move
+          this.selectionTransform.translate(-this.unitMove, 0);
         }
         break;
       case this.right:

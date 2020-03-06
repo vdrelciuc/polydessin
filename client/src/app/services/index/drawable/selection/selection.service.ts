@@ -9,6 +9,7 @@ import { Tools } from 'src/app/enums/tools';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { Stack } from 'src/app/classes/stack';
 import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
+import { SelectionTransformService } from './selection-transform.service';
 //import { InvertedElement } from 'src/app/interfaces/InvertedElement';
 
 @Injectable({
@@ -45,17 +46,23 @@ export class SelectionService extends DrawableService {
   private oldPointerOnMove: CoordinatesXY;
 
   private transFormShortcuts: SelectionTransformShortcutService;
-
+  private transformService: SelectionTransformService;
   constructor() {
     super();
     this.frenchName = 'Sélection';
     this.selectedElements = new Stack<SVGElementInfos>();
     this.elementsToInvert = new Stack<SVGElementInfos>();
     this.transFormShortcuts = new SelectionTransformShortcutService();
+    this.transformService = new SelectionTransformService();
   }
 
   initialize(manipulator: Renderer2, image: ElementRef, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
+    this.setupProperties();
+
+    SelectionTransformService.needsUpdate.subscribe(
+      () => { this.setGeneratedAreaBorders(); }
+    );
   }
 
   initializeProperties(): void {
@@ -481,6 +488,8 @@ export class SelectionService extends DrawableService {
       this.manipulator.setAttribute(this.controlPoints[3], SVGProperties.y, ((top + bottom) / 2 - this.controlPointSize / 2).toString());
 
       this.manipulator.appendChild(this.subElement, this.selectionGroup);
+
+      this.transformService.setElements(this.selectedElements, this.manipulator);
     } else {
       this.manipulator.removeChild(this.subElement, this.selectionGroup);
     }

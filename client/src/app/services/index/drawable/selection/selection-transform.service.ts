@@ -9,14 +9,16 @@ import { SVGProperties } from 'src/app/classes/svg-html-properties';
   providedIn: 'root'
 })
 export class SelectionTransformService {
-  
-  private needsUpdate: BehaviorSubject<boolean>;
-  private elementsToTransform: SVGElementInfos[] = [];
 
-  constructor(private manipulator: Renderer2) { }
+  static needsUpdate: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private static elementsToTransform: SVGElementInfos[] = [];
+  private static manipulator: Renderer2;
+  constructor() { }
 
-  setElements(elements: Stack<SVGElementInfos>) {
-    this.elementsToTransform = elements.getAll();
+  setElements(elements: Stack<SVGElementInfos>, manipulator: Renderer2) {
+
+    SelectionTransformService.elementsToTransform = elements.getAll();
+    SelectionTransformService.manipulator = manipulator;
   }
 
   transform(transformType: Transform, paramater1: number, paramater2?: number) {
@@ -43,18 +45,30 @@ export class SelectionTransformService {
     this.oldPointerOnMove = new CoordinatesXY(this.mousePosition.getX(), this.mousePosition.getY())
     this.setGeneratedAreaBorders();*/
   }
-  
+
   translate(translationX: number, translationY: number) {
-    for (let element of this.elementsToTransform) {
+
+    for (let element of SelectionTransformService.elementsToTransform) {
+
       const initialElementTransform = element.target.getAttribute(SVGProperties.transform);
       if (initialElementTransform === null) {
-        this.manipulator.setAttribute(element, SVGProperties.transform, `${Transform.translation}(${translationX}, ${translationY})`)
+        SelectionTransformService.manipulator.setAttribute(element.target, SVGProperties.transform, `${Transform.translation}(${translationX}, ${translationY})`)
       } else {
-        const indexOfOldTranslate = initialElementTransform.indexOf("translate(");
-        const oldTranslate = initialElementTransform.substring(initialElementTransform.indexOf("(") + 1, initialElementTransform.indexOf(")"));
-        const newTranslationX = oldTranslate.split(',')[0];
-        const newTranslationY = oldTranslate.substr(oldTranslate.indexOf(' ') + 1);
+        const indexOfOldTranslate = initialElementTransform.indexOf('translate(');
+        if (indexOfOldTranslate === -1) {
+          SelectionTransformService.manipulator.setAttribute(element.target, SVGProperties.transform, `${initialElementTransform} ${Transform.translation}(${translationX}, ${translationY})`)
+        } else {
+          const indexOfOldX = initialElementTransform.indexOf('(', indexOfOldTranslate) + 1;
+          const indexOfOldY = initialElementTransform.indexOf(')', indexOfOldTranslate);
+          const oldTranslate = initialElementTransform.substring(indexOfOldX, indexOfOldY);
+          const oldTranslationX = oldTranslate.split(',')[0];
+          const oldTranslationY = oldTranslate.split(',')[1];
+          const newTransform = `${initialElementTransform.substring(0, indexOfOldX)}${+oldTranslationX + translationX}, ${+oldTranslationY + translationY}${initialElementTransform.substring(indexOfOldY)}`;
+          SelectionTransformService.manipulator.setAttribute(element.target, SVGProperties.transform, newTransform);
+        }
       }
     }
+    SelectionTransformService.needsUpdate.next(true);
+
   }
 }
