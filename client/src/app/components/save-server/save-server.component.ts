@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import { MatDialogRef} from "@angular/material/dialog";
+import {ExportService} from "../../services/export/export.service";
 
 
 @Component({
@@ -7,18 +8,26 @@ import { MatDialogRef} from "@angular/material/dialog";
   templateUrl: './save-server.component.html',
   styleUrls: ['./save-server.component.scss']
 })
-export class SaveServerComponent {
+export class SaveServerComponent implements  AfterViewInit{
 
   title: string;
   isValid = false;
   tags : Set<string>;
   tagName : string;
 
-  constructor(private dialogRef: MatDialogRef<SaveServerComponent>) {
+  @ViewChild('mydrawing', {static: false}) canvas: ElementRef;
+  @ViewChild('proccessingCanas', {static : false}) proccessingCanas: ElementRef;
+
+  constructor(private dialogRef: MatDialogRef<SaveServerComponent>,
+              private exportation : ExportService) {
     this.tags = new  Set<string>();
   }
 
+  ngAfterViewInit() {
+    this.exportation.originalCanvas = this.proccessingCanas.nativeElement ;
+    this.exportation.canvas = this.canvas.nativeElement;
 
+  }
 
   onDialogClose() {
     this.dialogRef.close();

@@ -169,12 +169,16 @@ export class SidebarComponent implements OnInit {
   }
 
   saveServerProject(): void {
-    this.subscriptions.forEach((subscription) => subscription.remove(subscription));
-    this.bypassBrowserShortcuts();
-    this.saveServerDialog = this.dialog.open(SaveServerComponent, {disableClose: true});
-    this.saveServerDialog.afterClosed().subscribe(() => {
-      this.setupShortcuts();
-    });
+    this.exportService.SVGToCanvas().then(() => {
+      this.subscriptions.forEach((subscription) => subscription.remove(subscription));
+      this.bypassBrowserShortcuts();
+      this.saveServerDialog = this.dialog.open(SaveServerComponent, {disableClose: true});
+      this.saveServerDialog.afterClosed().subscribe(() => {
+        this.setupShortcuts();
+      });
+    })
+
+
   }
 
   createNewProject(): void {
