@@ -19,6 +19,7 @@ export class ExportComponent implements AfterViewInit {
   selectedFilter: string;
   exportTypes: string[];
   selectedExportType: string;
+  title: string;
 
   formatsMap: Map<string, ImageFormat>;
   filtersMap: Map<string, ImageFilter>;
@@ -27,8 +28,6 @@ export class ExportComponent implements AfterViewInit {
   @ViewChild('mydrawing', {static: false}) canvas: ElementRef;
   @ViewChild('myDownload', {static : false}) myDownload: ElementRef;
   @ViewChild('proccessingCanas', {static : false}) proccessingCanas: ElementRef;
-
-
 
   constructor(private dialogRef: MatDialogRef<ExportComponent>, private exportation: ExportService) {
     this.exportation.currentFilter.subscribe((filter: ImageFilter) => {
@@ -43,6 +42,7 @@ export class ExportComponent implements AfterViewInit {
     this.exportFormats = Object.keys(ImageFormat);
     this.exportFilters = Object.keys(ImageFilter);
     this.exportTypes = Object.keys(ImageExportType);
+
 
     this.initializeMaps();
   }
@@ -100,7 +100,7 @@ export class ExportComponent implements AfterViewInit {
 
   exportConfirmation() {
     this.onDialogClose();
-    this.exportation.export();
+    this.exportation.export(this.title);
   }
 
 }

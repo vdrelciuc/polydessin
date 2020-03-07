@@ -48,15 +48,15 @@ export class ExportService {
     this.imageAfterDeserialization.src = image64;
   }
 
-  export(): void {
+  export(imageTitle: string): void {
     if (this.currentFormat.getValue() === ImageFormat.SVG) {
       this.applyFilterFomSvg();
-      this.downloadSVG();
+      this.downloadSVG(imageTitle);
     } else {
       const context = this.originalCanvas.getContext('2d');
       if (context !== null) {
         this.applyFilterFromCanvas(context);
-        this.downloadCorrectType();
+        this.downloadCorrectType(imageTitle);
       }
     }
   }
@@ -111,7 +111,7 @@ export class ExportService {
   }
 
   // theory from https://stackoverflow.com/questions/17527713/force-browser-to-download-image-files-on-click
-  downloadCorrectType(): void {
+  downloadCorrectType(imageTitle: string): void {
     if (this.currentFormat.getValue() === ImageFormat.JPEG) {
       this.imageAfterDeserialization.src = this.originalCanvas.toDataURL('image/jpeg');
     } else if (this.currentFormat.getValue() === ImageFormat.PNG) {
@@ -119,7 +119,7 @@ export class ExportService {
     }
 
     this.myDownload.nativeElement.setAttribute('href', this.imageAfterDeserialization.src);
-    const finalString = 'img.' + this.currentFormat.getValue().toString();
+    const finalString = imageTitle + '.' + this.currentFormat.getValue().toString();
     this.myDownload.nativeElement.setAttribute('download', finalString);
   }
 
@@ -145,9 +145,9 @@ export class ExportService {
     }
   }
 
-  downloadSVG(): void {
+  downloadSVG(imageTitle: string): void {
     this.myDownload.nativeElement.setAttribute('href', this.deserializeImageToSvg());
-    const finalString = 'img.svg';
+    const finalString = imageTitle + '.svg';
     this.myDownload.nativeElement.setAttribute('download', finalString);
   }
 

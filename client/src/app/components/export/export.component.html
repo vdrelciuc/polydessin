@@ -1,4 +1,5 @@
 <div class="wrapper">
+  <h1>Options d'exportation</h1>
   <div class="option-section">
     <div class="left">
       <div class="left-section">
@@ -36,7 +37,7 @@
           <form class="info">
             <mat-form-field>
               <mat-label class="text">Titre</mat-label>
-              <input matInput>
+              <input matInput [(ngModel)]="this.title" [ngModelOptions]="{standalone: true}">
             </mat-form-field>
             <!--
             <mat-form-field>
