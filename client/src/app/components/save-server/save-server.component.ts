@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
-import { MatDialogRef} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ExportService} from "../../services/export/export.service";
+import {ErrorOnSaveComponent} from "./error-on-save/error-on-save.component";
 
 
 @Component({
@@ -11,7 +12,8 @@ import {ExportService} from "../../services/export/export.service";
 export class SaveServerComponent implements  AfterViewInit{
 
   title: string;
-  isValid = false;
+  isValidTitle = false;
+  isValidTag = false;
   tags : Set<string>;
   tagName : string;
 
@@ -19,6 +21,7 @@ export class SaveServerComponent implements  AfterViewInit{
   @ViewChild('proccessingCanas', {static : false}) proccessingCanas: ElementRef;
 
   constructor(private dialogRef: MatDialogRef<SaveServerComponent>,
+              private dialog: MatDialog,
               private exportation : ExportService) {
     this.tags = new  Set<string>();
   }
@@ -34,34 +37,46 @@ export class SaveServerComponent implements  AfterViewInit{
   }
 
   saveConfirmation() {
-    this.onDialogClose();
-    console.log(this.title);
-    // saving logic
+    if (!this.isValidTitle || !this.isValidTag) {
+      const warning = this.dialog.open(ErrorOnSaveComponent, {disableClose: true});
+      warning.componentInstance.errorTitle = this.isValidTitle;
+      warning.componentInstance.errorTag = this.isValidTag;
+    } else {
+      this.onDialogClose();
+      console.log(this.title);
+      // saving logic
+    }
+
   }
 
   addTag(etiquette : string): void{
-    if (etiquette ==='') {
-      return;
+    if (this.checkValidity(etiquette)){
+      this.tags.add(etiquette);
     }
-    this.tags.add(etiquette);
-    // todo add warning if has ettiquette
+    this.isValidTag = true;
   }
 
   removeTag(etiquette : string): void{
     this.tags.delete(etiquette);
+    if (this.tags.size ===0) {
+      this.isValidTag = false;
+    }
   }
 
   // inspired from https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
-  checkValidity(){
-    for(let i = 0 ; i < this.title.length ; ++i ){
-      let asci = this.title.charCodeAt(i);
+  checkValidity(field :string): boolean{
+    if (field === undefined || field === '') {
+      return false;
+    }
+    for(let i = 0 ; i < field.length ; ++i ){
+      let asci = field.charCodeAt(i);
       if (!(asci > 47 && asci < 58) && // numeric (0-9)
           !(asci > 64 && asci < 91) && // upper alpha (A-Z)
           !(asci > 96 && asci < 123)) { // lower alpha (a-z)
-        this.isValid = false;
-        return
+        return false;
       }
     }
-    this.isValid = true;
+
+    return true;
   }
 }

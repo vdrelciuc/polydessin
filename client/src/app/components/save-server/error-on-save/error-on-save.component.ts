@@ -7,9 +7,11 @@ import { Component } from '@angular/core';
 })
 export class ErrorOnSaveComponent  {
 
-  errors : [boolean,  boolean, boolean];
+  errorTag :boolean;
+  errorTitle: boolean;
 
-  constructor() { }
+  constructor() {
+  }
 
 
 }

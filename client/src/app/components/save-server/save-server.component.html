@@ -5,8 +5,9 @@
         <div class="details">
           <form class="info">
             <mat-form-field>
-              <mat-label class="text">Titre</mat-label>
-              <input [(ngModel)]="title" [ngModelOptions]="{standalone: true}" matInput (change)="checkValidity()" >
+              <mat-label class="text" >Titre</mat-label>
+              <input [(ngModel)]="title" (change)="isValidTitle=checkValidity(title)"
+                     [ngModelOptions]="{standalone: true}" matInput >
             </mat-form-field>
             <div class="icon" [matTooltip]="'Seuls les charactères alphanumérique seront acceptés pour les titres et ' +
            'les étiquettes. Les espaces blancs ne sont pas acceptés et vos étiquettes et votre titres ne peuvent être vides. '"
