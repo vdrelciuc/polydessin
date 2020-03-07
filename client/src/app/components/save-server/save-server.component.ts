@@ -29,6 +29,9 @@ export class SaveServerComponent {
   }
 
   addTag(etiquette : string): void{
+    if (etiquette ==='') {
+      return;
+    }
     this.tags.add(etiquette);
     // todo add warning if has ettiquette
   }
