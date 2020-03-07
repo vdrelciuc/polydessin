@@ -37,6 +37,11 @@
   flex-direction: column;
 }
 
+.icon{
+  float: right;
+  padding-top: 10px;
+}
+
 ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
   color: whitesmoke !important;
 }
@@ -97,9 +102,11 @@ h5 {
 }
 
 .add-tag-button {
-  background-color: greenyellow;
+  background-color: $vivid;
   outline: none;
   float: right;
+  right: 200px;
+  margin-top: 8px;
 }
 
 .list-tags{

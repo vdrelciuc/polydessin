@@ -8,7 +8,15 @@
               <mat-label class="text">Titre</mat-label>
               <input [(ngModel)]="title" [ngModelOptions]="{standalone: true}" matInput (change)="checkValidity()" >
             </mat-form-field>
+            <div class="icon" [matTooltip]="'Seuls les charactères alphanumérique seront acceptés pour les titres et ' +
+           'les étiquettes. Les espaces blancs ne sont pas acceptés et vos étiquettes et votre titres ne peuvent être vides. '"
+                 matTooltipPosition="below">
+              <button mat-button>
+                <img src="../../../assets/icons/guide.svg">
+              </button>
+            </div>
           </form>
+
         </div>
       </div>
       <div class="left-section">
