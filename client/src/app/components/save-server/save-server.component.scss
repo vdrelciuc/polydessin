@@ -91,12 +91,12 @@ h5 {
 
 }
 
-#confirm-button {
+.confirm-button {
   background-color: $vivid;
   outline: none;
 }
 
-#add-tag-button {
+.add-tag-button {
   background-color: greenyellow;
   outline: none;
   float: right;
@@ -109,6 +109,10 @@ h5 {
   font-size: 1.2em !important;
   border-radius: 15px !important;
   margin-bottom: 4px;
+}
+
+#error-message{
+  color: red;
 }
 
 #delete{
