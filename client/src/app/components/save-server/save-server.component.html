@@ -22,7 +22,9 @@
         </form>
         <!-- todo add angular material add list element -->
         <mat-action-list>
-          <button *ngFor="let tag of tags" mat-list-item (click)="removeTag(tag)">{{tag}}</button>
+          <button class="tag" *ngFor="let tag of tags" mat-list-item (click)="removeTag(tag)">{{tag}}
+            <img id="delete" width="12px" height="12px" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-close-circled-512.png" alt="close Icon">
+          </button>
         </mat-action-list>
 
       </div>
