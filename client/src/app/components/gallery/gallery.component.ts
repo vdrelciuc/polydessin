@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {MatDialogRef} from "@angular/material/dialog";
+import {SaveServerService} from "../../services/saveServer/save-server.service";
 
 @Component({
   selector: 'app-gallery',
@@ -9,9 +10,16 @@ import {MatDialogRef} from "@angular/material/dialog";
 export class GalleryComponent {
 
 
-  isSearchByTags : boolean;
+  isSearchByTags: boolean;
+  isValidTag: boolean;
+  tags: Set<string>;
+  tagName: string;
 
-  constructor(private dialogRef : MatDialogRef<GalleryComponent>) {
+  constructor(private dialogRef: MatDialogRef<GalleryComponent>,
+              private saveService: SaveServerService) {
+    this.isSearchByTags = true;
+    this.tags = new  Set<string>();
+
   }
 
   onDialogClose() {
@@ -23,6 +31,13 @@ export class GalleryComponent {
     //load logic goes here
   }
 
+  addTag(tag: string): void {
+    this.isValidTag = this.saveService.addTag(tag, this.tags);
+  }
+
+  removeTag(tag: string): void {
+    this.isValidTag = this.saveService.removeTag(tag, this.tags);
+  }
 
 
 }
