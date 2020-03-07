@@ -4,11 +4,10 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ShapeStyle } from 'src/app/classes/shape-style';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +31,7 @@ export class PolygonService extends DrawableService {
   protected perimeter: SVGPolygonElement;
   protected perimeterAlternative: SVGPolygonElement;
   protected ratioYX: number;
+  protected ID: number;
 
   private shapeIsEmpty: boolean;
 
@@ -80,6 +80,7 @@ export class PolygonService extends DrawableService {
       // This case happens if the mouse button was released out of canvas: the shaped is confirmed on next mouse click
       this.onMouseRelease(event);
     } else if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
+      this.ID = this.drawStack.getNextID();
       this.isChanging = true;
       this.startDraw();
       this.shapeCorner = CoordinatesXY.getEffectiveCoords(this.image, event);
@@ -93,16 +94,14 @@ export class PolygonService extends DrawableService {
       this.isChanging = false;
       if (this.shapeIsEmpty) {
         this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+      } else {
+        this.manipulator.removeChild(this.subElement, this.perimeter);
+        this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
+        this.drawStack.addElementWithInfos({
+          target: this.subElement,
+          id: this.ID
+        });
       }
-      this.manipulator.removeChild(this.subElement, this.perimeter);
-      this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
-
-      const nextID = this.drawStack.getNextID();
-      this.drawStack.addElementWithInfos({
-        target: this.subElement,
-        id: nextID
-      });
-      this.manipulator.setAttribute(this.subElement, SVGProperties.title, nextID.toString());
     }
   }
 
@@ -125,7 +124,7 @@ export class PolygonService extends DrawableService {
         width = height / this.ratioYX;
       }
 
-      this.radius = height / (this.nSides % 2 ? 1 + Math.cos(this.theta / 2) : 2 * Math.cos(this.theta / 2));
+      this.radius = height / (this.nSides % 2 ? 1 + Math.cos(this.theta / 2) : 2);
       let originX: number;
       let originY: number;
       originX = this.shapeCorner.getX() + ((quadrant === 1 || quadrant === 4) ? width / 2 : -width / 2);
@@ -142,7 +141,7 @@ export class PolygonService extends DrawableService {
   }
 
   calculateRatioYX(): void {
-    let angle = ((Math.PI / 2) - (this.theta / 2));
+    let angle = (Math.PI / 2);
     while (true) {
       if (Math.cos(angle) < Math.cos(angle - this.theta)) {
         angle -= this.theta;
@@ -152,29 +151,17 @@ export class PolygonService extends DrawableService {
     }
 
     const width = 2 * Math.cos(angle);
-    const height = ((this.nSides % 2) ? 1 + Math.cos(this.theta / 2) : 2 * Math.cos(this.theta / 2));
+    const height = ((this.nSides % 2) ? 1 + Math.cos(this.theta / 2) : 2);
 
     this.ratioYX = height / width;
-    console.log(this.ratioYX);
   }
 
   protected updateDraw(): void {
-    if (this.shapeStyle.hasBorder) {
-      const thicknessRadius = this.shapeStyle.thickness / 2 / Math.sin((this.nSides - 2) * Math.PI / this.nSides / 2);
-      if (this.radius > thicknessRadius) {
-        this.radius -= thicknessRadius;
-        this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, (this.shapeStyle.thickness).toString());
-      } else {
-        const newThickness = this.radius * Math.sin((this.nSides - 2) * Math.PI / this.nSides / 2);
-        this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, (newThickness).toString());
-        this.radius /= 2;
-      }
-    }
     let points = '';
 
-    let angle = this.theta / 2 + Math.PI / 2;
+    let angle = -Math.PI / 2;
     for (let i = 0; i < this.nSides; i++) {
-      points += `${this.shapeOrigin.getX() + this.radius * Math.cos(angle)},${this.shapeOrigin.getY() + this.radius * Math.sin(angle)} `
+      points += `${this.shapeOrigin.getX() + this.radius * Math.cos(angle)},${this.shapeOrigin.getY() + this.radius * Math.sin(angle)} `;
       angle += this.theta;
     }
     let perimeterPoints = `${this.shapeCorner.getX()},${this.shapeCorner.getY()} `;
@@ -202,6 +189,7 @@ export class PolygonService extends DrawableService {
     // Adding border properties
     if (this.shapeStyle.hasBorder) {
       this.manipulator.setAttribute(this.polygon, SVGProperties.color, this.shapeStyle.borderColor.getHex());
+      this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, (this.shapeStyle.thickness * 2).toString());
       this.manipulator.setAttribute(this.polygon, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
     } else {
       this.manipulator.setAttribute(this.polygon, SVGProperties.color, 'none');
@@ -214,8 +202,9 @@ export class PolygonService extends DrawableService {
   startDraw(): void {
     // Creating elements
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Polygon);
     this.polygon = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.subElement, SVGProperties.title, this.ID.toString());
+    this.manipulator.setAttribute(this.polygon, 'id', `polygon${this.ID}`);
 
     // Creating perimeter
     this.perimeter = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
@@ -228,11 +217,21 @@ export class PolygonService extends DrawableService {
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.dashedBorder, '4,4');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.dashedBorderOffset, '4');
+
+    // setting clip-path
+    this.manipulator.setAttribute(this.polygon, 'clip-path', `url(#clip${this.ID})`);
+    const clip = this.manipulator.createElement('clipPath', 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(clip, 'id', `clip${this.ID}`);
+    const use = this.manipulator.createElement('use', 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(use, 'href', `#polygon${this.ID}`);
+
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.polygon);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
     this.manipulator.appendChild(this.subElement, this.perimeter);
     this.manipulator.appendChild(this.subElement, this.perimeterAlternative);
+    this.manipulator.appendChild(this.subElement, clip);
+    this.manipulator.appendChild(clip, use);
   }
   endTool(): void {
     if (this.isChanging) {
