@@ -47,6 +47,7 @@ import { GridComponent } from './components/grid/grid.component';
 import { PipetteComponent } from './components/pipette/pipette.component';
 import { SaveServerComponent } from './components/save-server/save-server.component';
 import { ErrorOnSaveComponent } from './components/save-server/error-on-save/error-on-save.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { ErrorOnSaveComponent } from './components/save-server/error-on-save/err
     ExportComponent,
     PipetteComponent,
     SaveServerComponent,
-    ErrorOnSaveComponent
+    ErrorOnSaveComponent,
+    GalleryComponent
   ],
   entryComponents: [
     ColorPickerComponent,
