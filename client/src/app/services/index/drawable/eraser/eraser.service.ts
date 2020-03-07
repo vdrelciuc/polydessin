@@ -24,6 +24,7 @@ export class EraserService extends DrawableService {
   private leftClick: boolean;
   private preview: SVGRectElement;
   private canErase: boolean;
+  private brushDelete: SVGElementInfos;
 
   constructor() { 
     super();
@@ -58,11 +59,9 @@ export class EraserService extends DrawableService {
   onMouseMove(event: MouseEvent): void {
     if(this.canErase) {
       this.movePreview(new CoordinatesXY(event.clientX, event.clientY));
-      console.log(event.clientX + ' ' + event.clientY);
       if(this.selectedElement !== undefined)
       {
         const elementBounds = this.selectedElement.target.getBoundingClientRect();
-        console.log(elementBounds);
         if(!this.getInBounds(elementBounds as DOMRect, new CoordinatesXY(event.clientX, event.clientY))) {
           this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
           this.selectedElement = undefined as unknown as SVGElementInfos;
@@ -86,35 +85,34 @@ export class EraserService extends DrawableService {
   onMousePress(event: MouseEvent): void {
     if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = true;
+      this.brushDelete.target = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+      this.brushDelete.id = 0.1;
     }
   }
 
   onMouseRelease(event: MouseEvent): void {
     if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = false;
+      this.undoRedo.addToRemoved(this.brushDelete);
     }
   }
 
   endTool(): void {
     this.leftClick = false;
-    this.manipulator.removeChild(this.image, this.preview);
+    this.manipulator.removeChild(this.image.nativeElement, this.preview);
     if(this.selectedElement !== undefined) {
-      console.log('here');
-      console.log(this.selectedElement.target.firstChild);
-      console.log(this.oldBorder);
       this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
       this.selectedElement = undefined as unknown as SVGElementInfos;
     }
     for(let element of this.elements.getAll()) {
       element.target.onmouseover = null;
     }
+    delete(this.preview);
   }
 
   addingMouseMoveEvent(element : any){
     this.selectElement(element.target.parentElement as SVGGElement);
   }
-
-
 
   onSelect(): void {
     this.updateSVGElements();
@@ -123,13 +121,14 @@ export class EraserService extends DrawableService {
         if (element.target !== null){
           this.addingMouseMoveEvent(element);
         }
-
       }
     }
     if(this.preview === undefined) {
       this.preview = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
-      this.preview.setAttribute(SVGProperties.color, 'white');
+      this.preview.setAttribute('style', 'pointer-events:none;')
       this.preview.setAttribute(SVGProperties.color, 'black');
+      this.preview.setAttribute(SVGProperties.fill, 'white');
+      this.preview.setAttribute(SVGProperties.thickness, '5');
       this.preview.setAttribute(SVGProperties.x, '0');
       this.preview.setAttribute(SVGProperties.y, '0');
     }
@@ -180,7 +179,9 @@ export class EraserService extends DrawableService {
           CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
     }
     if(this.leftClick) {
-      this.deleteSelectedElement();
+      this.brushDelete.target.appendChild(this.selectedElement.target);
+      this.brushDelete.id += this.selectedElement.id;
+      this.drawStack.removeElement(this.selectedElement.id);
     }
   }
 
