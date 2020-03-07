@@ -45,6 +45,8 @@ import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
 import { GridComponent } from './components/grid/grid.component';
 import { PipetteComponent } from './components/pipette/pipette.component';
+import { SaveServerComponent } from './components/save-server/save-server.component';
+import { ErrorOnSaveComponent } from './components/save-server/error-on-save/error-on-save.component';
 
 @NgModule({
   declarations: [
@@ -83,11 +85,15 @@ import { PipetteComponent } from './components/pipette/pipette.component';
     GridComponent,
     PolygonComponent,
     ExportComponent,
-    PipetteComponent
+    PipetteComponent,
+    SaveServerComponent,
+    ErrorOnSaveComponent
   ],
   entryComponents: [
     ColorPickerComponent,
     CreateNewComponent,
+    SaveServerComponent,
+    ErrorOnSaveComponent,
     WarningDialogComponent,
     UserGuideComponent,
     ExportComponent
