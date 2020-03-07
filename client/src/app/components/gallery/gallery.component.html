@@ -1,1 +1,78 @@
-<p>gallery works!</p>
+<div class="wrapper">
+  <!-- Type de recherche -->
+  <div class="left-section">
+    <h5>Type de Recherche</h5>
+    <mat-radio-group name="formatList" [(ngModel)]="isSearchByTags">
+      <mat-grid-list cols="3" rowHeight="30">
+        <mat-grid-tile>
+          <mat-radio-button [value]="true" (click)="isSearchByTags=true">Etiquettes</mat-radio-button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-radio-button [value]="false" (click)="isSearchByTags=false">Titre</mat-radio-button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-radio-group>
+  </div>
+  <!-- recherche par tags -->
+  <div class="option-section" *ngIf="isSearchByTags">
+    <div class="left-section">
+      <h5>Étiquettes</h5>
+      <form class="info">
+        <mat-form-field>
+          <mat-label class="text">Ajouter une étiquette de recherche</mat-label>
+          <input matInput>
+        </mat-form-field>
+        <button mat-button class="add-tag-button">Ajouter</button>
+      </form>
+      <mat-action-list>
+        <button class="tag" mat-list-item>
+          <img class="delete" width="12px" height="12px"
+               src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-close-circled-512.png" alt="close Icon">
+        </button>
+      </mat-action-list>
+    </div>
+  </div>
+  <!-- recherche par titre -->
+  <div class="option-section" *ngIf="!isSearchByTags">
+    <div class="left">
+      <div class="left-section">
+        <div class="details">
+          <form class="info">
+            <mat-form-field>
+              <mat-label class="text">Titre</mat-label>
+              <input matInput>
+            </mat-form-field>
+            <div class="icon">
+              <button mat-button>
+                <img src="../../../assets/icons/guide.svg">
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- section resultats -->
+  <div class="right">
+    <h5>Résultats</h5>
+    <div class="preview">
+      <!-- TODO Ajouter les angular material cards -->
+    </div>
+  </div>
+  <!-- section boutons de la modale -->
+  <div class="button-section">
+    <button mat-button id="cancel-button" (click)="onDialogClose()">Annuler</button>
+    <button mat-button class="confirm-button" (click)="loadConfirmation()">Sauvegarder</button>
+  </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+

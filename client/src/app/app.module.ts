@@ -97,6 +97,7 @@ import { GalleryComponent } from './components/gallery/gallery.component';
     SaveServerComponent,
     ErrorOnSaveComponent,
     WarningDialogComponent,
+    GalleryComponent,
     UserGuideComponent,
     ExportComponent
   ],
