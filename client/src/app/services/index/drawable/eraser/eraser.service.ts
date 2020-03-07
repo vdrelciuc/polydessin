@@ -63,6 +63,7 @@ export class EraserService extends DrawableService {
       {
         const elementBounds = this.selectedElement.target.getBoundingClientRect();
         if(!this.getInBounds(elementBounds as DOMRect, new CoordinatesXY(event.clientX, event.clientY))) {
+          console.log('not in bounds');
           this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
           this.selectedElement = undefined as unknown as SVGElementInfos;
         }
@@ -137,11 +138,13 @@ export class EraserService extends DrawableService {
   }
 
   private getInBounds(elementBounds: DOMRect, mouse: CoordinatesXY): boolean {
+    console.log(elementBounds);
+    console.log(mouse);
     return (    
-      elementBounds.left   < mouse.getX() &&
-      elementBounds.right  > mouse.getX() &&
-      elementBounds.top    < mouse.getY() &&
-      elementBounds.bottom > mouse.getY()   
+      elementBounds.left   < mouse.getX() + this.thickness.value / 2 &&
+      elementBounds.right  > mouse.getX() - this.thickness.value / 2 &&
+      elementBounds.top    < mouse.getY() + this.thickness.value / 2 &&
+      elementBounds.bottom > mouse.getY() - this.thickness.value / 2  
     );
   }
 
@@ -177,11 +180,12 @@ export class EraserService extends DrawableService {
       }
       this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ? 
           CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
-    }
-    if(this.leftClick) {
-      this.brushDelete.target.appendChild(this.selectedElement.target);
-      this.brushDelete.id += this.selectedElement.id;
-      this.drawStack.removeElement(this.selectedElement.id);
+
+      if(this.leftClick) {
+        this.manipulator.appendChild(this.brushDelete.target, this.selectedElement.target)
+        this.brushDelete.id += this.selectedElement.id;
+        this.drawStack.removeElement(this.selectedElement.id);
+      }
     }
   }
 
