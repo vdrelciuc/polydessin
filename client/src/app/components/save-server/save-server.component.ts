@@ -4,6 +4,8 @@ import {ExportService} from "../../services/export/export.service";
 import {ErrorOnSaveComponent} from "./error-on-save/error-on-save.component";
 import {SaveServerService} from "../../services/saveServer/save-server.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {Image} from "../../interfaces/image";
+import {HttpErrorResponse} from "@angular/common/http";
 
 
 @Component({
@@ -47,7 +49,6 @@ export class SaveServerComponent implements  AfterViewInit{
     if (!this.isValidTitle) {
       const warning = this.dialog.open(ErrorOnSaveComponent, {disableClose: true});
       warning.componentInstance.errorTitle = this.isValidTitle;
-      warning.componentInstance.errorTag = this.isValidTag;
     } else {
       this.addImage().then(() => {
         this.onDialogClose();
@@ -72,14 +73,12 @@ export class SaveServerComponent implements  AfterViewInit{
 
    private async addImage() {
     this.isSaving =true;
-    this.snacks.open('Début de la sauvegarde', '', {duration : 2500} );
-    this.saveService.addImage(this.title, this.tags , this.exportation.imageAfterDeserialization.src).then(() => {
-      this.isSaving = false;
-      this.snacks.open('Votre image a été sauvegardé avec succès', '', {duration : 2500} );
-    }).catch(()=>{
-        //todo show modal failure save
+    this.snacks.open('Début de la sauvegarde', '', {duration : 1400} );
+    this.saveService.addImage(this.title, this.tags , this.exportation.imageAfterDeserialization.src)
+      .subscribe((data: Image) => {
+    }, (error : HttpErrorResponse) => {
         this.isSaving = false;
-        this.snacks.open('Une erreur est survenue lors de la sauvegarde', '', {duration : 2500} );
+        this.saveService.handleError(error);
     })
   }
 
