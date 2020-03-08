@@ -63,7 +63,6 @@ export class EraserService extends DrawableService {
       {
         const elementBounds = this.selectedElement.target.getBoundingClientRect();
         if(!this.getInBounds(elementBounds as DOMRect, new CoordinatesXY(event.clientX, event.clientY))) {
-          console.log('not in bounds');
           this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
           this.selectedElement = undefined as unknown as SVGElementInfos;
         }
@@ -86,8 +85,10 @@ export class EraserService extends DrawableService {
   onMousePress(event: MouseEvent): void {
     if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = true;
-      this.brushDelete.target = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-      this.brushDelete.id = 0.1;
+      this.brushDelete = {
+        target: this.manipulator.createElement('g', 'http://www.w3.org/2000/svg'),
+        id: 0.1 
+      };
     }
   }
 
@@ -138,8 +139,6 @@ export class EraserService extends DrawableService {
   }
 
   private getInBounds(elementBounds: DOMRect, mouse: CoordinatesXY): boolean {
-    console.log(elementBounds);
-    console.log(mouse);
     return (    
       elementBounds.left   < mouse.getX() + this.thickness.value / 2 &&
       elementBounds.right  > mouse.getX() - this.thickness.value / 2 &&
@@ -169,22 +168,23 @@ export class EraserService extends DrawableService {
   private selectElement(element: SVGGElement): void {
     const elementOnTop = { target: element, id: Number(element.getAttribute(SVGProperties.title))};
     if(elementOnTop.target !== undefined) {      
-      if(this.selectedElement === undefined) {
-        this.selectedElement = elementOnTop;
-        this.getColor();
-      }
-      if(this.selectedElement !== elementOnTop) {
-        this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
-        this.selectedElement = elementOnTop;
-        this.getColor();
-      }
-      this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ? 
-          CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
-
       if(this.leftClick) {
-        this.manipulator.appendChild(this.brushDelete.target, this.selectedElement.target)
+        this.manipulator.appendChild(this.brushDelete.target, elementOnTop.target)
         this.brushDelete.id += this.selectedElement.id;
         this.drawStack.removeElement(this.selectedElement.id);
+        this.manipulator.removeChild(this.image.nativeElement, elementOnTop.target);
+      } else {
+        if(this.selectedElement === undefined) {
+          this.selectedElement = elementOnTop;
+          this.getColor();
+        }
+        if(this.selectedElement !== elementOnTop) {
+          this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+          this.selectedElement = elementOnTop;
+          this.getColor();
+        }
+        this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ? 
+            CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
       }
     }
   }
