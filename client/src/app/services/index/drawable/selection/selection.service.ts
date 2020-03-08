@@ -360,19 +360,6 @@ export class SelectionService extends DrawableService {
     }
   }
 
-  /*private getPathThickness(element: HTMLElement): number {
-    if (element.tagName === 'path') {
-      const thickness = element.getAttribute(SVGProperties.thickness);
-      return thickness === null ? 0 : parseInt(thickness) / 2;
-    }
-    if (element.tagName === 'polyline') {
-      const thickness = element.getAttribute(SVGProperties.thickness);
-      const radius = element.getAttribute(SVGProperties.radius);
-      return (thickness === null || radius === null || parseInt(thickness) / 2 < parseInt(radius)) ? 0 : parseInt(thickness) / 2;
-    }
-    return 0;
-  }*/
-
   private getBBoxWithStroke(element: SVGGElement): BoundingBox {
     const gElementBoundingBox = element.getBoundingClientRect();
     const firstChild = element.firstChild as HTMLElement;
