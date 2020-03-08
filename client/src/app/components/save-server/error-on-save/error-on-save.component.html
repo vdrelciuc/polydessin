@@ -1,9 +1,11 @@
-<p id="error">Avertissement</p>
+<p *ngIf="!success" class="error">Avertissement</p>
+<p  *ngIf="success" class="error">Message du Système</p>
 <mat-dialog-content>
-  <p >Une erreur s'est produite lors de la sauvegarde</p> <br/>
+  <p *ngIf="!success" >Une erreur s'est produite lors de la sauvegarde</p> <br/>
   <p *ngIf="!errorTitle">- Votre titre n'est pas valide</p>
   <p *ngIf="!errorTag">- Votre/vos étiquette(s) n'est/ne sont pas valide(s)</p>
   <p *ngIf="false">Une erreur inconnue est survenue</p>
+  <p *ngIf="success">Votre dessin a été sauvegardé!</p>
 </mat-dialog-content>
 <div class="button-section">
   <button mat-button id="confirm-button" [mat-dialog-close]="true">D'accord</button>

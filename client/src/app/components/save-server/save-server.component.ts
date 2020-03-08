@@ -3,6 +3,7 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ExportService} from "../../services/export/export.service";
 import {ErrorOnSaveComponent} from "./error-on-save/error-on-save.component";
 import {SaveServerService} from "../../services/saveServer/save-server.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -17,15 +18,19 @@ export class SaveServerComponent implements  AfterViewInit{
   isValidTag = false;
   tags : Set<string>;
   tagName : string;
+  isSaving: boolean;
 
   @ViewChild('mydrawing', {static: false}) canvas: ElementRef;
   @ViewChild('proccessingCanas', {static : false}) proccessingCanas: ElementRef;
 
   constructor(private dialogRef: MatDialogRef<SaveServerComponent>,
+              private snacks : MatSnackBar,
               private dialog: MatDialog,
               private saveService : SaveServerService,
               private exportation : ExportService) {
     this.tags = new  Set<string>();
+    this.isSaving = false;
+
   }
 
   ngAfterViewInit() {
@@ -39,14 +44,14 @@ export class SaveServerComponent implements  AfterViewInit{
   }
 
   saveConfirmation() {
-    if (!this.isValidTitle || !this.isValidTag) {
+    if (!this.isValidTitle) {
       const warning = this.dialog.open(ErrorOnSaveComponent, {disableClose: true});
       warning.componentInstance.errorTitle = this.isValidTitle;
       warning.componentInstance.errorTag = this.isValidTag;
     } else {
-      this.onDialogClose();
-      console.log(this.title);
-      // saving logic
+      this.addImage().then(() => {
+        this.onDialogClose();
+      });
     }
 
   }
@@ -62,6 +67,22 @@ export class SaveServerComponent implements  AfterViewInit{
   checkValidity(tag : string) : boolean{
    return  this.saveService.checkValidity(tag);
   }
+
+
+
+   private async addImage() {
+    this.isSaving =true;
+    this.snacks.open('Début de la sauvegarde', '', {duration : 2500} );
+    this.saveService.addImage(this.title, this.tags , this.exportation.imageAfterDeserialization.src).then(() => {
+      this.isSaving = false;
+      this.snacks.open('Votre image a été sauvegardé avec succès', '', {duration : 2500} );
+    }).catch(()=>{
+        //todo show modal failure save
+        this.isSaving = false;
+        this.snacks.open('Une erreur est survenue lors de la sauvegarde', '', {duration : 2500} );
+    })
+  }
+
 
 
 }
