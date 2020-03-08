@@ -1,5 +1,5 @@
 export enum Tools {
-  Aerosol = 'aerosol',
+  Spray = 'spray',
   Brush = 'brush',
   Bucket = 'bucket',
   ColorApplicator = 'colorApplicator',

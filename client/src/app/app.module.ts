@@ -38,6 +38,7 @@ import { PolygonComponent } from './components/polygon/polygon.component';
 import { RectangleComponent } from './components/rectangle/rectangle.component';
 import { SelectionComponent } from './components/selection/selection.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { SprayComponent } from './components/spray/spray.component';
 import { UserGuideComponent } from './components/user-guide/user-guide.component';
 import { WorkingAreaComponent } from './components/working-area/working-area.component';
 import { ResizeObserverDirective } from './components/workspace/resize-observer.directive';
@@ -79,7 +80,8 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     PolygonComponent,
     EllipseComponent,
     EraserComponent,
-    SelectionComponent
+    SelectionComponent,
+    SprayComponent
   ],
   entryComponents: [
     ColorPickerComponent,
