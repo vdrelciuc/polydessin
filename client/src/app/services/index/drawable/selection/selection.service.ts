@@ -11,6 +11,7 @@ import { Stack } from 'src/app/classes/stack';
 import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
 import { Transform } from 'src/app/classes/transformations';
 import { SelectionState } from 'src/app/enums/selection-states';
+import { BoundingBox } from 'src/app/interfaces/bounding-box';
 
 @Injectable({
   providedIn: 'root'
@@ -317,14 +318,14 @@ export class SelectionService extends DrawableService {
     }
 
     if (selection.length > 0) {
-      const firstElement = selection[0].target.getBoundingClientRect();
+      const firstElement = this.getBBoxWithStroke(selection[0].target);
       let left = CoordinatesXY.effectiveX(this.image, firstElement.left);
       let right = CoordinatesXY.effectiveX(this.image, firstElement.right);
       let top = CoordinatesXY.effectiveY(this.image, firstElement.top);
       let bottom = CoordinatesXY.effectiveY(this.image, firstElement.bottom);
 
       for (let i = 1; i < selection.length; i++) {
-        const boundingBox = selection[i].target.getBoundingClientRect();
+        const boundingBox = this.getBBoxWithStroke(selection[i].target);
         left = Math.min(left, CoordinatesXY.effectiveX(this.image, boundingBox.left));
         right = Math.max(right, CoordinatesXY.effectiveX(this.image, boundingBox.right));
         top = Math.min(top, CoordinatesXY.effectiveY(this.image, boundingBox.top));
@@ -357,5 +358,39 @@ export class SelectionService extends DrawableService {
     } else {
       this.manipulator.removeChild(this.subElement, this.selectionGroup);
     }
+  }
+
+  /*private getPathThickness(element: HTMLElement): number {
+    if (element.tagName === 'path') {
+      const thickness = element.getAttribute(SVGProperties.thickness);
+      return thickness === null ? 0 : parseInt(thickness) / 2;
+    }
+    if (element.tagName === 'polyline') {
+      const thickness = element.getAttribute(SVGProperties.thickness);
+      const radius = element.getAttribute(SVGProperties.radius);
+      return (thickness === null || radius === null || parseInt(thickness) / 2 < parseInt(radius)) ? 0 : parseInt(thickness) / 2;
+    }
+    return 0;
+  }*/
+
+  private getBBoxWithStroke(element: SVGGElement): BoundingBox {
+    const gElementBoundingBox = element.getBoundingClientRect();
+    const firstChild = element.firstChild as HTMLElement;
+    const thickness = firstChild.getAttribute(SVGProperties.thickness);
+    if (thickness !== null && (firstChild.tagName === 'path' || firstChild.tagName === 'polyline')) {
+      const firstChildBBox = firstChild.getBoundingClientRect();
+      return {
+        left: Math.min(gElementBoundingBox.left, firstChildBBox.left - parseInt(thickness) / 2),
+        right: Math.max(gElementBoundingBox.right, firstChildBBox.right + parseInt(thickness) / 2),
+        top: Math.min(gElementBoundingBox.top, firstChildBBox.top - parseInt(thickness) / 2),
+        bottom: Math.max(gElementBoundingBox.bottom, firstChildBBox.bottom + parseInt(thickness) / 2)
+      };
+    }
+    return {
+      left: gElementBoundingBox.left,
+      right: gElementBoundingBox.right,
+      top: gElementBoundingBox.top,
+      bottom: gElementBoundingBox.bottom
+    };
   }
 }

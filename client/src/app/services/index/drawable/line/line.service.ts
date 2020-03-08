@@ -266,6 +266,8 @@ export class LineService extends DrawableService {
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color.getHex());
     this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
+    this.manipulator.setAttribute(this.line, SVGProperties.typeOfLine, 'round');
+    this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
 
     this.manipulator.appendChild(this.subElement, this.line);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
