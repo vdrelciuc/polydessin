@@ -25,7 +25,7 @@ export class SaveServerService {
       let asci = field.charCodeAt(i);
       if (!(asci > 47 && asci < 58) && // numeric (0-9)
         !(asci > 64 && asci < 91) && // upper alpha (A-Z)
-        !(asci > 96 && asci < 123)) { // lower alpha (a-z)
+        !(asci > 96 && asci < 123)){ // white space
         return false;
       }
     }

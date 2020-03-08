@@ -59,6 +59,9 @@ export class SaveServerComponent implements  AfterViewInit{
 
   addTag(tag: string) : void{
     this.isValidTag = this.saveService.addTag(tag, this.tags);
+    if (this.isValidTag){
+      this.tagName = '';
+    }
   }
 
   removeTag(tag : string) : void {
