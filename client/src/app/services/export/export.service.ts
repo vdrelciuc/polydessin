@@ -15,15 +15,19 @@ export class ExportService {
   private image: ElementRef<SVGElement>; // My actual svg
   imageAfterDeserialization: HTMLImageElement; // transformed image through formula
 
+  private readonly REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,10}$/gm; // Alphanumeric, space and dash: 3 to 10 chars
+
   currentFormat: BehaviorSubject<ImageFormat>;
   currentFilter: BehaviorSubject<ImageFilter>;
   currentExportType: BehaviorSubject<ImageExportType>;
+  isTitleValid: BehaviorSubject<boolean>;
   filtersMap: Map<ImageFilter, string>;
 
   constructor() {
     this.currentFormat = new BehaviorSubject<ImageFormat>(ImageFormat.JPEG);
     this.currentFilter = new BehaviorSubject<ImageFilter>(ImageFilter.Aucun);
     this.currentExportType = new BehaviorSubject<ImageExportType>(ImageExportType.Téléchargement);
+    this.isTitleValid = new BehaviorSubject<boolean>(false);
     this.initializeMap();
   }
 
@@ -153,6 +157,10 @@ export class ExportService {
 
   initialize(image: ElementRef<SVGElement>): void {
     this.image = image; // my actual SVG Element
+  }
+
+  validateTitle(title: string) {
+    this.isTitleValid.next(this.REGEX_TITLE.test(title));
   }
 
 }

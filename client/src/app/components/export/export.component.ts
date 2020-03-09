@@ -20,6 +20,7 @@ export class ExportComponent implements AfterViewInit {
   exportTypes: string[];
   selectedExportType: string;
   title: string;
+  isTitleValid: boolean;
 
   formatsMap: Map<string, ImageFormat>;
   filtersMap: Map<string, ImageFilter>;
@@ -39,15 +40,17 @@ export class ExportComponent implements AfterViewInit {
     this.exportation.currentExportType.subscribe((exportType: ImageExportType) => {
       this.selectedExportType = exportType.toString();
     });
+    this.exportation.isTitleValid.subscribe((validity: boolean) => {
+      this.isTitleValid = validity;
+    });
     this.exportFormats = Object.keys(ImageFormat);
     this.exportFilters = Object.keys(ImageFilter);
     this.exportTypes = Object.keys(ImageExportType);
 
-
     this.initializeMaps();
   }
 
-  private initializeMaps() {
+  private initializeMaps(): void {
     this.formatsMap = new Map();
     this.formatsMap.set('JPEG', ImageFormat.JPEG);
     this.formatsMap.set('PNG', ImageFormat.PNG);
@@ -66,20 +69,20 @@ export class ExportComponent implements AfterViewInit {
     this.exportTypeMap.set('Courriel', ImageExportType.Courriel);
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.exportation.canvas = this.canvas.nativeElement as HTMLCanvasElement;
     this.exportation.myDownload = this.myDownload as ElementRef;
     this.exportation.originalCanvas = this.proccessingCanas.nativeElement;
   }
 
-  onFormatUpdate(newFormatString: string) {
+  onFormatUpdate(newFormatString: string): void {
     const newFormat = this.formatsMap.get(newFormatString);
     if (newFormat !== undefined) {
       this.exportation.currentFormat.next(newFormat);
     }
   }
 
-  onFilterUpdate(newFilterString: string) {
+  onFilterUpdate(newFilterString: string): void {
     const newFilter = this.filtersMap.get(newFilterString);
     if (newFilter !== undefined) {
       this.exportation.currentFilter.next(newFilter);
@@ -87,20 +90,24 @@ export class ExportComponent implements AfterViewInit {
     }
   }
 
-  onExportTypeUpdate(newExportTypeString: string) {
+  onExportTypeUpdate(newExportTypeString: string): void {
     const newExportType = this.exportTypeMap.get(newExportTypeString);
     if (newExportType !== undefined) {
       this.exportation.currentExportType.next(newExportType);
     }
   }
 
-  onDialogClose() {
+  onDialogClose(): void {
     this.dialogRef.close();
   }
 
-  exportConfirmation() {
+  exportConfirmation(): void {
     this.onDialogClose();
     this.exportation.export(this.title);
+  }
+
+  onTitleUpdate(event: any) {
+    this.exportation.validateTitle(event.target.value);
   }
 
 }

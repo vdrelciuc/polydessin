@@ -36,7 +36,7 @@
         <form class="info">
           <mat-form-field>
             <mat-label class="text">Titre</mat-label>
-            <input matInput [(ngModel)]="this.title" [ngModelOptions]="{standalone: true}">
+            <input matInput [(ngModel)]="this.title" (input)="onTitleUpdate($event)" [ngModelOptions]="{standalone: true}">
           </mat-form-field>
         </form>
       </div>
@@ -53,5 +53,6 @@
 </div>
 <div class="button-section">
   <button mat-button id="cancel-button" (click)="onDialogClose()">Annuler</button>
-  <a #myDownload ><button mat-button id="confirm-button" (click)="exportConfirmation()">Exporter</button></a>
+  <a #myDownload *ngIf="isTitleValid"><button mat-button id="confirm-button" (click)="exportConfirmation()">Exporter</button></a>
+  <a #myDownload *ngIf="!isTitleValid"><button mat-button disabled id="confirm-button" (click)="exportConfirmation()">Exporter</button></a>
 </div>

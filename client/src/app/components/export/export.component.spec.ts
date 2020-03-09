@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExportComponent } from './export.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatRadioModule, MatGridListModule, MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatGridListModule, MatRadioModule } from '@angular/material';
+import { ExportComponent } from './export.component';
 
 describe('ExportComponent', () => {
   let component: ExportComponent;
