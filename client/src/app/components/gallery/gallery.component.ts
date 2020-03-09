@@ -87,4 +87,20 @@ export class GalleryComponent implements OnInit {
     }
   }
 
+  deleteImage(id : string):void{
+    this.imageRetriever.deleteImage(id).subscribe((data)=>{
+      for (let i = 0 ; i < this.images.length ; ++i){
+        if (id === this.images[i]._id){
+          //on supprime l'élément de notre copie du serveur
+          this.images.splice(i,1);
+        }
+      }
+      for (let i = 0 ; i < this.resultImages.length ; ++i){
+        if (id === this.resultImages[i]._id){
+          //on supprime l'élément de notre liste de resultats temporaire
+          this.resultImages.splice(i,1);
+        }
+      }
+    })
+  }
 }

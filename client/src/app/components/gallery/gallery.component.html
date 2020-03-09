@@ -59,13 +59,13 @@
         <mat-card-header>
           <mat-card-title>{{image.title}}</mat-card-title>
         </mat-card-header>
-        <img sanitizeHtml mat-card-image [attr.src]="image.serial" alt="Apperçu du dessin">
+        <img mat-card-image [attr.src]="image.serial" alt="Apperçu du dessin">
         <mat-card-content>
           <button mat-button *ngFor="let tag of image.tags">{{tag}} </button>
         </mat-card-content>
         <mat-card-actions>
           <button mat-button>Charger</button>
-          <button mat-button>Suprrimer</button>
+          <button mat-button (click)="deleteImage(image._id)">Suprimer</button>
         </mat-card-actions>
       </mat-card>
     </div>
