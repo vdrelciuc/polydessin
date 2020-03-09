@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {MatDialogRef} from "@angular/material/dialog";
 import {SaveServerService} from "../../services/saveServer/save-server.service";
+import {Image} from "../../interfaces/image";
 
 @Component({
   selector: 'app-gallery',
@@ -14,6 +15,7 @@ export class GalleryComponent {
   isValidTag: boolean;
   tags: Set<string>;
   tagName: string;
+  images: Image[];
 
   constructor(private dialogRef: MatDialogRef<GalleryComponent>,
               private saveService: SaveServerService) {
