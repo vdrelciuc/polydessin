@@ -55,7 +55,20 @@
   <div class="right">
     <h5>Résultats</h5>
     <div class="preview">
-      <!-- TODO Ajouter les angular material cards -->
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image"></div>
+          <mat-card-title>Titre de l'image</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Apperçu du dessin">
+        <mat-card-content>
+          <span ><!-- for each tag --></span>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>Charger</button>
+          <button mat-button>Suprrimer</button>
+        </mat-card-actions>
+      </mat-card>
     </div>
   </div>
   <!-- section boutons de la modale -->
