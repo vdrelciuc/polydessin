@@ -8,39 +8,64 @@
   min-width: 500px;
 }
 
+/* Global elements */
 h1 {
   color: whitesmoke;
   font-size: 1.5em;
   text-align: center;
 }
 
-.left-section {
-  margin-bottom: 10px;
+h5 {
+  color: whitesmoke;
+  font-size: 1em;
 }
 
+/*Option section*/
 .option-selection {
   display: flex;
   flex-direction: row;
 
-  .left {
-    width: 70%;
-    float: left;
-  }
+  .sub-section {
+    margin-bottom: 10px;
 
-  .right {
-    width: 30%;
-    float: left;
+    .details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #preview {
+      max-width: 300px;
+      max-height: 250px;
+    }
   }
 }
 
-#preview {
-  max-width: 300px;
-  max-height: 250px;
+/* Button section */
+.button-section {
+  margin-top: 10px;
+  text-align: right;
+  background-color:$dark-gray;
+
+  #cancel-button {
+    color: whitesmoke;
+    outline: none;
+
+  }
+
+  #confirm-button {
+    background-color: $vivid;
+    outline: none;
+  }
 }
 
-.details {
-  display: flex;
-  flex-direction: column;
+/* Angular Material proprieties override */
+
+.mat-radio-button{
+  color:whitesmoke;
+}
+
+::ng-deep .mat-radio-outer-circle {
+  border-color: whitesmoke;
 }
 
 ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
@@ -60,44 +85,13 @@ h1 {
   caret-color: whitesmoke !important;
 }
 
-.disabled {
-  color: red;
-}
-
 ::ng-deep .mat-form-field-underline, .mat-form-field-underline.mat-focused {
   background-color: whitesmoke !important;
-}
-
-h5 {
-  color: whitesmoke;
-  font-size: 1em;
 }
 
 ::ng-deep .mat-grid-tile .mat-figure {
   justify-content: left !important;
 }
 
-.mat-radio-button{
-  color:whitesmoke;
-}
 
-::ng-deep .mat-radio-outer-circle {
-  border-color: whitesmoke;
-}
 
-.button-section {
-  margin-top: 10px;
-  text-align: right;
-  background-color:$dark-gray;
-}
-
-#cancel-button {
-  color: whitesmoke;
-  outline: none;
-
-}
-
-#confirm-button {
-  background-color: $vivid;
-  outline: none;
-}
