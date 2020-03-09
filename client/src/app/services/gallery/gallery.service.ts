@@ -11,8 +11,8 @@ export class GalleryService {
   constructor() { }
 
   loadImage(image  : Image){
-    console.log(this.innerHtml);
-    this.innerHtml.nativeElement = image.innerHtml as unknown as SVGElement;
-    console.log(image.innerHtml as unknown as SVGElement);
+    console.log(this.innerHtml.nativeElement);
+    console.log(image.innerHtml);
+    // this.innerHtml.nativeElement.replaceWith(image.innerHtml.firstElementChild as SVGElement);
   }
 }

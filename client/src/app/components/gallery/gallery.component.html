@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <!-- Type de recherche -->
+  <!-- Type de recherche
   <div class="left-section">
     <h5>Type de Recherche</h5>
     <mat-radio-group name="formatList" [(ngModel)]="isSearchByTags">
@@ -12,14 +12,14 @@
         </mat-grid-tile>
       </mat-grid-list>
     </mat-radio-group>
-  </div>
+  </div> -->
   <!-- recherche par tags -->
-  <div class="option-section" *ngIf="isSearchByTags">
+  <div class="option-section">
     <div class="left-section">
-      <h5>Étiquettes</h5>
+      <h5>Rechercher par étiquette</h5>
       <form class="info">
         <mat-form-field>
-          <mat-label class="text">Ajouter une étiquette de Recherche</mat-label>
+          <mat-label class="text">Ajouter une étiquette</mat-label>
           <input [(ngModel)]="tagName" [ngModelOptions]="{standalone: true}" matInput>
         </mat-form-field>
         <button mat-button class="add-tag-button" (click)="addTag(tagName)">Ajouter</button>
@@ -31,7 +31,7 @@
       </mat-action-list>
     </div>
   </div>
-  <!-- recherche par titre -->
+  <!-- recherche par titre
   <div class="option-section" *ngIf="!isSearchByTags">
     <div class="left">
       <div class="left-section">
@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>-->
   <!-- section resultats -->
   <div class="right">
     <h5>Résultats</h5>

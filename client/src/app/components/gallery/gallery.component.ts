@@ -15,7 +15,7 @@ import {GalleryService} from "../../services/gallery/gallery.service";
 export class GalleryComponent implements OnInit {
 
 
-  isSearchByTags: boolean;
+  //isSearchByTags: boolean;
   isValidTag: boolean;
   tags: Set<string>;
   tagName: string;
@@ -29,7 +29,7 @@ export class GalleryComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private galleryService : GalleryService
   ) {
-    this.isSearchByTags = true;
+    // this.isSearchByTags = true;
     this.tags = new Set<string>();
   }
 
@@ -42,7 +42,7 @@ export class GalleryComponent implements OnInit {
         this.images.forEach((e) => {
           e.serial = this.sanitizer.bypassSecurityTrustResourceUrl(e.serial) as string;
         });
-        this.snacks.open('Nous avons récupéré les image :)', '', {duration: 2000});
+        this.snacks.open('Nous avons récupéré les images', '', {duration: 2000});
       });
   }
 
@@ -59,6 +59,7 @@ export class GalleryComponent implements OnInit {
     this.isValidTag = this.saveService.addTag(tag, this.tags);
     if (this.isValidTag) {
       this.filterWithTag();
+      this.tagName = '';
     }
   }
 
@@ -85,7 +86,7 @@ export class GalleryComponent implements OnInit {
     }
 
     if (this.resultImages.length === 0) {
-      this.snacks.open('Aucun dessin correspond a votre recherche ', '', {duration: 3000});
+      this.snacks.open('Aucun dessin correspond a votre recherche', '', {duration: 3000});
     }
   }
 
