@@ -79,7 +79,7 @@ export class ExportComponent implements AfterViewInit {
     }
   }
 
-   onFilterUpdate(newFilterString: string) {
+  onFilterUpdate(newFilterString: string) {
     const newFilter = this.filtersMap.get(newFilterString);
     if (newFilter !== undefined) {
       this.exportation.currentFilter.next(newFilter);

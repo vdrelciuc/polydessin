@@ -8,7 +8,7 @@
                   [matTooltip]="this.toolSelectorService.getSelection().frenchName"
                   matTooltipPosition="after"
                   aria-label="selection-tooltip"
-                  (click)="selectTool('selection')"
+                  (click)="selectTool('grid')"
                   [ngClass]="{'clicked': currentTool === 'selection',
             'not-clicked': currentTool !== 'selection'}">
             <img src="../../../assets/icons/arrow.svg">
@@ -151,7 +151,11 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('pipette')"
+          <button mat-button
+                  matTooltipPosition="after"
+                  aria-label="pencil-tooltip"
+                  (click)="selectTool('pipette')"
+                  [matTooltip]="this.toolSelectorService.getPipette().frenchName"
                   [ngClass]="{'clicked': currentTool === 'pipette',
             'not-clicked': currentTool !== 'pipette'}">
             <img src="../../../assets/icons/pipette.svg">

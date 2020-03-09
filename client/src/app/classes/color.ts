@@ -24,9 +24,12 @@ export class Color {
   static areVisuallyEqualForRed(color1: Color, color2: Color): boolean {
     const redOfColor1HSL = color1.getRGB()[0] / 255;
     const redOfColor2HSL = color2.getRGB()[0] / 255;
+    const maxPercentage = 1 - (CONSTANT.VISUAL_DIFFERENCE / 100);
+    if(redOfColor1HSL >= maxPercentage && redOfColor2HSL >= maxPercentage) {
+      return false;
+    }
     const difference = (redOfColor1HSL - redOfColor2HSL) * 100;
-    console.log('difference' + difference);
-    return difference < 15 && difference > -15;
+    return difference < CONSTANT.VISUAL_DIFFERENCE && CONSTANT.VISUAL_DIFFERENCE > -15;
   }
 
   private static rgbToHex(value: number): string {

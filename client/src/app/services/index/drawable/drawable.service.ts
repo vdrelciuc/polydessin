@@ -18,7 +18,7 @@ export abstract class DrawableService {
   frenchName: string;
 
   protected assignParams(
-    manipulator: Renderer2, 
+    manipulator: Renderer2,
     image: ElementRef<SVGElement>,
     colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService): void {
@@ -39,13 +39,13 @@ export abstract class DrawableService {
   }
 
   abstract initialize(
-    manipulator: Renderer2, 
+    manipulator: Renderer2,
     image: ElementRef<SVGElement>,
     colorSelectorService: ColorSelectorService,
-    drawStack: DrawStackService
+    drawStack: DrawStackService,
     ): void;
-  abstract initializeProperties(): void;
-
+    
+  initializeProperties(): void { /*To Override if needed*/};
   onMouseInCanvas(event: MouseEvent): void { /*To Override if needed*/}
   onMouseOutCanvas(event: MouseEvent): void { /*To Override if needed*/}
   onMousePress(event: MouseEvent): void { /*To Override if needed*/}
@@ -56,4 +56,5 @@ export abstract class DrawableService {
   onKeyPressed(event: KeyboardEvent): void { /*To Override if needed*/}
   onKeyReleased(event: KeyboardEvent): void { /*To Override if needed*/}
   endTool(): void { /*To Override if needed*/}
+  onSelect(): void {}
 }
