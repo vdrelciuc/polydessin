@@ -48,6 +48,7 @@ import { PipetteComponent } from './components/pipette/pipette.component';
 import { SaveServerComponent } from './components/save-server/save-server.component';
 import { ErrorOnSaveComponent } from './components/save-server/error-on-save/error-on-save.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
+import {SanitizeHtmlDirective} from "./directives/sanitize-html.directive";
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { GalleryComponent } from './components/gallery/gallery.component';
     ResizeObserverDirective,
     WarningDialogComponent,
     ExportComponent,
+    SanitizeHtmlDirective,
 
     EllipseComponent,
     EraserComponent,

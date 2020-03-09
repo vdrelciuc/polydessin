@@ -59,9 +59,9 @@
         <mat-card-header>
           <mat-card-title>{{image.title}}</mat-card-title>
         </mat-card-header>
-        <img mat-card-image src="{{image.serial}}}" alt="Apperçu du dessin">
+        <img sanitizeHtml mat-card-image [attr.src]="image.serial" alt="Apperçu du dessin">
         <mat-card-content>
-          <span *ngFor="let tag of image.tags"></span>
+          <button mat-button *ngFor="let tag of image.tags">{{tag}} </button>
         </mat-card-content>
         <mat-card-actions>
           <button mat-button>Charger</button>
