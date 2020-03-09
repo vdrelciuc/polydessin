@@ -5,6 +5,7 @@ import {Image} from "../../interfaces/image";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ImagesManagerService} from "../../services/imagesManager/images-manager.service";
 import {DomSanitizer} from "@angular/platform-browser";
+import {GalleryService} from "../../services/gallery/gallery.service";
 
 @Component({
   selector: 'app-gallery',
@@ -25,7 +26,8 @@ export class GalleryComponent implements OnInit {
               private saveService: SaveServerService,
               private snacks: MatSnackBar,
               private imageRetriever: ImagesManagerService,
-              private sanitizer: DomSanitizer
+              private sanitizer: DomSanitizer,
+              private galleryService : GalleryService
   ) {
     this.isSearchByTags = true;
     this.tags = new Set<string>();
@@ -102,5 +104,9 @@ export class GalleryComponent implements OnInit {
         }
       }
     })
+  }
+
+  loadImage(image : Image){
+    this.galleryService.loadImage(image);
   }
 }

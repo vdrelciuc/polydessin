@@ -64,7 +64,7 @@
           <button mat-button *ngFor="let tag of image.tags">{{tag}} </button>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button>Charger</button>
+          <button mat-button (click)="loadImage(image)">Charger</button>
           <button mat-button (click)="deleteImage(image._id)">Suprimer</button>
         </mat-card-actions>
       </mat-card>
