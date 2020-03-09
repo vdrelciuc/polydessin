@@ -90,7 +90,7 @@ export class ImageService {
         const containsTitle = this.checkValidity(image.title);
         const containsCorrectTags = this.checkValidityOnArray(image.tags);
         const containsSerial = image.serial !== null && image.serial !== '';
-        const containsInnerHtml = image.innerHtml !== null && image.innerHtml !== '';
+        const containsInnerHtml = image.innerHtml !== null ;
         return containsTitle && containsSerial && containsInnerHtml && containsCorrectTags;
     }
 
