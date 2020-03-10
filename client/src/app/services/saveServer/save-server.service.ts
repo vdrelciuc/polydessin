@@ -1,41 +1,34 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {ElementRef, Injectable} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {Observable} from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { ElementRef, Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
-import {Image} from '../../interfaces/image';
+import { Image } from '../../interfaces/image';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SaveServerService {
 
-  readonly HTTP_STATUS_OK: number = 201;
+  private readonly REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,16}$/; // Alphanumeric, space and dash: 3 to 16 chars
+  private readonly REGEX_TAG: RegExp = /^[A-Za-z0-9]{1,10}$/; // Alphanumeric, 1 to 10 chars
+  private readonly HTTP_STATUS_OK: number = 201;
   innerHtml: ElementRef<SVGElement>;
 
   constructor(private http: HttpClient,
               private snacks: MatSnackBar) {
   }
 
-  // inspired from https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
-  checkValidity(field: string): boolean {
-    if (field === undefined || field === '') {
-      return false;
-    }
-    for (let i = 0; i < field.length; ++i) {
-      const asci = field.charCodeAt(i);
-      if (!(asci > 47 && asci < 58) && // numeric (0-9)
-        !(asci > 64 && asci < 91) && // upper alpha (A-Z)
-        !(asci > 96 && asci < 123)) { // white space
-        return false;
-      }
-    }
+  checkTitleValidity(title: string): boolean {
+    return this.REGEX_TITLE.test(title);
+  }
 
-    return true;
+  private checkTagValidity(tag: string): boolean {
+    return this.REGEX_TAG.test(tag);
   }
 
   addTag(etiquette: string, data: Set<string>): boolean {
-    if (this.checkValidity(etiquette)) {
+    if (this.checkTagValidity(etiquette)) {
       data.add(etiquette);
       return true;
     }

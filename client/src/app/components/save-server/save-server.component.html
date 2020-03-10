@@ -6,11 +6,13 @@
         <form class="info">
           <mat-form-field>
             <mat-label class="text" >Titre</mat-label>
-            <input [(ngModel)]="title" (change)="isValidTitle=checkValidity(title)"
+            <input [(ngModel)]="title" (change)="isValidTitle=checkTitleValidity(title)"
                     [ngModelOptions]="{standalone: true}" matInput >
           </mat-form-field>
-          <div class="icon" [matTooltip]="'Seuls les charactères alphanumérique seront acceptés pour les titres et ' +
-          'les étiquettes. Les espaces blancs ne sont pas acceptés et vos étiquettes et votre titres ne peuvent être vides. '"
+          <div class="icon" [matTooltip]="'Le titre doit avoir de 3 à 16 caractères et peut contenir
+          des lettres, des chiffres, des espaces et des tirets (-). Les étiquettes sont optionnelles
+          mais doivent avoir entre 1 et 10 caractères et peuvent contenir des lettres et des chiffres.
+          Les étiquettes du même dessin sont uniques.'"
                 matTooltipPosition="below">
             <button mat-button>
               <img src="../../../assets/icons/guide.svg">

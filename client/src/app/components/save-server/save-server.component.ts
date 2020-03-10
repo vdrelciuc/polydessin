@@ -74,11 +74,11 @@ export class SaveServerComponent implements  AfterViewInit {
     this.saveService.removeTag(tag, this.tags);
   }
 
-  checkValidity(tag: string): boolean {
-   return  this.saveService.checkValidity(tag);
+  checkTitleValidity(title: string): boolean {
+    return this.saveService.checkTitleValidity(title);
   }
 
-   private async addImage(): Promise<void> {
+  private async addImage(): Promise<void> {
     this.isSaving = true;
     this.snacks.open('Début de la sauvegarde', '', {duration : 1400} );
     this.saveService.addImage(this.title, this.tags , this.exportation.imageAfterDeserialization.src)
