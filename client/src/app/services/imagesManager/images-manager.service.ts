@@ -17,7 +17,4 @@ export class ImagesManagerService {
     return this.http.get<Image[]>(this._url);
   }
 
-  deleteImage(id : string): Observable<void>{
-    return this.http.delete<void>(`${this._url}/${id}`)
-  }
 }

@@ -13,7 +13,6 @@ import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import {SaveServerService} from "../../services/saveServer/save-server.service";
-import {GalleryService} from "../../services/gallery/gallery.service";
 
 @Component({
   selector: 'app-canvas',
@@ -44,8 +43,8 @@ export class CanvasComponent implements OnInit {
     private canvasService: CanvasService,
     private workspaceService: WorkspaceService,
     private exportService: ExportService,
-    private saveService : SaveServerService,
-    private galleryService : GalleryService) {
+    private saveService : SaveServerService
+    ) {
       this.visible = true;
     }
 
@@ -57,7 +56,6 @@ export class CanvasComponent implements OnInit {
     this.eventListener.initializeEvents();
     this.gridService = this.toolSelector.getGrid();
     this.saveService.innerHtml = this.image;
-    this.galleryService.innerHtml = this.image;
 
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
       const isSameColor = this.workspaceService.checkIfSameBackgroundColor(color);
