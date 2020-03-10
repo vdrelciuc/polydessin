@@ -5,11 +5,11 @@ import { Stack } from './stack';
 import { SVGProperties } from './svg-html-properties';
 
 export enum TransformType {
-    translation = 'translate',
-    rotation = 'rotate',
-    resize = 'scale',
-    distorsionX = 'skewX',
-    distorsionY = 'skewY'
+  translation = 'translate',
+  rotation = 'rotate',
+  resize = 'scale',
+  distorsionX = 'skewX',
+  distorsionY = 'skewY'
 }
 
 export class Transform {
@@ -20,15 +20,12 @@ export class Transform {
   constructor() { }
 
   static setElements(elements: Stack<SVGElementInfos>, manipulator: Renderer2) {
-
     Transform.elementsToTransform = elements.getAll();
     Transform.manipulator = manipulator;
   }
 
   static translate(translationX: number, translationY: number) {
-
     for (let element of Transform.elementsToTransform) {
-
       const initialElementTransform = element.target.getAttribute(SVGProperties.transform);
       if (initialElementTransform === null) {
         Transform.manipulator.setAttribute(element.target, SVGProperties.transform, `${TransformType.translation}(${translationX}, ${translationY})`)
@@ -48,6 +45,5 @@ export class Transform {
       }
     }
     Transform.needsUpdate.next(true);
-
   }
 }
