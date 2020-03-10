@@ -59,12 +59,39 @@ export class ImageService {
             throw new Error('Invalid image');
         }
     }
+    // inspired from https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
+    private checkValidity(field: string): boolean {
+        if (field === undefined || field === '') {
+            return false;
+        }
+        for (let i = 0; i < field.length; ++i) {
+            let asci = field.charCodeAt(i);
+            if (!(asci > 47 && asci < 58) && // numeric (0-9)
+                !(asci > 64 && asci < 91) && // upper alpha (A-Z)
+                !(asci > 96 && asci < 123)){ // white space
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private checkValidityOnArray(fields : string[]) : boolean{
+        for (let i = 0 ; i< fields.length; i++){
+            if (!this.checkValidity(fields[i])){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     private validateImage(image: Image): boolean {
-        const containsTitle = image.title !== null && image.title !== '';
+        const containsTitle = this.checkValidity(image.title);
+        const containsCorrectTags = this.checkValidityOnArray(image.tags);
         const containsSerial = image.serial !== null && image.serial !== '';
-        const containsInnerHtml = image.innerHtml !== null && image.innerHtml !== '';
-        return image !== null && containsTitle && containsSerial && containsInnerHtml;
+        const containsInnerHtml = image.innerHtml !== null ;
+        return containsTitle && containsSerial && containsInnerHtml && containsCorrectTags;
     }
 
     async deleteImage(idImage: string): Promise<void> {
