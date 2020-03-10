@@ -202,9 +202,14 @@
             <img src="../../../assets/icons/new-project.svg">
           </button>
         </div>
+        <div class="icon" (click)="openGallery()">
+          <button mat-button>
+            <img src="../../../assets/icons/gallery.svg">
+          </button>
+        </div>
         <div class="icon">
           <button mat-button disabled>
-            <img src="../../../assets/icons/load-project.svg">
+            <img src="../../../assets/icons/home.svg">
           </button>
         </div>
       </div>
@@ -214,8 +219,13 @@
             <img src="../../../assets/icons/redo.svg">
           </button>
         </div>
+        <div class="icon" (click)="exportProject()">
+          <button mat-button>
+            <img src="../../../assets/icons/export.svg">
+          </button>
+        </div>
         <div class="icon">
-          <button mat-button (click)="exportProject()">
+          <button mat-button (click)="saveServerProject()">
             <img src="../../../assets/icons/save-project.svg">
           </button>
         </div>
