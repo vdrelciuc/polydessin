@@ -1,18 +1,5 @@
 <div class="wrapper">
-  <!-- Type de recherche
-  <div class="left-section">
-    <h5>Type de Recherche</h5>
-    <mat-radio-group name="formatList" [(ngModel)]="isSearchByTags">
-      <mat-grid-list cols="3" rowHeight="30">
-        <mat-grid-tile>
-          <mat-radio-button [value]="true" (click)="isSearchByTags=true">Etiquettes</mat-radio-button>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <mat-radio-button [value]="false" (click)="isSearchByTags=false">Titre</mat-radio-button>
-        </mat-grid-tile>
-      </mat-grid-list>
-    </mat-radio-group>
-  </div> -->
+  <h1>Galerie de dessins</h1>
   <!-- recherche par tags -->
   <div class="option-section">
     <div class="left-section">
@@ -24,34 +11,16 @@
         </mat-form-field>
         <button mat-button class="add-tag-button" (click)="addTag(tagName)">Ajouter</button>
       </form>
-      <mat-action-list>
-        <button class="tag" *ngFor="let tag of tags" mat-list-item (click)="removeTag(tag)">{{tag}}
-          <img id="delete" width="12px" height="12px" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-close-circled-512.png" alt="close Icon">
-        </button>
-      </mat-action-list>
+      <mat-chip-list #chipList>
+        <mat-chip *ngFor="let tag of tags" [selectable]="true"
+             [removable]="true" (removed)="removeTag(tag)">
+            {{ tag }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
     </div>
   </div>
-  <!-- recherche par titre
-  <div class="option-section" *ngIf="!isSearchByTags">
-    <div class="left">
-      <div class="left-section">
-        <div class="details">
-          <form class="info">
-            <mat-form-field>
-              <mat-label class="text">Titre</mat-label>
-              <input matInput>
-            </mat-form-field>
-            <div class="icon">
-              <button mat-button>
-                <img src="../../../assets/icons/guide.svg">
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>-->
-  <!-- section resultats -->
+  <!-- resultats -->
   <div class="right">
     <h5>Résultats</h5>
     <div class="preview">

@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {MatDialogRef} from "@angular/material/dialog";
-import {SaveServerService} from "../../services/saveServer/save-server.service";
-import {Image} from "../../interfaces/image";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ImagesManagerService} from "../../services/imagesManager/images-manager.service";
-import {DomSanitizer} from "@angular/platform-browser";
-import {GalleryService} from "../../services/gallery/gallery.service";
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Image } from '../../interfaces/image';
+import { GalleryService } from '../../services/gallery/gallery.service';
+import { ImagesManagerService } from '../../services/imagesManager/images-manager.service';
+import { SaveServerService } from '../../services/saveServer/save-server.service';
 
 @Component({
   selector: 'app-gallery',
@@ -14,8 +14,6 @@ import {GalleryService} from "../../services/gallery/gallery.service";
 })
 export class GalleryComponent implements OnInit {
 
-
-  //isSearchByTags: boolean;
   isValidTag: boolean;
   tags: Set<string>;
   tagName: string;
@@ -27,15 +25,14 @@ export class GalleryComponent implements OnInit {
               private snacks: MatSnackBar,
               private imageRetriever: ImagesManagerService,
               private sanitizer: DomSanitizer,
-              private galleryService : GalleryService
+              private galleryService: GalleryService
   ) {
-    // this.isSearchByTags = true;
     this.tags = new Set<string>();
   }
 
   ngOnInit(): void {
     this.imageRetriever.getALLImages()
-      .subscribe(data => {
+      .subscribe((data) => {
         this.images = data;
         this.resultImages = this.images;
         // bug fix to images url unsafe from https://github.com/angular/angular/issues/18950
@@ -46,13 +43,13 @@ export class GalleryComponent implements OnInit {
       });
   }
 
-  onDialogClose() {
+  onDialogClose(): void {
     this.dialogRef.close();
   }
 
-  loadConfirmation() {
+  loadConfirmation(): void {
     this.onDialogClose();
-    //load logic goes here
+    // load logic goes here
   }
 
   addTag(tag: string): void {
@@ -90,24 +87,24 @@ export class GalleryComponent implements OnInit {
     }
   }
 
-  deleteImage(id : string):void{
-    this.imageRetriever.deleteImage(id).subscribe((data)=>{
-      for (let i = 0 ; i < this.images.length ; ++i){
-        if (id === this.images[i]._id){
-          //on supprime l'élément de notre copie du serveur
-          this.images.splice(i,1);
+  deleteImage(id: string): void {
+    this.imageRetriever.deleteImage(id).subscribe((data) => {
+      for (let i = 0 ; i < this.images.length ; ++i) {
+        if (id === this.images[i]._id) {
+          // on supprime l'élément de notre copie du serveur
+          this.images.splice(i, 1);
         }
       }
-      for (let i = 0 ; i < this.resultImages.length ; ++i){
-        if (id === this.resultImages[i]._id){
-          //on supprime l'élément de notre liste de resultats temporaire
-          this.resultImages.splice(i,1);
+      for (let i = 0 ; i < this.resultImages.length ; ++i) {
+        if (id === this.resultImages[i]._id) {
+          // on supprime l'élément de notre liste de resultats temporaire
+          this.resultImages.splice(i, 1);
         }
       }
-    })
+    });
   }
 
-  loadImage(image : Image){
+  loadImage(image: Image): void {
     this.galleryService.loadImage(image);
   }
 }
