@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { CanvasService } from 'src/app/services/canvas.service';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { Tools } from '../../enums/tools';
 import { ExportService } from '../../services/export/export.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
 import { ExportComponent } from '../export/export.component';
-import {GalleryComponent} from '../gallery/gallery.component';
+import { GalleryComponent } from '../gallery/gallery.component';
 import { SaveServerComponent } from '../save-server/save-server.component';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
 
@@ -29,7 +29,7 @@ export class SidebarComponent implements OnInit {
     public toolSelectorService: ToolSelectorService,
     private shortcut: HotkeysService,
     private exportService: ExportService,
-    private canvasService: CanvasService,
+    private drawStackService: DrawStackService,
     private snackBar: MatSnackBar,
     protected dialog: MatDialog) {
     this.setupShortcuts();
@@ -209,7 +209,7 @@ export class SidebarComponent implements OnInit {
   }
 
   saveServerProject(): void {
-    if (this.canvasService.layerCount > 0) {
+    if (!this.drawStackService.isEmpty()) {
       this.prepareDialogLaunch();
       this.exportService.SVGToCanvas().then(() => {
         this.bypassBrowserShortcuts();
@@ -234,7 +234,7 @@ export class SidebarComponent implements OnInit {
   }
 
   openGallery(): void {
-    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+    this.prepareDialogLaunch();
     this.bypassBrowserShortcuts();
     this.galleryDialog = this.dialog.open(GalleryComponent, { disableClose: true });
     this.galleryDialog.afterClosed().subscribe( () => {
@@ -243,7 +243,7 @@ export class SidebarComponent implements OnInit {
   }
 
   exportProject(): void {
-    if (this.canvasService.layerCount > 0) {
+    if (!this.drawStackService.isEmpty()) {
       this.prepareDialogLaunch();
       this.exportService.SVGToCanvas().then(() => {
         this.bypassBrowserShortcuts();
