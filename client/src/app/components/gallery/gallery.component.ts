@@ -61,7 +61,7 @@ export class GalleryComponent implements OnInit {
   }
 
   removeTag(tag: string): void {
-    this.isValidTag = this.saveService.removeTag(tag, this.tags);
+    this.saveService.removeTag(tag, this.tags);
     this.filterWithTag();
   }
 

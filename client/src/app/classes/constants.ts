@@ -46,3 +46,6 @@ export const OPACITY_MINIMUM = 0.1;
 export const OPACITY_MAXIMUM = 1;
 export const THICKNESS_STEP = 5;
 // export const OPACITY_STEP = 0.1;
+
+// Backend server
+export const REST_API_ROOT = 'http://localhost:3000/api/images';
