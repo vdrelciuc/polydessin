@@ -2,10 +2,6 @@ import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ExportService} from "../../services/export/export.service";
 import {ErrorOnSaveComponent} from "./error-on-save/error-on-save.component";
-import {SaveServerService} from "../../services/saveServer/save-server.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Image} from "../../interfaces/image";
-import {HttpErrorResponse} from "@angular/common/http";
 
 
 @Component({
@@ -20,19 +16,14 @@ export class SaveServerComponent implements  AfterViewInit{
   isValidTag = false;
   tags : Set<string>;
   tagName : string;
-  isSaving: boolean;
 
   @ViewChild('mydrawing', {static: false}) canvas: ElementRef;
   @ViewChild('proccessingCanas', {static : false}) proccessingCanas: ElementRef;
 
   constructor(private dialogRef: MatDialogRef<SaveServerComponent>,
-              private snacks : MatSnackBar,
               private dialog: MatDialog,
-              private saveService : SaveServerService,
               private exportation : ExportService) {
     this.tags = new  Set<string>();
-    this.isSaving = false;
-
   }
 
   ngAfterViewInit() {
@@ -46,45 +37,46 @@ export class SaveServerComponent implements  AfterViewInit{
   }
 
   saveConfirmation() {
-    if (!this.isValidTitle) {
+    if (!this.isValidTitle || !this.isValidTag) {
       const warning = this.dialog.open(ErrorOnSaveComponent, {disableClose: true});
       warning.componentInstance.errorTitle = this.isValidTitle;
+      warning.componentInstance.errorTag = this.isValidTag;
     } else {
-      this.addImage().then(() => {
-        this.onDialogClose();
-      });
+      this.onDialogClose();
+      console.log(this.title);
+      // saving logic
     }
 
   }
 
-  addTag(tag: string) : void{
-    this.isValidTag = this.saveService.addTag(tag, this.tags);
-    if (this.isValidTag){
-      this.tagName = '';
+  addTag(etiquette : string): void{
+    if (this.checkValidity(etiquette)){
+      this.tags.add(etiquette);
+    }
+    this.isValidTag = true;
+  }
+
+  removeTag(etiquette : string): void{
+    this.tags.delete(etiquette);
+    if (this.tags.size ===0) {
+      this.isValidTag = false;
     }
   }
 
-  removeTag(tag : string) : void {
-    this.isValidTag = this.saveService.removeTag(tag, this.tags);
+  // inspired from https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
+  checkValidity(field :string): boolean{
+    if (field === undefined || field === '') {
+      return false;
+    }
+    for(let i = 0 ; i < field.length ; ++i ){
+      let asci = field.charCodeAt(i);
+      if (!(asci > 47 && asci < 58) && // numeric (0-9)
+          !(asci > 64 && asci < 91) && // upper alpha (A-Z)
+          !(asci > 96 && asci < 123)) { // lower alpha (a-z)
+        return false;
+      }
+    }
+
+    return true;
   }
-
-  checkValidity(tag : string) : boolean{
-   return  this.saveService.checkValidity(tag);
-  }
-
-
-
-   private async addImage() {
-    this.isSaving =true;
-    this.snacks.open('Début de la sauvegarde', '', {duration : 1400} );
-    this.saveService.addImage(this.title, this.tags , this.exportation.imageAfterDeserialization.src)
-      .subscribe((data: Image) => {
-    }, (error : HttpErrorResponse) => {
-        this.isSaving = false;
-        this.saveService.handleError(error);
-    })
-  }
-
-
-
 }

@@ -29,6 +29,7 @@
             </mat-form-field>
           <button mat-button class="add-tag-button" (click)="addTag(tagName)">Ajouter</button>
         </form>
+        <p *ngIf="tags.size ===0" id="error-message"> Vous devez insérer une étiquette!</p>
         <mat-action-list>
           <button class="tag" *ngFor="let tag of tags" mat-list-item (click)="removeTag(tag)">{{tag}}
             <img id="delete" width="12px" height="12px" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-close-circled-512.png" alt="close Icon">
@@ -47,8 +48,7 @@
   </div>
   <div class="button-section">
     <button mat-button id="cancel-button" (click)="onDialogClose()">Annuler</button>
-    <button mat-button *ngIf="!isSaving" class="confirm-button" (click)="saveConfirmation()">Sauvegarder</button>
-    <button mat-button disabled *ngIf="isSaving" class="confirm-button" (click)="saveConfirmation()">Sauvegarder</button>
+    <button mat-button class="confirm-button" (click)="saveConfirmation()">Sauvegarder</button>
   </div>
 </div>
 

@@ -9,7 +9,6 @@ import { ExportComponent } from '../export/export.component';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
 import {ExportService} from "../../services/export/export.service";
 import {SaveServerComponent} from "../save-server/save-server.component";
-import {GalleryComponent} from "../gallery/gallery.component";
 
 @Component({
   selector: 'app-sidebar',
@@ -20,7 +19,6 @@ export class SidebarComponent implements OnInit {
   currentTool: Tools;
   private subscriptions: Subscription[] = [];
   private createNewDialog: MatDialogRef<CreateNewComponent>;
-  private galleryDialog : MatDialogRef<GalleryComponent>;
   private exportDialog: MatDialogRef<ExportComponent>;
   private saveServerDialog: MatDialogRef<SaveServerComponent>;
 
@@ -44,10 +42,6 @@ export class SidebarComponent implements OnInit {
       )
     );
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'bypass open to save from chrome' }).subscribe(
-      (event) => {}
-      )
-    );
-    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.g', description: 'bypass search chrome' }).subscribe(
       (event) => {}
       )
     );
@@ -144,15 +138,6 @@ export class SidebarComponent implements OnInit {
       )
     );
 
-    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.g', description: 'Opening gallery' }).subscribe(
-      (event) => {
-        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
-        this.dialog.closeAll();
-        this.openGallery();
-      }
-      )
-    );
-
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.s', description: 'Opening Save on Server' }).subscribe(
       (event) => {
         this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
@@ -226,15 +211,6 @@ export class SidebarComponent implements OnInit {
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
     this.createNewDialog = this.dialog.open(CreateNewComponent, { disableClose: true });
     this.createNewDialog.afterClosed().subscribe( () => {
-      this.setupShortcuts();
-    });
-  }
-
-  openGallery(): void {
-    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
-    this.bypassBrowserShortcuts();
-    this.galleryDialog = this.dialog.open(GalleryComponent, { disableClose: true });
-    this.galleryDialog.afterClosed().subscribe( () => {
       this.setupShortcuts();
     });
   }
