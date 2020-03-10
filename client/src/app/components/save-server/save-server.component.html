@@ -1,7 +1,7 @@
 <h1>Sauvegarde en ligne</h1>
 <div class="option-section">
   <div class="left">
-    <div class="left-section">
+    <div class="sub-section">
       <div class="details">
         <form class="info">
           <mat-form-field>
@@ -12,7 +12,7 @@
           <div class="icon" [matTooltip]="'Le titre doit avoir de 3 à 16 caractères et peut contenir
           des lettres, des chiffres, des espaces et des tirets (-). Les étiquettes sont optionnelles
           mais doivent avoir entre 1 et 10 caractères et peuvent contenir des lettres et des chiffres.
-          Les étiquettes du même dessin sont uniques.'"
+          Les étiquettes du même dessin sont uniques. Maximum 5 étiquettes.'"
                 matTooltipPosition="below">
             <button mat-button>
               <img src="../../../assets/icons/guide.svg">
@@ -22,16 +22,16 @@
 
       </div>
     </div>
-    <div class="left-section">
+    <div class="sub-section">
       <h5>Étiquettes</h5>
-      <form class="info">
+      <form class="tag-section">
         <mat-form-field>
           <mat-label class="text">Ajouter une étiquette</mat-label>
           <input [(ngModel)]="tagName" [ngModelOptions]="{standalone: true}" matInput>
           </mat-form-field>
         <button mat-button class="add-tag-button" (click)="addTag(tagName)">Ajouter</button>
       </form>
-      <mat-chip-list #chipList aria-label="Fruit selection">
+      <mat-chip-list>
         <mat-chip *ngFor="let tag of tags" [selectable]="true"
             [removable]="true" (removed)="removeTag(tag)">
           {{ tag }}
