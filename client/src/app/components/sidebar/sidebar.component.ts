@@ -55,7 +55,9 @@ export class SidebarComponent implements OnInit {
       )
     );
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.g', description: 'bypass search chrome' }).subscribe(
-      (event) => {}
+      (event) => {
+        // do nothing
+      }
       )
     );
   }
@@ -148,8 +150,6 @@ export class SidebarComponent implements OnInit {
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.g', description: 'Opening gallery' }).subscribe(
       (event) => {
-        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
-        this.dialog.closeAll();
         this.openGallery();
       }
       )
