@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { Tools } from '../../enums/tools';
@@ -9,6 +9,7 @@ import { CreateNewComponent } from '../create-new/create-new.component';
 import { ExportComponent } from '../export/export.component';
 import { SaveServerComponent } from '../save-server/save-server.component';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
+import { CanvasService } from 'src/app/services/canvas.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -26,6 +27,8 @@ export class SidebarComponent implements OnInit {
     public toolSelectorService: ToolSelectorService,
     private shortcut: HotkeysService,
     private exportService: ExportService,
+    private canvasService: CanvasService,
+    private snackBar: MatSnackBar,
     protected dialog: MatDialog) {
     this.setupShortcuts();
   }
@@ -191,15 +194,20 @@ export class SidebarComponent implements OnInit {
   }
 
   saveServerProject(): void {
-    this.prepareDialogLaunch();
-    this.exportService.SVGToCanvas().then(() => {
-      this.bypassBrowserShortcuts();
-      this.saveServerDialog = this.dialog.open(SaveServerComponent, {disableClose: true});
-      this.saveServerDialog.afterClosed().subscribe(() => {
-        this.setupShortcuts();
+    if (this.canvasService.layerCount > 0) {
+      this.prepareDialogLaunch();
+      this.exportService.SVGToCanvas().then(() => {
+        this.bypassBrowserShortcuts();
+        this.saveServerDialog = this.dialog.open(SaveServerComponent, {disableClose: true});
+        this.saveServerDialog.afterClosed().subscribe(() => {
+          this.setupShortcuts();
+        });
       });
-    });
-
+    } else {
+      this.snackBar.open('Vous ne pouvez pas sauvegarder un canvas vide', '', {
+        duration: 2000,
+      });
+    }
   }
 
   createNewProject(): void {
@@ -211,14 +219,20 @@ export class SidebarComponent implements OnInit {
   }
 
   exportProject(): void {
-    this.prepareDialogLaunch();
-    this.exportService.SVGToCanvas().then(() => {
-      this.bypassBrowserShortcuts();
-      this.exportDialog = this.dialog.open(ExportComponent, { disableClose: true });
-      this.exportDialog.afterClosed().subscribe( () => {
-        this.setupShortcuts();
+    if (this.canvasService.layerCount > 0) {
+      this.prepareDialogLaunch();
+      this.exportService.SVGToCanvas().then(() => {
+        this.bypassBrowserShortcuts();
+        this.exportDialog = this.dialog.open(ExportComponent, { disableClose: true });
+        this.exportDialog.afterClosed().subscribe( () => {
+          this.setupShortcuts();
+        });
       });
-    });
+    } else {
+      this.snackBar.open('Vous ne pouvez pas exporter un canvas vide', '', {
+        duration: 2000,
+      });
+    }
   }
 
   openDialog(): void {
