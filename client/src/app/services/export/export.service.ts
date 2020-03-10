@@ -15,7 +15,7 @@ export class ExportService {
   private image: ElementRef<SVGElement>; // My actual svg
   imageAfterDeserialization: HTMLImageElement; // transformed image through formula
 
-  private readonly REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,10}$/; // Alphanumeric, space and dash: 3 to 10 chars
+  private readonly REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,16}$/; // Alphanumeric, space and dash: 3 to 16 chars
   private readonly MAX_WIDTH: number = 300;
   private readonly MAX_HEIGHT: number = 270;
 
