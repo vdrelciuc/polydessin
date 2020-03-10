@@ -148,6 +148,8 @@ export class SidebarComponent implements OnInit {
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.g', description: 'Opening gallery' }).subscribe(
       (event) => {
+        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+        this.dialog.closeAll();
         this.openGallery();
       }
       )
@@ -232,7 +234,7 @@ export class SidebarComponent implements OnInit {
   }
 
   openGallery(): void {
-    this.prepareDialogLaunch();
+    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
     this.bypassBrowserShortcuts();
     this.galleryDialog = this.dialog.open(GalleryComponent, { disableClose: true });
     this.galleryDialog.afterClosed().subscribe( () => {

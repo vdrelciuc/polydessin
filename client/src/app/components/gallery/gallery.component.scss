@@ -8,23 +8,22 @@
   min-width: 500px;
 }
 
-h1 {
-  color: whitesmoke;
-  font-size: 1.5em;
-  text-align: center;
-}
-
-h5 {
-  color: whitesmoke;
-  font-size: 1em;
+.left-section {
+  margin-bottom: 10px;
 }
 
 .option-selection {
   display: flex;
   flex-direction: row;
 
-  .sub-section {
-    margin-bottom: 10px;
+  .left {
+    width: 70%;
+    float: left;
+  }
+
+  .right {
+    width: 30%;
+    float: left;
   }
 }
 
@@ -33,31 +32,15 @@ h5 {
   max-height: 250px;
 }
 
-.button-section {
-  margin-top: 10px;
-  text-align: right;
-  background-color:$dark-gray;
-
-  #cancel-button {
-    color: whitesmoke;
-    outline: none;
-
-  }
-
-  .confirm-button {
-    background-color: $vivid;
-    outline: none;
-  }
+.details {
+  display: flex;
+  flex-direction: column;
 }
 
-.add-tag-button {
-  background-color: $vivid;
-  outline: none;
+.icon{
   float: right;
-  right: 200px;
-  margin-top: 8px;
+  padding-top: 10px;
 }
-
 
 ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
   color: whitesmoke !important;
@@ -76,6 +59,82 @@ h5 {
   caret-color: whitesmoke !important;
 }
 
+.disabled {
+  color: red;
+}
+
 ::ng-deep .mat-form-field-underline, .mat-form-field-underline.mat-focused {
   background-color: whitesmoke !important;
+}
+
+h5 {
+  color: whitesmoke;
+  font-size: 1em;
+}
+
+::ng-deep .mat-grid-tile .mat-figure {
+  justify-content: left !important;
+}
+
+.mat-radio-button{
+  color:whitesmoke;
+}
+
+::ng-deep .mat-radio-outer-circle {
+  border-color: whitesmoke;
+}
+
+.button-section {
+  margin-top: 10px;
+  text-align: right;
+  background-color:$dark-gray;
+}
+
+#cancel-button {
+  color: whitesmoke;
+  outline: none;
+
+}
+
+.confirm-button {
+  background-color: $vivid;
+  outline: none;
+}
+
+.add-tag-button {
+  background-color: $vivid;
+  outline: none;
+  float: right;
+  right: 200px;
+  margin-top: 8px;
+}
+
+.list-tags{
+  float: right !important;
+}
+
+.tag {
+  width: max-content !important;
+  color: red !important;
+  background-color: white !important;
+  font-size: 1.2em !important;
+  border-radius: 15px !important;
+  margin-bottom: 4px;
+}
+
+#error-message{
+  color: red;
+}
+
+.delete{
+  margin-top: 2px;
+  position: absolute;
+  right: 2px;
+}
+.tag:hover{
+  color: red !important;
+  background-color: #dbdbdb !important;
+  font-weight: bold !important;
+  font-size: 1.5em !important;
+
 }
