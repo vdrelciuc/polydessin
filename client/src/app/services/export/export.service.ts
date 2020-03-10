@@ -15,7 +15,9 @@ export class ExportService {
   private image: ElementRef<SVGElement>; // My actual svg
   imageAfterDeserialization: HTMLImageElement; // transformed image through formula
 
-  private readonly REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,10}$/gm; // Alphanumeric, space and dash: 3 to 10 chars
+  private readonly REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,10}$/; // Alphanumeric, space and dash: 3 to 10 chars
+  private readonly MAX_WIDTH: number = 300;
+  private readonly MAX_HEIGHT: number = 270;
 
   currentFormat: BehaviorSubject<ImageFormat>;
   currentFilter: BehaviorSubject<ImageFilter>;
@@ -65,27 +67,27 @@ export class ExportService {
     }
   }
 
-  drawPreview(firstCall: boolean){
-    let contextBinded = this.canvas.getContext('2d');
-    if (contextBinded !==null){
-      contextBinded.clearRect(0,0,contextBinded.canvas.width,contextBinded.canvas.height);
+  drawPreview(firstCall: boolean): void {
+    const contextBinded = this.canvas.getContext('2d');
+    if (contextBinded !== null) {
+      contextBinded.clearRect(0, 0, contextBinded.canvas.width, contextBinded.canvas.height);
       this.applyFilterForPreview(contextBinded);
-      let scaleX = 300 /this.originalCanvas.width;
-      let scaleY = (270 /this.originalCanvas.height)/2;
-      if (scaleX > 1){
-        scaleX =1;
+      let scaleX = this.MAX_HEIGHT / this.originalCanvas.width;
+      let scaleY = (this.MAX_WIDTH / this.originalCanvas.height) / 2;
+      if (scaleX > 1) {
+        scaleX = 1;
       }
-      if (scaleY > 1){
-        scaleY =1;
+      if (scaleY > 1) {
+        scaleY = 1;
       }
-      if (firstCall){
+      if (firstCall) {
         contextBinded.scale(scaleX, scaleY);
       }
-      contextBinded.drawImage(this.originalCanvas,0,0);
+      contextBinded.drawImage(this.originalCanvas, 0, 0);
     }
   }
 
-  async SVGToCanvas() {
+  async SVGToCanvas(): Promise<void> {
     this.deserializeImage();
     this.imageAfterDeserialization.onload = () => {
       this.originalCanvas.width = this.imageAfterDeserialization.width;
@@ -95,11 +97,11 @@ export class ExportService {
         context.drawImage(this.imageAfterDeserialization, 0, 0);
       }
       this.drawPreview(true);
-    }
+    };
 
   }
 
-  applyFilterForPreview(ctx:CanvasRenderingContext2D): void{
+  applyFilterForPreview(ctx: CanvasRenderingContext2D): void {
     const tempFilter = this.filtersMap.get(this.currentFilter.getValue());
     if (tempFilter !== undefined) {
       ctx.filter = tempFilter;
@@ -159,7 +161,7 @@ export class ExportService {
     this.image = image; // my actual SVG Element
   }
 
-  validateTitle(title: string) {
+  validateTitle(title: string): void {
     this.isTitleValid.next(this.REGEX_TITLE.test(title));
   }
 

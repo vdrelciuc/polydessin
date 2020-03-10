@@ -106,8 +106,10 @@ export class ExportComponent implements AfterViewInit {
     this.exportation.export(this.title);
   }
 
-  onTitleUpdate(event: any) {
-    this.exportation.validateTitle(event.target.value);
+  onTitleUpdate(event: any): void {
+    if (event.target !== null) {
+      this.exportation.validateTitle(event.target.value);
+    }
   }
 
 }
