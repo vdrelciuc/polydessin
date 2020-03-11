@@ -2,7 +2,7 @@
   <h1>Galerie de dessins</h1>
   <!-- recherche par tags -->
   <div class="option-section">
-    <div class="left-section">
+    <div class="sub-section">
       <h5>Rechercher par étiquette</h5>
       <form class="info">
         <mat-form-field>
@@ -21,10 +21,43 @@
     </div>
   </div>
   <!-- resultats -->
-  <div class="right">
+  <div class="right"></div>
     <h5>Résultats</h5>
-    <div class="preview">
-      <mat-card class="example-card" *ngFor="let image of resultImages">
+
+    <div class="scroll-container">
+      <mat-grid-list [style.width]="getTableWidth()" cols="{{ this.resultImages.length / 2 }}" rowHeight="250px" gutterSize="5px">
+        <mat-grid-tile class="result" *ngFor="let image of resultImages">
+          <img class="thumbnail" [attr.src]="image.serial">
+          <mat-grid-tile-footer>{{ image.title }}</mat-grid-tile-footer>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+
+    <!--<div ng-controller="TestController" class="scroll-container">
+      <md-grid-list md-gutter="1em" md-row-height="20px" md-cols="{{numCols}}">
+        <md-grid-tile ng-repeat="site in sites" class="repeated-item" ng-click="goToSite(site)">
+          {{site.name}}
+        </md-grid-tile>
+      </md-grid-list>
+    </div>-->
+
+      <!--<div class="results">
+        <div class="result" *ngFor="let image of resultImages; let i = index">
+          <div *ngIf="i % 2 == 0">
+            <img class="thumbnail" [attr.src]="image.serial">
+          </div>
+        </div>
+      </div>
+      <div class="results">
+        <div class="result" *ngFor="let image of resultImages; let i = index">
+          <div *ngIf="i % 2 != 0">
+            <img class="thumbnail" [attr.src]="image.serial">
+          </div>
+        </div>
+      </div>-->
+
+
+      <!--<mat-card class="example-card" *ngFor="let image of resultImages">
         <mat-card-header>
           <mat-card-title>{{image.title}}</mat-card-title>
         </mat-card-header>
@@ -36,17 +69,14 @@
           <button mat-button (click)="loadImage(image)">Charger</button>
           <button mat-button (click)="deleteImage(image._id)">Suprimer</button>
         </mat-card-actions>
-      </mat-card>
-    </div>
-  </div>
-  <!-- section boutons de la modale -->
+      </mat-card>-->
+    <!-- section boutons de la modale -->
   <div class="button-section">
     <button mat-button id="cancel-button" (click)="onDialogClose()">Annuler</button>
-    <button mat-button class="confirm-button" (click)="loadConfirmation()">Sauvegarder</button>
   </div>
-
-
 </div>
+
+
 
 
 

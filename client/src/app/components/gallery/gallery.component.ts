@@ -20,6 +20,8 @@ export class GalleryComponent implements OnInit {
   images: Image[];
   resultImages: Image[];
 
+  readonly TILE_WIDTH: number = 300;
+
   constructor(private dialogRef: MatDialogRef<GalleryComponent>,
               private saveService: SaveServerService,
               private snacks: MatSnackBar,
@@ -106,5 +108,10 @@ export class GalleryComponent implements OnInit {
 
   loadImage(image: Image): void {
     this.galleryService.loadImage(image);
+  }
+
+  getTableWidth(): string {
+    const width = this.resultImages.length / 2 * this.TILE_WIDTH;
+    return width + 'px';
   }
 }
