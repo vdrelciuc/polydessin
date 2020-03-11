@@ -24,7 +24,7 @@ export class EraserService extends DrawableService {
   private leftClick: boolean;
   private preview: SVGRectElement;
   private canErase: boolean;
-  private brushDelete: SVGElementInfos;
+  private brushDelete: Stack<SVGElementInfos>;
 
   constructor() { 
     super();
@@ -85,17 +85,18 @@ export class EraserService extends DrawableService {
   onMousePress(event: MouseEvent): void {
     if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = true;
-      this.brushDelete = {
-        target: this.manipulator.createElement('g', 'http://www.w3.org/2000/svg'),
-        id: 0.1 
-      };
+      this.brushDelete = new Stack<SVGElementInfos>();
     }
   }
 
   onMouseRelease(event: MouseEvent): void {
     if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = false;
-      this.undoRedo.addToRemoved(this.brushDelete);
+      let element = this.brushDelete.pop_back();
+      while(element !== undefined) {
+        this.undoRedo.addToRemoved(element);
+        element = this.brushDelete.pop_back();
+      }
     }
   }
 
@@ -169,10 +170,14 @@ export class EraserService extends DrawableService {
     const elementOnTop = { target: element, id: Number(element.getAttribute(SVGProperties.title))};
     if(elementOnTop.target !== undefined) {      
       if(this.leftClick) {
-        this.manipulator.appendChild(this.brushDelete.target, elementOnTop.target)
-        this.brushDelete.id += this.selectedElement.id;
-        this.drawStack.removeElement(this.selectedElement.id);
+        const previous = this.brushDelete.pop_back();
+        if(previous !== undefined) {
+          previous.deleteWith = elementOnTop.id;
+          this.brushDelete.push_back(previous);
+        }
+        this.brushDelete.push_back(elementOnTop);
         this.manipulator.removeChild(this.image.nativeElement, elementOnTop.target);
+        this.drawStack.removeElement(elementOnTop.id);
       } else {
         if(this.selectedElement === undefined) {
           this.selectedElement = elementOnTop;

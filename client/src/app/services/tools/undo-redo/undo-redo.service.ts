@@ -54,8 +54,22 @@ export class UndoRedoService {
     this.redoing = true;
     if(this.toRedo !== undefined) {
       this.redoing = true;
-      this.drawStack.addElementWithInfos(this.toRedo);
-      this.manipulator.appendChild(this.image.nativeElement, this.toRedo.target);
+      let stack: Stack<SVGElementInfos> = new Stack<SVGElementInfos>();
+      this.toRedo.deleteWith = undefined;
+      stack.push_front(this.toRedo);
+      this.toRedo = this.removed.pop_back();
+      while(this.toRedo!== undefined && this.toRedo.deleteWith !== undefined) {
+        this.toRedo.deleteWith = undefined;
+        stack.push_front(this.toRedo);
+        this.toRedo = this.removed.pop_back();
+      }
+      if(this.toRedo !== undefined) {
+        this.toRedo.deleteWith = undefined;
+        stack.push_front(this.toRedo);
+      }
+      for(const element of stack.getAll()) {
+        this.add(element);
+      }
       this.redoing = false;
     }
     if(this.toRedraw.getAll().length > 0) {
@@ -72,12 +86,29 @@ export class UndoRedoService {
     this.manipulator.removeChild(this.image.nativeElement, toUndo.target);
   }
 
+  private add(element: SVGElementInfos): void {
+    this.drawStack.addElementWithInfos(element);
+    this.manipulator.appendChild(this.image.nativeElement, element.target);
+  }
+
   private redrawStackFrom(from: number): void {
-    this.toRedraw = this.drawStack.removeElements(from);
+    let array: SVGElementInfos[] = this.drawStack.removeElements(from).getAll();
     if(this.toRedo !== undefined) {
-      for(const elementToRedraw of this.toRedraw.getAll()) {
+      for(const elementToRedraw of array) {
         this.manipulator.removeChild(this.image.nativeElement, elementToRedraw.target);
       }
+    }
+    array.sort((element1, element2) => {
+      if (element1.id > element2.id) {
+          return 1;
+      }
+      if (element1.id < element2.id) {
+          return -1;
+      }
+      return 0;
+    });
+    for(const element of array) {
+      this.toRedraw.push_back(element);
     }
   }
 
