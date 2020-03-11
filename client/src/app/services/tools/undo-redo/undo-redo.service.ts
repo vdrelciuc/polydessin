@@ -55,9 +55,12 @@ export class UndoRedoService {
     if(this.toRedo !== undefined) {
       this.redoing = true;
       let stack: Stack<SVGElementInfos> = new Stack<SVGElementInfos>();
+      const id = this.toRedo.deleteWith;
       this.toRedo.deleteWith = undefined;
       stack.push_front(this.toRedo);
-      this.toRedo = this.removed.pop_back();
+      if(id !== undefined) {
+        this.toRedo = this.removed.pop_back();
+      }
       while(this.toRedo!== undefined && this.toRedo.deleteWith !== undefined) {
         this.toRedo.deleteWith = undefined;
         stack.push_front(this.toRedo);
@@ -98,15 +101,17 @@ export class UndoRedoService {
         this.manipulator.removeChild(this.image.nativeElement, elementToRedraw.target);
       }
     }
-    array.sort((element1, element2) => {
-      if (element1.id > element2.id) {
-          return 1;
+    array.sort(
+      (element1, element2) => {
+        if (element1.id > element2.id) {
+            return 1;
+        }
+        if (element1.id < element2.id) {
+            return -1;
+        }
+        return 0;
       }
-      if (element1.id < element2.id) {
-          return -1;
-      }
-      return 0;
-    });
+    );
     for(const element of array) {
       this.toRedraw.push_back(element);
     }
