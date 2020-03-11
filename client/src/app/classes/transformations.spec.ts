@@ -1,5 +1,5 @@
 import { Transform } from './transformations';
-import { Renderer2, /*Type,*/ ElementRef } from '@angular/core';
+import { Renderer2, /*Type,*/ } from '@angular/core';
 import { /*getTestBed,*/ TestBed } from '@angular/core/testing';
 //import { Stack } from './stack';
 //import { SVGElementInfos } from '../interfaces/svg-element-infos';
@@ -7,9 +7,9 @@ import { /*getTestBed,*/ TestBed } from '@angular/core/testing';
 
 describe('Transform', () => {
 
-    let manipulator: Renderer2;
+    let manipulator: mockedRenderer;
     //let elementInStack: SVGGElement;
-    //let elements: Stack<SVGElementInfos>;
+    //let elements: Stack<mockedSVGElementInfos>;
     let transform: string | null = null;
 
     /*const mockedCreateElement = (tag: string, source: string): SVGGElement => {
@@ -23,17 +23,73 @@ describe('Transform', () => {
         console.log("mockedSet called with name: " + name);
     };*/
 
-    const mockedGetAttribute = (name: string): string | null => {
+    /*const mockedGetAttribute = (name: string): string | null => {
         console.log("mockedGetAttribute called with name - " + name + " -. Return: " + transform);
         return transform;
+    };*/
+
+    //let el = null as unknown as SVGGElement;
+    class mockedSVGElementInfos {
+        target = null as unknown as mockedSVGGElement;
+        id = 0
     };
 
-    const mockedSVGElementInfo = {
-        target: null as unknown as SVGGElement,
-        id: 0
-    };
-
-    class mockedRenderer {
+    class mockedRenderer extends Renderer2 {
+        data: { [key: string]: any; };
+        destroy(): void {
+            throw new Error("Method not implemented.");
+        }
+        createComment(value: string) {
+            throw new Error("Method not implemented.");
+        }
+        createText(value: string) {
+            throw new Error("Method not implemented.");
+        }
+        appendChild(parent: any, newChild: any): void {
+            throw new Error("Method not implemented.");
+        }
+        insertBefore(parent: any, newChild: any, refChild: any): void {
+            throw new Error("Method not implemented.");
+        }
+        removeChild(parent: any, oldChild: any, isHostElement?: boolean | undefined): void {
+            throw new Error("Method not implemented.");
+        }
+        selectRootElement(selectorOrNode: any, preserveContent?: boolean | undefined) {
+            throw new Error("Method not implemented.");
+        }
+        parentNode(node: any) {
+            throw new Error("Method not implemented.");
+        }
+        nextSibling(node: any) {
+            throw new Error("Method not implemented.");
+        }
+        removeAttribute(el: any, name: string, namespace?: string | null | undefined): void {
+            throw new Error("Method not implemented.");
+        }
+        addClass(el: any, name: string): void {
+            throw new Error("Method not implemented.");
+        }
+        removeClass(el: any, name: string): void {
+            throw new Error("Method not implemented.");
+        }
+        setStyle(el: any, style: string, value: any, flags?: import("@angular/core").RendererStyleFlags2 | undefined): void {
+            throw new Error("Method not implemented.");
+        }
+        removeStyle(el: any, style: string, flags?: import("@angular/core").RendererStyleFlags2 | undefined): void {
+            throw new Error("Method not implemented.");
+        }
+        setProperty(el: any, name: string, value: any): void {
+            throw new Error("Method not implemented.");
+        }
+        setValue(node: any, value: string): void {
+            throw new Error("Method not implemented.");
+        }
+        listen(target: any, eventName: string, callback: (event: any) => boolean | void): () => void {
+            throw new Error("Method not implemented.");
+        }
+        constructor() {
+            super();
+        }
         createElement(tag: string, source: string): mockedSVGGElement {
             console.log("mockedCreate called");
             return new mockedSVGGElement();
@@ -45,8 +101,7 @@ describe('Transform', () => {
         };
     }
 
-    class mockedSVGGElement {
-        constructor() {};
+    class mockedSVGGElement extends SVGGElement {
         getAttribute(name: string): string | null {
             console.log("mockedGetAttribute called with name - " + name + " -. Return: " + transform);
             return transform;
@@ -57,7 +112,7 @@ describe('Transform', () => {
         TestBed.configureTestingModule({
             providers: [
                 { provide: Renderer2, useClass: mockedRenderer },
-                { provide: ElementRef, useClass: mockedSVGGElement }
+                { provide: SVGGElement, useClass: mockedSVGGElement }
             ]
         });
         //manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
@@ -68,8 +123,8 @@ describe('Transform', () => {
         elements = new Stack<SVGElementInfos>();
         elements.push_back({ target: elementInStack, id: 1 });*/
 
-        Transform['elementsToTransform'] = [mockedSVGElementInfo];
-        Transform['manipulator'] = manipulator;
+        //Transform['elementsToTransform'] = [mockedSVGElementInfo];
+        //Transform['manipulator'] = manipulator;
     });
 
     it('mocked functions should be set properly', () => {
@@ -96,7 +151,13 @@ describe('Transform', () => {
         Transform.translate(10, 10);
         expect(transform).toBe('translate(10, 10');*/
         //spyOn(Transform['manipulator'], 'setAttribute').and.callFake(mockedSetAttribute);
-        spyOn(Transform['elementsToTransform'][0].target, 'getAttribute').and.callFake(mockedGetAttribute);
+        Transform['manipulator'] = manipulator;
+        //Transform.setElements(elements, manipulator);
+        //const mockedEl = new mockedSVGElementInfos();
+        //elements.push_back(new mockedSVGElementInfos());
+        Transform['elementsToTransform'] = [new mockedSVGElementInfos()];
+        //spyOn(mockedSVGElementInfo.target, 'getAttribute').and.callFake(mockedGetAttribute);
+        //elements.getAll = jasmine.createSpy().and.returnValue(true);
         
         Transform.translate(10, 10);
         //const newTransform = elements.getAll()[0].target.getAttribute(SVGProperties.transform);
