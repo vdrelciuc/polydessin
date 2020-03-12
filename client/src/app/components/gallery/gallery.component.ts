@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Image } from '../../interfaces/image';
 import { GalleryService } from '../../services/gallery/gallery.service';
-import { ImagesManagerService } from '../../services/imagesManager/images-manager.service';
 import { SaveServerService } from '../../services/saveServer/save-server.service';
 
 @Component({
@@ -26,7 +25,6 @@ export class GalleryComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<GalleryComponent>,
               private saveService: SaveServerService,
               private snacks: MatSnackBar,
-              private imageRetriever: ImagesManagerService,
               private sanitizer: DomSanitizer,
               private galleryService: GalleryService
   ) {
@@ -37,7 +35,7 @@ export class GalleryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.imageRetriever.getALLImages()
+    this.galleryService.getAllImages()
       .subscribe((data) => {
         this.images = data;
         this.resultImages = this.images;
@@ -96,7 +94,7 @@ export class GalleryComponent implements OnInit {
   }
 
   deleteImage(id: string): void {
-    this.imageRetriever.deleteImage(id).subscribe((data) => {
+    this.galleryService.deleteImage(id).subscribe((data) => {
       for (let i = 0 ; i < this.images.length ; ++i) {
         if (id === this.images[i]._id) {
           // on supprime l'élément de notre copie du serveur
@@ -109,7 +107,11 @@ export class GalleryComponent implements OnInit {
           this.resultImages.splice(i, 1);
         }
       }
-    });
+      this.snacks.open('Votre image a été supprimée du serveur', '', {duration: 1500});
+    }, (error) => {
+      this.snacks.open('Une erreur empêche la suppression', '', {duration: 2500});
+    })
+    ;
   }
 
   loadImage(image: Image): void {
