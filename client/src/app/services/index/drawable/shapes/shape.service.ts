@@ -5,14 +5,19 @@ import { ShapeStyle } from 'src/app/classes/shape-style';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class ShapeService extends DrawableService {
+
+  private readonly FIRST_QUADRANT: number = 1;
+  private readonly SECOND_QUADRANT: number = 2;
+  private readonly THIRD_QUADRANT: number = 3;
+  private readonly FOURTH_QUADRANT: number = 4;
 
   attributes: DrawablePropertiesService;
   colorSelectorService: ColorSelectorService;
@@ -30,6 +35,8 @@ export abstract class ShapeService extends DrawableService {
   protected perimeter: SVGRectElement;
   protected subElement: SVGGElement;
   protected shape: SVGElement;
+  protected clip: SVGClipPathElement;
+  protected use: SVGUseElement;
 
   protected svgHtmlTag: SVGProperties;
   protected svgTitle: Tools;
@@ -64,7 +71,7 @@ export abstract class ShapeService extends DrawableService {
   updateTracingType(tracingType: 'border' | 'fill'): void {
     // Verify if a checkbox was changed while a rectangle creation was ongoing and dragged out of canvas
     this.cancelShapeIfOngoing();
-    
+
     if (tracingType === 'border') {
       this.shapeStyle.hasBorder = !this.shapeStyle.hasBorder;
     } else {
@@ -97,13 +104,6 @@ export abstract class ShapeService extends DrawableService {
     } else if (this.isChanging) {
       this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
       this.manipulator.removeChild(this.subElement, this.perimeter);
-      //this.drawStack.addElement(this.subElement);
-      const nextID = this.drawStack.getNextID();
-      this.drawStack.addElementWithInfos({
-        target: this.subElement,
-        id: nextID
-      });
-      this.manipulator.setAttribute(this.subElement, SVGProperties.title, nextID.toString());
     }
     this.isChanging = false;
   }
@@ -137,7 +137,7 @@ export abstract class ShapeService extends DrawableService {
 
   endTool(): void {
     this.shiftPressed = false;
-    if(this.drawOnNextMove) {
+    if (this.drawOnNextMove) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
   }
@@ -150,12 +150,12 @@ export abstract class ShapeService extends DrawableService {
       this.mousePositionOnShiftPress = new CoordinatesXY(this.mousePosition.getX(), this.mousePosition.getY());
       const quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
       if (width > height) {
-        if (quadrant === 2 || quadrant === 3) {
+        if (quadrant === this.SECOND_QUADRANT || quadrant === this.THIRD_QUADRANT) {
           this.mousePosition.setX(this.mousePosition.getX() + (width - height)); // Faking mouse position
         }
         width = height;
       } else {
-        if (quadrant === 1 || quadrant === 2) {
+        if (quadrant === this.FIRST_QUADRANT || quadrant === this.SECOND_QUADRANT) {
           this.mousePosition.setY(this.mousePosition.getY() + (height - width)); // Faking mouse position
         }
         height = width;
@@ -166,71 +166,28 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.perimeter, SVGProperties.width, width.toString());
     this.manipulator.setAttribute(this.perimeter, SVGProperties.height, height.toString());
 
-    let thicknessOffset = this.shapeStyle.hasBorder ? this.shapeStyle.thickness / 2 : 0;
-
-    if (this.shapeStyle.hasBorder) {
-      /*let fakedWidth = width - this.shapeStyle.thickness;
-      let fakedHeight = height - this.shapeStyle.thickness;
-    
-      // Recover border
-      this.manipulator.setAttribute(this.shape, SVGProperties.thickness, this.shapeStyle.thickness.toString());
-      // Check if border thickness is larger than width or height
-      if (fakedWidth <= 0) {
-        fakedWidth = 1;
-        this.manipulator.setAttribute(this.shape, SVGProperties.thickness, Math.min(width, height).toString());
-        thicknessOffset = Math.min(width, height) / 2;
-        fakedHeight = height - 2 * thicknessOffset;
-      }
-      if (fakedHeight <= 0) {
-        fakedHeight = 1;
-        this.manipulator.setAttribute(this.shape, SVGProperties.thickness, Math.min(width, height).toString());
-        thicknessOffset = Math.min(width, height) / 2;
-        fakedWidth = width - 2 * thicknessOffset;
-      }
-
-      width = fakedWidth;
-      height = fakedHeight;*/
-
-      if (width > this.shapeStyle.thickness && height > this.shapeStyle.thickness) {
-        width = width - this.shapeStyle.thickness;
-        height = height - this.shapeStyle.thickness;
-        this.manipulator.setAttribute(this.shape, SVGProperties.thickness, this.shapeStyle.thickness.toString());
-      } else {
-        let newThickness: number;
-        if (width <= height) {
-          newThickness = width / 2;
-          width = width / 2;
-          height = height - newThickness;
-        } else {
-          newThickness = height / 2;
-          height = height / 2;
-          width = width - newThickness;
-        }
-        this.manipulator.setAttribute(this.shape, SVGProperties.thickness, newThickness.toString());
-        thicknessOffset = newThickness / 2;
-      }
-    }
-
     // Set dimensions attributes for shape
     this.setDimensionsAttributes(width, height);
-    this.alignShapeOrigin(width, height, thicknessOffset);
+    this.alignShapeOrigin(width, height);
   }
 
   protected setupProperties(): void {
     // Creating elements
+    const shapeID = this.drawStack.getNextID();
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.subElement, SVGProperties.title, this.svgTitle);
+    this.manipulator.setAttribute(this.subElement, SVGProperties.title, shapeID.toString());
     this.shape = this.manipulator.createElement(this.svgHtmlTag, 'http://www.w3.org/2000/svg');
     this.text = this.manipulator.createElement('text', 'http://www.w3.org/2000/svg');
     this.perimeter = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
 
     // Adding shape properties
-    const thickness = this.shapeStyle.hasBorder ? this.shapeStyle.thickness.toString() : '0';
+    const thickness = this.shapeStyle.hasBorder ? (this.shapeStyle.thickness * 2).toString() : '0';
     this.manipulator.setAttribute(this.shape, SVGProperties.fill, this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getHex() : 'none');
     this.manipulator.setAttribute(this.shape, SVGProperties.thickness, thickness);
     this.manipulator.setAttribute(this.shape, SVGProperties.color, this.shapeStyle.borderColor.getHex());
     this.manipulator.setAttribute(this.shape, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
     this.manipulator.setAttribute(this.shape, SVGProperties.fillOpacity, this.shapeStyle.fillOpacity.toString());
+    this.manipulator.setAttribute(this.shape, 'id', `shape${shapeID}`);
 
     // Adding text properties
     const color = this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getInvertedColor(true).getHex() : 'black';
@@ -246,33 +203,45 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.perimeter, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.perimeter, SVGProperties.dashedBorder, '4, 2');
 
+    // Removing border outside of shape
+    this.clip = this.manipulator.createElement('clipPath', 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.clip, 'id', `clip${shapeID}`);
+    this.use = this.manipulator.createElement('use', 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.shape, 'clip-path', `url(#clip${shapeID})`);
+    this.manipulator.setAttribute(this.use, 'href', `#shape${shapeID}`);
+
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.shape);
+    this.manipulator.appendChild(this.subElement, this.clip);
+    this.manipulator.appendChild(this.clip, this.use);
     this.manipulator.appendChild(this.subElement, this.text);
     this.manipulator.appendChild(this.subElement, this.perimeter);
-    this.manipulator.insertBefore(this.image.nativeElement, this.subElement, this.image.nativeElement.querySelector('#grid'));
+    this.manipulator.appendChild(this.image.nativeElement, this.subElement);
+
+    // Allow undo/redo
+    this.drawStack.addElementWithInfos({ target: this.subElement, id: shapeID });
   }
 
-  protected alignShapeOrigin(width: number, height: number, thicknessOffset: number): void {
+  protected alignShapeOrigin(width: number, height: number): void {
     const quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
 
-    if (quadrant === 1 || quadrant === 4) {
-      this.setShapeOriginFromRightQuadrants(width, thicknessOffset);
-      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.shapeOrigin.getX() + width / 2 + thicknessOffset).toString());
+    if (quadrant === this.FIRST_QUADRANT || quadrant === this.FOURTH_QUADRANT) {
+      this.setShapeOriginFromRightQuadrants(width);
+      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.shapeOrigin.getX() + width / 2).toString());
       this.manipulator.setAttribute(this.perimeter, SVGProperties.x, this.shapeOrigin.getX().toString());
     } else {
-      this.setShapeOriginFromLeftQuadrants(width, thicknessOffset);
-      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.mousePosition.getX() + width / 2 + thicknessOffset).toString());
+      this.setShapeOriginFromLeftQuadrants(width);
+      this.manipulator.setAttribute(this.text, SVGProperties.x, (this.mousePosition.getX() + width / 2).toString());
       this.manipulator.setAttribute(this.perimeter, SVGProperties.x, this.mousePosition.getX().toString());
     }
 
-    if (quadrant === 3 || quadrant === 4) {
-      this.setShapeOriginFromLowerQuadrants(height, thicknessOffset);
-      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.getY() + height / 2 + thicknessOffset).toString());
+    if (quadrant === this.THIRD_QUADRANT || quadrant === this.FOURTH_QUADRANT) {
+      this.setShapeOriginFromLowerQuadrants(height);
+      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.getY() + height / 2).toString());
       this.manipulator.setAttribute(this.perimeter, SVGProperties.y, this.shapeOrigin.getY().toString());
     } else {
-      this.setShapeOriginFromUpperQuadrants(height, thicknessOffset);
-      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.mousePosition.getY() + height / 2 + thicknessOffset).toString());
+      this.setShapeOriginFromUpperQuadrants(height);
+      this.manipulator.setAttribute(this.text, SVGProperties.y, (this.mousePosition.getY() + height / 2).toString());
       this.manipulator.setAttribute(this.perimeter, SVGProperties.y, this.mousePosition.getY().toString());
     }
 
@@ -296,8 +265,8 @@ export abstract class ShapeService extends DrawableService {
   // Methods to implement in concrete shape class
 
   protected abstract setDimensionsAttributes(width: number, height: number): void;
-  protected abstract setShapeOriginFromRightQuadrants(width: number, thicknessOffset: number): void;
-  protected abstract setShapeOriginFromLeftQuadrants(width: number, thicknessOffset: number): void;
-  protected abstract setShapeOriginFromLowerQuadrants(height: number, thicknessOffset: number): void;
-  protected abstract setShapeOriginFromUpperQuadrants(height: number, thicknessOffset: number): void;
+  protected abstract setShapeOriginFromRightQuadrants(width: number): void;
+  protected abstract setShapeOriginFromLeftQuadrants(width: number): void;
+  protected abstract setShapeOriginFromLowerQuadrants(height: number): void;
+  protected abstract setShapeOriginFromUpperQuadrants(height: number): void;
 }

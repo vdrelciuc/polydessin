@@ -1,7 +1,10 @@
 export interface Image {
-    _id : string;
+    _id: string;
     title: string;
     tags: string[];
     serial: string;
-    innerHtml: SVGElement;
+    innerHtml: string;
+    width: number;
+    height: number;
+    background: string;
 }

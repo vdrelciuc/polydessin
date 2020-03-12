@@ -1,4 +1,4 @@
-import { getTestBed, TestBed } from '@angular/core/testing';
+import { getTestBed, TestBed, fakeAsync } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
@@ -111,7 +111,7 @@ describe('ShapeService', () => {
   });
 
   it('#updateTracingType should change traced with border', () => {
-    // const spy = spyOn(service, 'cancelShape');
+    const spy = spyOn(service, 'cancelShapeIfOngoing');
     service['isChanging'] = true;
     service.updateTracingType('border');
     expect(service.shapeStyle.hasBorder).not.toBeTruthy();
@@ -119,16 +119,17 @@ describe('ShapeService', () => {
   });
 
   it('#updateTracingType should change traced with fill', () => {
-    // const spy = spyOn(service, 'cancelShape');
+    const spy = spyOn(service, 'cancelShapeIfOngoing');
     service['isChanging'] = false;
     service.updateTracingType('fill');
     expect(service.shapeStyle.hasFill).not.toBeTruthy();
-    // expect(spy).not.toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#cancelShape should stop shape', () => {
+    service['isChanging'] = true;
     const spy = spyOn(manipulator, 'removeChild');
-    // service.cancelShape();
+    service.cancelShapeIfOngoing();
     expect(spy).toHaveBeenCalledWith(image.nativeElement,
         service['subElement']);
     expect(service['isChanging']).not.toBeTruthy();
@@ -177,6 +178,7 @@ describe('ShapeService', () => {
 
   it('#onMouseRelease should stop shape', () => {
     service['drawOnNextMove'] = false;
+    service['isChanging'] = true;
     const spy = spyOn(manipulator, 'removeChild');
     service.onMouseRelease(eventMocker('mouserelease', 0));
     expect(service['drawOnNextMove']).not.toBeTruthy();
@@ -184,41 +186,31 @@ describe('ShapeService', () => {
   });
 
   it('#onMouseMove should save mouse position', () => {
-    service['isChanging'] = false;
-    service['drawOnNextMove'] = true;
-    service.onMouseMove(eventMocker('mousemove', 0));
+    fakeAsync(() => {
+      service['isChanging'] = false;
+      service['drawOnNextMove'] = true;
+      service.onMouseMove(eventMocker('mousemove', 0));
 
-    service['isChanging'] = true;
-    service['mousePosition'] = new CoordinatesXY(100, 100);
-    service['shapeOrigin'] = new CoordinatesXY(10, 10);
-    service.onMouseMove(eventMocker('mousemove', 0));
-    expect(service['mousePosition'].getX()).toEqual(10);
-    expect(service['mousePosition'].getY()).toEqual(10);
-  });
-
-  it('#onMouseMove should save mouse position', () => {
-    service['isChanging'] = false;
-    service['drawOnNextMove'] = true;
-    service.onMouseMove(eventMocker('mousemove', 0));
-
-    service['isChanging'] = true;
-    service['shiftPressed'] = true;
-    service['mousePosition'] = new CoordinatesXY(100, 100);
-    service['shapeOrigin'] = new CoordinatesXY(10, 10);
-    service.onMouseMove(eventMocker('mousemove', 0));
-    expect(service['mousePosition'].getX()).toEqual(10);
-    expect(service['mousePosition'].getY()).toEqual(10);
+      service['isChanging'] = true;
+      service['mousePosition'] = new CoordinatesXY(100, 100);
+      service['shapeOrigin'] = new CoordinatesXY(10, 10);
+      service.onMouseMove(eventMocker('mousemove', 0));
+      expect(service['mousePosition'].getX()).toEqual(10);
+      expect(service['mousePosition'].getY()).toEqual(10);
+    });
   });
 
   it('#onMouseMove should init properties', () => {
-    service['isChanging'] = false;
-    service['drawOnNextMove'] = true;
-    const spy = spyOn(manipulator, 'createElement');
-    const spy2 = spyOn(manipulator, 'appendChild');
-    service.onMouseMove(eventMocker('mousemove', 0));
-    expect(spy).toHaveBeenCalledTimes(3);
-    expect(spy2).toHaveBeenCalledTimes(3);
-    expect(service['drawOnNextMove']).not.toBeTruthy();
+    fakeAsync(() => {
+      service['isChanging'] = false;
+      service['drawOnNextMove'] = true;
+      const spy = spyOn(manipulator, 'createElement');
+      const spy2 = spyOn(manipulator, 'appendChild');
+      service.onMouseMove(eventMocker('mousemove', 0));
+      expect(spy).toHaveBeenCalledTimes(3);
+      expect(spy2).toHaveBeenCalledTimes(3);
+      expect(service['drawOnNextMove']).not.toBeTruthy();
+    });
   });
 
   it('#onKeyPressed should update size with shift', () => {
@@ -283,18 +275,20 @@ describe('ShapeService', () => {
   });
 
   it('#onKeyReleased should change shift status with update', () => {
-    service['isChanging'] = false;
-    service['drawOnNextMove'] = true;
-    service.onMouseMove(eventMocker('mousemove', 0));
+    fakeAsync(() => {
+      service['isChanging'] = false;
+      service['drawOnNextMove'] = true;
+      service.onMouseMove(eventMocker('mousemove', 0));
 
-    service['mousePositionOnShiftPress'] = new CoordinatesXY(10, 10);
-    service['shapeOrigin'] = new CoordinatesXY(10, 10);
-    service['shiftPressed'] = true;
-    service['isChanging'] = true;
-    service.onKeyReleased(new KeyboardEvent('keypress', {
-      shiftKey: false
-    }));
-    expect(service['shiftPressed']).not.toBeTruthy();
+      service['mousePositionOnShiftPress'] = new CoordinatesXY(10, 10);
+      service['shapeOrigin'] = new CoordinatesXY(10, 10);
+      service['shiftPressed'] = true;
+      service['isChanging'] = true;
+      service.onKeyReleased(new KeyboardEvent('keypress', {
+        shiftKey: false
+      }));
+      expect(service['shiftPressed']).not.toBeTruthy();
+    });
   });
 
   it('#onKeyReleased shouldn\'t change shift status', () => {

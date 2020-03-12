@@ -1,5 +1,5 @@
 export enum SVGProperties {
-
+  // General
   fill = 'fill',
   color = 'stroke',
   container = 'g',
@@ -15,9 +15,9 @@ export enum SVGProperties {
   width = 'width',
   title = 'title',
   visibility = 'visibility',
-  pattern = "pattern",
-  id = "id",
-
+  transform = 'transform',
+  pattern = 'pattern',
+  id = 'id',
 
   // Circle and Ellipse
   centerX = 'cx',

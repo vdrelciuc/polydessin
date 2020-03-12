@@ -1,4 +1,4 @@
-export interface Area {
+export interface BoundingBox {
     left: number;
     right: number;
     top: number;
