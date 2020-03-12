@@ -19,6 +19,7 @@ export class GalleryComponent implements OnInit {
   tagName: string;
   images: Image[];
   resultImages: Image[];
+  hoveredIndex: number;
 
   readonly TILE_WIDTH: number = 300;
 
@@ -30,6 +31,8 @@ export class GalleryComponent implements OnInit {
               private galleryService: GalleryService
   ) {
     this.tags = new Set<string>();
+    this.hoveredIndex = -1;
+    this.resultImages = [];
   }
 
   ngOnInit(): void {
@@ -113,5 +116,25 @@ export class GalleryComponent implements OnInit {
   getTableWidth(): string {
     const width = this.resultImages.length / 2 * this.TILE_WIDTH;
     return width + 'px';
+  }
+
+  onMouseEnter(index: number): void {
+    this.hoveredIndex = index;
+  }
+
+  onMouseLeave(): void {
+    this.hoveredIndex = -1;
+  }
+
+  formatTagsArray(tags: string[]): string {
+    let list = '';
+    for(let i = 0; i < tags.length; i++) {
+      if (i === 0) {
+        list = tags[i];
+      } else {
+        list = list + ', ' + tags[i];
+      }
+    }
+    return 'tags : ' + list;
   }
 }

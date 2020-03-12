@@ -22,7 +22,11 @@ img.thumbnail {
   height: 100%;
 }
 
-img.thumbnail:hover {
+.hover-box {
+ position: absolute;
+}
+
+.hovered {
   filter: blur(3px) contrast(0.15);
 }
 
@@ -50,25 +54,6 @@ img.thumbnail:hover {
   background: #8c8630;
 }
 
- /*
-.results {
-  display: flex;
-  flex-direction: row;
-
-  .result{
-    margin-left: 3px;
-    margin-right: 3px;
-
-    img.thumbnail {
-      width: 300px;
-      max-width: 250px;
-    }
-  }
-}*/
-
-
-
-
 h1 {
   color: whitesmoke;
   font-size: 1.5em;
@@ -89,6 +74,11 @@ h5 {
   }
 }
 
+#add-tag-button {
+  background-color: $vivid;
+  margin-left: 10px;
+}
+
 
 .button-section {
   margin-top: 10px;
@@ -102,14 +92,17 @@ h5 {
   }
 }
 
-.add-tag-button {
+#load-image {
   background-color: $vivid;
-  outline: none;
-  float: right;
-  right: 200px;
-  margin-top: 8px;
 }
 
+.info {
+  display: inline;
+}
+
+::ng-deep .mat-chip-list-wrapper {
+  margin-bottom: 10px !important;
+}
 
 ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
   color: whitesmoke !important;
