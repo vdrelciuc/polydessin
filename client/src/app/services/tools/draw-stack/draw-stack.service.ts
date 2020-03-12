@@ -24,7 +24,7 @@ export class DrawStackService {
   getAll(): Stack<SVGElementInfos> { return this.elements; }
 
   addElementWithInfos(toAdd: SVGElementInfos): void {
-    if(toAdd !== undefined) {
+    if(toAdd !== undefined && !this.exists(toAdd.id)) {
       if(toAdd.id < this.nextId) {
         this.changeAt.next(toAdd.id);
       }
@@ -35,7 +35,9 @@ export class DrawStackService {
   }
 
   addFromUndo(toAdd: SVGElementInfos): void {
-    this.elements.insert(toAdd, toAdd.id);
+    if(!this.exists(toAdd.id)) {
+      this.elements.insert(toAdd, toAdd.id);
+    }
   }
 
   removeElement(toRemove: number): void  {
@@ -106,4 +108,13 @@ export class DrawStackService {
   }
 
   getNextID(): number { return this.nextId; }
+
+  private exists(id: number): boolean {
+    for(const element of this.elements.getAll()) {
+      if(element.id === id) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

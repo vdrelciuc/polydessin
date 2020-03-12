@@ -112,6 +112,7 @@ export class UndoRedoService {
         return 0;
       }
     );
+    // this.toRedraw.clear();
     for(const element of array) {
       this.toRedraw.push_back(element);
     }
