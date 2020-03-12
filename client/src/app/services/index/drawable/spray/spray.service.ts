@@ -80,10 +80,8 @@ export class SprayService extends DrawableService {
 
   }
   onMouseRelease(event: MouseEvent): void {
-    if (event.button === CONSTANTS.MOUSE_LEFT) { // 0 for the left mouse button
-      if (this.isDrawing.value) {
-        this.isDrawing.next(false);
-      }
+    if (this.isDrawing.value) {
+      this.isDrawing.next(false);
     }
   }
   onMouseMove(event: MouseEvent): void {
@@ -118,7 +116,7 @@ export class SprayService extends DrawableService {
     this.manipulator.appendChild(this.subElement, dot);
   }
 
-  async Spray(): Promise<void> {
+  private async Spray(): Promise<void> {
     if (this.isDrawing.value) {
       this.printSpray();
       setTimeout(() => this.Spray(), this.MS_PER_S / this.frequency);
