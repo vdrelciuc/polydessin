@@ -31,6 +31,7 @@ export class SaveServerComponent implements  AfterViewInit {
               private saveService: SaveServerService,
               private exportation: ExportService) {
     this.tags = new  Set<string>();
+    this.tagName = '';
     this.isSaving = false;
     this.isValidTitle = false;
   }
