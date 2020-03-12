@@ -1,22 +1,23 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Tools } from '../../enums/tools'
+import { Tools } from '../../enums/tools';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { ColorSelectorService } from '../color-selector.service';
 import { BrushService } from '../index/drawable/brush/brush.service';
+import { ColorApplicatorService } from '../index/drawable/colorApplicator/color-applicator.service';
 import { DrawableService } from '../index/drawable/drawable.service';
-import { LineService } from '../index/drawable/line/line.service';
-import { PencilService } from '../index/drawable/pencil/pencil.service';
-import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
-import { DrawStackService } from './draw-stack/draw-stack.service';
-import { UndoRedoService } from './undo-redo/undo-redo.service';
 import { EllipseService } from '../index/drawable/ellipse/ellipse.service';
 import { EraserService } from '../index/drawable/eraser/eraser.service';
-import { PipetteService } from '../pipette.service';
-import { PolygonService } from '../index/drawable/polygon/polygon.service';
-import { SelectionService } from '../index/drawable/selection/selection.service';
-import { ColorApplicatorService } from '../index/drawable/colorApplicator/color-applicator.service';
 import { GridService } from '../index/drawable/grid/grid.service';
+import { LineService } from '../index/drawable/line/line.service';
+import { PencilService } from '../index/drawable/pencil/pencil.service';
+import { PolygonService } from '../index/drawable/polygon/polygon.service';
+import { RectangleService } from '../index/drawable/rectangle/rectangle.service';
+import { SelectionService } from '../index/drawable/selection/selection.service';
+import { SprayService } from '../index/drawable/spray/spray.service';
+import { PipetteService } from '../pipette.service';
+import { DrawStackService } from './draw-stack/draw-stack.service';
+import { UndoRedoService } from './undo-redo/undo-redo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +35,8 @@ export class ToolSelectorService {
   private polygon: PolygonService;
   private selection: SelectionService;
   private colorApplicator: ColorApplicatorService;
+  private spray: SprayService;
   private grid: GridService;
-
 
   private ellipse: EllipseService;
   private eraser: EraserService;
@@ -53,8 +54,10 @@ export class ToolSelectorService {
     this.polygon = new PolygonService();
     this.selection = new SelectionService();
     this.colorApplicator = new ColorApplicatorService();
+    this.spray = new SprayService();
     this.grid = new GridService();
 
+    this.tools.set(Tools.Spray, this.spray);
     this.tools.set(Tools.ColorApplicator, this.colorApplicator);
     this.tools.set(Tools.Polygon, this.polygon);
     this.tools.set(Tools.Selection, this.selection);
@@ -71,7 +74,7 @@ export class ToolSelectorService {
   }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService, canvas: ElementRef<HTMLCanvasElement>): void {
-    this.memory = new UndoRedoService(drawStack, manipulator, image)
+    this.memory = new UndoRedoService(drawStack, manipulator, image);
     for (const element of this.tools) {
       element[1].initialize(manipulator, image, colorSelectorService, drawStack);
     }
@@ -90,13 +93,14 @@ export class ToolSelectorService {
   getEllipse(): EllipseService { return this.ellipse; }
   getEraser(): EraserService { return this.eraser; }
   getSelection(): SelectionService { return this.selection; }
-  getColorApplicator(): ColorApplicatorService { return  this.colorApplicator};
+  getColorApplicator(): ColorApplicatorService { return  this.colorApplicator; }
+  getSpray(): SprayService { return  this.spray; }
   getGrid(): GridService { return this.grid; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
     if (foundTool !== undefined) {
-      if(this.tool !== undefined) {
+      if (this.tool !== undefined) {
         this.tool.endTool();
       }
       this.tool = foundTool;

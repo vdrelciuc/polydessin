@@ -53,10 +53,10 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('aerosol')"
-                  [ngClass]="{'clicked': currentTool === 'aerosol',
-            'not-clicked': currentTool !== 'aerosol'}">
-            <img src="../../../assets/icons/aerosol.svg">
+          <button mat-button (click)="selectTool('spray')"
+                  [ngClass]="{'clicked': currentTool === 'spray',
+            'not-clicked': currentTool !== 'spray'}">
+            <img src="../../../assets/icons/spray.svg">
           </button>
         </div>
       </div>

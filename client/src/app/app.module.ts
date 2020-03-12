@@ -23,6 +23,8 @@ import { WarningDialogComponent } from './components/create-new/warning-dialog/w
 import { EllipseComponent } from './components/ellipse/ellipse.component';
 import { EraserComponent } from './components/eraser/eraser.component';
 import { ExportComponent } from './components/export/export.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
+import { GridComponent } from './components/grid/grid.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
 import { CrayonGuideComponent } from './components/guideTemplaates/crayon-guide/crayon-guide.component';
 import { LigneGuideComponent } from './components/guideTemplaates/ligne-guide/ligne-guide.component';
@@ -33,21 +35,20 @@ import { HomeComponent } from './components/home/home.component';
 import { LineComponent } from './components/line/line.component';
 import { OptionPannelComponent } from './components/option-pannel/option-pannel.component';
 import { PencilComponent } from './components/pencil/pencil.component';
+import { PipetteComponent } from './components/pipette/pipette.component';
 import { PolygonComponent } from './components/polygon/polygon.component';
 import { RectangleComponent } from './components/rectangle/rectangle.component';
+import { ErrorOnSaveComponent } from './components/save-server/error-on-save/error-on-save.component';
+import { SaveServerComponent } from './components/save-server/save-server.component';
 import { SelectionComponent } from './components/selection/selection.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { SprayComponent } from './components/spray/spray.component';
 import { UserGuideComponent } from './components/user-guide/user-guide.component';
 import { WorkingAreaComponent } from './components/working-area/working-area.component';
 import { ResizeObserverDirective } from './components/workspace/resize-observer.directive';
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
-import { GridComponent } from './components/grid/grid.component';
-import { PipetteComponent } from './components/pipette/pipette.component';
-import { SaveServerComponent } from './components/save-server/save-server.component';
-import { ErrorOnSaveComponent } from './components/save-server/error-on-save/error-on-save.component';
-import { GalleryComponent } from './components/gallery/gallery.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { GalleryComponent } from './components/gallery/gallery.component';
     EllipseComponent,
     EraserComponent,
     SelectionComponent,
+    SprayComponent,
     GridComponent,
     PolygonComponent,
     ExportComponent,
