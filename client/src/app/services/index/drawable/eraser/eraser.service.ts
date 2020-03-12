@@ -26,7 +26,7 @@ export class EraserService extends DrawableService {
   private canErase: boolean;
   private brushDelete: Stack<SVGElementInfos>;
 
-  constructor() { 
+  constructor() {
     super();
     this.frenchName = 'Efface';
     this.leftClick = false;
@@ -35,9 +35,9 @@ export class EraserService extends DrawableService {
   }
 
   initialize(
-    manipulator: Renderer2, 
-    image:ElementRef<SVGElement>, 
-    colorSelectorService: ColorSelectorService, 
+    manipulator: Renderer2,
+    image:ElementRef<SVGElement>,
+    colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
       this.initializeProperties();
@@ -150,13 +150,13 @@ export class EraserService extends DrawableService {
 
   private movePreview(mouse: CoordinatesXY): void {
     this.manipulator.setAttribute(
-      this.preview, 
-      SVGProperties.x, 
+      this.preview,
+      SVGProperties.x,
       (CoordinatesXY.effectiveX(this.image, mouse.getX()) - this.thickness.value / 2).toString()
     );
     this.manipulator.setAttribute(
-      this.preview, 
-      SVGProperties.y, 
+      this.preview,
+      SVGProperties.y,
       (CoordinatesXY.effectiveY(this.image, mouse.getY()) - this.thickness.value / 2).toString()
     );
   }

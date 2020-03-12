@@ -3,6 +3,16 @@
   user-select: none; // So that [Shape] doesn't turn blue
 }
 
+:host {
+  position: absolute;
+}
+
+.canvas {
+  position: absolute;
+  visibility: hidden;
+  display: none;
+}
+
 .grid {
   pointer-events: none;
 }

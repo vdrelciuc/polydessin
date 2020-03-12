@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { SelectionService } from 'src/app/services/index/drawable/selection/selection.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { Tools } from 'src/app/enums/tools';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-selection',
@@ -9,6 +11,8 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
   styleUrls: ['./selection.component.scss']
 })
 export class SelectionComponent implements OnInit {
+
+  private static crtlShortcut: Subscription;
 
   constructor(
     private shortcuts: HotkeysService,
@@ -19,7 +23,9 @@ export class SelectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setupShortcuts();
+    if (SelectionComponent.crtlShortcut === undefined) {
+      this.setupShortcuts();
+    }
   }
 
   ngOnDestroy(): void {
@@ -27,8 +33,11 @@ export class SelectionComponent implements OnInit {
   }
 
   setupShortcuts(): void {
-    this.shortcuts.addShortcut({ keys: 'control.a', description: 'Select all elements on canvas' }).subscribe(
+    SelectionComponent.crtlShortcut = this.shortcuts.addShortcut({ keys: 'control.a', description: 'Select all elements on canvas' }).subscribe(
       (event) => {
+        if (this.toolSelector.$currentTool.getValue() !== Tools.Selection) {
+          this.toolSelector.setCurrentTool(Tools.Selection);
+        }
         this.service.selectAllElements();
       }
     );

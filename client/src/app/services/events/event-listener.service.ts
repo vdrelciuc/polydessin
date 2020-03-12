@@ -3,7 +3,7 @@ import { DrawableService } from '../index/drawable/drawable.service';
 import { ToolSelectorService } from '../tools/tool-selector.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EventListenerService {
 
@@ -13,15 +13,15 @@ export class EventListenerService {
   constructor(
     private image: ElementRef<SVGElement>,
     private toolSelector: ToolSelectorService,
-    private manipulator: Renderer2
+    private manipulator: Renderer2,
   ) {
-    this.toolSelector.$currentTool.subscribe ( (tool) => {
+    this.toolSelector.$currentTool.subscribe((tool) => {
       this.currentToolName = tool;
       this.currentTool = this.toolSelector.getCurrentTool();
     });
-   }
+  }
 
-   initializeEvents(): void {
+  initializeEvents(): void {
     this.manipulator.listen(this.image.nativeElement, 'mousemove', (event: MouseEvent) => {
       if (this.currentTool !== undefined) {
         this.currentTool.onMouseMove(event);
@@ -52,11 +52,11 @@ export class EventListenerService {
       }
     });
 
-     this.manipulator.listen(this.image.nativeElement, 'contextmenu', (event: MouseEvent) => {
-       if (this.currentTool !== undefined) {
-         this.currentTool.onClick(event);
-       }
-     });
+    this.manipulator.listen(this.image.nativeElement, 'contextmenu', (event: MouseEvent) => {
+      if (this.currentTool !== undefined) {
+        this.currentTool.onClick(event);
+      }
+    });
 
     this.manipulator.listen(this.image.nativeElement, 'mousedown', (event: MouseEvent) => {
       if (this.currentTool !== undefined) {

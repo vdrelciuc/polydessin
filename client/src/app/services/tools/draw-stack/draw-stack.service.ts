@@ -14,7 +14,7 @@ export class DrawStackService {
   isAdding: BehaviorSubject<boolean>;
   changeAt: BehaviorSubject<number>
 
-  constructor() { 
+  constructor() {
     this.elements = new Stack<SVGElementInfos>();
     this.nextId = 0;
     this.isAdding = new BehaviorSubject<boolean>(false);
@@ -48,7 +48,7 @@ export class DrawStackService {
       }
     }
   }
-  
+
   removeLastElement(): SVGElementInfos | undefined {
     const lastElement = this.elements.pop_back();
     if(lastElement !== undefined) {
