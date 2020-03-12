@@ -48,7 +48,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.canvasService.askForLayerCount.next(true);
     this.changed = false;
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
@@ -64,11 +64,11 @@ export class CreateNewComponent implements OnInit, OnDestroy {
       }
     })
   }
-  setcanvasSizeX(event: any) {
+  setcanvasSizeX(event: any): void {
     this.workspaceSize.setX(event.target.value);
     this.changed = true;
   }
-  setcanvasSizeY(event: any) {
+  setcanvasSizeY(event: any): void {
     this.workspaceSize.setY(event.target.value);
     this.changed = true;
   }
@@ -94,7 +94,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
   onCloseDialog(): void {
     this.dialogRef.close();
     if (history.state.comingFromEntryPoint) {
-      this.router.navigateByUrl('/')
+      this.router.navigateByUrl('/');
     }
   }
 

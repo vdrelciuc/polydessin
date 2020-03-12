@@ -22,6 +22,10 @@ import { PencilComponent } from '../pencil/pencil.component';
 import { RectangleComponent } from '../rectangle/rectangle.component';
 import { EllipseComponent } from '../ellipse/ellipse.component';
 import { OptionPannelComponent } from './option-pannel.component';
+import { PolygonComponent } from '../polygon/polygon.component';
+import { GridComponent } from '../grid/grid.component';
+import { SelectionComponent } from '../selection/selection.component';
+import { EraserComponent } from '../eraser/eraser.component';
 
 describe('OptionPannelComponent', () => {
   let component: OptionPannelComponent;
@@ -38,12 +42,22 @@ describe('OptionPannelComponent', () => {
         EllipseComponent,
         BrushComponent,
         ColorPanelComponent,
+        SelectionComponent,
+        EraserComponent,
+        EllipseComponent,
+        PolygonComponent,
+        GridComponent,
       ],
       providers: [
         ColorPaletteComponent,
+        SelectionComponent,
+        EraserComponent,
+        EllipseComponent,
         ColorPanelComponent,
         ColorPickerComponent,
         ColorSliderComponent,
+        PolygonComponent,
+        GridComponent,
         BrushComponent,
         OptionPannelComponent,
         HotkeysService,

@@ -250,7 +250,7 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.appendChild(this.subElement, this.shape);
     this.manipulator.appendChild(this.subElement, this.text);
     this.manipulator.appendChild(this.subElement, this.perimeter);
-    this.manipulator.appendChild(this.image.nativeElement, this.subElement);
+    this.manipulator.insertBefore(this.image.nativeElement, this.subElement, this.image.nativeElement.querySelector('#grid'));
   }
 
   protected alignShapeOrigin(width: number, height: number, thicknessOffset: number): void {

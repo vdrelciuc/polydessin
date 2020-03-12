@@ -15,6 +15,10 @@ export enum SVGProperties {
   width = 'width',
   title = 'title',
   visibility = 'visibility',
+  pattern = "pattern",
+  id = "id",
+
+
   // Circle and Ellipse
   centerX = 'cx',
   centerY = 'cy',

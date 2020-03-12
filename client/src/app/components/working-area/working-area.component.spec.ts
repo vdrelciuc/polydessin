@@ -36,6 +36,10 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { WorkspaceComponent } from '../workspace/workspace.component';
 import { WorkingAreaComponent } from './working-area.component';
 import { EllipseComponent } from '../ellipse/ellipse.component';
+import { GridComponent } from '../grid/grid.component';
+import { EraserComponent } from '../eraser/eraser.component';
+import { PolygonComponent } from '../polygon/polygon.component';
+import { SelectionComponent } from '../selection/selection.component';
 
 describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
@@ -58,7 +62,13 @@ describe('WorkingAreaComponent', () => {
         PencilComponent,
         RectangleComponent,
         EllipseComponent,
-        WorkspaceComponent ],
+        WorkspaceComponent,
+        GridComponent,
+        EraserComponent,
+        PolygonComponent,
+        SelectionComponent
+
+      ],
       imports: [
         BrowserAnimationsModule,
         MatDialogModule,

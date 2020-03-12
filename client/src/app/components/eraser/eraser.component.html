@@ -2,7 +2,7 @@
     <form id="line-form">
       <div class="head-group">
         <label class="title" id="thickness">Épaisseur</label>
-        <mat-slider
+        <mat-slider #thicknessSlider
           id="thickness-slider"
           name="thickness-slider"
           disabled="false"
@@ -11,8 +11,10 @@
           step="1"
           thumbLabel="true"
           tickInterval="false"
-          [(ngModel)]="service.thickness"
-          vertical="false">
+          [value]="service.thickness.value"
+          (change)="changeThickness(thicknessSlider.value)"
+          vertical="false"
+          >
         </mat-slider>
       </div>
     </form>

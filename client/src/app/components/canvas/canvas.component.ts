@@ -5,10 +5,15 @@ import { CanvasService } from 'src/app/services/canvas.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { CreateNewService } from 'src/app/services/create-new.service';
 import { EventListenerService } from 'src/app/services/events/event-listener.service';
+import { ExportService } from 'src/app/services/export/export.service';
 import { SVGService } from 'src/app/services/index/svg/svg.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import {SaveServerService} from "../../services/saveServer/save-server.service";
+import {GalleryService} from "../../services/gallery/gallery.service";
 
 @Component({
   selector: 'app-canvas',
@@ -17,10 +22,17 @@ import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.s
 })
 export class CanvasComponent implements OnInit {
   @ViewChild('drawing', { static: true }) image: ElementRef<SVGElement>;
+  @ViewChild('grid', { static: true }) grid: ElementRef<SVGElement>;
+  @ViewChild('rect', { static: true }) rectangle: ElementRef<SVGRectElement>;
+  @ViewChild('canvas', { static: true }) invisibleCanvas: ElementRef<HTMLCanvasElement>;
   filters: string;
   width: number;
   height: number;
   stack: SVGService;
+  thickness: number;
+  opacity: number;
+  gridService: GridService;
+  visible: boolean;
   private eventListener: EventListenerService;
 
   constructor(
@@ -30,14 +42,22 @@ export class CanvasComponent implements OnInit {
     private createNewService: CreateNewService,
     private drawStack: DrawStackService,
     private canvasService: CanvasService,
-    private workspaceService: WorkspaceService
-    ) { }
+    private workspaceService: WorkspaceService,
+    private exportService: ExportService,
+    private saveService : SaveServerService,
+    private galleryService : GalleryService) {
+      this.visible = true;
+    }
 
   ngOnInit() {
     this.filters = this.image.nativeElement.innerHTML;
-    this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack);
+    this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack,this.invisibleCanvas);
+    this.exportService.initialize(this.image);
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
     this.eventListener.initializeEvents();
+    this.gridService = this.toolSelector.getGrid();
+    this.saveService.innerHtml = this.image;
+    this.galleryService.innerHtml = this.image;
 
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
       const isSameColor = this.workspaceService.checkIfSameBackgroundColor(color);
@@ -48,17 +68,36 @@ export class CanvasComponent implements OnInit {
     });
 
     this.createNewService.canvasSize.subscribe((canvasSize: CoordinatesXY) => {
-      this.manipulator.setAttribute(this.image.nativeElement, 'width', `${canvasSize.getX()}`);
-      this.manipulator.setAttribute(this.image.nativeElement, 'height', `${canvasSize.getY()}`);
+      this.manipulator.setAttribute(this.image.nativeElement     , SVGProperties.width , `${canvasSize.getX()}`);
+      this.manipulator.setAttribute(this.image.nativeElement     , SVGProperties.height, `${canvasSize.getY()}`);
+      this.manipulator.setAttribute(this.grid.nativeElement      , SVGProperties.width , `${canvasSize.getX()}`);
+      this.manipulator.setAttribute(this.grid.nativeElement      , SVGProperties.height, `${canvasSize.getY()}`);
+      this.manipulator.setAttribute(this.rectangle.nativeElement , SVGProperties.width , `${canvasSize.getX()}`);
+      this.manipulator.setAttribute(this.rectangle.nativeElement , SVGProperties.height, `${canvasSize.getY()}`);
       this.resetCanvas();
-    })
+    });
+
+    this.gridService.thickness.subscribe( (value) => {
+      this.thickness = value;
+    });
+
+    this.gridService.opacity.subscribe ( (value) => {
+      this.opacity = value;
+    });
+
+    this.gridService.visible.subscribe ( (value) => {
+      if(value) {
+        this.grid.nativeElement.setAttribute(SVGProperties.visibility, 'visible');
+      } else {
+        this.grid.nativeElement.setAttribute(SVGProperties.visibility, 'hidden');
+      }
+    });
 
     this.canvasService.askForLayerCount.subscribe((value: boolean) => {
       if (value) {
       this.canvasService.layerCount = (this.image.nativeElement.children.length - 1);
       }
-    })
-
+    });
   }
 
   resetCanvas() {
