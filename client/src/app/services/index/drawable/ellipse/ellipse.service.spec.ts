@@ -1,7 +1,7 @@
 /*import { TestBed, getTestBed } from '@angular/core/testing';
 import * as CONSTANT from 'src/app/classes/constants';
 import { EllipseService } from './ellipse.service';
-import { ElementRef, Renderer2, Type } from '@angular/core';
+import { ElementRef, Renderer2 } from '@angular/core';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
@@ -11,8 +11,8 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
 describe('EllipseService', () => {
 
   let service: EllipseService;
-  let manipulator: Renderer2;
-  let image: ElementRef<SVGPolylineElement>;
+  // let manipulator: Renderer2;
+  // let image: ElementRef<SVGPolylineElement>;
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
@@ -58,8 +58,8 @@ describe('EllipseService', () => {
       ],
     });
     service = getTestBed().get(EllipseService);
-    manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
+    // manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
+    // image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
     service['mousePosition'] = new CoordinatesXY(10, 10);
     service['shapeStyle'].fillOpacity = 0.5;
     service['shapeStyle'].thickness = 5;

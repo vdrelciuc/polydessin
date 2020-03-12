@@ -8,7 +8,7 @@
                   [matTooltip]="this.toolSelectorService.getSelection().frenchName"
                   matTooltipPosition="after"
                   aria-label="selection-tooltip"
-                  (click)="selectTool('selection')"
+                  (click)="selectTool('grid')"
                   [ngClass]="{'clicked': currentTool === 'selection',
             'not-clicked': currentTool !== 'selection'}">
             <img src="../../../assets/icons/arrow.svg">
@@ -151,7 +151,11 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('pipette')"
+          <button mat-button
+                  matTooltipPosition="after"
+                  aria-label="pencil-tooltip"
+                  (click)="selectTool('pipette')"
+                  [matTooltip]="this.toolSelectorService.getPipette().frenchName"
                   [ngClass]="{'clicked': currentTool === 'pipette',
             'not-clicked': currentTool !== 'pipette'}">
             <img src="../../../assets/icons/pipette.svg">
@@ -198,9 +202,14 @@
             <img src="../../../assets/icons/new-project.svg">
           </button>
         </div>
+        <div class="icon" (click)="openGallery()">
+          <button mat-button>
+            <img src="../../../assets/icons/gallery.svg">
+          </button>
+        </div>
         <div class="icon">
           <button mat-button disabled>
-            <img src="../../../assets/icons/load-project.svg">
+            <img src="../../../assets/icons/home.svg">
           </button>
         </div>
       </div>
@@ -210,8 +219,13 @@
             <img src="../../../assets/icons/redo.svg">
           </button>
         </div>
+        <div class="icon" (click)="exportProject()">
+          <button mat-button>
+            <img src="../../../assets/icons/export.svg">
+          </button>
+        </div>
         <div class="icon">
-          <button mat-button (click)="exportProject()">
+          <button mat-button (click)="saveServerProject()">
             <img src="../../../assets/icons/save-project.svg">
           </button>
         </div>

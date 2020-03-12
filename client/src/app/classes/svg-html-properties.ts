@@ -16,6 +16,8 @@ export enum SVGProperties {
   title = 'title',
   visibility = 'visibility',
   transform = 'transform',
+  pattern = 'pattern',
+  id = 'id',
 
   // Circle and Ellipse
   centerX = 'cx',

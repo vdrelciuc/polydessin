@@ -12,21 +12,19 @@ mat-dialog-content {
   margin: 0;
 }
 
-h4 {
+.error {
   color:rgb(245, 97, 97);
   font-size: 1.5em;
   margin-bottom: 10px;
   text-align: center;
 }
 
-h6 {
+p {
   color: whitesmoke;
   font-size: 1em;
 }
 
-p {
-  color: whitesmoke;
-}
+
 
 
 .button-section {
@@ -35,11 +33,7 @@ p {
   background-color:$dark-gray;
 }
 
-#cancel-button {
-  color: whitesmoke;
-  outline: none;
 
-}
 
 #confirm-button {
   background-color: $vivid;

@@ -25,6 +25,7 @@ export const WORKSPACE_BACKGROUND = '808080';
 export const COLOR_DEFAULT = '#000000';
 export const OPACITY_DEFAULT = 1;
 export const MAX_RECENT_COLORS = 10;
+export const VISUAL_DIFFERENCE = 15; // %
 
 // Math
 export const HEX_BASE = 16;
@@ -37,3 +38,14 @@ export const ERASER_OUTLINE_RED_ELEMENTS = '#8B0000';
 
 // MouseEvents
 export const MOUSE_LEFT = 0;
+
+// Grid
+export const GRID_MINIMUM    = 5;
+export const GRID_MAXIMUM    = 100;
+export const OPACITY_MINIMUM = 0.1;
+export const OPACITY_MAXIMUM = 1;
+export const THICKNESS_STEP = 5;
+// export const OPACITY_STEP = 0.1;
+
+// Backend server
+export const REST_API_ROOT = 'http://localhost:3000/api/images';

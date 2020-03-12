@@ -66,7 +66,7 @@ describe('EraserService', () => {
 
   it('#initializeProperties should set default properties', () => {
     service.initializeProperties();
-    expect(service.thickness).toEqual(CONSTANTS.THICKNESS_MINIMUM_ERASER);
+    expect(service.thickness.value).toEqual(CONSTANTS.THICKNESS_MINIMUM_ERASER);
   });
 
   it('#onMouseMove should ', () => {
