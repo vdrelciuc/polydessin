@@ -1,11 +1,11 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { DrawableService } from '../drawable.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-import { BehaviorSubject } from 'rxjs';
+import { DrawableService } from '../drawable.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,8 @@ export class SprayService extends DrawableService {
   private readonly DEFAULT_RADIUS: number = 5;
   private readonly DEFAULT_FREQUENCY: number = 4;
   private readonly MS_PER_S: number = 1000;
-  private spraying: boolean = false;
+
+  private spraying: boolean;
   private color: Color;
   private opacity: number;
   private mousePosition: CoordinatesXY;
@@ -31,6 +32,7 @@ export class SprayService extends DrawableService {
     this.isDrawing = new BehaviorSubject<boolean>(false);
     this.radius = this.DEFAULT_RADIUS;
     this.frequency = this.DEFAULT_FREQUENCY;
+    this.spraying = false;
   }
 
   initialize(
@@ -42,11 +44,11 @@ export class SprayService extends DrawableService {
       this.initializeProperties();
       this.isDrawing.subscribe(
         () => {
-          if(!this.isDrawing.value && this.subElement !== undefined) {
+          if (!this.isDrawing.value && this.subElement !== undefined) {
             this.pushElement();
           }
         }
-      )
+      );
     }
 
   initializeProperties(): void {
@@ -88,7 +90,7 @@ export class SprayService extends DrawableService {
   }
 
   endTool(): void {
-    if(this.isDrawing.value) {
+    if (this.isDrawing.value) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
     delete(this.subElement);

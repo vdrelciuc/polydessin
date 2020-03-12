@@ -1,11 +1,11 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { SprayService } from './spray.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { SprayService } from './spray.service';
 
 describe('SprayService', () => {
   let service: SprayService;
@@ -16,7 +16,7 @@ describe('SprayService', () => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
   const eventMocker = (event: string, keyUsed: number, x: number, y: number) =>
       new MouseEvent(event, {button: keyUsed, clientX: x, clientY: y});
 
@@ -52,7 +52,7 @@ describe('SprayService', () => {
           provide: ColorSelectorService,
           useValue: {
             primaryColor: colorSubject,
-            primaryTransparency: new BehaviorSubject<number>(3)
+            primaryTransparency: new BehaviorSubject<number>(0)
           },
         },
         DrawStackService
@@ -60,7 +60,7 @@ describe('SprayService', () => {
     });
     service = getTestBed().get(SprayService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
+    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
     service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
@@ -68,6 +68,12 @@ describe('SprayService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('constructor should set default properties', () => {
+    expect(service['spraying']).toBeTruthy();
+    expect(service['frenchName']).toEqual('Aérosol');
+    expect(service['isDrawing']).not.toBeTruthy();
   });
 
   it('#initializeProperties should initialize subscription to color', () => {
