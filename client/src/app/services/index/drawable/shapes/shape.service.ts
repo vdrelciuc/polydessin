@@ -104,6 +104,7 @@ export abstract class ShapeService extends DrawableService {
     } else if (this.isChanging) {
       this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
       this.manipulator.removeChild(this.subElement, this.perimeter);
+      this.pushElement();
     }
     this.isChanging = false;
   }
@@ -219,7 +220,7 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
 
     // Allow undo/redo
-    this.drawStack.addElementWithInfos({ target: this.subElement, id: shapeID });
+    // this.pushElement();
   }
 
   protected alignShapeOrigin(width: number, height: number): void {

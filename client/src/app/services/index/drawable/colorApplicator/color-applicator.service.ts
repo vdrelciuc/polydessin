@@ -71,7 +71,7 @@ export class ColorApplicatorService extends DrawableService {
             this.manipulator.setAttribute(elementOnTop, SVGProperties.color, colorBorder);
             this.manipulator.setAttribute(elementOnTop, SVGProperties.colorOpacity, colorBorderOpacity);
         }
+        this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
     }
-
   }
 }

@@ -36,6 +36,7 @@ export abstract class DrawableService {
       id: nextID
     });
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, nextID.toString());
+    this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
   }
 
   abstract initialize(

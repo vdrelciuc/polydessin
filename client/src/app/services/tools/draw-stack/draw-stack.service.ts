@@ -13,12 +13,14 @@ export class DrawStackService {
   private nextId: number;
   isAdding: BehaviorSubject<boolean>;
   changeAt: BehaviorSubject<number>
+  addedSVG: BehaviorSubject<SVGElement | undefined>;
 
   constructor() {
     this.elements = new Stack<SVGElementInfos>();
     this.nextId = 0;
     this.isAdding = new BehaviorSubject<boolean>(false);
     this.changeAt = new BehaviorSubject<number>(-1);
+    this.addedSVG = new BehaviorSubject<SVGElement | undefined>(undefined);
   }
 
   getAll(): Stack<SVGElementInfos> { return this.elements; }
@@ -71,6 +73,10 @@ export class DrawStackService {
     }
     this.nextId -= (toRemove.getAll().length - 1);
     return toRemove;
+  }
+
+  addSVG(current: SVGElement): void {
+    this.addedSVG.next(current);
   }
 
   isEmpty(): boolean {
