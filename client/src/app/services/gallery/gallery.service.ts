@@ -3,20 +3,28 @@ import { ElementRef, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { Image } from '../../interfaces/image';
+import {SVGProperties} from "../../classes/svg-properties";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GalleryService {
 
-  innerHtml: ElementRef<SVGElement>;
+  refToSvg: ElementRef<SVGElement>;
 
   constructor(private http: HttpClient) {
   }
 
   loadImage(image: Image): void {
-    console.log(this.innerHtml.nativeElement);
-    console.log(image.innerHtml);
+
+
+    this.refToSvg.nativeElement.setAttribute(SVGProperties.width, image.width as unknown as string);
+    this.refToSvg.nativeElement.setAttribute(SVGProperties.height, image.height as unknown as string);
+    this.refToSvg.nativeElement.style.backgroundColor = image.background;
+    this.refToSvg.nativeElement.innerHTML = image.innerHtml;
+
+
+
   }
 
   getAllImages(): Observable<Image[]> {

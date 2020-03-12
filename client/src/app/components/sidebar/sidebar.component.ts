@@ -11,6 +11,7 @@ import { ExportComponent } from '../export/export.component';
 import { GalleryComponent } from '../gallery/gallery.component';
 import { SaveServerComponent } from '../save-server/save-server.component';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
+import {GalleryService} from "../../services/gallery/gallery.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -31,6 +32,7 @@ export class SidebarComponent implements OnInit {
     private exportService: ExportService,
     private drawStackService: DrawStackService,
     private snackBar: MatSnackBar,
+    private galleryService : GalleryService,
     protected dialog: MatDialog) {
     this.setupShortcuts();
   }
@@ -215,7 +217,9 @@ export class SidebarComponent implements OnInit {
   }
 
   saveServerProject(): void {
-    if (!this.drawStackService.isEmpty()) {
+    if (this.galleryService.refToSvg.nativeElement.childElementCount > 0 ||
+      !this.drawStackService.isEmpty()
+    ) {
       this.prepareDialogLaunch();
       this.exportService.SVGToCanvas().then(() => {
         this.bypassBrowserShortcuts();
@@ -249,7 +253,8 @@ export class SidebarComponent implements OnInit {
   }
 
   exportProject(): void {
-    if (!this.drawStackService.isEmpty()) {
+    if ((this.galleryService.refToSvg.nativeElement.childElementCount >0)
+      || !this.drawStackService.isEmpty()) {
       this.prepareDialogLaunch();
       this.exportService.SVGToCanvas().then(() => {
         this.bypassBrowserShortcuts();

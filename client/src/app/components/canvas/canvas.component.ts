@@ -56,8 +56,8 @@ export class CanvasComponent implements OnInit {
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
     this.eventListener.initializeEvents();
     this.gridService = this.toolSelector.getGrid();
-    this.saveService.innerHtml = this.image;
-    this.galleryService.innerHtml = this.image;
+    this.saveService.refToSvg = this.image;
+    this.galleryService.refToSvg = this.image;
 
     this.colorSelectorService.backgroundColor.subscribe((color: Color) => {
       const isSameColor = this.workspaceService.checkIfSameBackgroundColor(color);

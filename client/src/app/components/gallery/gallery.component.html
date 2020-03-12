@@ -34,7 +34,7 @@
           <mat-grid-tile-footer>{{ image.title }} ({{ this.formatTagsArray(image.tags) }})</mat-grid-tile-footer>
           <div class="hover-box" *ngIf="i === this.hoveredIndex">
             <button mat-button (click)="deleteImage(image._id)">Supprimer</button>
-            <button mat-button id="load-image">Charger</button>
+            <button mat-button id="load-image" (click)="loadImage(image)">Charger</button>
           </div>
         </mat-grid-tile>
       </mat-grid-list>
