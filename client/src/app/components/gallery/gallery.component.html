@@ -28,7 +28,7 @@
     <h5 *ngIf="this.resultImages.length === 1">Résultat</h5>
     <h5 *ngIf="this.resultImages.length > 1">Résultats</h5>
     <div class="scroll-container">
-      <mat-grid-list [style.width]="getTableWidth()" cols="{{ this.resultImages.length / 2 }}" rowHeight="250px" gutterSize="5px">
+      <mat-grid-list [style.width]="getTableWidth()" cols="{{ this.resultImages.length / 2 }}" rowHeight="150px" gutterSize="5px">
         <mat-grid-tile class="result" (mouseenter)="this.onMouseEnter(i)" (mouseleave)="this.onMouseLeave()" *ngFor="let image of resultImages; let i = index">
           <img [ngClass]="{'hovered':i === this.hoveredIndex}" class="thumbnail" [attr.src]="image.serial">
           <mat-grid-tile-footer>{{ image.title }} ({{ this.formatTagsArray(image.tags) }})</mat-grid-tile-footer>

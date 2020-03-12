@@ -21,7 +21,7 @@ export class GalleryComponent implements OnInit {
   resultImages: Image[];
   hoveredIndex: number;
 
-  readonly TILE_WIDTH: number = 300;
+  readonly TILE_WIDTH: number = 250;
 
   constructor(private dialogRef: MatDialogRef<GalleryComponent>,
               private saveService: SaveServerService,

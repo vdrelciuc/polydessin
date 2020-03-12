@@ -9,8 +9,8 @@
 }
 
 .cdk-overlay-pane{
-  height: 80%;
-  width: 80%;
+  height: 80% !important;
+  width: 80% !important;
 }
 
 .scroll-container {
@@ -18,7 +18,7 @@
 }
 
 img.thumbnail {
-  width: 300px;
+  width: 250px;
   height: 100%;
 }
 
