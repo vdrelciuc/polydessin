@@ -21,7 +21,7 @@ export class GalleryComponent implements OnInit {
   resultImages: Image[];
   hoveredIndex: number;
 
-  readonly TILE_WIDTH: number = 250;
+  readonly TILE_WIDTH_PX: number = 250;
 
   constructor(private dialogRef: MatDialogRef<GalleryComponent>,
               private saveService: SaveServerService,
@@ -31,6 +31,7 @@ export class GalleryComponent implements OnInit {
               private galleryService: GalleryService
   ) {
     this.tags = new Set<string>();
+    /* tslint:disable-next-line: no-magic-numbers */
     this.hoveredIndex = -1;
     this.resultImages = [];
   }
@@ -78,7 +79,9 @@ export class GalleryComponent implements OnInit {
     this.resultImages = [];
     // could have used a forEach but would add the same image more than one time if it has more
     // than one corresponding ticket because u cant break a foreach loop in typescript
+    /* tslint:disable-next-line: prefer-for-of */
     for (let i = 0; i < this.images.length; i++) {
+      /* tslint:disable-next-line: prefer-for-of */
       for (let j = 0; j < this.images[i].tags.length; j++) {
         if (this.tags.has(this.images[i].tags[j])) {
           this.resultImages.push(this.images[i]);
@@ -114,7 +117,7 @@ export class GalleryComponent implements OnInit {
   }
 
   getTableWidth(): string {
-    const width = this.resultImages.length / 2 * this.TILE_WIDTH;
+    const width = this.resultImages.length / 2 * this.TILE_WIDTH_PX;
     return width + 'px';
   }
 
@@ -123,12 +126,13 @@ export class GalleryComponent implements OnInit {
   }
 
   onMouseLeave(): void {
+    /* tslint:disable-next-line: no-magic-numbers */
     this.hoveredIndex = -1;
   }
 
   formatTagsArray(tags: string[]): string {
     let list = '';
-    for(let i = 0; i < tags.length; i++) {
+    for (let i = 0; i < tags.length; i++) {
       if (i === 0) {
         list = tags[i];
       } else {

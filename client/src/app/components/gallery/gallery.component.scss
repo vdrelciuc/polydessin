@@ -8,6 +8,46 @@
   height: 100%;
 }
 
+/* Global elements */
+
+h1 {
+  color: whitesmoke;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+h5 {
+  color: whitesmoke;
+  font-size: 1em;
+}
+
+/* Options section */
+.option-selection {
+  display: flex;
+  flex-direction: row;
+
+  .sub-section {
+    margin-bottom: 10px;
+
+    .info {
+      display: inline;
+    }
+  }
+}
+
+#load-image {
+  background-color: $vivid;
+}
+
+#add-tag-button {
+  background-color: $vivid;
+  margin-left: 10px;
+}
+
+.hovered {
+  filter: blur(3px) contrast(0.15);
+}
+
 .cdk-overlay-pane{
   height: 80% !important;
   width: 80% !important;
@@ -26,60 +66,7 @@ img.thumbnail {
  position: absolute;
 }
 
-.hovered {
-  filter: blur(3px) contrast(0.15);
-}
-
-// Trackbar inspired from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_scrollbar2
-
-/* width */
-::-webkit-scrollbar {
-  width: 20px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
-  border-radius: 10px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: $vivid;
-  border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #8c8630;
-}
-
-h1 {
-  color: whitesmoke;
-  font-size: 1.5em;
-  text-align: center;
-}
-
-h5 {
-  color: whitesmoke;
-  font-size: 1em;
-}
-
-.option-selection {
-  display: flex;
-  flex-direction: row;
-
-  .sub-section {
-    margin-bottom: 10px;
-  }
-}
-
-#add-tag-button {
-  background-color: $vivid;
-  margin-left: 10px;
-}
-
-
+/* Buttons section */
 .button-section {
   margin-top: 10px;
   text-align: right;
@@ -92,14 +79,7 @@ h5 {
   }
 }
 
-#load-image {
-  background-color: $vivid;
-}
-
-.info {
-  display: inline;
-}
-
+/* Override Angular Material elements */
 ::ng-deep .mat-chip-list-wrapper {
   margin-bottom: 10px !important;
 }
@@ -123,4 +103,23 @@ h5 {
 
 ::ng-deep .mat-form-field-underline, .mat-form-field-underline.mat-focused {
   background-color: whitesmoke !important;
+}
+
+// Scrollbar css inspired by https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_scrollbar2
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $vivid;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8c8630;
 }
