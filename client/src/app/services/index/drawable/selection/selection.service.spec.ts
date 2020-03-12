@@ -6,8 +6,9 @@ import { Renderer2, Type } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+// import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
-describe('SelectionService', () => {
+fdescribe('SelectionService', () => {
   let service: SelectionService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
@@ -40,7 +41,7 @@ describe('SelectionService', () => {
     }
   }*/
 
-  class mockedSVGRectElement extends SVGRectElement {
+  /*class mockedSVGRectElement extends SVGRectElement {
     constructor(){
       super()
     }
@@ -59,16 +60,25 @@ describe('SelectionService', () => {
         x: boundLeft,
         y: boundTop,
         toJSON(): () => any
-      };*/
+      };
       return new DOMRect(50, 50, 100, 100);
     }
-  }
+  }*/
 
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
-    const element = new Element();
-    parentElement.children.push(element);
-    return element;
-  };
+  // const mockedRendered = (): Element => {
+  //   // const element = new SVGRectElement();
+  //   const element = manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+  //   // parentElement.children.push(element);
+  //   return element;
+  // };
+
+  let rendererMock = jasmine.createSpyObj(
+    'rendererMock', [
+    'createElement, setAttribute, appendChild, removeChild'
+  ]);
+  let renderer2Mock = {
+    rendererComponent: () => rendererMock
+  }
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -76,15 +86,10 @@ describe('SelectionService', () => {
         SelectionService,
         {
           provide: Renderer2,
-          useValue: {
-              createElement: () => mockedRendered,
-              setAttribute: () => mockedRendered,
-              appendChild: () => mockedRendered,
-              removeChild: () => mockedRendered,
-          },
+          useValue: renderer2Mock,
         },
         //{ provide: DOMRect, useClass: mockedBoundingBox },
-        { provide: SVGRectElement, useClass: mockedSVGRectElement },
+        { provide: SVGRectElement, useValue: { getBoundingClientRect: () => { return new DOMRect(50, 50, 100, 100) } } },
         { provide: ElementRef,
           useValue: {
             nativeElement: {
@@ -107,7 +112,7 @@ describe('SelectionService', () => {
       ]
     });
     service = TestBed.get(SelectionService);
-    manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
+    // manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
     service.initialize(manipulator, image, 
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
@@ -123,11 +128,12 @@ describe('SelectionService', () => {
     //service['manipulator'] = manipulator;
     //service['setupProperties']();
     //service['selectionRect'] = manipulator.createElement('SVGRectElement')
-    //spyOn(service['selectionRect'], 'getBoundingClientRect').and.returnValue(new DOMRect);
+    spyOn(service['selectionRect'], 'getBoundingClientRect').and.returnValue(new DOMRect);
     //service['selectionRect'].getBoundingClientRect = jasmine.createSpy().and.returnValue(boundRect);
-    service['selectionRect'] = new mockedSVGRectElement();
+    //service['selectionRect'] = new mockedSVGRectElement();
     //const spy: jasmine.Spy = jasmine.createSpyObj('SVGRectElement', ['getBoundingClientRect']);
     //spy.and.returnValue(boundRect);
+    console.log(`manipulator: ${JSON.stringify(service["manipulator"])}`);
     const isInSelection = service['isInSelectionArea'](position);
     expect(isInSelection).toBe(true);
   });

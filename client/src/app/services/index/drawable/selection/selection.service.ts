@@ -344,6 +344,6 @@ export class SelectionService extends DrawableService {
         bottom: Math.max(gElementBBox.bottom, firstChildBBox.bottom + parseInt(thickness, 10) / 2)
       };
     }
-    return { left: gElementBBox.left, right: gElementBBox.right,top: gElementBBox.top, bottom: gElementBBox.bottom };
+    return { left: gElementBBox.left, right: gElementBBox.right, top: gElementBBox.top, bottom: gElementBBox.bottom };
   }
 }

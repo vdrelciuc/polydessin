@@ -111,7 +111,7 @@ describe('ShapeService', () => {
   });
 
   it('#updateTracingType should change traced with border', () => {
-    const spy = spyOn(service, 'cancelShapeIfOngoing');
+    // const spy = spyOn(service, 'cancelShapeIfOngoing');
     service['isChanging'] = true;
     service.updateTracingType('border');
     expect(service.shapeStyle.hasBorder).not.toBeTruthy();
