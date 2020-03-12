@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 describe('SprayService', () => {
   let service: SprayService;
@@ -94,17 +93,17 @@ describe('SprayService', () => {
   });
 
   it('#onMouseOutCanvas should add new element to drawStack', () => {
-    service['isDrawing'].next(true);
-    const spyAttributes = spyOn(manipulator, 'setAttribute');
+    service.onMousePress(eventMocker('mousepress', 0, 0, 0));
+    const spy = spyOn(service['drawStack'], 'addElementWithInfos');
     service.onMouseOutCanvas(eventMocker('mousemove', 0, 0, 0));
-    expect(spyAttributes).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#onMouseOutCanvas should not add new element to drawStack', () => {
-    service['isDrawing'].next(false);
-    const spyAttributes = spyOn(manipulator, 'setAttribute');
+    service.onMouseRelease(eventMocker('mousepress', 0, 0, 0));
+    const spy = spyOn(service['drawStack'], 'addElementWithInfos');
     service.onMouseOutCanvas(eventMocker('mousemove', 0, 0, 0));
-    expect(spyAttributes).not.toHaveBeenCalled();
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('#generateRandom should generate random nuber between 0 and 1', () => {

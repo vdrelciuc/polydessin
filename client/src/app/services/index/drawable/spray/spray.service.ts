@@ -6,7 +6,6 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { BehaviorSubject } from 'rxjs';
-import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
