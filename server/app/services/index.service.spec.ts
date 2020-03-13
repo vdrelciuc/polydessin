@@ -1,36 +1,33 @@
 import { expect } from 'chai';
-import * as inversify from 'inversify';
 import { Message } from '../../../common/communication/message';
+import { Stubbed, testingContainer } from '../../test/test-utils';
 import Types from '../types';
 import { DateService } from './date.service';
-import { IndexService} from './index.service';
-
-class MockDateService extends DateService {
-    async currentTime(): Promise<Message> {
-        return {
-            title: 'Time',
-            body: new Date(2020, 0, 10).toString(),
-        };
-    }
-}
-
-class MockErrorDateService extends DateService {
-    async currentTime(): Promise<Message> {
-        throw new Error('error in the service');
-    }
-}
+import { IndexService } from './index.service';
 
 describe('Index service', () => {
-
     let indexService: IndexService;
-    let container: inversify.Container;
+    let dateService: Stubbed<DateService>;
 
-    beforeEach(() => {
-        container = new inversify.Container();
-        container.bind(Types.IndexService).to(IndexService);
-        container.bind(Types.DateService).to(MockDateService);
+    beforeEach(async () => {
+        const [container, sandbox] = await testingContainer();
+        container.rebind(Types.DateService).toConstantValue({
+            currentTime: sandbox.stub().resolves({
+                title: 'Time',
+                body: new Date(2020, 0, 10).toString(),
+            }),
+        });
+        dateService = container.get(Types.DateService);
         indexService = container.get<IndexService>(Types.IndexService);
-    })
+    });
+
+    it('should return a simple message if #about is called', () => {
+        const expectedTitle = 'Basic Server About Page';
+        const expectedBody = 'Try calling helloWorld to get the time';
+        const aboutMessage = indexService.about();
+        expect(aboutMessage.title).to.equals(expectedTitle);
+        expect(aboutMessage.body).to.equals(expectedBody);
+    });
 
     it('should return Hello World as title', (done: Mocha.Done) => {
         indexService.helloWorld().then((result: Message) => {
@@ -39,24 +36,25 @@ describe('Index service', () => {
         });
     });
 
-    it('should have a body that starts with \'Time is\'', (done: Mocha.Done) => {
+    it('should have a body that starts with "Time is"', (done: Mocha.Done) => {
         indexService.helloWorld().then((result: Message) => {
-            expect(result.body).to.be.a('string').and.satisfy((body: string) => body.startsWith('Time is'));
+            expect(result.body)
+                .to.be.a('string')
+                .and.satisfy((body: string) => body.startsWith('Time is'));
             done();
         });
     });
 
     it('should handle an error from DateService', (done: Mocha.Done) => {
-        // Replace with the another mock
-        container.unbind(Types.DateService);
-        container.bind(Types.DateService).to(MockErrorDateService);
-        indexService = container.get<IndexService>(Types.IndexService);
-
-        indexService.helloWorld().then((result: Message) => {
-            expect(result.title).to.equals('Error');
-            done();
-        }).catch((error: unknown) => {
-            done(error);
-        });
-    })
+        dateService.currentTime.rejects(new Error('error in the service'));
+        indexService
+            .helloWorld()
+            .then((result: Message) => {
+                expect(result.title).to.equals('Error');
+                done();
+            })
+            .catch((error: unknown) => {
+                done(error);
+            });
+    });
 });
