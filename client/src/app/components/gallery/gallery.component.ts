@@ -149,7 +149,9 @@ export class GalleryComponent implements OnInit {
   }
 
   getTableWidth(): string {
-    const width = this.resultImages.length / 2 * this.TILE_WIDTH_PX;
+    const rows = Math.floor((this.resultImages.length / 2)) +
+      (this.resultImages.length % 2); // we want 1-2 to take 1st row, 3-4 to take 2nd row...
+    const width = rows * this.TILE_WIDTH_PX;
     return width + 'px';
   }
 
