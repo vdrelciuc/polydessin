@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { ElementRef, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
+import { SVGProperties } from '../../classes/svg-properties';
 import { Image } from '../../interfaces/image';
-import {SVGProperties} from "../../classes/svg-properties";
 
 @Injectable({
   providedIn: 'root'
@@ -11,20 +11,21 @@ import {SVGProperties} from "../../classes/svg-properties";
 export class GalleryService {
 
   refToSvg: ElementRef<SVGElement>;
+  private readonly SVG_SERIAL_SIGNATURE: string = 'data:image/svg+xml;';
+  private readonly SVG_HTML_TAG: string = '</svg>';
 
   constructor(private http: HttpClient) {
   }
 
-  loadImage(image: Image): void {
-
-
-    this.refToSvg.nativeElement.setAttribute(SVGProperties.width, image.width as unknown as string);
-    this.refToSvg.nativeElement.setAttribute(SVGProperties.height, image.height as unknown as string);
-    this.refToSvg.nativeElement.style.backgroundColor = image.background;
-    this.refToSvg.nativeElement.innerHTML = image.innerHtml;
-
-
-
+  loadImage(image: Image): boolean {
+    if (this.verifyImage(image)) {
+      this.refToSvg.nativeElement.setAttribute(SVGProperties.width, image.width as unknown as string);
+      this.refToSvg.nativeElement.setAttribute(SVGProperties.height, image.height as unknown as string);
+      this.refToSvg.nativeElement.style.backgroundColor = image.background;
+      this.refToSvg.nativeElement.innerHTML = image.innerHtml;
+      return true;
+    }
+    return false;
   }
 
   getAllImages(): Observable<Image[]> {
@@ -33,5 +34,13 @@ export class GalleryService {
 
   deleteImage(id: string): Observable<void> {
     return this.http.delete<void>(`${CONSTANTS.REST_API_ROOT}/${id}`);
+  }
+
+  private verifyImage(image: Image): boolean {
+    const validWidth = image.width !== null && image.width > 0;
+    const validHeight = image.height !== null && image.height > 0;
+    const validSerial = image.serial !== null && (image.serial).toString().includes(this.SVG_SERIAL_SIGNATURE);
+    const validHtml = image.innerHtml !== null && (image.innerHtml).toString().includes(this.SVG_HTML_TAG);
+    return validWidth && validHeight && validSerial && validHtml;
   }
 }
