@@ -7,7 +7,6 @@ import { Transform } from 'src/app/classes/transformations';
 import { SelectionState } from 'src/app/enums/selection-states';
 import { Tools } from 'src/app/enums/tools';
 import { BoundingBox } from 'src/app/interfaces/bounding-box';
-import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
@@ -19,24 +18,24 @@ import { SelectionTransformShortcutService } from './selection-transform-shortcu
 export class SelectionService extends DrawableService {
   private readonly CONTROL_SIZE: number = 6;
   private selectionOrigin: CoordinatesXY;
-  private clickedElement: SVGElementInfos | null;
+  private clickedElement: SVGGElement | null;
   private state: SelectionState = SelectionState.idle;
   private perimeter: SVGRectElement;
   private perimeterAlternative: SVGRectElement;
   private selectionBox: DOMRect;
-  private selectedElements: Stack<SVGElementInfos>;
+  private selectedElements: Stack<SVGGElement>;
   private selectionRect: SVGRectElement;
   private selectionGroup: SVGGElement;
   private controlPoints: SVGRectElement[];
   private oldMousePosition: CoordinatesXY;
-  private elementsToInvert: Stack<SVGElementInfos>;
+  private elementsToInvert: Stack<SVGGElement>;
   private transformShortcuts: SelectionTransformShortcutService;
 
   constructor() {
     super();
     this.frenchName = 'Sélection';
-    this.selectedElements = new Stack<SVGElementInfos>();
-    this.elementsToInvert = new Stack<SVGElementInfos>();
+    this.selectedElements = new Stack<SVGGElement>();
+    this.elementsToInvert = new Stack<SVGGElement>();
     this.transformShortcuts = new SelectionTransformShortcutService();
   }
 
@@ -45,11 +44,10 @@ export class SelectionService extends DrawableService {
     this.setupProperties();
     Transform.needsUpdate.subscribe( () => { this.setGeneratedAreaBorders(); } );
   }
-
   initializeProperties(): void { /* No properties to initialize */ }
 
   cancelSelection(): void {
-    this.selectedElements = new Stack<SVGElementInfos>();
+    this.selectedElements = new Stack<SVGGElement>();
     if (this.subElement !== undefined) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
@@ -70,22 +68,18 @@ export class SelectionService extends DrawableService {
         break;
       }
     }
-    this.clickedElement = null;
-    for (const groupElement of this.drawStack.getAll().getAll()) {
-      if (groupElement.target === (event.target as SVGGElement).parentNode as SVGGElement) {
-        this.clickedElement = groupElement;
-        break;
-      }
-    }
+
+    const target = (event.target as SVGElement).parentNode as SVGGElement;
+    this.clickedElement = target.tagName === 'APP-CANVAS' ? null : target;
 
     if (this.state !== SelectionState.idle) {
       this.onMouseRelease(event);
-    } else if (event.button === 0) { // Left click
-      /*tslint:disable-next-line: no-magic-numbers*/
-      if (controlPointClicked !== -1) {
+    } else if (event.button === 0) {
+      // Left click
+      if (controlPointClicked >= 0) {
         this.state = SelectionState.resizingTop + controlPointClicked;
       } else if (this.isInSelectionArea(new CoordinatesXY(event.clientX, event.clientY))
-        && (this.clickedElement === null || this.selectedElements.contains(this.clickedElement))) {
+             && (this.clickedElement === null || this.selectedElements.contains(this.clickedElement))) {
         this.state = SelectionState.leftClickInSelection;
       } else {
         this.state = SelectionState.singleLeftClickOutOfSelection;
@@ -114,11 +108,15 @@ export class SelectionService extends DrawableService {
         break;
       case SelectionState.inverting:
       case SelectionState.selecting:
-        this.removePerimeter();
+        this.manipulator.removeChild(this.subElement, this.perimeter);
+        this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
+        break;
+      case SelectionState.moving:
+        this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
         break;
     }
     this.invertSelection();
-    this.transformShortcuts.setupShortcuts(this.manipulator);
+    this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image);
     this.state = SelectionState.idle;
     if (this.selectedElements.isEmpty()) {
       this.cancelSelection();
@@ -234,18 +232,13 @@ export class SelectionService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
   }
 
-  private removePerimeter(): void {
-    this.manipulator.removeChild(this.subElement, this.perimeter);
-    this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
-  }
-
   private onSingleClick(): void {
     if (this.clickedElement !== null) {
       switch (this.state) {
         case SelectionState.singleLeftClickOutOfSelection:
           this.state = SelectionState.leftClickInSelection;
         case SelectionState.leftClickInSelection:
-          this.selectedElements = new Stack<SVGElementInfos>();
+          this.selectedElements = new Stack<SVGGElement>();
           this.selectedElements.push_back(this.clickedElement);
           break;
         case SelectionState.singleRightClick:
@@ -254,7 +247,7 @@ export class SelectionService extends DrawableService {
           break;
       }
     } else if (this.state === SelectionState.leftClickInSelection || this.state === SelectionState.singleLeftClickOutOfSelection) {
-      this.selectedElements = new Stack<SVGElementInfos>();
+      this.selectedElements = new Stack<SVGGElement>();
     }
     this.setGeneratedAreaBorders();
   }
@@ -263,47 +256,57 @@ export class SelectionService extends DrawableService {
     for (const element of this.elementsToInvert.getAll()) {
       this.selectedElements.contains(element) ? this.selectedElements.delete(element) : this.selectedElements.push_back(element);
     }
-    this.elementsToInvert = new Stack<SVGElementInfos>();
+    this.elementsToInvert = new Stack<SVGGElement>();
   }
 
   private addOrInvertEachElementInRect(): void {
-    const stack = new Stack<SVGElementInfos>();
-    for (let i = 0; i < this.drawStack.size(); i++) {
-      const element = this.drawStack.hasElementIn(i, this.selectionBox);
-      if (element !== undefined) {
-        stack.push_back(element);
+    const stack = new Stack<SVGGElement>();
+
+    for (let i = 1; i < this.image.nativeElement.childNodes.length; i++) {
+      const element = this.image.nativeElement.childNodes[i] as SVGGElement;
+      if (element !== this.subElement) {
+        const bBox = element.getBoundingClientRect();
+        if (!(bBox.left > this.selectionBox.right || this.selectionBox.left > bBox.right ||
+            bBox.top > this.selectionBox.bottom || this.selectionBox.top > bBox.bottom)) {
+            stack.push_back(element);
+            }
+        }
       }
-    }
     this.state === SelectionState.selecting ? this.selectedElements = stack : this.elementsToInvert = stack;
     this.setGeneratedAreaBorders();
   }
 
   selectAllElements(): void {
-    this.selectedElements = this.drawStack.getAll();
+    this.cancelSelection();
+    for (const element of [].slice.call(this.image.nativeElement.childNodes, 1)) {
+      if (element.tagName === 'g') {
+        this.selectedElements.push_back(element);
+      }
+    }
     this.setGeneratedAreaBorders();
+    this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
-    this.transformShortcuts.setupShortcuts(this.manipulator);
   }
 
   private setGeneratedAreaBorders(): void {
-    const selection: SVGElementInfos[] = [];
+    const selection = new Stack<SVGGElement>();
     for (const element of this.selectedElements.getAll()) {
-      selection.push(element);
-    }
-    for (const element of this.elementsToInvert.getAll()) {
-      const indexToRemove = selection.indexOf(element);
-      /*tslint:disable-next-line: no-magic-numbers*/
-      indexToRemove === -1 ? selection.push(element) : selection.splice(indexToRemove, 1);
+      selection.push_back(element);
     }
 
-    if (selection.length > 0) {
-      const firstElement = this.getBBoxWithStroke(selection[0].target);
+    for (const element of this.elementsToInvert.getAll()) {
+      selection.contains(element) ? selection.delete(element) : selection.push_back(element);
+    }
+
+    if (selection.getAll().length > 0) {
+      const firstElement = this.getBBoxWithStroke(selection.getAll()[0]);
       let left = CoordinatesXY.effectiveX(this.image, firstElement.left);
       let right = CoordinatesXY.effectiveX(this.image, firstElement.right);
       let top = CoordinatesXY.effectiveY(this.image, firstElement.top);
       let bottom = CoordinatesXY.effectiveY(this.image, firstElement.bottom);
-      for (let i = 1; i < selection.length; i++) {
-        const boundingBox = this.getBBoxWithStroke(selection[i].target);
+
+      for (let i = 1; i < selection.getAll().length; i++) {
+        const boundingBox = this.getBBoxWithStroke(selection.getAll()[i]);
         left = Math.min(left, CoordinatesXY.effectiveX(this.image, boundingBox.left));
         right = Math.max(right, CoordinatesXY.effectiveX(this.image, boundingBox.right));
         top = Math.min(top, CoordinatesXY.effectiveY(this.image, boundingBox.top));
