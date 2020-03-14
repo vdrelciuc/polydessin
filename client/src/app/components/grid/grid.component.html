@@ -1,10 +1,10 @@
 <div id="container">
     <form id="grid-form">
-      <div class="head-group">
+      <div class="group">
         <div class="group">
-          <mat-slide-toggle id="toggleCheckbox" (change)="service.toggle()">Visible</mat-slide-toggle>
+          <mat-slide-toggle id="toggleCheckbox" [checked]="service.visible.getValue()" (change)="service.toggle()">Visible</mat-slide-toggle>
        </div>
-        <label class="title" id="thickness">Largeur des carres</label>
+        <label class="title" id="thickness">Taille des carrés</label>
         <mat-slider
           id="thickness-slider"
           name="thickness-slider"
@@ -19,8 +19,8 @@
           vertical="false">
         </mat-slider>
       </div>
-      <div class="head-group">
-        <label class="title" id="opacity">Opacite</label>
+      <div class="group">
+        <label class="title" id="opacity">Opacité</label>
         <mat-slider
           id="opacity-slider"
           name="opacity-slider"

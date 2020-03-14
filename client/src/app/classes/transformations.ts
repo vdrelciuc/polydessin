@@ -41,8 +41,10 @@ export class Transform {
           const oldTranslate = initialElementTransform.substring(indexOfOldX, indexOfOldY);
           const oldTranslationX = oldTranslate.split(',')[0];
           const oldTranslationY = oldTranslate.split(',')[1];
-          const newTransform = `${initialElementTransform.substring(0, indexOfOldX)}${+oldTranslationX + translationX},
-            ${+oldTranslationY + translationY}${initialElementTransform.substring(indexOfOldY)}`;
+          const textBeforeParenthesis = initialElementTransform.substring(0, indexOfOldX);
+          const textAfterParenthesis = initialElementTransform.substring(indexOfOldY);
+          const newCoordinates = `${+oldTranslationX + translationX}, ${+oldTranslationY + translationY}`;
+          const newTransform = textBeforeParenthesis + newCoordinates + textAfterParenthesis;
           Transform.manipulator.setAttribute(element.target, SVGProperties.transform, newTransform);
         }
       }
