@@ -104,7 +104,6 @@ export abstract class ShapeService extends DrawableService {
     } else if (this.isChanging) {
       this.subElement.removeChild(this.text);
       this.subElement.removeChild(this.perimeter);
-      this.subElement.removeChild(this.clip);
       this.pushElement();
     }
     this.isChanging = false;
