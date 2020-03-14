@@ -1,6 +1,6 @@
 import { Color } from './color';
 
-describe('Color', () => {
+fdescribe('Color', () => {
     let color: Color;
     const defaultColor = '#000000';
     const defaultRGB = [0, 0, 0];
@@ -151,12 +151,24 @@ describe('Color', () => {
 
     it('#getInvertedColor should return opposite color when bw is false', () => {
         const white = new Color('#FFFFFF');
-        const black = new Color('#000000')
-        const ok = white.getInvertedColor(false).getHex();
-        console.log(ok);
-        const non = black.getInvertedColor(false).getHex();
-        console.log(non);
-        expect(ok).toEqual(black.getHex());
-        expect(non).toEqual(white.getHex());
+        const black = new Color('#000000');
+        const whiteOpposite = white.getInvertedColor(false).getHex();
+        const blackOpposite = black.getInvertedColor(false).getHex();
+        expect(whiteOpposite).toEqual(black.getHex());
+        expect(blackOpposite).toEqual(white.getHex());
+    });
+
+    it('#isSimilarTo should return false when colors are very different', () => {
+        const white = new Color('#FFFFFF');
+        const black = new Color('#000000');
+        const isSimilar = white.isSimilarTo(black);
+        expect(isSimilar).toEqual(false);
+    });
+
+    it('#isSimilarTo should return true when colors are very similar', () => {
+        const grey = new Color('#808080');
+        const similarGrey = new Color('#80808A');
+        const isSimilar = grey.isSimilarTo(similarGrey);
+        expect(isSimilar).toEqual(true);
     });
 });

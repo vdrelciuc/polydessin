@@ -19,6 +19,7 @@ export class PipetteService extends DrawableService {
 
   constructor() {
     super();
+    this.frenchName = 'Pipette';
   }
 
   onSelect(): void {

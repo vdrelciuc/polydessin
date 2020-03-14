@@ -1,4 +1,5 @@
 export interface SVGElementInfos {
     target: SVGGElement,
-    id: number
+    id: number,
+    deleteWith?: number
 }

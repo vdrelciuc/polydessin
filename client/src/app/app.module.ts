@@ -80,6 +80,7 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     ResizeObserverDirective,
     WarningDialogComponent,
     ExportComponent,
+    PipetteComponent,
 
     EllipseComponent,
     EraserComponent,
@@ -88,7 +89,6 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     GridComponent,
     PolygonComponent,
     ExportComponent,
-    PipetteComponent,
     SaveServerComponent,
     ErrorOnSaveComponent,
     GalleryComponent

@@ -13,12 +13,14 @@ export class GridService extends DrawableService{
   thickness: BehaviorSubject<number>;
   opacity: BehaviorSubject<number>;
   visible: BehaviorSubject<boolean>;
+  frenchName: string;
 
   constructor() { 
     super();
-    this.visible = new BehaviorSubject<boolean>(true);
+    this.visible = new BehaviorSubject<boolean>(false);
     this.thickness = new BehaviorSubject<number>(CONSTANT.GRID_MINIMUM);
     this.opacity = new BehaviorSubject<number>(CONSTANT.OPACITY_DEFAULT);
+    this.frenchName = 'Grille';
   }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {

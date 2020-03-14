@@ -6,6 +6,7 @@ import { Renderer2, Type } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+// import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 describe('SelectionService', () => {
   let service: SelectionService;
@@ -40,7 +41,7 @@ describe('SelectionService', () => {
     }
   }*/
 
-  class mockedSVGRectElement extends SVGRectElement {
+  /*class mockedSVGRectElement extends SVGRectElement {
     constructor(){
       super()
     }
@@ -59,16 +60,87 @@ describe('SelectionService', () => {
         x: boundLeft,
         y: boundTop,
         toJSON(): () => any
-      };*/
+      };
       return new DOMRect(50, 50, 100, 100);
     }
-  }
+  }*/
 
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  // const mockedRendered = (): Element => {
+  //   // const element = new SVGRectElement();
+  //   const element = manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+  //   // parentElement.children.push(element);
+  //   return element;
+  // };
+
+  /*const renderer2Mock = jasmine.createSpyObj('renderer2Mock', [
+    'destroy',
+    'createElement',
+    'createComment',
+    'createText',
+    'destroyNode',
+    'appendChild',
+    'insertBefore',
+    'removeChild',
+    'selectRootElement',
+    'parentNode',
+    'nextSibling',
+    'setAttribute',
+    'removeAttribute',
+    'addClass',
+    'removeClass',
+    'setStyle',
+    'removeStyle',
+    'setProperty',
+    'setValue',
+    'listen'
+  ]);
+  
+  const rootRendererMock =  {
+    renderComponent: () => {
+        return renderer2Mock;
+    }
+  };*/
+
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): DOMRect => {
     const element = new Element();
     parentElement.children.push(element);
-    return element;
+    return new DOMRect(50, 50, 100, 100);
   };
+
+  /*function createMockDiv() {
+    const width = 100;
+    const height = 100;
+    const div = document.createElement("div");
+    Object.assign(div.style, {
+      width: width+"px",
+      height: height+"px",
+    });
+    // we have to mock this for jsdom.
+    div.getBoundingClientRect = () => ({
+      x: 0,
+      y: 0,
+      width: width,
+      height: height,
+      top: 0,
+      left: 0,
+      right: width,
+      bottom: height,
+      toJSON: () => {return null}
+    });
+    return div;
+  }*/
+
+  const mockedBBox = () => ({
+    x: 0,
+    y: 0,
+    width: 100,
+    height: 100,
+    top: 0,
+    left: 0,
+    right: 100,
+    bottom: 100,
+    toJSON: () => {return null}
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -77,14 +149,14 @@ describe('SelectionService', () => {
         {
           provide: Renderer2,
           useValue: {
-              createElement: () => mockedRendered,
-              setAttribute: () => mockedRendered,
-              appendChild: () => mockedRendered,
-              removeChild: () => mockedRendered,
-          },
+            createElement: () => mockedRendered,
+            setAttribute: () => mockedRendered,
+            appendChild: () => mockedRendered,
+            removeChild: () => mockedRendered,
+        },
         },
         //{ provide: DOMRect, useClass: mockedBoundingBox },
-        { provide: SVGRectElement, useClass: mockedSVGRectElement },
+        { provide: SVGRectElement.prototype.getBoundingClientRect, called: { getBoundingClientRect: () => { return new DOMRect(50, 50, 100, 100) } } },
         { provide: ElementRef,
           useValue: {
             nativeElement: {
@@ -119,15 +191,19 @@ describe('SelectionService', () => {
   });
 
   it('#isInSelectionArea should return true when position is in area', () => {
-    const position = new CoordinatesXY(100, 100);
+    const position = new CoordinatesXY(50, 50);
     //service['manipulator'] = manipulator;
     //service['setupProperties']();
     //service['selectionRect'] = manipulator.createElement('SVGRectElement')
-    //spyOn(service['selectionRect'], 'getBoundingClientRect').and.returnValue(new DOMRect);
-    //service['selectionRect'].getBoundingClientRect = jasmine.createSpy().and.returnValue(boundRect);
-    service['selectionRect'] = new mockedSVGRectElement();
+    //service['selectionRect'] = document.createElementNS('http://www.w3.org/1999/xhtml','rect')
+    //spyOn(service['selectionRect'], 'getBoundingClientRect').and.callFake(mockedBBox);
+    service['selectionRect'].getBoundingClientRect = jasmine.createSpy().and.callFake(mockedBBox);
+    //service['selectionRect'] = new mockedSVGRectElement();
     //const spy: jasmine.Spy = jasmine.createSpyObj('SVGRectElement', ['getBoundingClientRect']);
     //spy.and.returnValue(boundRect);
+    //Element.prototype.getBoundingClientRect;
+    //console.log(`manipulator: ${JSON.stringify(service["manipulator"])}`);
+    console.log("selectionRect: " + service['selectionRect']);
     const isInSelection = service['isInSelectionArea'](position);
     expect(isInSelection).toBe(true);
   });

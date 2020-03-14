@@ -8,7 +8,7 @@
                   [matTooltip]="this.toolSelectorService.getSelection().frenchName"
                   matTooltipPosition="after"
                   aria-label="selection-tooltip"
-                  (click)="selectTool('grid')"
+                  (click)="selectTool('selection')"
                   [ngClass]="{'clicked': currentTool === 'selection',
             'not-clicked': currentTool !== 'selection'}">
             <img src="../../../assets/icons/arrow.svg">
@@ -16,6 +16,17 @@
         </div>
       </div>
       <div class="right-column">
+        <div class="icon">
+          <button mat-button
+                  [matTooltip]="this.toolSelectorService.getGrid().frenchName"
+                  matTooltipPosition="after"
+                  aria-label="grid-tooltip"
+                  (click)="selectTool('grid')"
+                  [ngClass]="{'clicked': currentTool === 'grid',
+            'not-clicked': currentTool !== 'grid'}">
+            <img src="../../../assets/icons/grid.svg">
+          </button>
+        </div>
       </div>
     </div>
     <hr noshade size="1">
