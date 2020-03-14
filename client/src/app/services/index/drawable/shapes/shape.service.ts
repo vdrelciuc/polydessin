@@ -5,14 +5,19 @@ import { ShapeStyle } from 'src/app/classes/shape-style';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class ShapeService extends DrawableService {
+
+  private readonly FIRST_QUADRANT: number = 1;
+  private readonly SECOND_QUADRANT: number = 2;
+  private readonly THIRD_QUADRANT: number = 3;
+  private readonly FOURTH_QUADRANT: number = 4;
 
   attributes: DrawablePropertiesService;
   colorSelectorService: ColorSelectorService;
@@ -66,7 +71,7 @@ export abstract class ShapeService extends DrawableService {
   updateTracingType(tracingType: 'border' | 'fill'): void {
     // Verify if a checkbox was changed while a rectangle creation was ongoing and dragged out of canvas
     this.cancelShapeIfOngoing();
-    
+
     if (tracingType === 'border') {
       this.shapeStyle.hasBorder = !this.shapeStyle.hasBorder;
     } else {
@@ -97,21 +102,23 @@ export abstract class ShapeService extends DrawableService {
       // Only a click was registered and no rectangle has been created after the mouse press
       this.drawOnNextMove = false;
     } else if (this.isChanging) {
-      this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
-      this.manipulator.removeChild(this.subElement, this.perimeter);
-      //this.drawStack.addElement(this.subElement);
+      this.subElement.removeChild(this.text);
+      this.subElement.removeChild(this.perimeter);
+      this.subElement.removeChild(this.clip);
+      this.pushElement();
     }
     this.isChanging = false;
   }
 
   onMouseMove(event: MouseEvent): void {
-    if (this.isChanging) {
-      this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
-      this.updateSize();
-    } else if (this.drawOnNextMove) {
+    if (this.drawOnNextMove) {
       this.setupProperties();
       this.drawOnNextMove = false;
       this.isChanging = true;
+    }
+    if (this.isChanging) {
+      this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
+      this.updateSize();
     }
   }
 
@@ -119,21 +126,25 @@ export abstract class ShapeService extends DrawableService {
     if (event.shiftKey && !this.shiftPressed && this.isChanging) {
       this.shiftPressed = true;
       this.updateSize();
+    } else if (event.shiftKey) {
+      this.shiftPressed = true;
     }
   }
   onKeyReleased(event: KeyboardEvent): void {
-    if (!event.shiftKey && this.shiftPressed) {
+    if (!event.shiftKey && this.shiftPressed && this.isChanging) {
       this.shiftPressed = false;
       this.mousePosition = new CoordinatesXY(this.mousePositionOnShiftPress.getX(), this.mousePositionOnShiftPress.getY());
       if (this.isChanging) {
         this.updateSize();
       }
+    } else if (!event.shiftKey) {
+      this.shiftPressed = false;
     }
   }
 
   endTool(): void {
     this.shiftPressed = false;
-    if(this.drawOnNextMove) {
+    if (this.drawOnNextMove) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
   }
@@ -146,12 +157,12 @@ export abstract class ShapeService extends DrawableService {
       this.mousePositionOnShiftPress = new CoordinatesXY(this.mousePosition.getX(), this.mousePosition.getY());
       const quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
       if (width > height) {
-        if (quadrant === 2 || quadrant === 3) {
+        if (quadrant === this.SECOND_QUADRANT || quadrant === this.THIRD_QUADRANT) {
           this.mousePosition.setX(this.mousePosition.getX() + (width - height)); // Faking mouse position
         }
         width = height;
       } else {
-        if (quadrant === 1 || quadrant === 2) {
+        if (quadrant === this.FIRST_QUADRANT || quadrant === this.SECOND_QUADRANT) {
           this.mousePosition.setY(this.mousePosition.getY() + (height - width)); // Faking mouse position
         }
         height = width;
@@ -213,15 +224,12 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.appendChild(this.subElement, this.text);
     this.manipulator.appendChild(this.subElement, this.perimeter);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
-
-    // Allow undo/redo
-    this.drawStack.addElementWithInfos({ target: this.subElement, id: shapeID });
   }
 
   protected alignShapeOrigin(width: number, height: number): void {
     const quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
 
-    if (quadrant === 1 || quadrant === 4) {
+    if (quadrant === this.FIRST_QUADRANT || quadrant === this.FOURTH_QUADRANT) {
       this.setShapeOriginFromRightQuadrants(width);
       this.manipulator.setAttribute(this.text, SVGProperties.x, (this.shapeOrigin.getX() + width / 2).toString());
       this.manipulator.setAttribute(this.perimeter, SVGProperties.x, this.shapeOrigin.getX().toString());
@@ -231,7 +239,7 @@ export abstract class ShapeService extends DrawableService {
       this.manipulator.setAttribute(this.perimeter, SVGProperties.x, this.mousePosition.getX().toString());
     }
 
-    if (quadrant === 3 || quadrant === 4) {
+    if (quadrant === this.THIRD_QUADRANT || quadrant === this.FOURTH_QUADRANT) {
       this.setShapeOriginFromLowerQuadrants(height);
       this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.getY() + height / 2).toString());
       this.manipulator.setAttribute(this.perimeter, SVGProperties.y, this.shapeOrigin.getY().toString());

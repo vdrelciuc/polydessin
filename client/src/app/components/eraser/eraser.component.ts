@@ -23,4 +23,8 @@ export class EraserComponent{
   ) {
     this.service = this.toolSelector.getEraser();
   }
+  
+  changeThickness(newThickness: number): void {
+    this.service.thickness.next(newThickness);
+  }
 }

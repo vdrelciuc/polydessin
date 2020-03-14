@@ -13,18 +13,24 @@ export class DrawStackService {
   private nextId: number;
   isAdding: BehaviorSubject<boolean>;
   changeAt: BehaviorSubject<number>
+  addedSVG: BehaviorSubject<SVGElement | undefined>;
+  addedToRedo: BehaviorSubject<SVGElement | undefined>;
+  reset: BehaviorSubject<boolean>;
 
-  constructor() { 
+  constructor() {
     this.elements = new Stack<SVGElementInfos>();
     this.nextId = 0;
     this.isAdding = new BehaviorSubject<boolean>(false);
     this.changeAt = new BehaviorSubject<number>(-1);
+    this.addedSVG = new BehaviorSubject<SVGElement | undefined>(undefined);
+    this.addedToRedo = new BehaviorSubject<SVGElement | undefined>(undefined);
+    this.reset = new BehaviorSubject<boolean>(false);
   }
 
   getAll(): Stack<SVGElementInfos> { return this.elements; }
 
   addElementWithInfos(toAdd: SVGElementInfos): void {
-    if(toAdd !== undefined) {
+    if(toAdd !== undefined && !this.exists(toAdd.id)) {
       if(toAdd.id < this.nextId) {
         this.changeAt.next(toAdd.id);
       }
@@ -35,7 +41,9 @@ export class DrawStackService {
   }
 
   addFromUndo(toAdd: SVGElementInfos): void {
-    this.elements.insert(toAdd, toAdd.id);
+    if(!this.exists(toAdd.id)) {
+      this.elements.insert(toAdd, toAdd.id);
+    }
   }
 
   removeElement(toRemove: number): void  {
@@ -46,7 +54,7 @@ export class DrawStackService {
       }
     }
   }
-  
+
   removeLastElement(): SVGElementInfos | undefined {
     const lastElement = this.elements.pop_back();
     if(lastElement !== undefined) {
@@ -69,6 +77,19 @@ export class DrawStackService {
     }
     this.nextId -= (toRemove.getAll().length - 1);
     return toRemove;
+  }
+
+  addSVG(current: SVGElement): void {
+    this.addedSVG.next(current);
+  }
+
+  addSVGToRedo(current: SVGElement): void {
+    this.addedToRedo.next(current);
+  }
+
+  addSVGWithNewElement (current: SVGElement): void {
+    this.reset.next(true);
+    this.addSVG(current);
   }
 
   isEmpty(): boolean {
@@ -106,4 +127,13 @@ export class DrawStackService {
   }
 
   getNextID(): number { return this.nextId; }
+
+  private exists(id: number): boolean {
+    for(const element of this.elements.getAll()) {
+      if(element.id === id) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

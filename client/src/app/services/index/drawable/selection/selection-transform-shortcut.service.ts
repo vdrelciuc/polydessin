@@ -6,14 +6,14 @@ import { Transform } from 'src/app/classes/transformations';
 })
 export class SelectionTransformShortcutService {
 
-  readonly firstDelay = 500;
-  readonly moveDelay = 100;
-  readonly unitMove = 3;
+  readonly firstDelay: number = 500;
+  readonly moveDelay: number  = 100;
+  readonly unitMove: number  = 3;
 
-  readonly left = 'ArrowLeft';
-  readonly down = 'ArrowDown';
-  readonly right = 'ArrowRight';
-  readonly up = 'ArrowUp';
+  readonly left: string = 'ArrowLeft';
+  readonly down: string = 'ArrowDown';
+  readonly right: string = 'ArrowRight';
+  readonly up: string = 'ArrowUp';
 
   private lastKeyPressed: string;
 
@@ -29,8 +29,6 @@ export class SelectionTransformShortcutService {
 
   private shortcutListener: (() => void)[] = [];
 
-  constructor() { }
-
   setupShortcuts(manipulator: Renderer2): void {
     this.deleteShortcuts();
     this.shortcutListener.push(manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
@@ -41,12 +39,8 @@ export class SelectionTransformShortcutService {
     }));
   }
 
-  deleteShortcuts() {
-    this.shortcutListener.forEach(listener => (listener()));
-  }
-
-  fct() {
-    console.log(undefined === 'left');
+  deleteShortcuts(): void {
+    this.shortcutListener.forEach((listener) => listener());
   }
 
   private onKeyDown(keyPressed: string): void {
@@ -115,7 +109,6 @@ export class SelectionTransformShortcutService {
 
   private async autoMove(): Promise<void> {
     if (this.isMoving) {
-      
       if (this.hasWaitedHalfSec) {
         this.translate();
         setTimeout(() => this.autoMove(), this.moveDelay);
@@ -129,7 +122,7 @@ export class SelectionTransformShortcutService {
     }
   }
 
-  private translate() {
+  private translate(): void {
     const translateX = (this.leftArrowIsPressed ? - this.unitMove : 0) + (this.rightArrowIsPressed ? this.unitMove : 0);
     const translateY = (this.upArrowIsPressed ? - this.unitMove : 0) + (this.downArrowIsPressed ? this.unitMove : 0);
 
