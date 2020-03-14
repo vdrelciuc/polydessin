@@ -104,20 +104,20 @@ export abstract class ShapeService extends DrawableService {
     } else if (this.isChanging) {
       this.subElement.removeChild(this.text);
       this.subElement.removeChild(this.perimeter);
-      this.subElement.removeChild(this.clip);
       this.pushElement();
     }
     this.isChanging = false;
   }
 
   onMouseMove(event: MouseEvent): void {
-    if (this.isChanging) {
-      this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
-      this.updateSize();
-    } else if (this.drawOnNextMove) {
+    if (this.drawOnNextMove) {
       this.setupProperties();
       this.drawOnNextMove = false;
       this.isChanging = true;
+    }
+    if (this.isChanging) {
+      this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
+      this.updateSize();
     }
   }
 
@@ -125,15 +125,19 @@ export abstract class ShapeService extends DrawableService {
     if (event.shiftKey && !this.shiftPressed && this.isChanging) {
       this.shiftPressed = true;
       this.updateSize();
+    } else if (event.shiftKey) {
+      this.shiftPressed = true;
     }
   }
   onKeyReleased(event: KeyboardEvent): void {
-    if (!event.shiftKey && this.shiftPressed) {
+    if (!event.shiftKey && this.shiftPressed && this.isChanging) {
       this.shiftPressed = false;
       this.mousePosition = new CoordinatesXY(this.mousePositionOnShiftPress.getX(), this.mousePositionOnShiftPress.getY());
       if (this.isChanging) {
         this.updateSize();
       }
+    } else if (!event.shiftKey) {
+      this.shiftPressed = false;
     }
   }
 

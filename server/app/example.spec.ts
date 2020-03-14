@@ -1,4 +1,4 @@
-// tslint:disable:no-magic-numbers
+/*// tslint:disable:no-magic-numbers
 // tslint:disable:no-console
 import { assert, expect } from 'chai';
 
@@ -30,7 +30,7 @@ describe('A starting set of test examples to showcase test-suite behaviour', () 
             // Get a promise of a value that will be later resolved
             const promiseOfValue = promiseGenerator().next();
             // Assign a value to our object
-            promiseOfValue.value.then((v) => {
+            promiseOfValue.value.then((v: number) => {
                 variableNeedingToBeChangedEachRun = v;
                 d();
             });
@@ -70,7 +70,7 @@ describe('A starting set of test examples to showcase test-suite behaviour', () 
                 done();
             });
         });
-        it('will fail if calling done AND returning a promise', (done: Mocha.Done) => {
+        it('will fail if calling done AND returning a promise', async (done: Mocha.Done) => {
             // Message from mocha:
             // Error: Resolution method is overspecified. Specify a callback *or* return a Promise; not both.
             return getDelayedPromise().then((v: string) => {
@@ -107,3 +107,4 @@ describe('A starting set of test examples to showcase test-suite behaviour', () 
         });
     });
 });
+*/

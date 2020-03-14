@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import * as Httpstatus from 'http-status-codes';
 import { inject, injectable } from 'inversify';
+import { HttpStatus } from '../enums/http-status';
 import { Image } from '../interfaces/image';
 import { ImageService } from '../services/image.service';
 import Types from '../types';
@@ -22,7 +22,7 @@ export class ImageController {
                 res.json(images);
             })
             .catch((error: Error) => {
-                res.status(Httpstatus.NOT_FOUND).send(error.message);
+                res.status(HttpStatus.NOT_FOUND).send(error.message);
             });
         });
 
@@ -32,27 +32,27 @@ export class ImageController {
                     res.json(image);
                 })
                 .catch((error: Error) => {
-                    res.status(Httpstatus.NOT_FOUND).send(error.message);
+                    res.status(HttpStatus.NOT_FOUND).send(error.message);
                 });
         });
 
         this.router.post('/', async (req: Request, res: Response, next: NextFunction) => {
             this.imageService.addImage(req.body)
                 .then(() => {
-                    res.sendStatus(Httpstatus.CREATED).send();
+                    res.sendStatus(HttpStatus.CREATED).send();
                 })
                 .catch((error: Error) => {
-                    res.status(Httpstatus.NOT_FOUND).send(error.message);
+                    res.status(HttpStatus.BAD_REQUEST).send(error.message);
                 });
         });
 
         this.router.delete('/:imageId', async (req: Request, res: Response, next: NextFunction) => {
             this.imageService.deleteImage(req.params.imageId)
                 .then(() => {
-                    res.sendStatus(Httpstatus.NO_CONTENT).send();
+                    res.sendStatus(HttpStatus.NO_CONTENT).send();
                 })
                 .catch((error: Error) => {
-                    res.status(Httpstatus.NOT_FOUND).send(error.message);
+                    res.status(HttpStatus.NOT_FOUND).send(error.message);
                 });
         });
     }
