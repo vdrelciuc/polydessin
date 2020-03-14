@@ -65,7 +65,7 @@ describe('UndoRedoService', () => {
   });
 
   it('should empty stack if element is added', () => {
-    service['removed'].push_back(mockedSVGElementInfo);
+    // service['removed'].push_back(mockedSVGElementInfo);
     expect(service.canRedo()).toBeTruthy();
     drawStack.isAdding.next(true);
     expect(service.canRedo()).not.toBeTruthy();
@@ -95,14 +95,14 @@ describe('UndoRedoService', () => {
   });
 
   it('#redo should be able to redo last action', () => {
-    service['removed'].push_back(mockedSVGElementInfo);
+    // service['removed'].push_back(mockedSVGElementInfo);
     const toRedrawElement = {
       target: "null" as unknown as SVGGElement,
       id: 5
     };
     let stack = new Stack<SVGElementInfos>();
     stack.push_back(toRedrawElement);
-    service['toRedraw'] = stack;
+    // service['toRedraw'] = stack;
     expect(service.canRedo()).toBeTruthy();
     const spy = spyOn(manipulator, 'appendChild');
     const spy2 = spyOn(service['drawStack'], 'addFromUndo');
@@ -120,15 +120,15 @@ describe('UndoRedoService', () => {
 
   it('#addToRemoved should add to removed stack', () => {
     const spy = spyOn(manipulator, 'removeChild');
-    service.addToRemoved(mockedSVGElementInfo);
+    // service.addToRemoved(mockedSVGElementInfo);
     expect(spy).toHaveBeenCalled();
     expect(service.canRedo()).toBeTruthy();
   });
 
   it('#redrawStackFrom should redraw stack', () => {
-    service['toRedo'] = mockedSVGElementInfo;
+    // service['toRedo'] = mockedSVGElementInfo;
     const spy = spyOn(manipulator, 'removeChild');
-    service['toRedraw'].push_back(mockedSVGElementInfo);
+    // service['toRedraw'].push_back(mockedSVGElementInfo);
     drawStack.changeAt.next(3);
     expect(spy).toHaveBeenCalled();
   });
