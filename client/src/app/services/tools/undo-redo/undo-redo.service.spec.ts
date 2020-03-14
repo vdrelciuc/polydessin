@@ -1,16 +1,13 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { UndoRedoService } from './undo-redo.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
+import { Renderer2, ElementRef } from '@angular/core';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
-import { Stack } from 'src/app/classes/stack';
-import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 
 describe('UndoRedoService', () => {
 
   let service: UndoRedoService;
   let drawStack: DrawStackService;
-  let manipulator: Renderer2;
 
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
@@ -18,9 +15,11 @@ describe('UndoRedoService', () => {
     return element;
   };
 
-  const mockedSVGElementInfo = {
-    target: null as unknown as SVGGElement,
-    id: 0
+  let mockedSVG = {
+    getBoundingClientRect: 
+      () => new DOMRect(10,10,100,100),
+      childElementCount: 1,
+      childNodes: () => new Array()
   };
   
   beforeEach(() => {
@@ -48,6 +47,16 @@ describe('UndoRedoService', () => {
                     };
                     return boundRect;
                 },
+                cloneNode: () => {
+                  const boundleft = 0;
+                  const boundtop = 0;
+                  const boundRect = {
+                      left: boundleft,
+                      top: boundtop,
+                  };
+                  return boundRect;
+              },
+              childNodes: new Array()
             },
           },
         },
@@ -56,86 +65,103 @@ describe('UndoRedoService', () => {
     });
     service = TestBed.get(UndoRedoService);
     drawStack = TestBed.get<DrawStackService>(DrawStackService);
-    manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    
+    mockedSVG = {
+      getBoundingClientRect: 
+        () => new DOMRect(10,10,100,100),
+        childElementCount: 1,
+        childNodes: () => new Array()
+    };
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should empty stack if element is added', () => {
-    // service['removed'].push_back(mockedSVGElementInfo);
-    expect(service.canRedo()).toBeTruthy();
-    drawStack.isAdding.next(true);
-    expect(service.canRedo()).not.toBeTruthy();
+  it('should change current svg and add old one to elements', () => {
+    drawStack.addedSVG.next(mockedSVG as unknown as SVGElement);
+    expect(service['elements'].getAll().length).toEqual(1);
+    expect(service['currentSVG'].getBoundingClientRect()).toEqual(
+      new DOMRect(10,10,100,100)
+    );
+    expect(drawStack.addedSVG.value).toEqual(undefined);
   });
 
-  it('#canRedo shouldn\'t be able to redo', () => {
-    expect(service.canRedo()).not.toBeTruthy();
+  it('should change current svg and add old one to redo', () => {
+    drawStack.addedToRedo.next(mockedSVG as unknown as SVGElement);
+    expect(service['removed'].getAll().length).toEqual(1);
+    expect(service['currentSVG'].getBoundingClientRect()).toEqual(
+      new DOMRect(10,10,100,100)
+    );
+    expect(drawStack.addedToRedo.value).toEqual(undefined);
+  });
+
+  it('should reset redo stack', () => {
+    service['removed'].push_back(mockedSVG as unknown as SVGElement);
+    expect(service['removed'].getAll().length).toEqual(1);
+    drawStack.reset.next(true);
+    expect(service['removed'].getAll().length).toEqual(0);
+    expect(drawStack.reset.value).toEqual(false);
+  });
+
+  it('#undo should undo last action (being the only action)', () => {
+    service['currentSVG'] = {
+      getBoundingClientRect: () => new DOMRect(10,10,1000,1000),
+      childElementCount: 0
+    } as SVGElement;
+    expect(service['currentSVG'].childElementCount).toEqual(0);
+    service['elements'].push_back(mockedSVG as unknown as SVGElement);
+    service.undo();
+    expect(service['changed'].value).toEqual(true);
+    expect(service['currentSVG'].childElementCount).toEqual(1);
+  });
+
+  it('#undo should undo last action not the only', () => {
+    service['currentSVG'] = {
+      getBoundingClientRect: () => new DOMRect(10,10,1000,1000),
+      childElementCount: 2
+    } as SVGElement;
+    expect(service['currentSVG'].childElementCount).toEqual(2);
+    service['elements'].push_back(mockedSVG as unknown as SVGElement);
+    mockedSVG.childElementCount = 10;
+    service['elements'].push_back(mockedSVG as unknown as SVGElement);
+    expect(service['removed'].getAll().length).toEqual(0);
+    service.undo();
+    expect(service['removed'].getAll().length).toEqual(1);
+    expect(service['currentSVG'].childElementCount).toEqual(10);
+  });
+
+  it('#undo should not undo because stack is empty', () => {
+    service['currentSVG'] = mockedSVG as unknown as SVGElement;
+    expect(service['changed'].value).toEqual(false);
+    expect(service['elements'].getAll().length).toEqual(0);
+    service.undo();
+    expect(service['currentSVG']).toEqual(mockedSVG as unknown as SVGElement);
+    expect(service['elements'].getAll().length).toEqual(0);
+    expect(service['changed'].value).toEqual(false);
   });
 
   it('#canUndo shouldn\'t be able to undo', () => {
     expect(service.canUndo()).not.toBeTruthy();
   });
 
-  it('#undo should undo last action', () => {
-    drawStack.addElementWithInfos(mockedSVGElementInfo);
-    const spy = spyOn(manipulator, 'removeChild');
-    service.undo();
-    expect(spy).toHaveBeenCalled();
-    expect(service.canRedo()).toBeTruthy();
-  });
-
-  it('#undo shouldn\'t undo because stack is empty', () => {
-    const spy = spyOn(manipulator, 'removeChild');
-    service.undo();
-    expect(spy).not.toHaveBeenCalled();
-    expect(service.canRedo()).not.toBeTruthy();
-  });
-
   it('#redo should be able to redo last action', () => {
-    // service['removed'].push_back(mockedSVGElementInfo);
-    const toRedrawElement = {
-      target: "null" as unknown as SVGGElement,
-      id: 5
-    };
-    let stack = new Stack<SVGElementInfos>();
-    stack.push_back(toRedrawElement);
-    // service['toRedraw'] = stack;
-    expect(service.canRedo()).toBeTruthy();
-    const spy = spyOn(manipulator, 'appendChild');
-    const spy2 = spyOn(service['drawStack'], 'addFromUndo');
+    service['removed'].push_back(mockedSVG as unknown as SVGElement);
+    expect(service['changed'].value).toEqual(false);
     service.redo();
-    expect(spy).toHaveBeenCalled();
-    expect(spy2).toHaveBeenCalledWith(toRedrawElement);
+    expect(service['currentSVG']).toEqual(mockedSVG as unknown as SVGElement);
+    expect(service['changed'].value).toEqual(true);
   });
 
-  it('#redo should\'t redo because stack is empty', () => {
-    const spy = spyOn(manipulator, 'appendChild');
+  it('#redo should not redo because stack is empty', () => {
+    expect(service['removed'].getAll().length).toEqual(0);
+    service['currentSVG'] = mockedSVG as unknown as SVGElement;
+    expect(service['changed'].value).toEqual(false);
     service.redo();
-    expect(spy).not.toHaveBeenCalled();
+    expect(service['currentSVG']).toEqual(mockedSVG as unknown as SVGElement);
+    expect(service['changed'].value).toEqual(false);
+  });
+
+  it('#canRedo shouldn\'t be able to redo', () => {
     expect(service.canRedo()).not.toBeTruthy();
-  });
-
-  it('#addToRemoved should add to removed stack', () => {
-    const spy = spyOn(manipulator, 'removeChild');
-    // service.addToRemoved(mockedSVGElementInfo);
-    expect(spy).toHaveBeenCalled();
-    expect(service.canRedo()).toBeTruthy();
-  });
-
-  it('#redrawStackFrom should redraw stack', () => {
-    // service['toRedo'] = mockedSVGElementInfo;
-    const spy = spyOn(manipulator, 'removeChild');
-    // service['toRedraw'].push_back(mockedSVGElementInfo);
-    drawStack.changeAt.next(3);
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it('#redrawStackFrom should redraw stack', () => {
-    const spy = spyOn(manipulator, 'removeChild');
-    drawStack.changeAt.next(-2);
-    expect(spy).not.toHaveBeenCalled();
   });
 });

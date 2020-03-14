@@ -40,11 +40,11 @@ export class DrawStackService {
     }
   }
 
-  addFromUndo(toAdd: SVGElementInfos): void {
-    if(!this.exists(toAdd.id)) {
-      this.elements.insert(toAdd, toAdd.id);
-    }
-  }
+  // addFromUndo(toAdd: SVGElementInfos): void {
+  //   if(!this.exists(toAdd.id)) {
+  //     this.elements.insert(toAdd, toAdd.id);
+  //   }
+  // }
 
   removeElement(toRemove: number): void  {
     for(const element of this.elements.getAll()) {
@@ -87,7 +87,7 @@ export class DrawStackService {
     this.addedToRedo.next(current);
   }
 
-  addSVGWithNewElement (current: SVGElement): void {
+  addSVGWithNewElement(current: SVGElement): void {
     this.reset.next(true);
     this.addSVG(current);
   }
