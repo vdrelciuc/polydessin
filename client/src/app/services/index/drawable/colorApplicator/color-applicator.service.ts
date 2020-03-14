@@ -37,7 +37,7 @@ export class ColorApplicatorService extends DrawableService {
 
   constructor() {
     super();
-    this.frenchName = 'Applicateur De Couleur';
+    this.frenchName = 'Applicateur de couleur';
   }
 
   onClick(event: MouseEvent): void {
