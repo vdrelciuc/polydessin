@@ -16,6 +16,6 @@ export class WorkspaceService {
   }
 
   checkIfSameBackgroundColor(color: Color): boolean {
-    return color.getHex() === this.backgroundColor.getHex();
+    return this.backgroundColor.isSimilarTo(color);
   }
 }

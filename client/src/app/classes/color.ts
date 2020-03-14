@@ -22,10 +22,10 @@ export class Color {
   }
 
   static areVisuallyEqualForRed(color1: Color, color2: Color): boolean {
-    const redOfColor1HSL = color1.getRGB()[0] / 255;
-    const redOfColor2HSL = color2.getRGB()[0] / 255;
+    const redOfColor1HSL = color1.getRGB()[0] / Color.MAX_VALUE;
+    const redOfColor2HSL = color2.getRGB()[0] / Color.MAX_VALUE;
     const maxPercentage = 1 - (CONSTANT.VISUAL_DIFFERENCE / 100);
-    if(redOfColor1HSL >= maxPercentage && redOfColor2HSL >= maxPercentage) {
+    if (redOfColor1HSL >= maxPercentage && redOfColor2HSL >= maxPercentage) {
       return false;
     }
     const difference = (redOfColor1HSL - redOfColor2HSL) * 100;
@@ -132,9 +132,12 @@ export class Color {
   getInvertedColor(bw: boolean): Color {
     const hex = this.getHex().slice(1);
 
-    let red = parseInt(hex.slice(0, 2), 16);
-    let green = parseInt(hex.slice(2, 4), 16);
-    let blue = parseInt(hex.slice(4, 6), 16);
+    const endOfRed = 2;
+    const endOfGreen = 4;
+    const endOfBlue = 6;
+    let red = parseInt(hex.slice(0, endOfRed), CONSTANT.HEX_BASE);
+    let green = parseInt(hex.slice(endOfRed, endOfGreen), CONSTANT.HEX_BASE);
+    let blue = parseInt(hex.slice(endOfGreen, endOfBlue), CONSTANT.HEX_BASE);
 
     if (bw) {
       // Factors from http://stackoverflow.com/a/3943023/112731
@@ -149,10 +152,34 @@ export class Color {
     }
 
     // Invert color components
-    red = 255 - red;
-    green = 255 - green;
-    blue = 255 - blue;
+    red = Color.MAX_VALUE - red;
+    green = Color.MAX_VALUE - green;
+    blue = Color.MAX_VALUE - blue;
 
     return new Color([red, green, blue]);
+  }
+
+  // Inspired from https://stackoverflow.com/questions/22692134/detect-similar-colours-from-hex-values
+
+  isSimilarTo(otherColor: Color): boolean {
+    // RGB of 'this' color
+    const redOfThis = this.getRGB()[0];
+    const greenOfThis = this.getRGB()[1];
+    const blueOfThis = this.getRGB()[2];
+
+    // RGB of 'otherColor' color
+    const redOfOtherColor = otherColor.getRGB()[0];
+    const greenOfOtherColor = otherColor.getRGB()[1];
+    const blueOfOtherColor = otherColor.getRGB()[2];
+
+    // Calculate differences between reds, greens and blues and limit differences between 0 and 1
+    const redDifference = (Color.MAX_VALUE - Math.abs(redOfThis - redOfOtherColor)) / Color.MAX_VALUE;
+    const greenDifference = (Color.MAX_VALUE - Math.abs(greenOfThis - greenOfOtherColor)) / Color.MAX_VALUE;
+    const blueDifference = (Color.MAX_VALUE - Math.abs(blueOfThis - blueOfOtherColor)) / Color.MAX_VALUE;
+
+    // 0 means opposit colors, 1 means same colors
+    const isSameColorFactor = 0.98;
+    const divisionFactor = 3;
+    return (redDifference + greenDifference + blueDifference) / divisionFactor > isSameColorFactor;
   }
 }
