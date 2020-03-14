@@ -46,6 +46,7 @@ describe('ImageController', () => {
         const [container, sandbox] = await testingContainer();
         container.rebind(Types.ImageService).toConstantValue({
             getAllImages: sandbox.stub().resolves([baseImage]),
+            getImage: sandbox.stub().resolves(baseImage)
         });
         imageService = imageService; // todo: delete
         imageService = container.get(Types.ImageService);
@@ -53,12 +54,32 @@ describe('ImageController', () => {
 
     });
 
-    it('should return an array of images on valid GET /api/images', async () => {
+    it('should return an array of images for GET /api/images', async () => {
         return supertest(app)
             .get('/api/images')
             .expect(HttpStatus.OK)
             .then((response: any) => {
                 expect(response.body).to.be.a('array');
+            });
+    });
+
+    it('should return a single image on valid imageId for GET /api/images/:imageId', async () => {
+        return supertest(app)
+            .get('/api/images/validImageId')
+            .expect(HttpStatus.OK)
+            .then((response: any) => {
+                expect(response.body).to.deep.equal(baseImage);
+            });
+    });
+
+    it('should return an error on invalid imageId for GET /api/images/:imageId', async () => {
+        imageService.getImage.returns('"Image not in database"');
+        return supertest(app)
+            .get('/api/images/invalidImageId')
+            .expect(HttpStatus.NOT_FOUND)
+            .expect('"Image not in database"')
+            .then((response: any) => {
+                expect(response.body).to.deep.equal(baseImage);
             });
     });
 });
