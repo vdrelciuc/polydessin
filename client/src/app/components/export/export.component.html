@@ -38,8 +38,8 @@
             <mat-label class="text">Titre</mat-label>
             <input matInput [(ngModel)]="this.title" (input)="onTitleUpdate($event)" [ngModelOptions]="{standalone: true}">
           </mat-form-field>
-          <div class="icon" [matTooltip]="'Le titre doit avoir de 3 à 16 caractères et peut contenir
-          des lettres, des chiffres, des espaces et des tirets (-).'"
+          <div class="icon" [matTooltip]="'Le titre doit avoir de 3 à 16 caractères et peut contenir ' +
+           'des lettres, des chiffres, des espaces et des tirets (-).'"
                 matTooltipPosition="below">
             <button mat-button>
               <img src="../../../assets/icons/guide.svg">

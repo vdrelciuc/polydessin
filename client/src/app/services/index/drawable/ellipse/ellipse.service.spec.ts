@@ -89,5 +89,5 @@ describe('EllipseService', () => {
     service.onMouseMove(new MouseEvent('mousemove', {clientX: 100, clientY: 100}));
     expect(spy).toHaveBeenCalled();
   });*/
-  
+
 //});

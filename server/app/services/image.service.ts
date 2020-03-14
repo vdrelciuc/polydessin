@@ -7,6 +7,8 @@ const DATABASE_NAME = 'Polydessin';
 const DATABASE_COLLECTION = 'Image';
 const REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,16}$/; // Alphanumeric, space and dash: 3 to 16 chars
 const REGEX_TAG: RegExp = /^[A-Za-z0-9]{1,10}$/; // Alphanumeric, 1 to 10 chars
+const SVG_SERIAL_SIGNATURE: string = 'data:image/svg+xml;';
+const SVG_HTML_TAG: string = '</svg>';
 
 @injectable()
 export class ImageService {
@@ -79,9 +81,11 @@ export class ImageService {
     private validateImage(image: Image): boolean {
         const containsValidTitle = this.validateTitle(image.title);
         const containsCorrectTags = this.validateTags(image.tags);
-        const containsSerial = image.serial !== null && image.serial !== '';
-        const containsInnerHtml = image.innerHtml !== null ;
-        return containsValidTitle && containsCorrectTags && containsSerial && containsInnerHtml;
+        const validWidth = image.width !== null && image.width > 0;
+        const validHeight = image.height !== null && image.height > 0;
+        const validSerial = image.serial !== null && (image.serial).toString().includes(SVG_SERIAL_SIGNATURE);
+        const validHtml = image.innerHtml !== null && (image.innerHtml).toString().includes(SVG_HTML_TAG);
+        return containsValidTitle && containsCorrectTags && validWidth && validHeight && validSerial && validHtml;
     }
 
     async deleteImage(idImage: string): Promise<void> {

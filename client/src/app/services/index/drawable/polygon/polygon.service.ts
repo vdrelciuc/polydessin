@@ -7,14 +7,12 @@ import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
-import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PolygonService extends DrawableService {
-
-  attributes: DrawablePropertiesService;
+  private readonly DEFAULT_NSIDES: number = 3;
 
   shapeStyle: ShapeStyle;
   nSides: number;
@@ -37,7 +35,7 @@ export class PolygonService extends DrawableService {
 
   constructor() {
     super();
-    this.nSides = 3;
+    this.nSides = this.DEFAULT_NSIDES;
     this.shapeIsEmpty = true;
     this.frenchName = 'Polygone';
     this.shapeStyle = {
@@ -116,7 +114,6 @@ export class PolygonService extends DrawableService {
       this.mousePointer = CoordinatesXY.getEffectiveCoords(this.image, event);
       let height = Math.abs(this.mousePointer.getY() - this.shapeCorner.getY());
       let width = Math.abs(this.mousePointer.getX() - this.shapeCorner.getX());
-      const quadrant = this.mousePointer.getQuadrant(this.shapeCorner);
 
       if (height > width * this.ratioYX) {
         height = width * this.ratioYX;
@@ -125,22 +122,26 @@ export class PolygonService extends DrawableService {
       }
 
       this.radius = height / (this.nSides % 2 ? 1 + Math.cos(this.theta / 2) : 2);
-      let originX: number;
-      let originY: number;
-      originX = this.shapeCorner.getX() + ((quadrant === 1 || quadrant === 4) ? width / 2 : -width / 2);
-
-      if (quadrant === 1 || quadrant === 2) {
-        originY = this.shapeCorner.getY() - ((this.nSides % 2 === 0) ? height / 2 : height - this.radius);
-      } else {
-        originY = this.shapeCorner.getY() + ((this.nSides % 2 === 0) ? height / 2 : this.radius);
-      }
-      this.shapeOrigin = new CoordinatesXY(originX, originY);
-
-      this.updateDraw();
+      this.setShapeOrigin(width, height);
     }
   }
 
-  calculateRatioYX(): void {
+  private setShapeOrigin(width: number, height: number): void {
+    let originX: number;
+    let originY: number;
+    originX = this.shapeCorner.getX() + ((this.mousePointer.getX() - this.shapeCorner.getX()) > 0 ? width / 2 : -width / 2);
+
+    if ((this.mousePointer.getY() - this.shapeCorner.getY()) < 0) {
+      originY = this.shapeCorner.getY() - ((this.nSides % 2 === 0) ? height / 2 : height - this.radius);
+    } else {
+      originY = this.shapeCorner.getY() + ((this.nSides % 2 === 0) ? height / 2 : this.radius);
+    }
+    this.shapeOrigin = new CoordinatesXY(originX, originY);
+
+    this.updateDraw();
+  }
+
+  private calculateRatioYX(): void {
     let angle = (Math.PI / 2);
     while (true) {
       if (Math.cos(angle) < Math.cos(angle - this.theta)) {
@@ -168,9 +169,9 @@ export class PolygonService extends DrawableService {
     perimeterPoints += `${this.shapeCorner.getX()},${this.mousePointer.getY()} `;
     perimeterPoints += `${this.mousePointer.getX()},${this.mousePointer.getY()} `;
     perimeterPoints += `${this.mousePointer.getX()},${this.shapeCorner.getY()}`;
-    this.polygon.setAttribute(SVGProperties.points, points);
-    this.perimeter.setAttribute(SVGProperties.points, perimeterPoints);
-    this.perimeterAlternative.setAttribute(SVGProperties.points, perimeterPoints);
+    this.manipulator.setAttribute(this.polygon, SVGProperties.points, points);
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.points, perimeterPoints);
+    this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.points, perimeterPoints);
     this.shapeIsEmpty = (this.radius === 0);
   }
 
@@ -194,9 +195,8 @@ export class PolygonService extends DrawableService {
     } else {
       this.manipulator.setAttribute(this.polygon, SVGProperties.color, 'none');
     }
-    const background = this.colorSelectorService.backgroundColor.getValue();
-    this.manipulator.setAttribute(this.perimeter, SVGProperties.color, background.getInvertedColor(true).getHex());
-    this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.color, background.getHex());
+    this.manipulator.setAttribute(this.perimeter, SVGProperties.color, 'black');
+    this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.color, 'white');
   }
 
   startDraw(): void {

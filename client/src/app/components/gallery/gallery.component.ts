@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { Image } from '../../interfaces/image';
 import { GalleryService } from '../../services/gallery/gallery.service';
 import { SaveServerService } from '../../services/saveServer/save-server.service';
+import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
 
 @Component({
   selector: 'app-gallery',
@@ -13,12 +15,13 @@ import { SaveServerService } from '../../services/saveServer/save-server.service
 })
 export class GalleryComponent implements OnInit {
 
-  isValidTag: boolean;
-  tags: Set<string>;
-  tagName: string;
-  images: Image[];
+  private isValidTag: boolean;
+  private tags: Set<string>;
+  private images: Image[];
   resultImages: Image[];
+  tagName: string;
   hoveredIndex: number;
+  isLoading: boolean;
 
   readonly TILE_WIDTH_PX: number = 250;
 
@@ -26,15 +29,20 @@ export class GalleryComponent implements OnInit {
               private saveService: SaveServerService,
               private snacks: MatSnackBar,
               private sanitizer: DomSanitizer,
-              private galleryService: GalleryService
+              private galleryService: GalleryService,
+              private drawStackService: DrawStackService,
+              private dialog: MatDialog
   ) {
     this.tags = new Set<string>();
     /* tslint:disable-next-line: no-magic-numbers */
     this.hoveredIndex = -1;
     this.resultImages = [];
+    this.tagName = '';
+    this.isLoading = false;
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.galleryService.getAllImages()
       .subscribe((data) => {
         this.images = data;
@@ -43,17 +51,16 @@ export class GalleryComponent implements OnInit {
         this.images.forEach((e) => {
           e.serial = this.sanitizer.bypassSecurityTrustResourceUrl(e.serial) as string;
         });
-        this.snacks.open('Nous avons récupéré les images', '', {duration: 2000});
+        this.isLoading = false;
+        this.snacks.open('Nous avons récupéré les images du serveur', '', {duration: 2000});
+      }, (error) => {
+        this.isLoading = false;
+        this.snacks.open('Une erreur de connexion est survenue', '', {duration: 3500});
       });
   }
 
   onDialogClose(): void {
     this.dialogRef.close();
-  }
-
-  loadConfirmation(): void {
-    this.onDialogClose();
-    // load logic goes here
   }
 
   addTag(tag: string): void {
@@ -89,11 +96,12 @@ export class GalleryComponent implements OnInit {
     }
 
     if (this.resultImages.length === 0) {
-      this.snacks.open('Aucun dessin correspond a votre recherche', '', {duration: 3000});
+      this.snacks.open('Aucun résultat ne correspond à votre recherche.', '', {duration: 3500});
     }
   }
 
   deleteImage(id: string): void {
+    this.isLoading = true;
     this.galleryService.deleteImage(id).subscribe((data) => {
       for (let i = 0 ; i < this.images.length ; ++i) {
         if (id === this.images[i]._id) {
@@ -107,19 +115,43 @@ export class GalleryComponent implements OnInit {
           this.resultImages.splice(i, 1);
         }
       }
-      this.snacks.open('Votre image a été supprimée du serveur', '', {duration: 1500});
+      this.isLoading = false;
+      this.snacks.open('Votre image a été supprimée du serveur.', '', {duration: 2000});
     }, (error) => {
-      this.snacks.open('Une erreur empêche la suppression', '', {duration: 2500});
+      this.isLoading = false;
+      this.snacks.open('Une erreur de connxeion empêche la suppression.', '', {duration: 3500});
     })
     ;
   }
 
   loadImage(image: Image): void {
-    this.galleryService.loadImage(image);
+    let isImageLoadable = true;
+    if (!this.drawStackService.isEmpty()) { // drawing is currenly opened
+      const warning = this.dialog.open(WarningDialogComponent, { disableClose: true });
+      if (warning !== undefined) {
+        warning.afterClosed().subscribe((result) => {
+          if (!result) {
+            // user decided to disregard current drawing
+            isImageLoadable = this.galleryService.loadImage(image);
+          }
+        });
+      }
+    } else { // no drawing currently opened
+      isImageLoadable = this.galleryService.loadImage(image);
+    }
+
+    if (isImageLoadable) {
+      this.snacks.open('Image chargée avec succès.', '', {duration: 2000});
+      this.onDialogClose();
+    } else {
+      this.snacks.open('Image corrompue. SVP effacer celle-ci et choisir une autre.', '', {duration: 3500});
+    }
   }
 
   getTableWidth(): string {
-    const width = this.resultImages.length / 2 * this.TILE_WIDTH_PX;
+    const rows = Math.floor((this.resultImages.length / 2)) +
+      (this.resultImages.length % 2); // we want 1-2 to take 1st row, 3-4 to take 2nd row...
+    const width = rows * this.TILE_WIDTH_PX;
     return width + 'px';
   }
 
