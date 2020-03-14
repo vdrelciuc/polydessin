@@ -81,7 +81,8 @@ export class EraserService extends DrawableService {
   onClick(event: MouseEvent): void {
     const target = (event.target as SVGGElement);
     if(
-      this.getInBounds( 
+      target !== this.image.nativeElement 
+      && this.getInBounds( 
         target.getBoundingClientRect() as DOMRect,
         new CoordinatesXY(event.clientX, event.clientY)
       )
@@ -101,10 +102,12 @@ export class EraserService extends DrawableService {
   onMouseRelease(event: MouseEvent): void {
     if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = false;
-      this.manipulator.removeChild(this.image, this.preview);
-      this.drawStack.addSVGToRedo(this.image.nativeElement.cloneNode(true) as SVGElement);
-      this.manipulator.appendChild(this.image.nativeElement, this.preview);
-      this.updatePreview();
+      if(!this.brushDelete.isEmpty()) {
+        this.manipulator.removeChild(this.image, this.preview);
+        this.drawStack.addSVGToRedo(this.image.nativeElement.cloneNode(true) as SVGElement);
+        this.manipulator.appendChild(this.image.nativeElement, this.preview);
+        this.onMouseMove(event);
+      }
     }
   }
 
@@ -204,7 +207,7 @@ export class EraserService extends DrawableService {
 
   private deleteSelectedElement(): void {
     if(this.selectedElement !== undefined) {
-      this.manipulator.setAttribute(this.selectedElement.target, SVGProperties.color, this.oldBorder);
+      this.manipulator.setAttribute(this.selectedElement.target.firstChild as SVGElement, SVGProperties.color, this.oldBorder);
       this.drawStack.removeElement(this.selectedElement.id);
       this.manipulator.removeChild(this.image, this.selectedElement.target);
       this.manipulator.removeChild(this.image, this.preview);

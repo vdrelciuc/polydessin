@@ -2,6 +2,7 @@ import { Injectable, Renderer2, ElementRef } from '@angular/core';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { Stack } from 'src/app/classes/stack';
 import { BehaviorSubject } from 'rxjs';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 @Injectable({
   providedIn: 'root'
@@ -89,11 +90,16 @@ export class UndoRedoService {
     let children = this.image.nativeElement.childNodes;
     children.forEach(
       (child) => {
+        this.drawStack.removeElement( Number((child as SVGGElement).getAttribute(SVGProperties.title)) );
         this.manipulator.removeChild(this.image, child as SVGGElement);
       }
     );
     const newChildren = Array.from(by.childNodes);
     for(const child of newChildren) {
+      this.drawStack.addElementWithInfos( {
+        target: (child as SVGGElement),
+        id: Number((child as SVGGElement).getAttribute(SVGProperties.title)) 
+      });
       this.manipulator.appendChild(this.image.nativeElement, child.cloneNode(true) as SVGGElement);
     }
   }
