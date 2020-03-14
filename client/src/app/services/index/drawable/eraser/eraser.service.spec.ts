@@ -13,7 +13,24 @@ describe('EraserService', () => {
   let service: EraserService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
-  const mockedSVGInfo = {id: 1, target: {firstChild: null} as unknown as SVGGElement};
+  const mockedSVGInfo = {
+    id: 1, 
+    target: {
+      firstChild: null,
+      getBoundingClientRect: () => {
+        const boundleft = 0;
+        const boundtop = 0;
+        const boundRect = {
+            left: boundleft,
+            top: boundtop,
+        };
+        return boundRect;
+      },
+      getAttribute: () => null,
+      querySelectorAll: () => [],
+      clientHeight: 100,
+      cloneNode: () => null
+    } as unknown as SVGGElement};
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
@@ -26,7 +43,7 @@ describe('EraserService', () => {
         {
           provide: Renderer2,
           useValue: {
-              createElement: () => mockedRendered,
+              createElement: () => { ({setAttribute: () => 1, getAttribute: () => 2}) },
               setAttribute: () => mockedRendered,
               appendChild: () => mockedRendered,
               removeChild: () => mockedRendered,
@@ -75,6 +92,7 @@ describe('EraserService', () => {
 
   it('#initialize should be initialize element', () => {
     const spy = spyOn<any>(service, 'updateSVGElements');
+    service['elements'] = new Stack<SVGElementInfos>();
     expect(service['elements'].getAll().length).toEqual(0);
     service.initialize(manipulator, image,
     getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
@@ -110,7 +128,25 @@ describe('EraserService', () => {
     service.onMouseInCanvas();
     service['selectedElement'] = mockedSVGInfo;
     const spy = spyOn<any>(service, 'movePreview');
-    service.onMouseMove(new MouseEvent('mousemove', {clientX: 100, clientY: 100}));
+    service.onMouseMove({
+      clientX: 100,
+      clientY: 100,
+      target: {
+        getBoundingClientRect: () => {
+            const boundleft = 0;
+            const boundtop = 0;
+            const boundRect = {
+                left: boundleft,
+                top: boundtop,
+            };
+            return boundRect;
+        },
+        getAttribute: () => null,
+        querySelectorAll: () => [],
+        clientHeight: 100,
+        cloneNode: () => null,
+    } as unknown as SVGGElement
+    } as any);
     expect(spy).toHaveBeenCalledWith(new CoordinatesXY(100, 100));
   });
 
@@ -209,5 +245,51 @@ describe('EraserService', () => {
     service.endTool();
     expect(service['leftClick']).not.toBeTruthy();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('#onSelect should init tool', () => {
+    const spy = spyOn<any>(service, 'updateSVGElements');
+    const spy2 = spyOn<any>(service, 'addingMouseMoveEvent');
+    service['elements'] = new Stack<SVGElementInfos>();
+    service['elements'].push_back({
+        target: {
+          onmouseover 
+        } as unknown as SVGGElement, 
+        id: 1
+    });
+    service['elements'].push_back({
+      target: {
+        onmouseover 
+      } as unknown as SVGGElement, 
+      id: 2
+    });
+    expect(service['elements'].getAll().length).toEqual(2);
+    service.onSelect();
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledTimes(2);
+  });
+
+  it('#selectElement should select element first time', () => {
+    const spy = spyOn<any>(service, 'getColor');
+    const spy2 = spyOn<any>(service, 'setOutline');
+    service.selectElement({
+      getAttribute: () => '#FFFFFF',
+    } as unknown as SVGGElement);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy2).toHaveBeenCalledWith('#8B0000');
+  });
+
+  it('#selectElement should select element different than the selected one', () => {
+    service.selectElement({
+      getAttribute: () => '#FFFFFF',
+    } as unknown as SVGGElement);
+
+    const spy = spyOn(manipulator, 'setAttribute');
+    const spy2 = spyOn<any>(service, 'setOutline');
+    service.selectElement({
+      getAttribute: () => '#FFFFFB',
+    } as unknown as SVGGElement);
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledWith('#8B0000');
   });
 });

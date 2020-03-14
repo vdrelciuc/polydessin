@@ -15,7 +15,8 @@ import {
   MatSidenavModule,
   MatSliderModule,
   MatSlideToggleModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -40,6 +41,8 @@ import { GridComponent } from '../grid/grid.component';
 import { EraserComponent } from '../eraser/eraser.component';
 import { PolygonComponent } from '../polygon/polygon.component';
 import { SelectionComponent } from '../selection/selection.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
@@ -90,10 +93,13 @@ describe('WorkingAreaComponent', () => {
         MatTooltipModule,
         MatCheckboxModule,
         MatSlideToggleModule,
+        MatSnackBarModule,
+        HttpClientModule
       ],
       providers: [
         {provide: APP_BASE_HREF, useValue : '/' }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [CreateNewComponent] } })
     .compileComponents();
