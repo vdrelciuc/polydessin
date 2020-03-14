@@ -65,6 +65,7 @@ export class CanvasComponent implements OnInit {
       this.manipulator.setAttribute(this.image.nativeElement, 'style', `background-color: ${color.getHex()};
        border-bottom: ${border};
        border-right: ${border}`);
+      this.manipulator.setAttribute(this.grid.nativeElement, SVGProperties.color, color.getInvertedColor(true).getHex());
     });
 
     this.createNewService.canvasSize.subscribe((canvasSize: CoordinatesXY) => {
