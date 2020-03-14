@@ -71,9 +71,9 @@ describe('SprayService', () => {
   });
 
   it('constructor should set default properties', () => {
-    expect(service['spraying']).toBeTruthy();
+    expect(service['spraying']).not.toBeTruthy();
     expect(service['frenchName']).toEqual('Aérosol');
-    expect(service['isDrawing']).not.toBeTruthy();
+    expect(service['isDrawing'].value).not.toBeTruthy();
   });
 
   it('#initializeProperties should initialize subscription to color', () => {

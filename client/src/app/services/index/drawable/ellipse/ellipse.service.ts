@@ -29,6 +29,7 @@ export class EllipseService extends ShapeService {
   }
 
   protected setDimensionsAttributes(width: number, height: number): void {
+
     this.manipulator.setAttribute(this.shape, SVGProperties.radiusX, (width / 2).toString());
     this.manipulator.setAttribute(this.shape, SVGProperties.radiusY, (height / 2).toString());
   }
