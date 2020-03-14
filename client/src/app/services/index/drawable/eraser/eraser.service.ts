@@ -5,7 +5,7 @@ import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.s
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import * as CONSTANTS from '../../../../classes/constants';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
-import { UndoRedoService } from 'src/app/services/tools/undo-redo/undo-redo.service';
+// import { UndoRedoService } from 'src/app/services/tools/undo-redo/undo-redo.service';
 import { Color } from 'src/app/classes/color';
 import { Stack } from 'src/app/classes/stack';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
@@ -19,7 +19,7 @@ export class EraserService extends DrawableService {
   thickness: BehaviorSubject<number>;
   private selectedElement: SVGElementInfos;
   private oldBorder: string;
-  private undoRedo: UndoRedoService;
+  // private undoRedo: UndoRedoService;
   private elements: Stack<SVGElementInfos>;
   private leftClick: boolean;
   private preview: SVGRectElement;
@@ -52,9 +52,9 @@ export class EraserService extends DrawableService {
     });
   }
 
-  assignUndoRedo(undoRedo: UndoRedoService): void {
-    this.undoRedo = undoRedo;
-  }
+  // assignUndoRedo(undoRedo: UndoRedoService): void {
+  //   this.undoRedo = undoRedo;
+  // }
 
   onMouseMove(event: MouseEvent): void {
     if(this.canErase) {
@@ -79,7 +79,16 @@ export class EraserService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    this.deleteSelectedElement();
+    const target = (event.target as SVGGElement);
+    if(
+      this.getInBounds( 
+        target.getBoundingClientRect() as DOMRect,
+        new CoordinatesXY(event.clientX, event.clientY)
+      )
+      && target.getAttribute(SVGProperties.fill) !== null
+      ) {
+        this.deleteSelectedElement();
+      }
   }
 
   onMousePress(event: MouseEvent): void {
@@ -92,11 +101,10 @@ export class EraserService extends DrawableService {
   onMouseRelease(event: MouseEvent): void {
     if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = false;
-      let element = this.brushDelete.pop_back();
-      while(element !== undefined) {
-        this.undoRedo.addToRemoved(element);
-        element = this.brushDelete.pop_back();
-      }
+      this.manipulator.removeChild(this.image, this.preview);
+      this.drawStack.addSVGToRedo(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image.nativeElement, this.preview);
+      this.updatePreview();
     }
   }
 
@@ -196,8 +204,13 @@ export class EraserService extends DrawableService {
 
   private deleteSelectedElement(): void {
     if(this.selectedElement !== undefined) {
-      this.undoRedo.addToRemoved(this.selectedElement);
+      this.manipulator.setAttribute(this.selectedElement.target, SVGProperties.color, this.oldBorder);
       this.drawStack.removeElement(this.selectedElement.id);
+      this.manipulator.removeChild(this.image, this.selectedElement.target);
+      this.manipulator.removeChild(this.image, this.preview);
+      this.drawStack.addSVGToRedo(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image.nativeElement, this.preview);
+      this.updatePreview();
     }
   }
 

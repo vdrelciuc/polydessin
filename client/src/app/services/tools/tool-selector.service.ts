@@ -79,7 +79,18 @@ export class ToolSelectorService {
       element[1].initialize(manipulator, image, colorSelectorService, drawStack);
     }
     this.pipette.setupCanvas(canvas);
-    this.eraser.assignUndoRedo(this.memory);
+    // this.eraser.assignUndoRedo(this.memory);
+    this.memory.changed.subscribe(
+      () => {
+        if(this.memory.changed.value) {
+          this.memory.changed.next(false);
+          if(this.tool !== undefined) {
+            this.tool.endTool();
+            this.tool.onSelect();
+          }
+        }
+      }
+    );
   }
 
   getCurrentTool(): DrawableService | undefined { return this.tool; }

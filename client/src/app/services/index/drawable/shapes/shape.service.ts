@@ -102,8 +102,9 @@ export abstract class ShapeService extends DrawableService {
       // Only a click was registered and no rectangle has been created after the mouse press
       this.drawOnNextMove = false;
     } else if (this.isChanging) {
-      this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
-      this.manipulator.removeChild(this.subElement, this.perimeter);
+      this.subElement.removeChild(this.text);
+      this.subElement.removeChild(this.perimeter);
+      this.subElement.removeChild(this.clip);
       this.pushElement();
     }
     this.isChanging = false;
@@ -218,9 +219,6 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.appendChild(this.subElement, this.text);
     this.manipulator.appendChild(this.subElement, this.perimeter);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
-
-    // Allow undo/redo
-    // this.pushElement();
   }
 
   protected alignShapeOrigin(width: number, height: number): void {
