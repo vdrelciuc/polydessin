@@ -111,9 +111,12 @@ export class SelectionService extends DrawableService {
         this.manipulator.removeChild(this.subElement, this.perimeter);
         this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
         break;
+      case SelectionState.moving:
+        this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+        break;
     }
     this.invertSelection();
-    this.transformShortcuts.setupShortcuts(this.manipulator);
+    this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image);
     this.state = SelectionState.idle;
     if (this.selectedElements.isEmpty()) {
       this.cancelSelection();
@@ -275,13 +278,14 @@ export class SelectionService extends DrawableService {
 
   selectAllElements(): void {
     this.cancelSelection();
-    const allElements = [].slice.call(this.image.nativeElement.childNodes, 1);
-    for (const element of allElements) {
-      this.selectedElements.push_back(element);
+    for (const element of [].slice.call(this.image.nativeElement.childNodes, 1)) {
+      if (element.tagName === 'g') {
+        this.selectedElements.push_back(element);
+      }
     }
     this.setGeneratedAreaBorders();
+    this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
-    this.transformShortcuts.setupShortcuts(this.manipulator);
   }
 
   private setGeneratedAreaBorders(): void {

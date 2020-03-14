@@ -1,5 +1,6 @@
-import { Injectable, Renderer2 } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Transform } from 'src/app/classes/transformations';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,9 @@ export class SelectionTransformShortcutService {
   private upArrowIsPressed: boolean;
   private downArrowIsPressed: boolean;
 
+  private image: ElementRef<SVGElement>;
+  private drawStack: DrawStackService;
+
   private isMoving: boolean;
   private hasWaitedHalfSec: boolean;
 
@@ -29,8 +33,10 @@ export class SelectionTransformShortcutService {
 
   private shortcutListener: (() => void)[] = [];
 
-  setupShortcuts(manipulator: Renderer2): void {
+  setupShortcuts(manipulator: Renderer2, drawStack: DrawStackService, image: ElementRef<SVGElement>): void {
     this.deleteShortcuts();
+    this.drawStack = drawStack;
+    this.image = image;
     this.shortcutListener.push(manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
       this.onKeyDown(event.key);
     }));
@@ -74,7 +80,8 @@ export class SelectionTransformShortcutService {
     }
 
     this.isMoving = true;
-    if (!this.autoMoveHasInstance) {
+    if (!this.autoMoveHasInstance && (this.upArrowIsPressed || this.downArrowIsPressed
+       || this.leftArrowIsPressed || this.rightArrowIsPressed)) {
       this.autoMoveHasInstance = true;
       this.autoMove();
     }
@@ -119,6 +126,9 @@ export class SelectionTransformShortcutService {
     } else {
       this.hasWaitedHalfSec = false;
       this.autoMoveHasInstance = false;
+      console.log('');
+
+      this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
     }
   }
 
