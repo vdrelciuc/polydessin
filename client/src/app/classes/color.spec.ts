@@ -1,6 +1,6 @@
 import { Color } from './color';
 
-fdescribe('Color', () => {
+describe('Color', () => {
     let color: Color;
     const defaultColor = '#000000';
     const defaultRGB = [0, 0, 0];
