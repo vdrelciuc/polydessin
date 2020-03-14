@@ -18,10 +18,10 @@ export class UndoRedoService {
     private drawStack: DrawStackService,
     private manipulator: Renderer2,
     private image: ElementRef<SVGElement>) { 
+      this.changed = new BehaviorSubject<boolean>(false);
       this.removed = new Stack<SVGElement>();
       this.elements = new Stack<SVGElement>();
       this.setCurrent(this.image.nativeElement.cloneNode(true) as SVGElement);
-      this.changed = new BehaviorSubject<boolean>(false);
       this.drawStack.addedSVG.subscribe(
         () => {
           const svg = this.drawStack.addedSVG.value;
