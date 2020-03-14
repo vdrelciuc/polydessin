@@ -48,9 +48,6 @@ export class ColorApplicatorService extends DrawableService {
     const colorBorderOpacity = this.colorSelectorService.secondaryTransparency.getValue() as unknown as string;
 
     if(elementOnTop !== undefined) {
-      console.log(elementOnTop);
-      console.log(elementOnTop.firstChild);
-      console.log(elementOnTop.firstElementChild);
       const capturedSVG = elementOnTop ;
       const actualColor = capturedSVG.getAttribute(SVGProperties.fill);
       if (event.button === 0 && actualColor !== 'none'){
@@ -71,7 +68,7 @@ export class ColorApplicatorService extends DrawableService {
             this.manipulator.setAttribute(elementOnTop, SVGProperties.color, colorBorder);
             this.manipulator.setAttribute(elementOnTop, SVGProperties.colorOpacity, colorBorderOpacity);
         }
+        this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
     }
-
   }
 }

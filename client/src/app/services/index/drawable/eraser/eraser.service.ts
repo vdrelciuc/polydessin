@@ -5,7 +5,7 @@ import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.s
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import * as CONSTANTS from '../../../../classes/constants';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
-import { UndoRedoService } from 'src/app/services/tools/undo-redo/undo-redo.service';
+// import { UndoRedoService } from 'src/app/services/tools/undo-redo/undo-redo.service';
 import { Color } from 'src/app/classes/color';
 import { Stack } from 'src/app/classes/stack';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
@@ -19,11 +19,12 @@ export class EraserService extends DrawableService {
   thickness: BehaviorSubject<number>;
   private selectedElement: SVGElementInfos;
   private oldBorder: string;
-  private undoRedo: UndoRedoService;
+  // private undoRedo: UndoRedoService;
   private elements: Stack<SVGElementInfos>;
   private leftClick: boolean;
   private preview: SVGRectElement;
   private canErase: boolean;
+  private brushDelete: Stack<SVGElementInfos>;
 
   constructor() {
     super();
@@ -51,18 +52,16 @@ export class EraserService extends DrawableService {
     });
   }
 
-  assignUndoRedo(undoRedo: UndoRedoService): void {
-    this.undoRedo = undoRedo;
-  }
+  // assignUndoRedo(undoRedo: UndoRedoService): void {
+  //   this.undoRedo = undoRedo;
+  // }
 
   onMouseMove(event: MouseEvent): void {
     if(this.canErase) {
       this.movePreview(new CoordinatesXY(event.clientX, event.clientY));
-      console.log(event.clientX + ' ' + event.clientY);
       if(this.selectedElement !== undefined)
       {
         const elementBounds = this.selectedElement.target.getBoundingClientRect();
-        console.log(elementBounds);
         if(!this.getInBounds(elementBounds as DOMRect, new CoordinatesXY(event.clientX, event.clientY))) {
           this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
           this.selectedElement = undefined as unknown as SVGElementInfos;
@@ -80,41 +79,54 @@ export class EraserService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    this.deleteSelectedElement();
+    const target = (event.target as SVGGElement);
+    if(
+      target !== this.image.nativeElement 
+      && this.getInBounds( 
+        target.getBoundingClientRect() as DOMRect,
+        new CoordinatesXY(event.clientX, event.clientY)
+      )
+      && target.getAttribute(SVGProperties.fill) !== null
+      ) {
+        this.deleteSelectedElement();
+      }
   }
 
   onMousePress(event: MouseEvent): void {
     if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = true;
+      this.brushDelete = new Stack<SVGElementInfos>();
     }
   }
 
   onMouseRelease(event: MouseEvent): void {
     if(event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = false;
+      if(!this.brushDelete.isEmpty()) {
+        this.manipulator.removeChild(this.image, this.preview);
+        this.drawStack.addSVGToRedo(this.image.nativeElement.cloneNode(true) as SVGElement);
+        this.manipulator.appendChild(this.image.nativeElement, this.preview);
+        this.onMouseMove(event);
+      }
     }
   }
 
   endTool(): void {
     this.leftClick = false;
-    this.manipulator.removeChild(this.image, this.preview);
+    this.manipulator.removeChild(this.image.nativeElement, this.preview);
     if(this.selectedElement !== undefined) {
-      console.log('here');
-      console.log(this.selectedElement.target.firstChild);
-      console.log(this.oldBorder);
       this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
       this.selectedElement = undefined as unknown as SVGElementInfos;
     }
     for(let element of this.elements.getAll()) {
       element.target.onmouseover = null;
     }
+    delete(this.preview);
   }
 
   addingMouseMoveEvent(element : any){
     this.selectElement(element.target.parentElement as SVGGElement);
   }
-
-
 
   onSelect(): void {
     this.updateSVGElements();
@@ -123,13 +135,14 @@ export class EraserService extends DrawableService {
         if (element.target !== null){
           this.addingMouseMoveEvent(element);
         }
-
       }
     }
     if(this.preview === undefined) {
       this.preview = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
-      this.preview.setAttribute(SVGProperties.color, 'white');
+      this.preview.setAttribute('style', 'pointer-events:none;')
       this.preview.setAttribute(SVGProperties.color, 'black');
+      this.preview.setAttribute(SVGProperties.fill, 'white');
+      this.preview.setAttribute(SVGProperties.thickness, '5');
       this.preview.setAttribute(SVGProperties.x, '0');
       this.preview.setAttribute(SVGProperties.y, '0');
     }
@@ -138,11 +151,11 @@ export class EraserService extends DrawableService {
   }
 
   private getInBounds(elementBounds: DOMRect, mouse: CoordinatesXY): boolean {
-    return (
-      elementBounds.left   < mouse.getX() &&
-      elementBounds.right  > mouse.getX() &&
-      elementBounds.top    < mouse.getY() &&
-      elementBounds.bottom > mouse.getY()
+    return (    
+      elementBounds.left   < mouse.getX() + this.thickness.value / 2 &&
+      elementBounds.right  > mouse.getX() - this.thickness.value / 2 &&
+      elementBounds.top    < mouse.getY() + this.thickness.value / 2 &&
+      elementBounds.bottom > mouse.getY() - this.thickness.value / 2  
     );
   }
 
@@ -166,28 +179,41 @@ export class EraserService extends DrawableService {
 
   private selectElement(element: SVGGElement): void {
     const elementOnTop = { target: element, id: Number(element.getAttribute(SVGProperties.title))};
-    if(elementOnTop.target !== undefined) {
-      if(this.selectedElement === undefined) {
-        this.selectedElement = elementOnTop;
-        this.getColor();
+    if(elementOnTop.target !== undefined) {      
+      if(this.leftClick) {
+        const previous = this.brushDelete.pop_back();
+        if(previous !== undefined) {
+          previous.deleteWith = elementOnTop.id;
+          this.brushDelete.push_back(previous);
+        }
+        this.brushDelete.push_back(elementOnTop);
+        this.manipulator.removeChild(this.image.nativeElement, elementOnTop.target);
+        this.drawStack.removeElement(elementOnTop.id);
+      } else {
+        if(this.selectedElement === undefined) {
+          this.selectedElement = elementOnTop;
+          this.getColor();
+        }
+        if(this.selectedElement !== elementOnTop) {
+          this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+          this.selectedElement = elementOnTop;
+          this.getColor();
+        }
+        this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ? 
+            CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
       }
-      if(this.selectedElement !== elementOnTop) {
-        this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
-        this.selectedElement = elementOnTop;
-        this.getColor();
-      }
-      this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ?
-          CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
-    }
-    if(this.leftClick) {
-      this.deleteSelectedElement();
     }
   }
 
   private deleteSelectedElement(): void {
     if(this.selectedElement !== undefined) {
-      this.undoRedo.addToRemoved(this.selectedElement);
+      this.manipulator.setAttribute(this.selectedElement.target.firstChild as SVGElement, SVGProperties.color, this.oldBorder);
       this.drawStack.removeElement(this.selectedElement.id);
+      this.manipulator.removeChild(this.image, this.selectedElement.target);
+      this.manipulator.removeChild(this.image, this.preview);
+      this.drawStack.addSVGToRedo(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image.nativeElement, this.preview);
+      this.updatePreview();
     }
   }
 

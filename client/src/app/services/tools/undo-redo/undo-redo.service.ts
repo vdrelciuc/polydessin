@@ -1,65 +1,84 @@
 import { Injectable, Renderer2, ElementRef } from '@angular/core';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
-import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { Stack } from 'src/app/classes/stack';
+import { BehaviorSubject } from 'rxjs';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UndoRedoService {
 
-  private removed: Stack<SVGElementInfos>;
-  private toRedo: SVGElementInfos | undefined;
-  private toRedraw: Stack<SVGElementInfos>;
-  private redoing: boolean;
+  private removed: Stack<SVGElement>;
+  private elements: Stack<SVGElement>;
+  private currentSVG: SVGElement;
+  changed: BehaviorSubject<boolean>;
 
   constructor(
     private drawStack: DrawStackService,
     private manipulator: Renderer2,
     private image: ElementRef<SVGElement>) { 
-      this.redoing = false;
-      this.removed = new Stack<SVGElementInfos>();
-      this.drawStack.isAdding.subscribe(
+      this.removed = new Stack<SVGElement>();
+      this.elements = new Stack<SVGElement>();
+      this.setCurrent(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.changed = new BehaviorSubject<boolean>(false);
+      this.drawStack.addedSVG.subscribe(
         () => {
-          if(this.drawStack.isAdding.value && !this.redoing) {
-            this.removed = new Stack<SVGElementInfos>();
+          const svg = this.drawStack.addedSVG.value;
+          if(svg !== undefined) {
+            this.setCurrent(svg);
+            this.drawStack.addedSVG.next(undefined);
           }
         }
       );
-      this.drawStack.changeAt.subscribe(
+      this.drawStack.addedToRedo.subscribe(
         () => {
-          const changeValue = this.drawStack.changeAt.value;
-          if(changeValue !== -1) {
-            this.redrawStackFrom(changeValue);
+          const svg = this.drawStack.addedToRedo.value;
+          if(svg !== undefined) {
+            const svg = this.drawStack.addedToRedo.value;
+            if(svg !== undefined) {
+              this.removed.push_back(this.currentSVG);
+              this.currentSVG = svg;
+              this.drawStack.addedSVG.next(undefined);
+            }
           }
         }
       );
-      this.toRedraw = new Stack<SVGElementInfos>();
-    }
+      this.drawStack.reset.subscribe(
+        () => {
+          if(this.drawStack.reset.value) {
+            this.removed.clear();
+            this.drawStack.reset.next(false);
+          }
+        }
+      )
+  }
 
   undo(): void {
-    const toUndo = this.drawStack.removeLastElement();
+    const toUndo = this.elements.pop_back();
     if(toUndo !== undefined) {
-      this.removed.push_back(toUndo);
-      this.manipulator.removeChild(this.image, toUndo.target);
+      if(this.currentSVG.childElementCount > 1) {
+        this.removed.push_back(this.currentSVG);
+      }
+      this.currentSVG = toUndo;
+      if(this.isEmpty()) {
+        this.addElement(toUndo);
+      }
+      this.replace(toUndo);
+      this.changed.next(true);
     }
   }
 
   canUndo(): boolean {
-    return !this.drawStack.isEmpty();
+    return !this.isEmpty();
   }
 
   redo(): void{
-    this.toRedo = this.removed.pop_back();
-    this.redoing = true;
-    if(this.toRedo !== undefined) {
-      this.redoing = true;
-      this.drawStack.addElementWithInfos(this.toRedo);
-      this.manipulator.appendChild(this.image.nativeElement, this.toRedo.target);
-      this.redoing = false;
-    }
-    if(this.toRedraw.getAll().length > 0) {
-      this.redrawStack();
+    const toRedo = this.removed.pop_back();
+    if(toRedo !== undefined) {
+      this.setCurrent(toRedo);
+      this.replace(toRedo);
+      this.changed.next(true);
     }
   }
 
@@ -67,28 +86,36 @@ export class UndoRedoService {
     return this.removed.getAll().length > 0;
   }
 
-  addToRemoved(toUndo: SVGElementInfos): void {
-    this.removed.push_back(toUndo);
-    this.manipulator.removeChild(this.image.nativeElement, toUndo.target);
-  }
-
-  private redrawStackFrom(from: number): void {
-    this.toRedraw = this.drawStack.removeElements(from);
-    if(this.toRedo !== undefined) {
-      for(const elementToRedraw of this.toRedraw.getAll()) {
-        this.manipulator.removeChild(this.image.nativeElement, elementToRedraw.target);
+  private replace(by: SVGElement): void {
+    let children = this.image.nativeElement.childNodes;
+    children.forEach(
+      (child) => {
+        this.drawStack.removeElement( Number((child as SVGGElement).getAttribute(SVGProperties.title)) );
+        this.manipulator.removeChild(this.image, child as SVGGElement);
       }
+    );
+    const newChildren = Array.from(by.childNodes);
+    for(const child of newChildren) {
+      this.drawStack.addElementWithInfos( {
+        target: (child as SVGGElement),
+        id: Number((child as SVGGElement).getAttribute(SVGProperties.title)) 
+      });
+      this.manipulator.appendChild(this.image.nativeElement, child.cloneNode(true) as SVGGElement);
     }
   }
 
-  private redrawStack(): void {
-    if(this.toRedraw.getAll().length !== 0) {
-      let elementToRedraw = this.toRedraw.pop_front();
-      while(elementToRedraw !== undefined) {
-        this.manipulator.appendChild(this.image.nativeElement, elementToRedraw.target);
-        this.drawStack.addFromUndo(elementToRedraw);
-        elementToRedraw = this.toRedraw.pop_front();
-      }
+  private setCurrent(current: SVGElement): void {
+    if(this.currentSVG !== undefined) {
+      this.elements.push_back(this.currentSVG);
     }
+    this.currentSVG = current;
+  }
+
+  private addElement(toAdd: SVGElement): void {
+    this.elements.push_back(toAdd);
+  }
+
+  private isEmpty(): boolean {
+    return this.elements.getAll().length === 0;
   }
 }

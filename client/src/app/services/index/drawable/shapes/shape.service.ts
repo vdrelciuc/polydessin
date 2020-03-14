@@ -102,10 +102,10 @@ export abstract class ShapeService extends DrawableService {
       // Only a click was registered and no rectangle has been created after the mouse press
       this.drawOnNextMove = false;
     } else if (this.isChanging) {
-      this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
-      this.manipulator.removeChild(this.subElement, this.perimeter);
-      // Allow undo/redo
-      this.drawStack.addElementWithInfos({ target: this.subElement, id: this.drawStack.getNextID() });
+      this.subElement.removeChild(this.text);
+      this.subElement.removeChild(this.perimeter);
+      this.subElement.removeChild(this.clip);
+      this.pushElement();
     }
     this.isChanging = false;
   }
