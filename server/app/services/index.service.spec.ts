@@ -22,8 +22,8 @@ describe('Index service', () => {
     });
 
     it('should return a simple message if #about is called', () => {
-        const expectedTitle = 'Basic Server About Page';
-        const expectedBody = 'Try calling helloWorld to get the time';
+        const expectedTitle = 'This is merely a test';
+        const expectedBody = 'Lorem ipsum........';
         const aboutMessage = indexService.about();
         expect(aboutMessage.title).to.equals(expectedTitle);
         expect(aboutMessage.body).to.equals(expectedBody);

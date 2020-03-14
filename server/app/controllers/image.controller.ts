@@ -42,7 +42,7 @@ export class ImageController {
                     res.sendStatus(HttpStatus.CREATED).send();
                 })
                 .catch((error: Error) => {
-                    res.status(HttpStatus.NOT_FOUND).send(error.message);
+                    res.status(HttpStatus.BAD_REQUEST).send(error.message);
                 });
         });
 
