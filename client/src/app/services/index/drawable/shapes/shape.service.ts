@@ -104,18 +104,21 @@ export abstract class ShapeService extends DrawableService {
     } else if (this.isChanging) {
       this.manipulator.removeChild(this.subElement, this.text); // Will be destroyed automatically when detached
       this.manipulator.removeChild(this.subElement, this.perimeter);
+      // Allow undo/redo
+      this.drawStack.addElementWithInfos({ target: this.subElement, id: this.drawStack.getNextID() });
     }
     this.isChanging = false;
   }
 
   onMouseMove(event: MouseEvent): void {
-    if (this.isChanging) {
-      this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
-      this.updateSize();
-    } else if (this.drawOnNextMove) {
+    if (this.drawOnNextMove) {
       this.setupProperties();
       this.drawOnNextMove = false;
       this.isChanging = true;
+    }
+    if (this.isChanging) {
+      this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event); // Save mouse position for KeyPress Event
+      this.updateSize();
     }
   }
 
@@ -123,15 +126,19 @@ export abstract class ShapeService extends DrawableService {
     if (event.shiftKey && !this.shiftPressed && this.isChanging) {
       this.shiftPressed = true;
       this.updateSize();
+    } else if (event.shiftKey) {
+      this.shiftPressed = true;
     }
   }
   onKeyReleased(event: KeyboardEvent): void {
-    if (!event.shiftKey && this.shiftPressed) {
+    if (!event.shiftKey && this.shiftPressed && this.isChanging) {
       this.shiftPressed = false;
       this.mousePosition = new CoordinatesXY(this.mousePositionOnShiftPress.getX(), this.mousePositionOnShiftPress.getY());
       if (this.isChanging) {
         this.updateSize();
       }
+    } else if (!event.shiftKey) {
+      this.shiftPressed = false;
     }
   }
 
@@ -217,9 +224,6 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.appendChild(this.subElement, this.text);
     this.manipulator.appendChild(this.subElement, this.perimeter);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
-
-    // Allow undo/redo
-    this.drawStack.addElementWithInfos({ target: this.subElement, id: shapeID });
   }
 
   protected alignShapeOrigin(width: number, height: number): void {
