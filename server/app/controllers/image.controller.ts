@@ -52,7 +52,11 @@ export class ImageController {
                     res.sendStatus(HttpStatus.NO_CONTENT).send();
                 })
                 .catch((error: Error) => {
-                    res.status(HttpStatus.NOT_FOUND).send(error.message);
+                    if (error.message === 'Cannot remove headers after they are sent to the client') {
+                        // ignore this error
+                    } else {
+                        res.status(HttpStatus.NOT_FOUND).send(error.message);
+                    }
                 });
         });
     }
