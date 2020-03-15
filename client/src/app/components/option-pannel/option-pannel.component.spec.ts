@@ -26,6 +26,8 @@ import { PolygonComponent } from '../polygon/polygon.component';
 import { GridComponent } from '../grid/grid.component';
 import { SelectionComponent } from '../selection/selection.component';
 import { EraserComponent } from '../eraser/eraser.component';
+import { PipetteComponent } from '../pipette/pipette.component';
+import { SprayComponent } from '../spray/spray.component';
 
 describe('OptionPannelComponent', () => {
   let component: OptionPannelComponent;
@@ -47,6 +49,8 @@ describe('OptionPannelComponent', () => {
         EllipseComponent,
         PolygonComponent,
         GridComponent,
+        PipetteComponent,
+        SprayComponent,
       ],
       providers: [
         ColorPaletteComponent,
@@ -67,6 +71,8 @@ describe('OptionPannelComponent', () => {
         DrawerService,
         PencilService,
         RectangleComponent,
+        PipetteComponent,
+        SprayComponent,
         MatDialog
       ],
       imports: [

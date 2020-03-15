@@ -79,7 +79,6 @@ export class ToolSelectorService {
       element[1].initialize(manipulator, image, colorSelectorService, drawStack);
     }
     this.pipette.setupCanvas(canvas);
-    // this.eraser.assignUndoRedo(this.memory);
     this.memory.changed.subscribe(
       () => {
         if(this.memory.changed.value) {
