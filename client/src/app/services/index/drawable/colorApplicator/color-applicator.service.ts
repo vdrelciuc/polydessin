@@ -1,11 +1,9 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { DrawableService } from '../drawable.service';
+import { SVGProperties } from '../../../../classes/svg-properties';
 import { ColorSelectorService } from '../../../color-selector.service';
 import { DrawStackService } from '../../../tools/draw-stack/draw-stack.service';
+import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-//import { CoordinatesXY } from '../../../../classes/coordinates-x-y';
-import { SVGProperties } from '../../../../classes/svg-properties';
-
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +18,7 @@ export class ColorApplicatorService extends DrawableService {
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
   }
 
-  initializeProperties(): void {}
+  initializeProperties(): void { /* No properties to initialize for this tool */}
 
   protected assignParams(
     manipulator: Renderer2,
@@ -34,41 +32,73 @@ export class ColorApplicatorService extends DrawableService {
     this.attributes = new DrawablePropertiesService();
   }
 
-
   constructor() {
     super();
     this.frenchName = 'Applicateur de couleur';
   }
 
   onClick(event: MouseEvent): void {
-    let elementOnTop = event.target as SVGElement;
-    const colorFill = this.colorSelectorService.primaryColor.getValue().getHex();
-    const colorBorder = this.colorSelectorService.secondaryColor.getValue().getHex();
-    const colorFillOpacity = this.colorSelectorService.primaryTransparency.getValue() as unknown as string;
-    const colorBorderOpacity = this.colorSelectorService.secondaryTransparency.getValue() as unknown as string;
+    const clickedElement = event.target as SVGElement;
 
-    if(elementOnTop !== undefined) {
-      const capturedSVG = elementOnTop ;
-      const actualColor = capturedSVG.getAttribute(SVGProperties.fill);
-      if (event.button === 0 && actualColor !== 'none'){
-          this.manipulator.setAttribute(elementOnTop, SVGProperties.fill, colorFill);
-        this.manipulator.setAttribute(elementOnTop, SVGProperties.fillOpacity, colorFillOpacity);
-
-      } else if (capturedSVG.tagName === 'polyline'){
-        this.manipulator.setAttribute(elementOnTop, SVGProperties.color, colorFill);
-        this.manipulator.setAttribute(elementOnTop, SVGProperties.colorOpacity, colorFillOpacity);
+    if (clickedElement !== undefined) {
+      if (event.button === 0) {
+        this.onLeftClick(clickedElement);
+      } else if (event.button === 2) {
+        this.onRightClick(clickedElement);
       }
 
-      else if (event.button === 0 && capturedSVG.tagName === 'path' ) {
-        this.manipulator.setAttribute(elementOnTop, SVGProperties.color, colorFill);
-        this.manipulator.setAttribute(elementOnTop, SVGProperties.fillOpacity, colorFillOpacity);
-      }
-        else if (event.button === 2) {
-          if (capturedSVG.tagName !== 'path' )
-            this.manipulator.setAttribute(elementOnTop, SVGProperties.color, colorBorder);
-            this.manipulator.setAttribute(elementOnTop, SVGProperties.colorOpacity, colorBorderOpacity);
-        }
+      if (clickedElement.tagName !== 'svg') {
         this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+      }
     }
+  }
+
+  private onLeftClick(clickedElement: SVGElement): void {
+    const hasFill = clickedElement.getAttribute(SVGProperties.fill) !== 'none';
+    const newColor = this.colorSelectorService.primaryColor.getValue().getHex();
+    const newOpacity = this.colorSelectorService.primaryTransparency.getValue().toString();
+
+    if ((clickedElement.tagName === 'rect' || clickedElement.tagName === 'ellipse' || clickedElement.tagName === 'polygon') && hasFill) {
+      this.shapeChange(clickedElement, newColor, newOpacity, true);
+    } else if (clickedElement.tagName === 'path') {
+      this.pathChange(clickedElement, newColor, newOpacity);
+    } else if ((clickedElement.tagName === 'polyline' || clickedElement.tagName === 'circle') && clickedElement.parentNode !== null) {
+      const children = clickedElement.parentNode.childNodes;
+
+      if ((children[0] as SVGElement).tagName === 'polyline') {
+        this.pathChange(children[0] as SVGElement, newColor, newOpacity);
+      } else {
+        this.shapeChange(children[0] as SVGElement, newColor, newOpacity, true);
+        this.shapeChange(children[0] as SVGElement, newColor, newOpacity, false);
+      }
+
+      for (let i = 1; i < children.length; i++) {
+        this.shapeChange(children[i] as SVGElement, newColor, newOpacity, true);
+        this.shapeChange(children[i] as SVGElement, newColor, newOpacity, false);
+      }
+    }
+  }
+
+  private onRightClick(clickedElement: SVGElement): void {
+    const newColor = this.colorSelectorService.secondaryColor.getValue().getHex();
+    const newOpacity = this.colorSelectorService.secondaryTransparency.getValue().toString();
+
+    switch (clickedElement.tagName) {
+      case 'rect':
+      case 'ellipse':
+      case 'polygon':
+        this.shapeChange(clickedElement, newColor, newOpacity, false);
+        break;
+    }
+  }
+
+  private shapeChange(clickedElement: SVGElement, newColor: string, newOpacity: string, isFill: boolean): void {
+    this.manipulator.setAttribute(clickedElement, isFill ? SVGProperties.fill : SVGProperties.color, newColor);
+    this.manipulator.setAttribute(clickedElement, isFill ? SVGProperties.fillOpacity : SVGProperties.colorOpacity, newOpacity);
+  }
+
+  private pathChange(clickedElement: SVGElement, newColor: string, newOpacity: string): void {
+    this.manipulator.setAttribute(clickedElement, SVGProperties.color, newColor);
+    this.manipulator.setAttribute(clickedElement, SVGProperties.colorOpacity, newOpacity);
   }
 }
