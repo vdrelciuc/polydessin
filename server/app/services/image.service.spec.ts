@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-// import * as sinon from 'sinon';
 import { testingContainer } from '../../test/test-utils';
 import { Image } from '../interfaces/image';
 import Types from '../types';
@@ -22,11 +21,6 @@ describe('Image Service', () => {
         const [container] = await testingContainer();
         imageService = container.get<ImageService>(Types.ImageService);
     });
-
-    /*it('getAllImages should return an array of images', async () => {
-        const result = await imageService.getAllImages();
-        expect(result).to.be.a('array');
-    });*/
 
     it('#validateTitle should allow a valid title', () => {
         const validTitle = 'My-valid title1';
