@@ -47,6 +47,7 @@ export class SelectionService extends DrawableService {
   initializeProperties(): void { /* No properties to initialize */ }
   cancelSelection(): void {
     this.selectedElements = new Stack<SVGGElement>();
+    this.elementsToInvert = new Stack<SVGGElement>();
     if (this.subElement !== undefined) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
       this.manipulator.removeChild(this.image.nativeElement, this.resizeGroup);
@@ -105,12 +106,10 @@ export class SelectionService extends DrawableService {
         break;
       case SelectionState.inverting:
       case SelectionState.selecting:
-        this.manipulator.removeChild(this.image, this.subElement);
+        this.manipulator.removeChild(this.image.nativeElement, this.subElement);
         break;
       case SelectionState.moving:
-        this.manipulator.removeChild(this.image, this.resizeGroup);
         this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
-        this.manipulator.appendChild(this.image, this.resizeGroup);
         break;
     }
     this.invertSelection();
@@ -273,13 +272,12 @@ export class SelectionService extends DrawableService {
     this.onMouseRelease(new MouseEvent(''));
     this.cancelSelection();
     for (const element of [].slice.call(this.image.nativeElement.childNodes, 1)) {
-      if (element !== this.subElement && element !== this.resizeGroup) {
+      if (element !== this.subElement && element !== this.resizeGroup && element.tagName === 'g') {
         this.selectedElements.push_back(element);
       }
     }
     this.setGeneratedAreaBorders();
     this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image, this.resizeGroup);
-    this.manipulator.appendChild(this.image.nativeElement, this.resizeGroup);
   }
 
   private setGeneratedAreaBorders(): void {

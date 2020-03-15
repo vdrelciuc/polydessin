@@ -131,9 +131,9 @@ export class SelectionTransformShortcutService {
       this.hasWaitedHalfSec = false;
       this.autoMoveHasInstance = false;
 
-      this.manipulator.removeChild(this.image, this.selectionGroup);
+      this.manipulator.removeChild(this.image.nativeElement, this.selectionGroup);
       this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
-      this.manipulator.appendChild(this.image, this.selectionGroup);
+      this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
     }
   }
 

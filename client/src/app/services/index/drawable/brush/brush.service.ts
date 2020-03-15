@@ -135,6 +135,9 @@ export class BrushService extends DrawableService {
     if(this.isDrawing.value) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
+    if (this.previewCricle !== undefined) {
+      this.manipulator.removeChild(this.image.nativeElement, this.previewCricle);
+    }
     delete(this.subElement);
     this.isDrawing.next(false);
     this.path = '';
