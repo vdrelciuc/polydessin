@@ -110,6 +110,7 @@ export class SelectionService extends DrawableService {
       case SelectionState.moving:
         this.manipulator.removeChild(this.image, this.resizeGroup);
         this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+        this.manipulator.appendChild(this.image, this.resizeGroup);
         break;
     }
     this.invertSelection();

@@ -133,6 +133,7 @@ export class SelectionTransformShortcutService {
 
       this.manipulator.removeChild(this.image, this.selectionGroup);
       this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image, this.selectionGroup);
     }
   }
 
