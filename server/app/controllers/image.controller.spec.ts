@@ -7,17 +7,9 @@ import { Image } from '../interfaces/image';
 import { ImageService } from '../services/image.service';
 import Types from '../types';
 
-/*it('should return message from index service on valid get request to root', async () => {
-    return supertest(app)
-        .get('/api/index')
-        .expect(HTTP_STATUS_OK)
-        .then((response: any) => {
-            expect(response.body).to.deep.equal(baseMessage);
-        });
-});*/
-
+/*tslint:disable:no-any */
 describe('ImageController', () => {
-    let baseImage = {
+    const validImage = {
         title: 'My image',
         tags: ['tag1', 'tag2', 'tag3'],
         serial: 'data:image/svg+xml;base64,PHN2Z',
@@ -32,42 +24,81 @@ describe('ImageController', () => {
     beforeEach(async () => {
         const [container, sandbox] = await testingContainer();
         container.rebind(Types.ImageService).toConstantValue({
-            getAllImages: sandbox.stub().resolves([baseImage]),
-            getImage: sandbox.stub().resolves(baseImage)
+            getAllImages: sandbox.stub().resolves([validImage]),
+            getImage: sandbox.stub().resolves(validImage),
+            addImage: sandbox.stub().resolves(),
+            deleteImage: sandbox.stub().resolves()
         });
-        imageService = imageService; // todo: delete
         imageService = container.get(Types.ImageService);
         app = container.get<Application>(Types.Application).app;
-
     });
 
-    it('should return an array of images for GET /api/images', async () => {
+    it('should return an array of all images', async () => {
         return supertest(app)
             .get('/api/images')
-            .expect(HttpStatus.OK)
             .then((response: any) => {
+                expect(response.statusCode).to.equal(HttpStatus.OK);
                 expect(response.body).to.be.a('array');
             });
     });
 
-    it('should return a single image on valid imageId for GET /api/images/:imageId', async () => {
+    it('should return a single image when sending validImageId', async () => {
         return supertest(app)
             .get('/api/images/validImageId')
-            .expect(HttpStatus.OK)
             .then((response: any) => {
-                expect(response.body).to.deep.equal(baseImage);
+                expect(response.statusCode).to.equal(HttpStatus.OK);
+                expect(response.body).to.deep.equal(validImage);
             });
     });
 
-    /*it('should return an error on invalid imageId for GET /api/images/:imageId', async () => {
-        let stub = sinon.createStubInstance()
-        imageService.getImage.resolves({ statusCode: HttpStatus.NOT_FOUND, data: 'Image not in database' });
+    it('should return an error when sending invalidImageId', async () => {
+        imageService.getImage.rejects();
         return supertest(app)
             .get('/api/images/invalidImageId')
-            .expect(HttpStatus.NOT_FOUND)
-            .expect('Image not in database')
             .then((response: any) => {
-                expect(response.body).to.deep.equal(baseImage);
+                expect(response.statusCode).to.equal(HttpStatus.NOT_FOUND);
+            })
+            .catch((error: any) => {
+                expect(error);
             });
-    });*/
+    });
+
+    it('should create an image when sending validImage', async () => {
+        return supertest(app)
+            .post('/api/images')
+            .send(validImage)
+            .then((response: any) => {
+                expect(response.statusCode).to.equal(HttpStatus.CREATED);
+            });
+    });
+
+    it('should return an error when sending invalidImage', async () => {
+        imageService.addImage.rejects();
+        return supertest(app)
+            .post('/api/images')
+            .send(validImage)
+            .then((response: any) => {
+                expect(response.statusCode).to.equal(HttpStatus.BAD_REQUEST);
+            })
+            .catch((error: any) => {
+                expect(error);
+            });
+    });
+
+    it('should delete an image when sending validImageId', async () => {
+        return supertest(app)
+            .delete('/api/images/validImageId')
+            .then((response: any) => {
+                expect(response.statusCode).to.equal(HttpStatus.NO_CONTENT);
+            });
+    });
+
+    it('should send an error when sending invalidImageId', async () => {
+        imageService.deleteImage.rejects();
+        return supertest(app)
+            .delete('/api/images/invalidImageId')
+            .then((response: any) => {
+                expect(response.statusCode).to.equal(HttpStatus.NOT_FOUND);
+            });
+    });
 });
