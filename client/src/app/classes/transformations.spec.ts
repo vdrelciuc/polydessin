@@ -1,7 +1,6 @@
 /*tslint:disable: no-magic-numbers*/
 import { Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
-import { SVGElementInfos } from '../interfaces/svg-element-infos';
 import { Stack } from './stack';
 import { Transform } from './transformations';
 

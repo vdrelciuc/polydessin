@@ -11,13 +11,10 @@ describe('PinceauGuideComponent', () => {
       declarations: [ PinceauGuideComponent ]
     })
     .compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(PinceauGuideComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

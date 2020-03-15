@@ -140,6 +140,34 @@ export class EraserService extends DrawableService {
     this.updatePreview();
   }
 
+  selectElement(element: SVGGElement): void {
+    const elementOnTop = { target: element, id: Number(element.getAttribute(SVGProperties.title))};
+    if(elementOnTop.target !== undefined) {      
+      if(this.leftClick) {
+        const previous = this.brushDelete.pop_back();
+        if(previous !== undefined) {
+          previous.deleteWith = elementOnTop.id;
+          this.brushDelete.push_back(previous);
+        }
+        this.brushDelete.push_back(elementOnTop);
+        this.manipulator.removeChild(this.image.nativeElement, elementOnTop.target);
+        this.drawStack.removeElement(elementOnTop.id);
+      } else {
+        if(this.selectedElement === undefined) {
+          this.selectedElement = elementOnTop;
+          this.getColor();
+        }
+        if(this.selectedElement !== elementOnTop) {
+          this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+          this.selectedElement = elementOnTop;
+          this.getColor();
+        }
+        this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ? 
+            CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
+      }
+    }
+  }
+
   private addingMouseMoveEvent(element : any){
     this.selectElement(element.target.parentElement as SVGGElement);
   }
@@ -169,34 +197,6 @@ export class EraserService extends DrawableService {
   private updatePreview(): void {
     this.manipulator.setAttribute(this.preview, SVGProperties.height, this.thickness.value.toString());
     this.manipulator.setAttribute(this.preview, SVGProperties.width, this.thickness.value.toString());
-  }
-
-  private selectElement(element: SVGGElement): void {
-    const elementOnTop = { target: element, id: Number(element.getAttribute(SVGProperties.title))};
-    if(elementOnTop.target !== undefined) {      
-      if(this.leftClick) {
-        const previous = this.brushDelete.pop_back();
-        if(previous !== undefined) {
-          previous.deleteWith = elementOnTop.id;
-          this.brushDelete.push_back(previous);
-        }
-        this.brushDelete.push_back(elementOnTop);
-        this.manipulator.removeChild(this.image.nativeElement, elementOnTop.target);
-        this.drawStack.removeElement(elementOnTop.id);
-      } else {
-        if(this.selectedElement === undefined) {
-          this.selectedElement = elementOnTop;
-          this.getColor();
-        }
-        if(this.selectedElement !== elementOnTop) {
-          this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
-          this.selectedElement = elementOnTop;
-          this.getColor();
-        }
-        this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ? 
-            CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
-      }
-    }
   }
 
   private deleteSelectedElement(): void {

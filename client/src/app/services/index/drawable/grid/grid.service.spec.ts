@@ -20,9 +20,9 @@ describe('GridService', () => {
 
   it('#toggle should change grid state', () => {
     service.toggle();
-    expect(service.visible.value).not.toBeTruthy();
+    expect(service.visible.value).toEqual(true);
     service.toggle();
-    expect(service.visible.value).toBeTruthy();
+    expect(service.visible.value).toEqual(false);
   });
 
   it('#incrementThickness should increment thickness', () => {

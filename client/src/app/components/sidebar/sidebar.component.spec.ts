@@ -1,12 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { APP_BASE_HREF } from '@angular/common';
-import { MatDialog, MatTooltipModule } from '@angular/material';
+import { MatDialog, MatTooltipModule, MatSnackBarModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { SidebarComponent } from './sidebar.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -30,6 +31,8 @@ describe('SidebarComponent', () => {
         {provide: APP_BASE_HREF, useValue : '/' }
       ],
       imports: [
+        MatSnackBarModule,
+        HttpClientModule,
         MatTooltipModule,
         RouterModule.forRoot(
           [
@@ -71,14 +74,8 @@ describe('SidebarComponent', () => {
   it('#selectTool should select current tool', () => {
     component.selectTool(Tools.Line);
     expect(selector.$currentTool.value).toEqual(Tools.Line);
-    expect(component['subscriptions'].length).toEqual(5);
+    expect(component['subscriptions'].length).toEqual(20);
   });
-
-  // it('#createNewProject should  stop shortcuts and create dialog ', () => {
-  //   component.createNewProject();
-  //   expect(component['subscriptions'].length).toEqual(0);
-  //   expect(component['createNewDialog']).toBeTruthy();
-  // });
 
   it('#openDialog should open dialog', () => {
     const spy = spyOn(component['dialog'], 'open');
