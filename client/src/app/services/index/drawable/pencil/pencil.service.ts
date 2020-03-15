@@ -30,8 +30,6 @@ export class PencilService extends DrawableService {
     this.frenchName = 'Crayon';
     this.isDrawing = false;
     this.path = '';
-    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.line = this.manipulator.createElement('path', 'http://www.w3.org/2000/svg');
   }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
@@ -70,9 +68,15 @@ export class PencilService extends DrawableService {
   }
 
   onMousePress(event: MouseEvent): void {
-    this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+    if (this.mousePointer !== undefined) {
+      this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'hidden');
+      //this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      delete(this.mousePointer);
+    }
     this.isDrawing = true;
     this.beginDraw(event.clientX, event.clientY);
+    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    this.line = this.manipulator.createElement('path', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, 'pencil-path');
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color.getHex());
@@ -86,7 +90,6 @@ export class PencilService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
 
     this.addPath(event.clientX, event.clientY);
-    this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'hidden');
   }
 
   onMouseRelease(event: MouseEvent): void {
@@ -96,7 +99,6 @@ export class PencilService extends DrawableService {
         this.isDrawing = false;
         this.pushElement();
         this.updateCursor(event.clientX, event.clientY);
-        this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
       }
       // }
   }
@@ -114,10 +116,12 @@ export class PencilService extends DrawableService {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
     this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+    if (this.mousePointer !== undefined) {
+      delete(this.mousePointer);
+    }
 
     this.isDrawing = false;
     this.path = '';
-    this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
   }
 
   private beginDraw(clientX: number, clientY: number) {
@@ -139,8 +143,6 @@ export class PencilService extends DrawableService {
       this.path = this.path + (' l 0,0');
     }
     this.manipulator.setAttribute(this.line, 'd', this.path);
-
-    this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
   }
 
   private updateCursor(clientX: number, clientY: number) {
