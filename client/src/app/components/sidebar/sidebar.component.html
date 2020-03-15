@@ -65,6 +65,9 @@
         </div>
         <div class="icon">
           <button mat-button (click)="selectTool('spray')"
+                  [matTooltip]="this.toolSelectorService.getSpray().frenchName"
+                  matTooltipPosition="after"
+                  aria-label="spray-tooltip"
                   [ngClass]="{'clicked': currentTool === 'spray',
             'not-clicked': currentTool !== 'spray'}">
             <img src="../../../assets/icons/spray.svg">
