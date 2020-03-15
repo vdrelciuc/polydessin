@@ -23,8 +23,10 @@ export class SelectionTransformShortcutService {
   private upArrowIsPressed: boolean;
   private downArrowIsPressed: boolean;
 
+  private manipulator: Renderer2;
   private image: ElementRef<SVGElement>;
   private drawStack: DrawStackService;
+  private selectionGroup: SVGGElement;
 
   private isMoving: boolean;
   private hasWaitedHalfSec: boolean;
@@ -33,10 +35,12 @@ export class SelectionTransformShortcutService {
 
   private shortcutListener: (() => void)[] = [];
 
-  setupShortcuts(manipulator: Renderer2, drawStack: DrawStackService, image: ElementRef<SVGElement>): void {
+  setupShortcuts(manipulator: Renderer2, drawStack: DrawStackService, image: ElementRef<SVGElement>, selectionGroup: SVGGElement): void {
     this.deleteShortcuts();
+    this.manipulator = manipulator;
     this.drawStack = drawStack;
     this.image = image;
+    this.selectionGroup = selectionGroup;
     this.shortcutListener.push(manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
       this.onKeyDown(event.key);
     }));
@@ -126,8 +130,8 @@ export class SelectionTransformShortcutService {
     } else {
       this.hasWaitedHalfSec = false;
       this.autoMoveHasInstance = false;
-      console.log('');
 
+      this.manipulator.removeChild(this.image, this.selectionGroup);
       this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
     }
   }

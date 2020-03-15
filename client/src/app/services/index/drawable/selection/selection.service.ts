@@ -108,11 +108,12 @@ export class SelectionService extends DrawableService {
         this.manipulator.removeChild(this.image, this.subElement);
         break;
       case SelectionState.moving:
+        this.manipulator.removeChild(this.image, this.resizeGroup);
         this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
         break;
     }
     this.invertSelection();
-    this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image);
+    this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image, this.resizeGroup);
     this.state = SelectionState.idle;
     if (this.selectedElements.isEmpty()) {
       this.cancelSelection();
@@ -276,7 +277,7 @@ export class SelectionService extends DrawableService {
       }
     }
     this.setGeneratedAreaBorders();
-    this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image);
+    this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image, this.resizeGroup);
     this.manipulator.appendChild(this.image.nativeElement, this.resizeGroup);
   }
 
