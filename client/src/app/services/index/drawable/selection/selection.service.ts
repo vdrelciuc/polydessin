@@ -25,7 +25,7 @@ export class SelectionService extends DrawableService {
   private selectionBox: DOMRect;
   private selectedElements: Stack<SVGGElement>;
   private selectionRect: SVGRectElement;
-  private selectionGroup: SVGGElement;
+  private resizeGroup: SVGGElement;
   private controlPoints: SVGRectElement[];
   private oldMousePosition: CoordinatesXY;
   private elementsToInvert: Stack<SVGGElement>;
@@ -45,11 +45,11 @@ export class SelectionService extends DrawableService {
     Transform.needsUpdate.subscribe( () => { this.setGeneratedAreaBorders(); } );
   }
   initializeProperties(): void { /* No properties to initialize */ }
-
   cancelSelection(): void {
     this.selectedElements = new Stack<SVGGElement>();
     if (this.subElement !== undefined) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+      this.manipulator.removeChild(this.image.nativeElement, this.resizeGroup);
     }
     this.transformShortcuts.deleteShortcuts();
   }
@@ -68,9 +68,8 @@ export class SelectionService extends DrawableService {
         break;
       }
     }
-
     const target = (event.target as SVGElement).parentNode as SVGGElement;
-    this.clickedElement = target.tagName === 'APP-CANVAS' ? null : target;
+    this.clickedElement = (target.tagName === 'APP-CANVAS' || target === this.resizeGroup) ? null : target;
 
     if (this.state !== SelectionState.idle) {
       this.onMouseRelease(event);
@@ -84,7 +83,6 @@ export class SelectionService extends DrawableService {
       } else {
         this.state = SelectionState.singleLeftClickOutOfSelection;
         this.onSingleClick();
-        this.manipulator.appendChild(this.image.nativeElement, this.subElement);
       }
     } else { // Right click
       this.state = SelectionState.singleRightClick;
@@ -104,12 +102,10 @@ export class SelectionService extends DrawableService {
       case SelectionState.singleLeftClickOutOfSelection:
       case SelectionState.singleRightClick:
         this.onSingleClick();
-        this.manipulator.appendChild(this.image.nativeElement, this.subElement);
         break;
       case SelectionState.inverting:
       case SelectionState.selecting:
-        this.manipulator.removeChild(this.subElement, this.perimeter);
-        this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
+        this.manipulator.removeChild(this.image, this.subElement);
         break;
       case SelectionState.moving:
         this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
@@ -127,17 +123,16 @@ export class SelectionService extends DrawableService {
     switch (this.state) {
       case SelectionState.singleLeftClickOutOfSelection:
         this.state = SelectionState.selecting;
-        this.appendPerimeter();
+        this.manipulator.appendChild(this.image.nativeElement, this.subElement);
         break;
       case SelectionState.singleRightClick:
         this.state = SelectionState.inverting;
-        this.appendPerimeter();
+        this.manipulator.appendChild(this.image.nativeElement, this.subElement);
         break;
       case SelectionState.leftClickInSelection:
         this.state = SelectionState.moving;
         break;
     }
-
     switch (this.state) {
       case SelectionState.selecting:
       case SelectionState.inverting:
@@ -197,8 +192,10 @@ export class SelectionService extends DrawableService {
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.color, 'white');
 
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.selectionGroup = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    this.resizeGroup = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Selection);
+    this.manipulator.appendChild(this.subElement, this.perimeter);
+    this.manipulator.appendChild(this.subElement, this.perimeterAlternative);
 
     // Creating selection rectangle
     this.selectionRect = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
@@ -206,7 +203,8 @@ export class SelectionService extends DrawableService {
     this.manipulator.setAttribute(this.selectionRect, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.selectionRect, SVGProperties.color, 'black');
     this.manipulator.setAttribute(this.selectionRect, SVGProperties.title, 'selection-area');
-    this.manipulator.appendChild(this.selectionGroup, this.selectionRect);
+    this.manipulator.setAttribute(this.selectionRect, 'pointer-events', 'none');
+    this.manipulator.appendChild(this.resizeGroup, this.selectionRect);
 
     // Creating control points
     const controlPointQuantity = 4;
@@ -219,17 +217,10 @@ export class SelectionService extends DrawableService {
       this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.title, `control-point${i + 1}`);
       this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.height, this.CONTROL_SIZE.toString());
       this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.width, this.CONTROL_SIZE.toString());
-      this.manipulator.appendChild(this.selectionGroup, this.controlPoints[i]);
+      this.manipulator.appendChild(this.resizeGroup, this.controlPoints[i]);
       this.manipulator.setAttribute(this.controlPoints[i], CursorProperties.cursor,
         (i < 2) ? CursorProperties.vertical : CursorProperties.horizontal);
     }
-    this.manipulator.appendChild(this.subElement, this.selectionGroup);
-  }
-
-  private appendPerimeter(): void {
-    this.manipulator.appendChild(this.subElement, this.perimeter);
-    this.manipulator.appendChild(this.subElement, this.perimeterAlternative);
-    this.manipulator.appendChild(this.image.nativeElement, this.subElement);
   }
 
   private onSingleClick(): void {
@@ -264,28 +255,29 @@ export class SelectionService extends DrawableService {
 
     for (let i = 1; i < this.image.nativeElement.childNodes.length; i++) {
       const element = this.image.nativeElement.childNodes[i] as SVGGElement;
-      if (element !== this.subElement) {
-        const bBox = element.getBoundingClientRect();
+      if (element !== this.resizeGroup && element !== this.subElement) {
+        const bBox = this.getBBoxWithStroke(element);
         if (!(bBox.left > this.selectionBox.right || this.selectionBox.left > bBox.right ||
             bBox.top > this.selectionBox.bottom || this.selectionBox.top > bBox.bottom)) {
             stack.push_back(element);
             }
-        }
       }
+    }
     this.state === SelectionState.selecting ? this.selectedElements = stack : this.elementsToInvert = stack;
     this.setGeneratedAreaBorders();
   }
 
   selectAllElements(): void {
+    this.onMouseRelease(new MouseEvent(''));
     this.cancelSelection();
     for (const element of [].slice.call(this.image.nativeElement.childNodes, 1)) {
-      if (element.tagName === 'g') {
+      if (element !== this.subElement && element !== this.resizeGroup) {
         this.selectedElements.push_back(element);
       }
     }
     this.setGeneratedAreaBorders();
     this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image);
-    this.manipulator.appendChild(this.image.nativeElement, this.subElement);
+    this.manipulator.appendChild(this.image.nativeElement, this.resizeGroup);
   }
 
   private setGeneratedAreaBorders(): void {
@@ -327,10 +319,10 @@ export class SelectionService extends DrawableService {
       this.manipulator.setAttribute(this.controlPoints[point++], SVGProperties.y, ((top + bottom) / 2 - this.CONTROL_SIZE / 2).toString());
       this.manipulator.setAttribute(this.controlPoints[point], SVGProperties.x, (right - this.CONTROL_SIZE / 2).toString());
       this.manipulator.setAttribute(this.controlPoints[point++], SVGProperties.y, ((top + bottom) / 2 - this.CONTROL_SIZE / 2).toString());
-      this.manipulator.appendChild(this.subElement, this.selectionGroup);
+      this.manipulator.appendChild(this.image.nativeElement, this.resizeGroup);
       Transform.setElements(this.selectedElements, this.manipulator);
     } else {
-      this.manipulator.removeChild(this.subElement, this.selectionGroup);
+      this.manipulator.removeChild(this.image.nativeElement, this.resizeGroup);
     }
   }
 
