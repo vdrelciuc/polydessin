@@ -115,8 +115,8 @@ export class PencilService extends DrawableService {
     if(this.isDrawing) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
-    this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
     if (this.mousePointer !== undefined) {
+      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
       delete(this.mousePointer);
     }
 
