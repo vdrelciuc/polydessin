@@ -1,14 +1,12 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-
-import { ColorApplicatorService } from './color-applicator.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
+// tslint:disable: no-any
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-//import * as CONSTANT from 'src/app/classes/constants';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-//import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { ColorApplicatorService } from './color-applicator.service';
 
 describe('ColorApplicatorService', () => {
   let service: ColorApplicatorService;
@@ -19,11 +17,9 @@ describe('ColorApplicatorService', () => {
 
   const LEFT_CLICK = 0;
   const RIGHT_CLICK = 2;
-  //let mockedTagElement: string;
   let mockedFillAttribute: string;
   let mockedEvent: MouseEvent;
 
-  // tslint:disable-next-line: no-any
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
@@ -48,17 +44,7 @@ describe('ColorApplicatorService', () => {
       {
         provide: ElementRef,
         useValue: {
-            nativeElement: {
-                getBoundingClientRect: () => {
-                    const boundleft = 0;
-                    const boundtop = 0;
-                    const boundRect = {
-                        left: boundleft,
-                        top: boundtop,
-                    };
-                    return boundRect;
-                },
-            },
+            nativeElement: {}
           },
         },
         {
@@ -81,7 +67,7 @@ describe('ColorApplicatorService', () => {
     service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
-    
+
     service['image'].nativeElement.cloneNode = jasmine.createSpy().and.returnValue(undefined);
   });
 
@@ -97,7 +83,7 @@ describe('ColorApplicatorService', () => {
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(leftClickSpy).toHaveBeenCalled();
@@ -112,7 +98,7 @@ describe('ColorApplicatorService', () => {
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(leftClickSpy).toHaveBeenCalled();
@@ -127,7 +113,7 @@ describe('ColorApplicatorService', () => {
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(leftClickSpy).toHaveBeenCalled();
@@ -142,7 +128,7 @@ describe('ColorApplicatorService', () => {
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(leftClickSpy).toHaveBeenCalled();
@@ -157,7 +143,7 @@ describe('ColorApplicatorService', () => {
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(leftClickSpy).toHaveBeenCalled();
@@ -172,7 +158,7 @@ describe('ColorApplicatorService', () => {
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(leftClickSpy).toHaveBeenCalled();
@@ -185,7 +171,7 @@ describe('ColorApplicatorService', () => {
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(rightClickSpy).toHaveBeenCalled();
@@ -198,7 +184,7 @@ describe('ColorApplicatorService', () => {
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(rightClickSpy).toHaveBeenCalled();
@@ -211,7 +197,7 @@ describe('ColorApplicatorService', () => {
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(rightClickSpy).toHaveBeenCalled();
@@ -226,7 +212,7 @@ describe('ColorApplicatorService', () => {
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
     const pathChangeSpy = spyOn<any>(service, 'pathChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(leftClickSpy).toHaveBeenCalled();
@@ -239,7 +225,7 @@ describe('ColorApplicatorService', () => {
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const pathChangeSpy = spyOn<any>(service, 'pathChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(rightClickSpy).toHaveBeenCalled();
@@ -254,14 +240,14 @@ describe('ColorApplicatorService', () => {
     const circleElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     gElelemt.appendChild(polylineElement);
     gElelemt.appendChild(circleElement);
-    
+
     Object.defineProperty(mockedEvent, 'target', { value: polylineElement });
 
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
     const pathChangeSpy = spyOn<any>(service, 'pathChange').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(leftClickSpy).toHaveBeenCalled();
@@ -275,7 +261,7 @@ describe('ColorApplicatorService', () => {
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const pathChangeSpy = spyOn<any>(service, 'pathChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(rightClickSpy).toHaveBeenCalled();
@@ -290,19 +276,20 @@ describe('ColorApplicatorService', () => {
     const circle2Element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     gElelemt.appendChild(circle1Element);
     gElelemt.appendChild(circle2Element);
-    
+
     Object.defineProperty(mockedEvent, 'target', { value: circle1Element });
 
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
     const pathChangeSpy = spyOn<any>(service, 'pathChange').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(leftClickSpy).toHaveBeenCalled();
     expect(pathChangeSpy).not.toHaveBeenCalled();
-    expect(shapeChangeSpy).toHaveBeenCalledTimes(4);
+    const expectedShapeChangeCalls = 4;
+    expect(shapeChangeSpy).toHaveBeenCalledTimes(expectedShapeChangeCalls);
   });
 
   it('#onClick should not set new fill color of spray on right click', () => {
@@ -311,7 +298,7 @@ describe('ColorApplicatorService', () => {
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const pathChangeSpy = spyOn<any>(service, 'pathChange').and.callThrough();
-    
+
     service.onClick(mockedEvent);
 
     expect(rightClickSpy).toHaveBeenCalled();
@@ -324,7 +311,7 @@ describe('ColorApplicatorService', () => {
 
     const leftClickSpy = spyOn<any>(service, 'onLeftClick');
     const rightClickSpy = spyOn<any>(service, 'onRightClick');
-    
+
     service.onClick(mockedEvent);
 
     expect(leftClickSpy).not.toHaveBeenCalled();
@@ -337,7 +324,7 @@ describe('ColorApplicatorService', () => {
 
     const pathChangeSpy = spyOn<any>(service, 'pathChange');
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange');
-    
+
     service.onClick(mockedEvent);
 
     expect(pathChangeSpy).not.toHaveBeenCalled();
