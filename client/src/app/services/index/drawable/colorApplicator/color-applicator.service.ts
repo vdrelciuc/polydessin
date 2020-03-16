@@ -37,8 +37,11 @@ export class ColorApplicatorService extends DrawableService {
     this.frenchName = 'Applicateur de couleur';
   }
 
+  test: SVGElement;
+
   onClick(event: MouseEvent): void {
     const clickedElement = event.target as SVGElement;
+    this.test = clickedElement;
 
     if (clickedElement !== undefined) {
       if (event.button === 0) {
