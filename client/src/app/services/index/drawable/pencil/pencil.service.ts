@@ -17,8 +17,8 @@ export class PencilService extends DrawableService {
   private previousY: number;
   thickness: number;
   isDrawing: boolean;
-  private line: SVGPathElement;
-  private mousePointer: SVGCircleElement;
+  protected line: SVGPathElement;
+  protected mousePointer: SVGCircleElement;
   private color: Color;
   opacity: number;
   attributes: DrawablePropertiesService;
@@ -147,7 +147,7 @@ export class PencilService extends DrawableService {
     }
   }
 
-  private createCircle(x: number, y: number): void {
+  protected createCircle(x: number, y: number): void {
     this.mousePointer = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, this.color.getHex());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.globalOpacity, this.opacity.toString());
