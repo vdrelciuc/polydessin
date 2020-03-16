@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
+import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 
 @Component({
   selector: 'app-home',
@@ -8,6 +10,7 @@ import { UserGuideComponent } from '../user-guide/user-guide.component';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  private subscriptions: Subscription[] = [];
   options: object[] =
     [
       {description : 'Creer un nouveau dessin', optionPath : '/dessin' , show : true},
@@ -19,6 +22,7 @@ export class HomeComponent {
   messageDescriptif = "A tout dessin un artiste, et cet artiste, c'est vous!";
 
 constructor(
+  private shortcut: HotkeysService,
   public dialog: MatDialog
   ) {}
 
@@ -31,4 +35,19 @@ constructor(
     });
   }
 
+  setupShortcuts(): void {
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
+      (event) => {
+        // link to create new window
+      }
+    )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.g', description: 'Opening gallery' }).subscribe(
+      (event) => {
+        // link to open gallery window
+      }
+    )
+    );
+  }
 }
