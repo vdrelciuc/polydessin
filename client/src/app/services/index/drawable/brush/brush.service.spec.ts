@@ -84,11 +84,6 @@ describe('BrushService', () => {
     expect(service.thickness).toEqual(randomTestValue);
   });
 
-  it('#getThickness should get integer', () => {
-    service['thickness'] = 3.49;
-    expect(service.getThickness()).toEqual(3);
-  });
-
   it('#onMouseInCanvas should set preview and create circle', () => {
     const spy = spyOn(manipulator, 'appendChild');
     const spy2 = spyOn(manipulator, 'createElement');
