@@ -51,7 +51,15 @@ export class UndoRedoService {
             this.drawStack.reset.next(false);
           }
         }
-      )
+      );
+      this.drawStack.newSVG.subscribe(
+        () => {
+          if(this.drawStack.newSVG.value) {
+            this.clear();
+            this.drawStack.newSVG.next(false);
+          }
+        }
+      );
   }
 
   undo(): void {

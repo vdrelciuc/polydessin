@@ -133,6 +133,7 @@ export class GalleryComponent implements OnInit {
           if (!result) {
             // user decided to disregard current drawing
             isImageLoadable = this.galleryService.loadImage(image);
+            this.drawStackService.addingNewSVG();
           }
         });
       }
@@ -142,6 +143,7 @@ export class GalleryComponent implements OnInit {
 
     if (isImageLoadable) {
       this.snacks.open('Image chargée avec succès.', '', {duration: 2000});
+      this.drawStackService.addingNewSVG();
       this.onDialogClose();
     } else {
       this.snacks.open('Image corrompue. SVP effacer celle-ci et choisir une autre.', '', {duration: 3500});
