@@ -86,6 +86,12 @@ export class UndoRedoService {
     return this.removed.getAll().length > 0;
   }
 
+  clear(): void {
+    this.setCurrent(this.image.nativeElement.cloneNode(true) as SVGElement);
+    this.elements.clear();
+    this.removed.clear();
+  }
+
   private replace(by: SVGElement): void {
     let children = this.image.nativeElement.childNodes;
     children.forEach(
