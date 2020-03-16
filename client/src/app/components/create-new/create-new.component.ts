@@ -9,6 +9,7 @@ import { ColorType } from 'src/app/enums/color-types';
 import { CanvasService } from 'src/app/services/canvas.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { CreateNewService } from 'src/app/services/create-new.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { WorkspaceService } from 'src/app/services/workspace.service';
 import { HotkeysService } from '../../services/events/shortcuts/hotkeys.service';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
@@ -34,14 +35,16 @@ export class CreateNewComponent implements OnInit, OnDestroy {
               private createNewService: CreateNewService,
               private workspaceService: WorkspaceService,
               private canvasService: CanvasService,
+              private shortcutManager: ShortcutManagerService,
               public router: Router,
               private shortcut: HotkeysService
               ) {
+    this.shortcutManager.disableShortcuts();
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
       (event) => {
         // cant open a nez dialog
       }
-    ))
+    ));
   }
 
   ngOnDestroy(): void {
@@ -57,12 +60,12 @@ export class CreateNewComponent implements OnInit, OnDestroy {
     this.colorSelectorService.temporaryColor.subscribe((color: Color) => {
       this.previewColor = color;
     });
-    this.colorSelectorService.temporaryColor.next(new Color(DEFAULT_SECONDARY_COLOR))
+    this.colorSelectorService.temporaryColor.next(new Color(DEFAULT_SECONDARY_COLOR));
     this.workspaceService.Size.subscribe((size: CoordinatesXY) => {
       if (!this.changed) {
         this.workspaceSize = size;
       }
-    })
+    });
   }
   setcanvasSizeX(event: any): void {
     this.workspaceSize.setX(event.target.value);
@@ -93,6 +96,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
 
   onCloseDialog(): void {
     this.dialogRef.close();
+    this.shortcutManager.setupShortcuts();
     if (history.state.comingFromEntryPoint) {
       this.router.navigateByUrl('/');
     }

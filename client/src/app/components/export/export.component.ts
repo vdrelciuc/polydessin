@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageExportType } from 'src/app/enums/export-type';
 import { ImageFormat } from 'src/app/enums/image-format';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ExportService } from '../../services/export/export.service';
 
 @Component({
@@ -30,24 +31,29 @@ export class ExportComponent implements AfterViewInit {
   @ViewChild('myDownload', {static : false}) myDownload: ElementRef;
   @ViewChild('proccessingCanas', {static : false}) proccessingCanas: ElementRef;
 
-  constructor(private dialogRef: MatDialogRef<ExportComponent>, private exportation: ExportService) {
-    this.exportation.currentFilter.subscribe((filter: ImageFilter) => {
-      this.selectedFilter = filter.toString();
-    });
-    this.exportation.currentFormat.subscribe((format: ImageFormat) => {
-      this.selectedFormat = format.toString();
-    });
-    this.exportation.currentExportType.subscribe((exportType: ImageExportType) => {
-      this.selectedExportType = exportType.toString();
-    });
-    this.exportation.isTitleValid.subscribe((validity: boolean) => {
-      this.isTitleValid = validity;
-    });
-    this.exportFormats = Object.keys(ImageFormat);
-    this.exportFilters = Object.keys(ImageFilter);
-    this.exportTypes = Object.keys(ImageExportType);
+  constructor(
+    private dialogRef: MatDialogRef<ExportComponent>,
+    private exportation: ExportService,
+    private shortcutManager: ShortcutManagerService
+    ) {
+      this.shortcutManager.disableShortcuts();
+      this.exportation.currentFilter.subscribe((filter: ImageFilter) => {
+        this.selectedFilter = filter.toString();
+      });
+      this.exportation.currentFormat.subscribe((format: ImageFormat) => {
+        this.selectedFormat = format.toString();
+      });
+      this.exportation.currentExportType.subscribe((exportType: ImageExportType) => {
+        this.selectedExportType = exportType.toString();
+      });
+      this.exportation.isTitleValid.subscribe((validity: boolean) => {
+        this.isTitleValid = validity;
+      });
+      this.exportFormats = Object.keys(ImageFormat);
+      this.exportFilters = Object.keys(ImageFilter);
+      this.exportTypes = Object.keys(ImageExportType);
 
-    this.initializeMaps();
+      this.initializeMaps();
   }
 
   private initializeMaps(): void {
@@ -99,6 +105,7 @@ export class ExportComponent implements AfterViewInit {
 
   onDialogClose(): void {
     this.dialogRef.close();
+    this.shortcutManager.setupShortcuts();
   }
 
   exportConfirmation(): void {

@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { Image } from '../../interfaces/image';
 import { ExportService } from '../../services/export/export.service';
 import { SaveServerService } from '../../services/saveServer/save-server.service';
@@ -29,11 +30,13 @@ export class SaveServerComponent implements  AfterViewInit {
               private snacks: MatSnackBar,
               private dialog: MatDialog,
               private saveService: SaveServerService,
+              private shortcutManager: ShortcutManagerService,
               private exportation: ExportService) {
     this.tags = new  Set<string>();
     this.tagName = '';
     this.isSaving = false;
     this.isValidTitle = false;
+    this.shortcutManager.disableShortcuts();
   }
 
   ngAfterViewInit(): void {
@@ -44,6 +47,7 @@ export class SaveServerComponent implements  AfterViewInit {
 
   onDialogClose(): void {
     this.dialogRef.close();
+    this.shortcutManager.setupShortcuts();
   }
 
   saveConfirmation(): void {

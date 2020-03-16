@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatAccordion} from '@angular/material/expansion';
 import { Router } from '@angular/router';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
 @Component({
   selector: 'app-user-guide',
@@ -11,10 +12,12 @@ import { Router } from '@angular/router';
 
 export class UserGuideComponent implements OnInit {
 
-  constructor(public router: Router,
-              public dialogRef: MatDialogRef<UserGuideComponent>
-              ) {
-
+  constructor(
+    private shortcutManager: ShortcutManagerService,
+    public router: Router,
+    public dialogRef: MatDialogRef<UserGuideComponent>
+    ) {
+      this.shortcutManager.disableShortcuts();
   }
 
   @ViewChild('myaccordion', {static: true}) myPanels: MatAccordion;
@@ -155,6 +158,7 @@ export class UserGuideComponent implements OnInit {
 
   closeGuide() {
     this.dialogRef.close();
+    this.shortcutManager.setupShortcuts();
     this.router.navigate([{outlets: {guideSubCategory: null}}]);
   }
 

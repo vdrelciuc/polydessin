@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { Image } from '../../interfaces/image';
 import { GalleryService } from '../../services/gallery/gallery.service';
@@ -31,8 +32,10 @@ export class GalleryComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private galleryService: GalleryService,
               private drawStackService: DrawStackService,
+              private shortcutManager: ShortcutManagerService,
               private dialog: MatDialog
   ) {
+    this.shortcutManager.disableShortcuts();
     this.tags = new Set<string>();
     /* tslint:disable-next-line: no-magic-numbers */
     this.hoveredIndex = -1;
@@ -61,6 +64,7 @@ export class GalleryComponent implements OnInit {
 
   onDialogClose(): void {
     this.dialogRef.close();
+    this.shortcutManager.setupShortcuts();
   }
 
   addTag(tag: string): void {

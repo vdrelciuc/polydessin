@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
 @Component({
   selector: 'app-color-picker',
@@ -16,9 +17,12 @@ export class ColorPickerComponent {
 
   constructor(
     private dialogRef: MatDialogRef<ColorPickerComponent>,
-    private colorSelectorService: ColorSelectorService) {
-    this.selectedColor = this.colorSelectorService.getCurrentlySelectedColor();
-    this.selectedHue = this.colorSelectorService.getCurrentlySelectedColor();
+    private shortcutManager: ShortcutManagerService,
+    private colorSelectorService: ColorSelectorService
+    ) {
+      this.shortcutManager.disableShortcuts();
+      this.selectedColor = this.colorSelectorService.getCurrentlySelectedColor();
+      this.selectedHue = this.colorSelectorService.getCurrentlySelectedColor();
   }
 
   updateRed(event: any): void {
@@ -35,6 +39,7 @@ export class ColorPickerComponent {
 
   onDialogClose() {
     this.dialogRef.close();
+    this.shortcutManager.setupShortcuts();
   }
 
   onConfirm() {

@@ -18,7 +18,9 @@ export class HomeComponent {
   messageAccueil = 'Bienvenue a PolyDessin';
   messageDescriptif = "A tout dessin un artiste, et cet artiste, c'est vous!";
 
-constructor(public dialog: MatDialog) {}
+constructor(
+  public dialog: MatDialog
+  ) {}
 
   openDialog(): void {
     this.dialog.open(UserGuideComponent, {
