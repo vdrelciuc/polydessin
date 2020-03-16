@@ -25,8 +25,6 @@ export class IndexService {
                 };
             })
             .catch((error: unknown) => {
-                console.error('There was an error!!!', error);
-
                 return {
                     title: 'Error',
                     body: error as string,

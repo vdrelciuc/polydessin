@@ -63,7 +63,7 @@ describe('PencilService', () => {
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
     service.attributes = new DrawablePropertiesService();
-    service.initialize(manipulator, image, 
+    service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
   });
@@ -116,13 +116,13 @@ describe('PencilService', () => {
   });
 
   it('#onMouseRelease should stop drawing with l', () => {
-    service.isDrawing.next(true);
+    service.isDrawing = true;
     service.onMouseRelease(eventMocker('mouserelease', 0));
     expect(service.isDrawing).not.toBeTruthy();
   });
 
   it('#onMouseRelease should stop drawing without l', () => {
-    service.isDrawing.next(true);
+    service.isDrawing = true;
     service['path'] = 'M 475,299';
     const spy1 = spyOn(manipulator, 'removeChild');
     const spy2 = spyOn(manipulator, 'appendChild');
@@ -132,20 +132,20 @@ describe('PencilService', () => {
   });
 
   it('#onMouseRelease shouldn\'t stop drawing', () => {
-    service.isDrawing.next(true);
+    service.isDrawing = true;
     service.onMouseRelease(eventMocker('mouserelease', 1))
     expect(service.isDrawing).toBeTruthy();
   });
 
   it('#onMouseMove should update path, user is drawing', () => {
-    service.isDrawing.next(true);
+    service.isDrawing = true;
     service.onMouseMove(eventMocker('mousemouve', 0));
     expect(service['previousX']).toEqual(10);
     expect(service['previousY']).toEqual(10);
   });
 
   it('#onMouseMove should update mousepointer, user is previewing', () => {
-    service.isDrawing.next(false);
+    service.isDrawing = false;
     const spy = spyOn(manipulator, 'setAttribute');
     service.onMouseMove(eventMocker('mousemouve', 0));
     expect(service['previousX']).not.toBeDefined();
