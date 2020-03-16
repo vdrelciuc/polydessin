@@ -69,8 +69,7 @@ export class PencilService extends DrawableService {
 
   onMousePress(event: MouseEvent): void {
     if (this.mousePointer !== undefined) {
-      this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'hidden');
-      //this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
       delete(this.mousePointer);
     }
     this.isDrawing = true;
