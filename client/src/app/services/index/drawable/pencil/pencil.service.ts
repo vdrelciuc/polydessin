@@ -59,7 +59,7 @@ export class PencilService extends DrawableService {
 
   onMouseOutCanvas(event: MouseEvent): void {
     if (this.isDrawing) {
-      this.endPath();
+      this.addPath(event.clientX, event.clientY);
       this.isDrawing = false;
       this.pushElement();
     }
@@ -95,7 +95,7 @@ export class PencilService extends DrawableService {
 
   onMouseRelease(event: MouseEvent): void {
     if (this.isDrawing) {
-      this.endPath();
+      this.addPath(event.clientX, event.clientY);
       this.isDrawing = false;
       this.pushElement();
       this.updateCursor(event.clientX, event.clientY);
@@ -113,6 +113,7 @@ export class PencilService extends DrawableService {
   endTool(): void {
     if (this.isDrawing) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+      delete(this.subElement);
     }
     if (this.mousePointer !== undefined) {
       this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
@@ -134,13 +135,6 @@ export class PencilService extends DrawableService {
     this.previousX = clientX;
     this.previousY = clientY;
     this.path = this.path + (pathToAdd);
-    this.manipulator.setAttribute(this.line, 'd', this.path);
-  }
-
-  private endPath(): void {
-    if (this.path.indexOf('l') < 0) {
-      this.path = this.path + (' l 0,0');
-    }
     this.manipulator.setAttribute(this.line, 'd', this.path);
   }
 
