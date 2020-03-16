@@ -1,15 +1,14 @@
-import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANT from 'src/app/classes/constants';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { RectangleService } from './rectangle.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-// import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-
-describe('RectangleService', () => {
+// tslint:disable: no-magic-numbers no-any
+fdescribe('RectangleService', () => {
 
   let service: RectangleService;
   let manipulator: Renderer2;
@@ -19,7 +18,7 @@ describe('RectangleService', () => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
 
   const mockedPrimary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
   const mockedSecondary = new BehaviorSubject<Color>(new Color('#FFFFFF'));
@@ -61,6 +60,9 @@ describe('RectangleService', () => {
     e.button,
     document.body.parentNode
   );
+
+  const eventMocker = (event: string, keyUsed: number, x: number, y: number) =>
+  new MouseEvent(event, {button: keyUsed, clientX: x, clientY: y});
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -104,9 +106,9 @@ describe('RectangleService', () => {
     });
     service = getTestBed().get(RectangleService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
+    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
     service.attributes = new DrawablePropertiesService();
-    service.initialize(manipulator, image, 
+    service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
     });
@@ -139,16 +141,35 @@ describe('RectangleService', () => {
       .toBe('#FFFFFF');
   });
 
-  // it('#setShapeOriginFromRightQuadrants should set all attributes', () => {
-  //   service['isChanging'] = false;
-  //   service['drawOnNextMove'] = true;
-  //   service.onMouseMove(new MouseEvent('mousemove', {}));
+  it('#onMouseMove should call setDimensionsAttributes', () => {
+    service.colorSelectorService.backgroundColor = new BehaviorSubject<Color>(new Color('ffffff'));
+    service.onMousePress(eventMocker('', 0, 0, 0));
+    console.log(service['drawOnNextMove']);
 
-  //   service['isChanging'] = true;
-  //   service['shapeOrigin'] = new CoordinatesXY(0,0);
-  //   const spy = spyOn(manipulator, 'setAttribute');
-  //   service.onMouseMove(new MouseEvent('mousemove', {}));
-  //   expect(service['shiftPressed']).toBeTruthy();
-  //   expect(spy).toHaveBeenCalled();
-  // });
+    const spy = spyOn(service as any, 'setDimensionsAttributes');
+    service.onMouseMove(eventMocker('', 0, 0, 0));
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('drawing top-left to bottom-right should call setShapeOriginFrom Lower and Right Quadrants', () => {
+    service.colorSelectorService.backgroundColor = new BehaviorSubject<Color>(new Color('ffffff'));
+
+    const spyRight = spyOn(service as any, 'setShapeOriginFromRightQuadrants');
+    const spyLower = spyOn(service as any, 'setShapeOriginFromLowerQuadrants');
+    service.onMousePress(eventMocker('', 0, 0, 0));
+    service.onMouseMove(eventMocker('', 0, 100, 100));
+    expect(spyRight).toHaveBeenCalled();
+    expect(spyLower).toHaveBeenCalled();
+  });
+
+  it('drawing bottom-right to top-left should call setShapeOriginFrom Upper and Left Quadrants', () => {
+    service.colorSelectorService.backgroundColor = new BehaviorSubject<Color>(new Color('ffffff'));
+
+    const spyLeft = spyOn(service as any, 'setShapeOriginFromLeftQuadrants');
+    const spyUpper = spyOn(service as any, 'setShapeOriginFromUpperQuadrants');
+    service.onMousePress(eventMocker('', 0, 100, 100));
+    service.onMouseMove(eventMocker('', 0, 0, 0));
+    expect(spyLeft).toHaveBeenCalled();
+    expect(spyUpper).toHaveBeenCalled();
+  });
 });

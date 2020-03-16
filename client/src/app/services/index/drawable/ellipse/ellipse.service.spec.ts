@@ -113,4 +113,14 @@ describe('EllipseService', () => {
     expect(spyLower).toHaveBeenCalled();
   });
 
+  it('drawing bottom-right to top-left should call setShapeOriginFrom Upper and Left Quadrants', () => {
+    service.colorSelectorService.backgroundColor = new BehaviorSubject<Color>(new Color('ffffff'));
+
+    const spyLeft = spyOn(service as any, 'setShapeOriginFromLeftQuadrants');
+    const spyUpper = spyOn(service as any, 'setShapeOriginFromUpperQuadrants');
+    service.onMousePress(eventMocker('', 0, 100, 100));
+    service.onMouseMove(eventMocker('', 0, 0, 0));
+    expect(spyLeft).toHaveBeenCalled();
+    expect(spyUpper).toHaveBeenCalled();
+  });
 });
