@@ -51,7 +51,15 @@ export class UndoRedoService {
             this.drawStack.reset.next(false);
           }
         }
-      )
+      );
+      this.drawStack.newSVG.subscribe(
+        () => {
+          if(this.drawStack.newSVG.value) {
+            this.clear();
+            this.drawStack.newSVG.next(false);
+          }
+        }
+      );
   }
 
   undo(): void {
@@ -84,6 +92,12 @@ export class UndoRedoService {
 
   canRedo(): boolean {
     return this.removed.getAll().length > 0;
+  }
+
+  clear(): void {
+    this.setCurrent(this.image.nativeElement.cloneNode(true) as SVGElement);
+    this.elements.clear();
+    this.removed.clear();
   }
 
   private replace(by: SVGElement): void {

@@ -84,6 +84,7 @@ describe('ShapeService', () => {
       nameDisplayDefault: '[Rectangle]',
       nameDisplayOnShift: '[Carré]'
     };
+
     service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
@@ -140,16 +141,6 @@ describe('ShapeService', () => {
     expect(service['drawOnNextMove']).toBeTruthy();
   });
 
-  it('#onMouseRelease should end drawing', () => {
-    service['isChanging'] = true;
-    service['drawOnNextMove'] = false;
-    const spy = spyOn(manipulator, 'removeChild');
-    service.onMouseRelease(eventMocker('mouseup', 0, 0, 0));
-    expect(service['isChanging']).not.toBeTruthy();
-    expect(service['drawOnNextMove']).not.toBeTruthy();
-    expect(spy).toHaveBeenCalled();
-  });
-
   it('#onMouseRelease should do nothing if single click', () => {
     const remove = spyOn(service['manipulator'], 'removeChild');
     const addElement = spyOn(service['drawStack'], 'addElementWithInfos');
@@ -163,13 +154,16 @@ describe('ShapeService', () => {
 
   it('#onMouseRelease should stop shape', () => {
     service.onMousePress(eventMocker('mouserelease', 0, 0, 0));
-    service.onMouseMove(eventMocker('mouserelease', 0, 1, 1));
-    const spy = spyOn(manipulator, 'removeChild');
-    const addElement = spyOn(service['drawStack'], 'addElementWithInfos');
+    service.onMouseMove(eventMocker('mouserelease', 0, 10, 10));
+    const mockedRemoveChild = (el: SVGGElement): void => { /*Much Wow*/ };
+    const mockedPushElement = (el: SVGGElement): void => { /*Much Wow*/ };
+    const removeChild = (service['text'].removeChild = jasmine.createSpy().and.callFake(mockedRemoveChild));
+    const saveSVG = (service['pushElement'] = jasmine.createSpy().and.callFake(mockedPushElement));
+
     service.onMouseRelease(eventMocker('mouserelease', 0, 0, 0));
     expect(service['drawOnNextMove']).not.toBeTruthy();
-    expect(spy).toHaveBeenCalled();
-    expect(addElement).toHaveBeenCalled();
+    expect(removeChild).toHaveBeenCalled();
+    expect(saveSVG).toHaveBeenCalled();
   });
 
   it('#onMouseMove should save mouse position only when drawing', () => {

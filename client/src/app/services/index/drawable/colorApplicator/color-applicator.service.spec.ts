@@ -4,7 +4,7 @@ import { ColorApplicatorService } from './color-applicator.service';
 import { Renderer2, ElementRef, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import * as CONSTANT from 'src/app/classes/constants';
+// import * as CONSTANT from 'src/app/classes/constants';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
@@ -22,8 +22,8 @@ fdescribe('ColorApplicatorService', () => {
     return element;
   };
 
-  const eventMocker = (event: string, keyUsed: number, x: number, y: number) =>
-      new MouseEvent(event, {button: keyUsed, clientX: x, clientY: y});
+  /*const eventMocker = (event: string, keyUsed: number, x: number, y: number) =>
+      new MouseEvent(event, {button: keyUsed, clientX: x, clientY: y});*/
 
   beforeEach(() => {
     TestBed.configureTestingModule({

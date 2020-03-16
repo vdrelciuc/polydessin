@@ -16,6 +16,7 @@ export class DrawStackService {
   addedSVG: BehaviorSubject<SVGElement | undefined>;
   addedToRedo: BehaviorSubject<SVGElement | undefined>;
   reset: BehaviorSubject<boolean>;
+  newSVG: BehaviorSubject<boolean>;
 
   constructor() {
     this.elements = new Stack<SVGElementInfos>();
@@ -25,6 +26,7 @@ export class DrawStackService {
     this.addedSVG = new BehaviorSubject<SVGElement | undefined>(undefined);
     this.addedToRedo = new BehaviorSubject<SVGElement | undefined>(undefined);
     this.reset = new BehaviorSubject<boolean>(false);
+    this.newSVG = new BehaviorSubject<boolean>(false);
   }
 
   getAll(): Stack<SVGElementInfos> { return this.elements; }
@@ -90,6 +92,10 @@ export class DrawStackService {
   addSVGWithNewElement(current: SVGElement): void {
     this.reset.next(true);
     this.addSVG(current);
+  }
+
+  addingNewSVG(): void {
+    this.newSVG.next(true);
   }
 
   isEmpty(): boolean {
