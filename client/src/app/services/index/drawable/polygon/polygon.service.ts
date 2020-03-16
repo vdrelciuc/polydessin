@@ -194,6 +194,7 @@ export class PolygonService extends DrawableService {
       this.manipulator.setAttribute(this.polygon, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
     } else {
       this.manipulator.setAttribute(this.polygon, SVGProperties.color, 'none');
+      this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, '0');
     }
     this.manipulator.setAttribute(this.perimeter, SVGProperties.color, 'black');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.color, 'white');

@@ -37,18 +37,11 @@ export class ColorApplicatorService extends DrawableService {
     this.frenchName = 'Applicateur de couleur';
   }
 
-  test: SVGElement;
-
   onClick(event: MouseEvent): void {
     const clickedElement = event.target as SVGElement;
-    this.test = clickedElement;
 
-    if (clickedElement !== undefined) {
-      if (event.button === 0) {
-        this.onLeftClick(clickedElement);
-      } else if (event.button === 2) {
-        this.onRightClick(clickedElement);
-      }
+    if (clickedElement !== undefined && (event.button === 0 || event.button === 2)) {
+      event.button === 0 ? this.onLeftClick(clickedElement) : this.onRightClick(clickedElement);
 
       if (clickedElement.tagName !== 'svg') {
         this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
