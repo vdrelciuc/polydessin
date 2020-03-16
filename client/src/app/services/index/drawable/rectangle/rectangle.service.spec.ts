@@ -8,7 +8,7 @@ import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.s
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { RectangleService } from './rectangle.service';
 // tslint:disable: no-magic-numbers no-any
-fdescribe('RectangleService', () => {
+describe('RectangleService', () => {
 
   let service: RectangleService;
   let manipulator: Renderer2;
