@@ -7,8 +7,6 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-import { BehaviorSubject } from 'rxjs';
-import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -21,16 +19,16 @@ export class BrushService extends DrawableService {
   previousX: number;
   previousY: number;
   thickness: number;
-  isDrawing: BehaviorSubject<boolean>;
+  isDrawing: boolean;
   previewLine: SVGPathElement;
-  previewCricle: SVGCircleElement;
+  mousePointer: SVGCircleElement;
   attributes: DrawablePropertiesService;
   colorSelectorService: ColorSelectorService;
 
   constructor() {
     super();
     this.frenchName = 'Pinceau';
-    this.isDrawing = new BehaviorSubject<boolean>(false);
+    this.isDrawing = false;
     this.path = '';
     this.selectedFilter = FilterList[0].referenceID;
   }
@@ -42,13 +40,6 @@ export class BrushService extends DrawableService {
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
       this.initializeProperties();
-      this.isDrawing.subscribe(
-        () => {
-        if(!this.isDrawing.value && this.subElement !== undefined) {
-          this.pushElement();
-        }
-      }
-      )
     }
 
     initializeProperties(): void {
@@ -65,28 +56,29 @@ export class BrushService extends DrawableService {
       this.attributes.thickness.subscribe((element: number) => {
         this.thickness = element;
       });
-      this.previewCricle = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
     }
 
-  getThickness() {
-    return Math.floor(this.thickness);
-  }
   onMouseInCanvas(event: MouseEvent): void {
     this.createCircle(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
-
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.radius, (this.getThickness() / 2).toString());
-    this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);
   }
+
   onMouseOutCanvas(event: MouseEvent): void {
-    if (this.isDrawing.value) {
-      this.addPath(event.clientX, event.clientY);
+    if (this.isDrawing) {
+      this.isDrawing = false;
       this.endPath();
-      this.isDrawing.next(false);
+      this.pushElement();
     }
-    this.manipulator.removeChild(this.image.nativeElement, this.previewCricle);
+    if (this.mousePointer !== undefined) {
+      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      delete(this.mousePointer);
+    }
   }
   onMousePress(event: MouseEvent): void {
-    this.isDrawing.next(true);
+    if (this.mousePointer !== undefined) {
+      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      delete(this.mousePointer);
+    }
+    this.isDrawing = true;
     this.beginDraw(event.clientX, event.clientY);
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, 'brush-path');
@@ -97,51 +89,43 @@ export class BrushService extends DrawableService {
     this.manipulator.setAttribute(this.previewLine, SVGProperties.typeOfLine, 'round');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.endOfLine, 'round');
     this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
-    this.manipulator.setAttribute(this.previewLine, SVGProperties.thickness, `${this.getThickness()}`);
+    this.manipulator.setAttribute(this.previewLine, SVGProperties.thickness, `${this.thickness.toString()}`);
     this.manipulator.setAttribute(this.previewLine, 'filter', `url(#${this.selectedFilter})`);
 
     this.manipulator.appendChild(this.subElement, this.previewLine);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
-
-    this.manipulator.removeChild(this.image.nativeElement, this.previewCricle);
-
     this.addPath(event.clientX, event.clientY);
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'hidden');
   }
   onMouseRelease(event: MouseEvent): void {
-    if (event.button === CONSTANTS.MOUSE_LEFT) { // 0 for the left mouse button
-      if (this.isDrawing.value) {
-        this.isDrawing.next(false);
-        // this.addPath(event.clientX, event.clientY);
-        this.endPath();
-        this.updateCursor(event.clientX, event.clientY);
-        this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'visible');
-      }
+    if (this.isDrawing) {
+      this.isDrawing = false;
+      this.endPath();
+      this.pushElement();
+      this.updateCursor(event.clientX, event.clientY);
     }
   }
+
   onMouseMove(event: MouseEvent): void {
-    if (this.isDrawing.value) {
-    this.addPath(event.clientX, event.clientY);
-
-    this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
-    } else {this.updateCursor(event.clientX, event.clientY); }
-  }
-
-  onClick(event: MouseEvent): void {
-    this.isDrawing.next(false);
+    if (this.isDrawing) {
+      this.addPath(event.clientX, event.clientY);
+    } else {
+      this.updateCursor(event.clientX, event.clientY);
+    }
   }
 
   endTool(): void {
-    if(this.isDrawing.value) {
+    if (this.isDrawing) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
-    delete(this.subElement);
-    this.isDrawing.next(false);
+    if (this.mousePointer !== undefined) {
+      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      delete(this.mousePointer);
+    }
+    this.isDrawing = false;
     this.path = '';
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.visibility, 'visible');
   }
 
-  private beginDraw(clientX: number, clientY: number) {
+  private beginDraw(clientX: number, clientY: number): void {
     this.previousX = clientX;
     this.previousY = clientY;
     this.path = `M ${CoordinatesXY.effectiveX(this.image, clientX)},${CoordinatesXY.effectiveY(this.image, clientY)} l 1,1`;
@@ -152,26 +136,28 @@ export class BrushService extends DrawableService {
     this.previousX = clientX;
     this.previousY = clientY;
     this.path = this.path + (pathToAdd);
+    this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
   }
   private endPath() {
-    this.manipulator.appendChild(this.image.nativeElement, this.previewCricle);
+    this.manipulator.setAttribute(this.previewLine, SVGProperties.d, this.path);
   }
 
   updateCursor(clientX: number, clientY: number) {
-    if (this.previewCricle === undefined) {
+    if (this.mousePointer === undefined) {
       this.createCircle(clientX, clientY);
     }
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
-  }
-  private createCircle(x: number, y: number): SVGCircleElement {
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.fill, this.color.getHex());
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.globalOpacity, this.opacity.toString());
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.radius, (this.getThickness() / 2).toString());
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerX, x.toString());
-    this.manipulator.setAttribute(this.previewCricle, SVGProperties.centerY, y.toString());
-    this.manipulator.setAttribute(this.previewCricle, 'filter', `url(#${this.selectedFilter})`);
-    return this.previewCricle;
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
   }
 
+  private createCircle(x: number, y: number): void {
+    this.mousePointer = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, this.color.getHex());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.globalOpacity, this.opacity.toString());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, x.toString());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, y.toString());
+    this.manipulator.setAttribute(this.mousePointer, 'filter', `url(#${this.selectedFilter})`);
+    this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
+  }
 }

@@ -38,8 +38,8 @@ export class EraserService extends DrawableService {
     colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
-      this.initializeProperties();
       this.updateSVGElements();
+      this.initializeProperties();
   }
 
   initializeProperties(): void {
@@ -168,12 +168,24 @@ export class EraserService extends DrawableService {
     }
   }
 
+  private deleteSelectedElement(): void {
+    if(this.selectedElement !== undefined) {
+      this.manipulator.setAttribute(this.selectedElement.target.firstChild as SVGElement, SVGProperties.color, this.oldBorder);
+      this.drawStack.removeElement(this.selectedElement.id);
+      this.manipulator.removeChild(this.image, this.selectedElement.target);
+      this.manipulator.removeChild(this.image, this.preview);
+      this.drawStack.addSVGToRedo(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image.nativeElement, this.preview);
+      this.updatePreview();
+    }
+  }
+
   private addingMouseMoveEvent(element : any){
     this.selectElement(element.target.parentElement as SVGGElement);
   }
 
   private getInBounds(elementBounds: DOMRect, mouse: CoordinatesXY): boolean {
-    return (    
+  return (    
       elementBounds.left   < mouse.getX() + this.thickness.value / 2 &&
       elementBounds.right  > mouse.getX() - this.thickness.value / 2 &&
       elementBounds.top    < mouse.getY() + this.thickness.value / 2 &&
@@ -197,18 +209,6 @@ export class EraserService extends DrawableService {
   private updatePreview(): void {
     this.manipulator.setAttribute(this.preview, SVGProperties.height, this.thickness.value.toString());
     this.manipulator.setAttribute(this.preview, SVGProperties.width, this.thickness.value.toString());
-  }
-
-  private deleteSelectedElement(): void {
-    if(this.selectedElement !== undefined) {
-      this.manipulator.setAttribute(this.selectedElement.target.firstChild as SVGElement, SVGProperties.color, this.oldBorder);
-      this.drawStack.removeElement(this.selectedElement.id);
-      this.manipulator.removeChild(this.image, this.selectedElement.target);
-      this.manipulator.removeChild(this.image, this.preview);
-      this.drawStack.addSVGToRedo(this.image.nativeElement.cloneNode(true) as SVGElement);
-      this.manipulator.appendChild(this.image.nativeElement, this.preview);
-      this.updatePreview();
-    }
   }
 
   private setOutline(colorToSet: string): void {
