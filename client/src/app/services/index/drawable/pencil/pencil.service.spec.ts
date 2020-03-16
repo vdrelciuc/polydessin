@@ -9,7 +9,7 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
 import { PencilService } from './pencil.service';
 // tslint:disable: no-magic-numbers no-any
 
-fdescribe('PencilService', () => {
+describe('PencilService', () => {
   let service: PencilService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
