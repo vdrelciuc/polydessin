@@ -9,7 +9,7 @@ import { BrushService } from './brush.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 // tslint:disable: no-magic-numbers no-any
 
-fdescribe('BrushService', () => {
+describe('BrushService', () => {
   let service: BrushService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
@@ -123,19 +123,21 @@ fdescribe('BrushService', () => {
     service.onMouseMove(eventMocker('mousemove', 0));
     service.onMouseOutCanvas(eventMocker('mousemove', 0));
     expect(service['isDrawing']).not.toBeTruthy();
-    expect(service['mousePointer']).toBeUndefined();
+    expect(service['mousePointer'])
   });
 
   it('#onMousePress should init elements', () => {
     const spy = spyOn(manipulator, 'createElement');
+    const spy2 = spyOn(manipulator, 'setAttribute');
     service.onMousePress(eventMocker('mousemove', 0));
     expect(service['previousX']).toEqual(10);
     expect(service['previousY']).toEqual(10);
     expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledTimes(10);
   });
 
   it('#onMouseRelease should do nothing', () => {
-    const spy = spyOn(service, 'updateCursor');
+    const spy = spyOn(service as any, 'updateCursor');
     service['isDrawing'] = false;
     service.onMouseRelease(eventMocker('mouseup', 0));
     expect(service['isDrawing']).not.toBeTruthy();
@@ -151,7 +153,7 @@ fdescribe('BrushService', () => {
   });
 
   it('#onMouseRelease should update Cursor', () => {
-    const spy = spyOn(service, 'updateCursor');
+    const spy = spyOn(service as any, 'updateCursor');
     service['isDrawing'] = true;
     service.onMouseRelease(eventMocker('mouseup', 0));
     expect(service['isDrawing']).not.toBeTruthy();
@@ -159,7 +161,7 @@ fdescribe('BrushService', () => {
   });
 
   it('#onMouseMove should update cursor', () => {
-    const spy = spyOn(service, 'updateCursor');
+    const spy = spyOn(service as any, 'updateCursor');
     service['isDrawing'] = false;
     service.onMouseMove(eventMocker('mouseup', 0));
     expect(spy).toHaveBeenCalledWith(10, 10);
@@ -177,9 +179,32 @@ fdescribe('BrushService', () => {
     expect(service['isDrawing']).not.toBeTruthy();
   });
 
-  it('#updateCursor should update cursor attributes', () => {
-    const spy = spyOn(manipulator, 'setAttribute');
-    service.updateCursor(10, 10);
-    expect(spy).toHaveBeenCalledTimes(8);
+  it('#endTool should remove everything', () => {
+    const mockedRemoveChild = (el: SVGGElement): void => { /*Much Wow*/ };
+    service.onMousePress(eventMocker('mousemouve', 0));
+    const removeChild = (service['subElement'].remove = jasmine.createSpy().and.callFake(mockedRemoveChild));
+    let removeCount = removeChild.calls.count();
+    service.onMouseMove(eventMocker('mousemouve', 0));
+    expect(service['subElement']).not.toBeUndefined();
+    expect(service['mousePointer']).toBeUndefined();
+    expect(removeChild.calls.count()).toEqual(removeCount);
+    removeCount = removeChild.calls.count();
+
+    service['endTool']();
+    expect(service['subElement']).toBeUndefined();
+    expect(service['mousePointer']).toBeUndefined();
+    expect(removeChild.calls.count()).toBeGreaterThan(removeCount);
+    removeCount = removeChild.calls.count();
+
+    service.onMouseMove(eventMocker('mousemouve', 0));
+    expect(service['subElement']).toBeUndefined();
+    expect(service['mousePointer']).not.toBeUndefined();
+    expect(removeChild.calls.count()).toEqual(removeCount);
+    removeCount = removeChild.calls.count();
+
+    service['endTool']();
+    expect(service['subElement']).toBeUndefined();
+    expect(service['mousePointer']).toBeUndefined();
+    expect(removeChild.calls.count()).toBeGreaterThan(removeCount);
   });
 });

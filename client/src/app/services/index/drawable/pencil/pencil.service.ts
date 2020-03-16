@@ -112,11 +112,11 @@ export class PencilService extends DrawableService {
 
   endTool(): void {
     if (this.isDrawing) {
-      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+      this.subElement.remove();
       delete(this.subElement);
     }
     if (this.mousePointer !== undefined) {
-      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      this.mousePointer.remove();
       delete(this.mousePointer);
     }
 
@@ -140,7 +140,7 @@ export class PencilService extends DrawableService {
 
   private updateCursor(clientX: number, clientY: number): void {
     if (this.mousePointer === undefined) {
-      this.createCircle(clientX, clientY);
+      this.createCircle(CoordinatesXY.effectiveX(this.image, clientX), CoordinatesXY.effectiveY(this.image, clientY));
     } else {
       this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
       this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
