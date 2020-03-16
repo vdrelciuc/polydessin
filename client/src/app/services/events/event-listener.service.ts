@@ -9,6 +9,7 @@ export class EventListenerService {
 
   currentTool: DrawableService | undefined;
   currentToolName: string;
+  private isMouseIn: boolean;
 
   constructor(
     private image: ElementRef<SVGElement>,
@@ -18,6 +19,7 @@ export class EventListenerService {
     this.toolSelector.$currentTool.subscribe((tool) => {
       this.currentToolName = tool;
       this.currentTool = this.toolSelector.getCurrentTool();
+      this.isMouseIn = false;
     });
   }
 
@@ -29,14 +31,17 @@ export class EventListenerService {
     });
 
     this.manipulator.listen(this.image.nativeElement, 'mouseenter', (event: MouseEvent) => {
-      if (this.currentTool !== undefined) {
+      if (this.currentTool !== undefined && !this.isMouseIn) {
         this.currentTool.onMouseInCanvas(event);
+        this.isMouseIn = true;
       }
     });
 
     this.manipulator.listen(this.image.nativeElement, 'mouseleave', (event: MouseEvent) => {
       if (this.currentTool !== undefined) {
         this.currentTool.onMouseOutCanvas(event);
+        this.isMouseIn = false;
+
       }
     });
 
