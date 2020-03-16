@@ -8,7 +8,7 @@ import { DrawablePropertiesService } from '../properties/drawable-properties.ser
 import { PencilService } from './pencil.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
-describe('PencilService', () => {
+fdescribe('PencilService', () => {
   let service: PencilService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
@@ -20,6 +20,7 @@ describe('PencilService', () => {
   }
   const eventMocker = (event: string, keyUsed: number) =>
       new MouseEvent(event, {button: keyUsed, clientX: 10, clientY: 10});
+  let spyPushSVG: jasmine.Spy<InferableFunction>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -66,6 +67,8 @@ describe('PencilService', () => {
     service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
+
+    spyPushSVG = (service['pushElement'] = jasmine.createSpy().and.callFake(() => null));
   });
 
   it('should be created', () => {
@@ -108,33 +111,27 @@ describe('PencilService', () => {
   });
 
   it('#onMousePress should remove mouse pointer', () => {
-    const spy = spyOn(manipulator, 'setAttribute');
+    service.onMouseMove(eventMocker('mousepress', 0));
+    expect(document).toContain(service['mousePointer']);
     service.onMousePress(eventMocker('mousepress', 0));
-    expect(spy).toHaveBeenCalledTimes(10);
-    expect(service['previousX']).toEqual(10);
-    expect(service['previousY']).toEqual(10);
+    expect(service['image'].nativeElement).not.toContain(service['mousePointer']);
   });
 
-  it('#onMouseRelease should stop drawing with l', () => {
-    service.isDrawing = true;
+  it('#onMouseRelease should stop drawing with "l 0,0" with simple click', () => {
+    service.onMousePress(eventMocker('mouserelease', 0));
     service.onMouseRelease(eventMocker('mouserelease', 0));
     expect(service.isDrawing).not.toBeTruthy();
+    expect(service['path'].substr(-5, 5)).toEqual('l 0,0');
+    expect(spyPushSVG).toHaveBeenCalled();
   });
 
   it('#onMouseRelease should stop drawing without l', () => {
     service.isDrawing = true;
     service['path'] = 'M 475,299';
-    const spy1 = spyOn(manipulator, 'removeChild');
-    const spy2 = spyOn(manipulator, 'appendChild');
     service.onMouseRelease(eventMocker('mouserelease', 0));
-    expect(spy1).toHaveBeenCalled();
-    expect(spy2).toHaveBeenCalledTimes(2);
-  });
-
-  it('#onMouseRelease shouldn\'t stop drawing', () => {
-    service.isDrawing = true;
-    service.onMouseRelease(eventMocker('mouserelease', 1))
-    expect(service.isDrawing).toBeTruthy();
+    const spy = spyOn(service as any, 'endPath');
+    expect(spy).not.toHaveBeenCalled();
+    expect(spyPushSVG).toHaveBeenCalled();
   });
 
   it('#onMouseMove should update path, user is drawing', () => {
