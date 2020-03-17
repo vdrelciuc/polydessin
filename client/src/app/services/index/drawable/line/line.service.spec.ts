@@ -7,11 +7,12 @@ import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { LineService } from './line.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+// tslint:disable: no-magic-numbers no-any
 
-describe('LineService', () => {
+fdescribe('LineService', () => {
   let service: LineService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
@@ -62,13 +63,13 @@ describe('LineService', () => {
     });
     service = getTestBed().get(LineService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
+    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
     service['pointerPosition'] = new CoordinatesXY(10, 10);
     service['opacity'] = 0.5;
     service['dotDiameter'] = 5;
     service['thickness'] = 10;
     service.attributes = new DrawablePropertiesService();
-    service.initialize(manipulator, image, 
+    service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
   });
@@ -176,7 +177,7 @@ describe('LineService', () => {
   });
 
   it('#onDoubleClick should not be within 3px', () => {
-    const mockedPoints = new Stack<CoordinatesXY>(); ;
+    const mockedPoints = new Stack<CoordinatesXY>();
     mockedPoints.push_back(new CoordinatesXY(10, 10));
     const lastPoint = new CoordinatesXY(100, 100);
     mockedPoints.push_back(lastPoint);
@@ -192,7 +193,7 @@ describe('LineService', () => {
   });
 
   it('#onDoubleClick should be within 3px', () => {
-    const mockedPoints = new Stack<CoordinatesXY>(); ;
+    const mockedPoints = new Stack<CoordinatesXY>();
     mockedPoints.push_back(new CoordinatesXY(10, 10));
     const lastPoint = new CoordinatesXY(100, 100);
     mockedPoints.push_back(lastPoint);
@@ -252,7 +253,7 @@ describe('LineService', () => {
     service.deleteLine();
     expect(service['isDone']).toBeTruthy();
     expect(service['isStarted']).not.toBeTruthy();
-    expect(service['points'].getRoot()).toBe(undefined)
+    expect(service['points'].getRoot()).toBeUndefined();
   });
 
   it('#removeLastPoint should remove last point with junction is dot', () => {

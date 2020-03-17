@@ -9,7 +9,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 
-fdescribe('ColorApplicatorService', () => {
+describe('ColorApplicatorService', () => {
   let service: ColorApplicatorService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;

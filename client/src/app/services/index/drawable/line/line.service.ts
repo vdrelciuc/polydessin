@@ -5,14 +5,16 @@ import { Stack } from 'src/app/classes/stack';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LineService extends DrawableService {
+  readonly OFFSET_MIN: number = 3;
+  readonly SIZEOF_POINT: number = 8;
 
   attributes: DrawablePropertiesService;
   thickness: number;
@@ -50,7 +52,7 @@ export class LineService extends DrawableService {
     this.isDone = true;
   }
 
-  initializeProperties() {
+  initializeProperties(): void {
     this.thickness = this.attributes.thickness.value;
     this.dotDiameter = this.attributes.dotDiameter.value;
     this.jointIsDot = this.attributes.junction.value;
@@ -103,7 +105,7 @@ export class LineService extends DrawableService {
     }
   }
 
-  private followPointer() {
+  private followPointer(): void {
     let previewPoints = this.pointsToString();
     if (this.shiftPressed) {
       const lastPoint = this.points.getLast();
@@ -140,31 +142,28 @@ export class LineService extends DrawableService {
 
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
+      console.log('heheXD');
+
       const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
       const effectiveY = CoordinatesXY.effectiveY(this.image, event.clientY);
-      const lastPoint = new CoordinatesXY(effectiveX, effectiveY);
       const firstPoint = this.points.getRoot();
+      // Remove last point and cancel double point from appearing
+      this.removeLastPoint();
+
       if (firstPoint !== undefined) {
-        const differenceOfCoordinatesX = firstPoint.getX() - lastPoint.getX();
-        const differenceOfCoordinatesY = firstPoint.getY() - lastPoint.getY();
-        const isWithin3Px: boolean =
-          differenceOfCoordinatesX <= 3 &&
-          differenceOfCoordinatesX >= -3 &&
-          differenceOfCoordinatesY <= 3 &&
-          differenceOfCoordinatesY >= -3;
+        const differenceOfCoordinatesX = Math.abs(firstPoint.getX() - effectiveX);
+        const differenceOfCoordinatesY = Math.abs(firstPoint.getY() - effectiveY);
+        const isWithin3Px: boolean = differenceOfCoordinatesX <= this.OFFSET_MIN && differenceOfCoordinatesY <= this.OFFSET_MIN;
         if (isWithin3Px) {
+          console.log('3px');
+
+          this.removeLastPoint();
           this.addPointToLine(firstPoint.getX(), firstPoint.getY());
         } else {
           this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
         }
       }
-      // Remove last point and cancel double point from appearing
-      this.removeLastPoint();
-      let previewPoints = this.pointsToString();
-      // Removing last 8 characters, which correspond to a point in SVG attribute
-      previewPoints = previewPoints.slice(0, -8);
-      this.manipulator.setAttribute(this.line, SVGProperties.pointsList, previewPoints);
-
+      this.updateLine();
       // Send the line to the whole image to be pushed
       this.points.clear();
       this.isStarted = false;
@@ -174,6 +173,8 @@ export class LineService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
+    console.log('click');
+
     let recoverShiftPressed = false;
     if (!this.isStarted) {
       if (this.shiftPressed) {
@@ -215,10 +216,12 @@ export class LineService extends DrawableService {
     if (recoverShiftPressed) {
       this.shiftPressed = true;
     }
+    console.log(this.points);
+
   }
 
   endTool(): void {
-    if(this.isStarted && !this.isDone) {
+    if (this.isStarted && !this.isDone) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
     this.shiftPressed = false;
@@ -245,6 +248,10 @@ export class LineService extends DrawableService {
       this.followPointer();
     }
 
+    let previewPoints = this.pointsToString();
+    // Removing last 8 characters, which correspond to a point in SVG attribute
+    previewPoints = previewPoints.slice(0, -this.SIZEOF_POINT);
+    this.manipulator.setAttribute(this.line, SVGProperties.pointsList, previewPoints);
   }
 
   getLineIsDone(): boolean { return this.isDone; }
@@ -273,7 +280,7 @@ export class LineService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
   }
 
-  private pointsToString({newPoints= this.points}: {newPoints?: Stack<CoordinatesXY>}= {}) {
+  private pointsToString({newPoints= this.points}: {newPoints?: Stack<CoordinatesXY>}= {}): string {
     let pointsToString = '';
     for (const point of newPoints.getAll()) {
       pointsToString += point.getX() + ',' + point.getY() + ' ';
