@@ -1,21 +1,21 @@
-import {ElementRef, Injectable, Renderer2} from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import * as CONSTANTS from 'src/app/classes/constants';
-import {Color} from '../classes/color';
-import {CoordinatesXY} from '../classes/coordinates-x-y';
-import {ColorType} from '../enums/color-types';
-import {ColorSelectorService} from './color-selector.service';
-import {DrawableService} from './index/drawable/drawable.service';
-import {DrawablePropertiesService} from './index/drawable/properties/drawable-properties.service';
-import {DrawStackService} from './tools/draw-stack/draw-stack.service';
+import { Color } from '../classes/color';
+import { CoordinatesXY } from '../classes/coordinates-x-y';
+import { CursorProperties } from '../classes/cursor-properties';
+import { ColorType } from '../enums/color-types';
+import { ColorSelectorService } from './color-selector.service';
+import { DrawableService } from './index/drawable/drawable.service';
+import { DrawStackService } from './tools/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PipetteService extends DrawableService {
-  readonly LEFT_CLICK = 0;
-  readonly RIGHT_CLICK = 2;
+  readonly LEFT_CLICK: number = 0;
+  readonly RIGHT_CLICK: number = 2;
 
-  hiddenCanvas: ElementRef;
+  hiddenCanvas: HTMLCanvasElement;
 
   constructor() {
     super();
@@ -23,10 +23,15 @@ export class PipetteService extends DrawableService {
   }
 
   onSelect(): void {
-    this.getColorAtPosition(new CoordinatesXY(1,1));
+    this.getColorAtPosition(new CoordinatesXY(1, 1));
+    this.manipulator.setAttribute(this.image.nativeElement, CursorProperties.cursor, CursorProperties.crosshair);
   }
 
-  setupCanvas(hiddenCanvas: ElementRef) {
+  endTool(): void {
+    this.manipulator.setAttribute(this.image.nativeElement, CursorProperties.cursor, CursorProperties.default);
+  }
+
+  setupCanvas(hiddenCanvas: HTMLCanvasElement): void {
     this.hiddenCanvas = hiddenCanvas;
   }
 
@@ -38,49 +43,36 @@ export class PipetteService extends DrawableService {
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
   }
 
-  initializeProperties(): void {
-  }
-
-  protected assignParams(
-    manipulator: Renderer2,
-    image: ElementRef<SVGElement>,
-    colorSelectorService: ColorSelectorService,
-    drawStack: DrawStackService): void {
-    this.manipulator = manipulator;
-    this.image = image;
-    this.colorSelectorService = colorSelectorService;
-    this.drawStack = drawStack;
-    this.attributes = new DrawablePropertiesService();
-  }
+  initializeProperties(): void { /* No properties to initialize */ }
 
   // Adapted from https://jsfiddle.net/Wijmo5/h2L3gw88/
-  private getColorAtPosition(coordinates: CoordinatesXY): Color {
-    let ctx: CanvasRenderingContext2D;
-    ctx = this.hiddenCanvas.nativeElement.getContext('2d');
+  private getColorAtPosition(coordinates: CoordinatesXY): Color | null {
+    const ctx = this.hiddenCanvas.getContext('2d');
+    if (this.hiddenCanvas !== null && ctx !== null) {
+      const xml = new XMLSerializer().serializeToString(this.image.nativeElement);
+      const imageAfterDeserialization = new Image();
+      const svg64 = btoa(xml);
+      const b64Start = 'data:image/svg+xml;base64,';
+      const image64 = b64Start + svg64;
+      imageAfterDeserialization.src = image64;
 
-    let xml;
-    let imageAfterDeserialization = new Image();
-    xml = new XMLSerializer().serializeToString(this.image.nativeElement);
-    let svg64 = btoa(xml);
-    let b64Start = 'data:image/svg+xml;base64,';
-    let image64 = b64Start + svg64;
-    imageAfterDeserialization.src = image64;
+      imageAfterDeserialization.onload = () => {
+        if (ctx !== null) {
+          ctx.canvas.width = imageAfterDeserialization.width;
+          ctx.canvas.height = imageAfterDeserialization.height;
+          ctx.drawImage(imageAfterDeserialization, 0, 0);
+        }
+      };
 
-    imageAfterDeserialization.onload = () => {
-      ctx.canvas.width = imageAfterDeserialization.width;
-      ctx.canvas.height = imageAfterDeserialization.height;
+      const imageData = ctx.getImageData(coordinates.getX(), coordinates.getY(), 1, 1).data;
+      const hexValue = '#'
+        + this.correctDigits(imageData[0].toString(CONSTANTS.HEX_BASE))
+        + this.correctDigits(imageData[1].toString(CONSTANTS.HEX_BASE))
+        + this.correctDigits(imageData[2].toString(CONSTANTS.HEX_BASE));
 
-      ctx.drawImage(imageAfterDeserialization, 0, 0);
-
-    };
-
-    const imageData = ctx.getImageData(coordinates.getX(), coordinates.getY(), 1, 1).data;
-    const hexValue = '#'
-      + this.correctDigits(imageData[0].toString(CONSTANTS.HEX_BASE))
-      + this.correctDigits(imageData[1].toString(CONSTANTS.HEX_BASE))
-      + this.correctDigits(imageData[2].toString(CONSTANTS.HEX_BASE));
-
-    return new Color(hexValue);
+      return new Color(hexValue);
+    }
+    return null;
   }
 
   private correctDigits(n: string): string {
@@ -90,15 +82,13 @@ export class PipetteService extends DrawableService {
   onClick(event: MouseEvent): void {
     const position = CoordinatesXY.getEffectiveCoords(this.image, event);
     const newColor = this.getColorAtPosition(position);
-    if (newColor != null) {
+    if (newColor != null && (event.button === this.LEFT_CLICK || event.button === this.RIGHT_CLICK)) {
       if (event.button === this.LEFT_CLICK) {
         this.colorSelectorService.colorToChange = ColorType.Primary;
-      } else if (event.button === this.RIGHT_CLICK) {
+      } else {
         this.colorSelectorService.colorToChange = ColorType.Secondary;
       }
       this.colorSelectorService.updateColor(newColor);
     }
   }
-
-
 }
