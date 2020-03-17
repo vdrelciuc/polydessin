@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { Image } from '../../interfaces/image';
@@ -31,6 +32,7 @@ export class GalleryComponent implements OnInit {
               private snacks: MatSnackBar,
               private sanitizer: DomSanitizer,
               private galleryService: GalleryService,
+              public router: Router,
               private drawStackService: DrawStackService,
               private shortcutManager: ShortcutManagerService,
               private dialog: MatDialog
@@ -65,6 +67,10 @@ export class GalleryComponent implements OnInit {
   onDialogClose(): void {
     this.dialogRef.close();
     this.shortcutManager.setupShortcuts();
+    history.state.goingToGallery = false;
+    if (history.state.comingFromEntryPoint) {
+      this.router.navigateByUrl('/');
+    }
   }
 
   addTag(tag: string): void {

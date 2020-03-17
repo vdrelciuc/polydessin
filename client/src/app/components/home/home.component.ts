@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { UserGuideComponent } from '../user-guide/user-guide.component';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { UserGuideComponent } from '../user-guide/user-guide.component';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +11,9 @@ import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.servic
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  @ViewChild('createNewBtn', { static: true }) createNewBtn: ElementRef<HTMLAnchorElement>;
+  @ViewChild('openGalleryBtn', { static: true }) openGalleryBtn: ElementRef<HTMLAnchorElement>;
+
   private subscriptions: Subscription[] = [];
   options: object[] =
     [
@@ -23,8 +27,12 @@ export class HomeComponent {
 
 constructor(
   private shortcut: HotkeysService,
+  private shortcutManager: ShortcutManagerService,
   public dialog: MatDialog
-  ) {}
+  ) {
+    this.shortcutManager.disableShortcuts();
+    this.setupShortcuts();
+  }
 
   openDialog(): void {
     this.dialog.open(UserGuideComponent, {
@@ -38,14 +46,16 @@ constructor(
   setupShortcuts(): void {
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
       (event) => {
-        // link to create new window
+        this.createNewBtn.nativeElement.click();
+        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
       }
     )
     );
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.g', description: 'Opening gallery' }).subscribe(
       (event) => {
-        // link to open gallery window
+        this.openGalleryBtn.nativeElement.click();
+        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
       }
     )
     );

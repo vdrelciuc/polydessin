@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SidebarComponent } from 'src/app/components/sidebar/sidebar.component';
+import { WorkingAreaComponent } from 'src/app/components/working-area/working-area.component';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from '../events/shortcuts/hotkeys.service';
 import { ToolSelectorService } from '../tools/tool-selector.service';
@@ -10,7 +10,7 @@ import { ToolSelectorService } from '../tools/tool-selector.service';
 })
 export class ShortcutManagerService {
   private subscriptions: Subscription[] = [];
-  private sidebarComponent: SidebarComponent;
+  private workingAreaComponent: WorkingAreaComponent;
 
   constructor(
     public toolSelectorService: ToolSelectorService,
@@ -19,11 +19,12 @@ export class ShortcutManagerService {
       this.bypassBrowserShortcuts();
     }
 
-  setSidebarComponent(sidebar: SidebarComponent): void {
-    this.sidebarComponent = sidebar;
+  setWorkingAreaComponent(component: WorkingAreaComponent): void {
+    this.workingAreaComponent = component;
   }
 
   disableShortcuts(): void {
+    this.bypassBrowserShortcuts();
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
   }
 
@@ -70,7 +71,7 @@ export class ShortcutManagerService {
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.e', description: 'open export dialog' }).subscribe(
       (event) => {
-        this.sidebarComponent.exportProject();
+        this.workingAreaComponent.exportProject();
       }
       )
     );
@@ -125,21 +126,21 @@ export class ShortcutManagerService {
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
         (event) => {
-          this.sidebarComponent.createNewProject();
+          this.workingAreaComponent.createNewProject();
         }
       )
     );
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.g', description: 'Opening gallery' }).subscribe(
       (event) => {
-        this.sidebarComponent.openGallery();
+        this.workingAreaComponent.openGallery();
       }
       )
     );
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.s', description: 'Opening Save on Server' }).subscribe(
       (event) => {
-        this.sidebarComponent.saveServerProject();
+        this.workingAreaComponent.saveServerProject();
       }
       )
     );
