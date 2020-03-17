@@ -9,7 +9,7 @@ import { DrawablePropertiesService } from './index/drawable/properties/drawable-
 import { PipetteService } from './pipette.service';
 import { DrawStackService } from './tools/draw-stack/draw-stack.service';
 
-fdescribe('PipetteService', () => {
+describe('PipetteService', () => {
   let service: PipetteService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
