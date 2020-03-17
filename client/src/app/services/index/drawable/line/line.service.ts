@@ -142,8 +142,6 @@ export class LineService extends DrawableService {
 
   onDoubleClick(event: MouseEvent): void { // Should end line
     if (this.isStarted && !this.isDone) {
-      console.log('heheXD');
-
       const effectiveX = CoordinatesXY.effectiveX(this.image, event.clientX);
       const effectiveY = CoordinatesXY.effectiveY(this.image, event.clientY);
       const firstPoint = this.points.getRoot();
@@ -155,10 +153,8 @@ export class LineService extends DrawableService {
         const differenceOfCoordinatesY = Math.abs(firstPoint.getY() - effectiveY);
         const isWithin3Px: boolean = differenceOfCoordinatesX <= this.OFFSET_MIN && differenceOfCoordinatesY <= this.OFFSET_MIN;
         if (isWithin3Px) {
-          console.log('3px');
-
           this.removeLastPoint();
-          this.addPointToLine(firstPoint.getX(), firstPoint.getY());
+          this.points.push_back(firstPoint);
         } else {
           this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
         }
@@ -173,8 +169,6 @@ export class LineService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    console.log('click');
-
     let recoverShiftPressed = false;
     if (!this.isStarted) {
       if (this.shiftPressed) {
@@ -216,8 +210,6 @@ export class LineService extends DrawableService {
     if (recoverShiftPressed) {
       this.shiftPressed = true;
     }
-    console.log(this.points);
-
   }
 
   endTool(): void {
