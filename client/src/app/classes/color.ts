@@ -1,10 +1,11 @@
 import * as CONSTANT from 'src/app/classes/constants';
+import {
+  COLOR_REGEX_WITH_HASHTAG,
+  COLOR_REGEX_RGB_VALUE_IN_HEX,
+  COLOR_REGEX_WITHOUT_HASHTAG
+} from 'src/app/classes/regular-expressions';
 
 export class Color {
-
-  private readonly REGEX_WITH_HASHTAG: RegExp = /^#[0-9A-F]{6}$/i;
-  private readonly REGEX_WITHOUT_HASHTAG: RegExp = /[0-9A-F]{6}$/i;
-  private readonly REGEX_RGB_VALUE_IN_HEX: RegExp = /[0-9A-F]{2}$/i;
 
   private hex: string;
 
@@ -57,9 +58,9 @@ export class Color {
           padding =  1;
       }
       if (hex.length === (CONSTANT.HEX_LENGTH + padding)) {
-          if (this.REGEX_WITH_HASHTAG.test(hex)) {
+          if (COLOR_REGEX_WITH_HASHTAG.test(hex)) {
               this.hex = hex.toUpperCase();
-          } else if (this.REGEX_WITHOUT_HASHTAG.test(hex)) {
+          } else if (COLOR_REGEX_WITHOUT_HASHTAG.test(hex)) {
               this.hex = '#'.concat(hex).toUpperCase();
           }
       }
@@ -92,21 +93,21 @@ export class Color {
 
   setRedHex(red: string): void {
     red = this.correctHexDigit(red);
-    if (this.REGEX_RGB_VALUE_IN_HEX.test(red)) {
+    if (COLOR_REGEX_RGB_VALUE_IN_HEX.test(red)) {
       this.hex = this.hex.charAt(0) + red + this.hex.substr(3);
     }
   }
 
   setGreenHex(green: string): void {
     green = this.correctHexDigit(green);
-    if (this.REGEX_RGB_VALUE_IN_HEX.test(green)) {
+    if (COLOR_REGEX_RGB_VALUE_IN_HEX.test(green)) {
       this.hex = this.hex.substr(0, 3) + green + this.hex.substr(5);
     }
   }
 
   setBlueHex(blue: string): void {
     blue = this.correctHexDigit(blue);
-    if (this.REGEX_RGB_VALUE_IN_HEX.test(blue)) {
+    if (COLOR_REGEX_RGB_VALUE_IN_HEX.test(blue)) {
       this.hex = this.hex.substr(0, 5) + blue;
     }
   }

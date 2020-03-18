@@ -5,14 +5,12 @@ import { Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { Image } from '../../interfaces/image';
 import { SVGProperties } from "../../classes/svg-html-properties";
+import { REGEX_TAG, REGEX_TITLE } from 'src/app/classes/regular-expressions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SaveServerService {
-
-  private readonly REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,16}$/; // Alphanumeric, space and dash: 3 to 16 chars
-  private readonly REGEX_TAG: RegExp = /^[A-Za-z0-9]{1,10}$/; // Alphanumeric, 1 to 10 chars
   private innerHtml: string;
   refToSvg: ElementRef<SVGElement>;
 
@@ -23,7 +21,7 @@ export class SaveServerService {
   }
 
   checkTitleValidity(title: string): boolean {
-    return this.REGEX_TITLE.test(title);
+    return REGEX_TITLE.test(title);
   }
 
   addTag(etiquette: string, data: Set<string>): boolean {
@@ -64,6 +62,6 @@ export class SaveServerService {
   }
 
   private checkTagValidity(tag: string): boolean {
-    return this.REGEX_TAG.test(tag);
+    return REGEX_TAG.test(tag);
   }
 }
