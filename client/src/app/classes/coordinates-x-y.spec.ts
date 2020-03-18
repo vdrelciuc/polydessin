@@ -88,4 +88,15 @@ describe('CoordinatedXY', () => {
     expect(closest.getX()).toEqual(100);
     expect(closest.getY()).toEqual(0);
   });
+
+  it('#inRadius should not be in radius', () => {
+    expect(
+      point.inRadius({
+        right: 100,
+        left: -1,
+        top: -1,
+        bottom: 100
+      } as DOMRect)
+    ).toEqual(false);
+  });
 });
