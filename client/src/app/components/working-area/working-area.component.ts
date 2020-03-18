@@ -41,12 +41,9 @@ export class WorkingAreaComponent implements OnInit {
   ngOnInit(): void {
     if (history.state.goingToGallery) {
       this.openGallery();
-      console.log('go to gallery');
     } else if (history.state.comingFromEntryPoint) {
       this.createNewProject();
-      console.log('go to create new');
     }
-    console.log('dont go');
   }
 
   getDrawerStatus(): boolean {
