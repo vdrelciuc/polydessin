@@ -12,7 +12,6 @@ import { DrawableService } from '../drawable.service';
   providedIn: 'root'
 })
 export class PolygonService extends DrawableService {
-  private readonly DEFAULT_NSIDES: number = 3;
 
   shapeStyle: ShapeStyle;
   nSides: number;
@@ -35,7 +34,7 @@ export class PolygonService extends DrawableService {
 
   constructor() {
     super();
-    this.nSides = this.DEFAULT_NSIDES;
+    this.nSides = CONSTANT.DEFAULT_NSIDES;
     this.shapeIsEmpty = true;
     this.frenchName = 'Polygone';
     this.shapeStyle = {

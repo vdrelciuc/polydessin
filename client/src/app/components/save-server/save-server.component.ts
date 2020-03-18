@@ -6,6 +6,7 @@ import { Image } from '../../interfaces/image';
 import { ExportService } from '../../services/export/export.service';
 import { SaveServerService } from '../../services/saveServer/save-server.service';
 import { ErrorOnSaveComponent } from './error-on-save/error-on-save.component';
+import { MAX_TAGS_ALLOWED } from 'src/app/classes/constants';
 
 @Component({
   selector: 'app-save-server',
@@ -19,8 +20,6 @@ export class SaveServerComponent implements  AfterViewInit {
   tags: Set<string>;
   tagName: string;
   isSaving: boolean;
-
-  readonly MAX_TAGS_ALLOWED: number = 5;
 
   @ViewChild('mydrawing', {static: false}) canvas: ElementRef;
   @ViewChild('proccessingCanas', {static : false}) proccessingCanas: ElementRef;
@@ -59,7 +58,7 @@ export class SaveServerComponent implements  AfterViewInit {
   }
 
   addTag(tag: string): void {
-    if (this.tags.size < this.MAX_TAGS_ALLOWED) {
+    if (this.tags.size < MAX_TAGS_ALLOWED) {
       const isTagValid = this.saveService.addTag(tag, this.tags);
       if (isTagValid) {
         this.tagName = '';
