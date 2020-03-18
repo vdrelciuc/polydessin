@@ -109,6 +109,7 @@ describe('BrushService', () => {
     service.onMouseMove(eventMocker('mousemove', 0));
     const spy = spyOn(manipulator, 'removeChild');
     service.onMouseOutCanvas(eventMocker('mousemove', 0));
+    expect(service['isDrawing']).not.toBeTruthy();
     expect(spy).toHaveBeenCalled();
   });
 
@@ -117,13 +118,6 @@ describe('BrushService', () => {
     service.onMouseOutCanvas(eventMocker('mousemove', 0));
     expect(service['isDrawing']).not.toBeTruthy();
     expect(spyPushSVG).toHaveBeenCalled();
-  });
-
-  it('#onMouseOutCanvas should remove mousePointer', () => {
-    service.onMouseMove(eventMocker('mousemove', 0));
-    service.onMouseOutCanvas(eventMocker('mousemove', 0));
-    expect(service['isDrawing']).not.toBeTruthy();
-    expect(service['mousePointer']);
   });
 
   it('#onMousePress should init elements', () => {
