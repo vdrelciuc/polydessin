@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
 
-describe('CanvasComponent', () => {
+fdescribe('CanvasComponent', () => {
   let component: CanvasComponent;
   let fixture: ComponentFixture<CanvasComponent>;
 

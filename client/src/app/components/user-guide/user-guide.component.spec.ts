@@ -66,7 +66,7 @@ describe('UserGuideComponent', () => {
   //   expect(component['currentSubCategorie']).toEqual(mocked);
   // });
 
-  it('#findIndex should return index of invalid dparam', () => {
+  it('#findIndex should return index of invalid param', () => {
     expect(component.findIndex('mocked')).toEqual([0, 0, true]);
   });
 

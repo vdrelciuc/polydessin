@@ -4,9 +4,9 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { BrushService } from './brush.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 // tslint:disable: no-magic-numbers no-any
 
 describe('BrushService', () => {
@@ -18,7 +18,7 @@ describe('BrushService', () => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
   const eventMocker = (event: string, keyUsed: number) =>
       new MouseEvent(event, {button: keyUsed, clientX: 10, clientY: 10});
 
@@ -64,7 +64,7 @@ describe('BrushService', () => {
     });
     service = getTestBed().get(BrushService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
+    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
     service.attributes = new DrawablePropertiesService();
     service.initialize(manipulator, image,
         getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
@@ -109,6 +109,7 @@ describe('BrushService', () => {
     service.onMouseMove(eventMocker('mousemove', 0));
     const spy = spyOn(manipulator, 'removeChild');
     service.onMouseOutCanvas(eventMocker('mousemove', 0));
+    expect(service['isDrawing']).not.toBeTruthy();
     expect(spy).toHaveBeenCalled();
   });
 
@@ -117,13 +118,6 @@ describe('BrushService', () => {
     service.onMouseOutCanvas(eventMocker('mousemove', 0));
     expect(service['isDrawing']).not.toBeTruthy();
     expect(spyPushSVG).toHaveBeenCalled();
-  });
-
-  it('#onMouseOutCanvas should remove mousePointer', () => {
-    service.onMouseMove(eventMocker('mousemove', 0));
-    service.onMouseOutCanvas(eventMocker('mousemove', 0));
-    expect(service['isDrawing']).not.toBeTruthy();
-    expect(service['mousePointer'])
   });
 
   it('#onMousePress should init elements', () => {

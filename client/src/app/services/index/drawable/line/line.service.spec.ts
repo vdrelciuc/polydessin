@@ -7,9 +7,10 @@ import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { LineService } from './line.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+// tslint:disable: no-magic-numbers no-any
 
 describe('LineService', () => {
   let service: LineService;
@@ -20,6 +21,7 @@ describe('LineService', () => {
     parentElement.children.push(element);
     return element;
   };
+  let spyPushSVG: jasmine.Spy<InferableFunction>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -62,15 +64,17 @@ describe('LineService', () => {
     });
     service = getTestBed().get(LineService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
+    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
     service['pointerPosition'] = new CoordinatesXY(10, 10);
     service['opacity'] = 0.5;
     service['dotDiameter'] = 5;
     service['thickness'] = 10;
     service.attributes = new DrawablePropertiesService();
-    service.initialize(manipulator, image, 
+    service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
+
+    spyPushSVG = (service['pushElement'] = jasmine.createSpy().and.callFake(() => null));
   });
 
   it('should be created', () => {
@@ -158,6 +162,27 @@ describe('LineService', () => {
     expect(service['shiftPressed']).not.toBeTruthy();
   });
 
+  it('#onKeyReleased should update view when drawing', () => {
+    service.onKeyPressed(
+      new KeyboardEvent('keyup', {shiftKey: true})
+    );
+    const event = new MouseEvent('mouseclick', { clientX: 100, clientY: 100 });
+    service.onMouseMove(event);
+    service.onClick(event);
+    const spy = spyOn(service as any, 'followPointer');
+    service.onKeyReleased(
+      new KeyboardEvent('keyup', {shiftKey: false})
+    );
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(service['shiftPressed']).not.toBeTruthy();
+
+    service.onKeyPressed(
+      new KeyboardEvent('keyup', {shiftKey: true})
+      );
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(service['shiftPressed']).toBeTruthy();
+  });
+
   it('#addPointToLine should add point to line without shift pressed', () => {
     const point = new CoordinatesXY(1, 1);
     const spy = spyOn<CoordinatesXY>(point, 'getClosestPoint');
@@ -173,10 +198,11 @@ describe('LineService', () => {
     service.onDoubleClick(new MouseEvent('mousepress', {}));
     expect(service['isStarted']).not.toBeTruthy();
     expect(service['isDone']).toBeTruthy();
+    expect(spyPushSVG).toHaveBeenCalled();
   });
 
   it('#onDoubleClick should not be within 3px', () => {
-    const mockedPoints = new Stack<CoordinatesXY>(); ;
+    const mockedPoints = new Stack<CoordinatesXY>();
     mockedPoints.push_back(new CoordinatesXY(10, 10));
     const lastPoint = new CoordinatesXY(100, 100);
     mockedPoints.push_back(lastPoint);
@@ -189,33 +215,53 @@ describe('LineService', () => {
       clientY: 100
     }));
     expect(spy).not.toHaveBeenCalledWith(10, 10);
+    expect(spyPushSVG).toHaveBeenCalled();
   });
 
   it('#onDoubleClick should be within 3px', () => {
-    const mockedPoints = new Stack<CoordinatesXY>(); ;
-    mockedPoints.push_back(new CoordinatesXY(10, 10));
-    const lastPoint = new CoordinatesXY(100, 100);
-    mockedPoints.push_back(lastPoint);
-    service['points'] = mockedPoints;
-    service['isDone'] = false;
-    service['isStarted'] = true;
+    service.onMouseMove(new MouseEvent('mousepress', { clientX: 10, clientY: 10 }));
+    service.onClick(new MouseEvent('mousepress', { clientX: 10, clientY: 10 }));
+
+    service.onMouseMove(new MouseEvent('mousepress', { clientX: 101, clientY: 110 }));
+    service.onClick(new MouseEvent('mousepress', { clientX: 101, clientY: 110 }));
+
+    service.onMouseMove(new MouseEvent('mousepress', { clientX: 11, clientY: 11 }));
+    service.onClick(new MouseEvent('mousepress', { clientX: 11, clientY: 11 }));
     const spy = spyOn(service, 'addPointToLine');
-    service.onDoubleClick(new MouseEvent('mousepress', {
-      clientX: 11,
-      clientY: 11
-    }));
-    expect(spy).toHaveBeenCalledWith(10, 10);
+
+    service.onClick(new MouseEvent('mousepress', { clientX: 11, clientY: 11 }));
+    expect(spy).toHaveBeenCalled();
+    const spyCount = spy.calls.count();
+    service.onDoubleClick(new MouseEvent('mousepress', { clientX: 11, clientY: 11 }));
+    expect(spy.calls.count()).toEqual(spyCount);
+    expect(service['points'].size()).toEqual(0);
+    expect(spyPushSVG).toHaveBeenCalled();
   });
 
   it('#onClick should add point', () => {
     service['isStarted'] = true;
     const spy = spyOn(service, 'addPointToLine');
-    const event = new MouseEvent('mouseclick', {
-      clientX: 100,
-      clientY: 100
-    });
+    const event = new MouseEvent('mouseclick', { clientX: 100, clientY: 100 });
     service.onClick(event);
     const effectivePoint = CoordinatesXY.getEffectiveCoords(image, event);
+    expect(spy).toHaveBeenCalledWith(effectivePoint.getX(), effectivePoint.getY());
+  });
+
+  it('#onClick should add point with shift and dots', () => {
+    service.onKeyPressed(new KeyboardEvent('', {shiftKey: true}));
+    service.jointIsDot = true;
+    let event = new MouseEvent('mouseclick', { clientX: 100, clientY: 100 });
+    service.onMouseMove(event);
+    service.onClick(event);
+    service.onClick(event);
+    let effectivePoint = CoordinatesXY.getEffectiveCoords(image, event);
+    const spy = spyOn(service, 'addPointToLine');
+
+    event = new MouseEvent('mouseclick', { clientX: 100, clientY: 151 });
+    effectivePoint = CoordinatesXY.getEffectiveCoords(image, event);
+    service.onMouseMove(event);
+
+    service.onClick(event);
     expect(spy).toHaveBeenCalledWith(effectivePoint.getX(), effectivePoint.getY());
   });
 
@@ -224,10 +270,7 @@ describe('LineService', () => {
     service['jointIsDot'] = true;
     const spy = spyOn(service, 'addPointToLine');
     const spy2 = spyOn(manipulator, 'appendChild');
-    const event = new MouseEvent('mouseclick', {
-      clientX: 100,
-      clientY: 100
-    });
+    const event = new MouseEvent('mouseclick', { clientX: 100, clientY: 100 });
     service.onClick(event);
     const effectivePoint = CoordinatesXY.getEffectiveCoords(image, event);
     expect(spy).toHaveBeenCalledWith(effectivePoint.getX(), effectivePoint.getY());
@@ -238,10 +281,7 @@ describe('LineService', () => {
   it('#onClick should add first point', () => {
     const spy = spyOn(service, 'addPointToLine');
     const spy2 = spyOn(manipulator, 'appendChild');
-    const event = new MouseEvent('mouseclick', {
-      clientX: 100,
-      clientY: 100
-    });
+    const event = new MouseEvent('mouseclick', { clientX: 100, clientY: 100 });
     service.onClick(event);
     const effectivePoint = CoordinatesXY.getEffectiveCoords(image, event);
     expect(spy).toHaveBeenCalledWith(effectivePoint.getX(), effectivePoint.getY());
@@ -249,10 +289,12 @@ describe('LineService', () => {
   });
 
   it('#deleteLine should clear everything', () => {
+    service.onMouseMove(new MouseEvent('mousepress', { clientX: 11, clientY: 11 }));
+    service.onClick(new MouseEvent('mousepress', { clientX: 11, clientY: 11 }));
     service.deleteLine();
     expect(service['isDone']).toBeTruthy();
     expect(service['isStarted']).not.toBeTruthy();
-    expect(service['points'].getRoot()).toBe(undefined)
+    expect(service['points'].getRoot()).toBeUndefined();
   });
 
   it('#removeLastPoint should remove last point with junction is dot', () => {
@@ -282,5 +324,22 @@ describe('LineService', () => {
     service['shiftPressed'] = false;
     service.removeLastPoint();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('#endTool should remove everything', () => {
+    const mockedRemoveChild = (el: SVGGElement): void => { /*Much Wow*/ };
+    service.onMouseMove(new MouseEvent('mousepress', { clientX: 11, clientY: 11 }));
+    service.onClick(new MouseEvent('mousepress', { clientX: 11, clientY: 11 }));
+    service.onMouseMove(new MouseEvent('mousepress', { clientX: 11, clientY: 11 }));
+    const removeChild = (service['subElement'].remove = jasmine.createSpy().and.callFake(mockedRemoveChild));
+    let removeCount = removeChild.calls.count();
+    service['endTool']();
+    expect(removeChild.calls.count()).toBeGreaterThan(removeCount);
+    removeCount = removeChild.calls.count();
+
+    service['endTool']();
+
+    service.onMouseMove(new MouseEvent('mousepress', { clientX: 11, clientY: 11 }));
+    expect(removeChild.calls.count()).toEqual(removeCount);
   });
 });

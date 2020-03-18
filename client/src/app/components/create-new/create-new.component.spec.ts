@@ -109,7 +109,7 @@ describe('CreateNewComponent', () => {
 
   it('#onConfirm should open warning message', () => {
     component['canvasService']['layerCount'] = 1;
-    const spy = spyOn(component, 'openDialogWarning');
+    const spy = (component.openDialogWarning = jasmine.createSpy().and.callFake(() => null));
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       component.onConfirm();
