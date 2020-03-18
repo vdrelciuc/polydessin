@@ -37,6 +37,8 @@ export abstract class DrawableService {
     });
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, nextID.toString());
     this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
+    this.drawStack.isAdding.next(true);
+
   }
 
   abstract initialize(
@@ -45,7 +47,7 @@ export abstract class DrawableService {
     colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService,
     ): void;
-    
+
   initializeProperties(): void { /*To Override if needed*/};
   onMouseInCanvas(event: MouseEvent): void { /*To Override if needed*/}
   onMouseOutCanvas(event: MouseEvent): void { /*To Override if needed*/}
