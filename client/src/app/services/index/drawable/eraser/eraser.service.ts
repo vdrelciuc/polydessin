@@ -66,6 +66,7 @@ export class EraserService extends DrawableService {
 
   onMouseOutCanvas(): void {
     this.canErase = false;
+    this.leftClick = false;
   }
 
   onMouseInCanvas(): void {

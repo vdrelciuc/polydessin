@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DrawStackService } from './draw-stack.service';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
+import { DrawStackService } from './draw-stack.service';
+// tslint:disable: no-magic-numbers no-any
 
 describe('DrawStackService', () => {
   let service: DrawStackService;
@@ -37,13 +38,11 @@ describe('DrawStackService', () => {
 
   it('#addElementWithInfos should not add duplicated element', () => {
     mockedSVGElementInfo.id = 0;
+    service['elements'].push_back(mockedSVGElementInfo);
     const spy = spyOn(service['elements'], 'insert');
     service.addElementWithInfos(mockedSVGElementInfo);
-    service.addElementWithInfos(mockedSVGElementInfo);
     expect(service['elements'].getAll().length).toEqual(1);
-    expect(service['nextId']).toEqual(1);
-    expect(service.changeAt.value).toEqual(0);
-    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('#addElementWithInfos should add first element with good id', () => {
@@ -122,10 +121,11 @@ describe('DrawStackService', () => {
   it('#removeElements should remove elements from 1', () => {
     mockedSVGElementInfo.id = 0;
     service['elements'].push_back(mockedSVGElementInfo);
-    mockedSVGElementInfo.id = 1;
-    service['elements'].push_back(mockedSVGElementInfo);
-    mockedSVGElementInfo.id = 2;
-    service['elements'].push_back(mockedSVGElementInfo);
+    const mockedSVGElementInfo1 = { target: { } as SVGGElement, id: 1 };
+    const mockedSVGElementInfo2 = { target: { } as SVGGElement, id: 2 };
+    service['elements'].push_back(mockedSVGElementInfo1);
+    service['elements'].push_back(mockedSVGElementInfo2);
+
     expect(service.removeElements(1).getAll().length).toEqual(2);
     expect(service['elements'].getAll().length).toEqual(1);
   });
@@ -135,7 +135,7 @@ describe('DrawStackService', () => {
     service.addSVG(mockedSVGElementInfo.target as SVGElement);
     expect(service.addedSVG.value).not.toEqual(undefined);
     expect(service.addedSVG.value).not.toEqual(undefined);
-    if(service.addedSVG.value !== undefined) {
+    if (service.addedSVG.value !== undefined) {
       expect(service.addedSVG.value.getBoundingClientRect()).toEqual(new DOMRect(100, 100, 50, 50));
     }
   });
@@ -145,7 +145,7 @@ describe('DrawStackService', () => {
     service.addSVGToRedo(mockedSVGElementInfo.target as SVGElement);
     expect(service.addedToRedo.value).not.toEqual(undefined);
     expect(service.addedToRedo.value).not.toEqual(undefined);
-    if(service.addedToRedo.value !== undefined) {
+    if (service.addedToRedo.value !== undefined) {
       expect(service.addedToRedo.value.getBoundingClientRect()).toEqual(new DOMRect(100, 100, 50, 50));
     }
   });
@@ -157,7 +157,7 @@ describe('DrawStackService', () => {
     expect(service.addedSVG.value).not.toEqual(undefined);
     expect(service.addedSVG.value).not.toEqual(undefined);
     expect(service.reset.value).toEqual(true);
-    if(service.addedSVG.value !== undefined) {
+    if (service.addedSVG.value !== undefined) {
       expect(service.addedSVG.value.getBoundingClientRect()).toEqual(new DOMRect(100, 100, 50, 50));
     }
   });
@@ -177,35 +177,32 @@ describe('DrawStackService', () => {
     expect(service.size()).toEqual(1);
   });
 
-
   it('#findTopElementAt shouldn\'t find element, stack is empty', () => {
-    expect(service.findTopElementAt(new CoordinatesXY(10,10))).toEqual(undefined);
+    expect(service.findTopElementAt(new CoordinatesXY(10, 10))).toEqual(undefined);
   });
 
   it('#findTopElementAt should find the element at the correct position', () => {
     const mockedStack = new Stack<SVGElementInfos>();
-    const element1 = {getBoundingClientRect: () => new DOMRect(10,10,100,100)};
-    const element2 = {getBoundingClientRect: () => new DOMRect(1000,1000,10,10)};
+    const element1 = {getBoundingClientRect: () => new DOMRect(10, 10, 100, 100)};
+    const element2 = {getBoundingClientRect: () => new DOMRect(1000, 1000, 10, 10)};
     mockedStack.push_back({target: element1 as unknown as SVGGElement, id: 0 });
     mockedStack.push_back({target: element2 as unknown as SVGGElement, id: 1 });
     const foundElement = DrawStackService.findTopElementAt(
-      new CoordinatesXY(10,10),
+      new CoordinatesXY(11, 11),
       mockedStack
     );
-    if(foundElement !== undefined) {
+    expect(foundElement).not.toBeUndefined();
+    if (foundElement !== undefined) {
       expect(foundElement.id).toEqual(0);
     }
-    else {
-      expect(false).toBeTruthy();
-    }
-  }); 
-  
+  });
+
   it('#hasElementIn should find correct element', () => {
     service['elements'] = new Stack<SVGElementInfos>();
     service['elements'].push_back(mockedSVGElementInfo);
     expect(service.hasElementIn(0, new DOMRect(75, 75 , 100, 100))).toEqual(mockedSVGElementInfo);
   });
-  
+
   it('#hasElementIn should return undefined (no element in surface)', () => {
     service['elements'] = new Stack<SVGElementInfos>();
     service['elements'].push_back(mockedSVGElementInfo);
@@ -219,8 +216,8 @@ describe('DrawStackService', () => {
   it('#getRoot should get first element', () => {
     mockedSVGElementInfo.id = 99;
     service['elements'].push_back(mockedSVGElementInfo);
-    const popedRoot = service.getRoot()
-    if(popedRoot !== undefined) {
+    const popedRoot = service.getRoot();
+    if (popedRoot !== undefined) {
       expect(popedRoot.id).toEqual(99);
     } else {
       expect(false).toBeTruthy();

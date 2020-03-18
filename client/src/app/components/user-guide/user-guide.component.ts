@@ -91,7 +91,7 @@ export class UserGuideComponent implements OnInit {
    *
    *
    */
-  findIndex(nom: string): any[] {
+  findIndex(nom: string): [number, number, boolean] {
     for (let i = 0 ; i < this.categories.length ; ++i) {
       for (let j = 0 ; j < this.categories[i].type.elements.length ; ++j) {
         if (nom === this.categories[i].type.elements[j].nom) {

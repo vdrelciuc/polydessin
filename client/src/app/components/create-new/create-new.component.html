@@ -4,11 +4,11 @@
     <h6>Dimensions</h6>
     <div>
       <label for="width">Largeur : </label>
-      <input type="number" id="width" min="1"  oninput="validity.valid||(value='');" [value]="workspaceSize.getX()" (input) = "setcanvasSizeX($event)">
+      <input type="number" id="width" min="1"  oninput="validity.valid||(value='');" [value]="workspaceSizeX" (input) = "setcanvasSizeX($event)">
     </div>
     <div>
       <label for="height">Hauteur : </label>
-      <input type="number" id="height" min="1" oninput="validity.valid||(value='');" [value]="workspaceSize.getY()" (input) = "setcanvasSizeY($event)">
+      <input type="number" id="height" min="1" oninput="validity.valid||(value='');" [value]="workspaceSizeY" (input) = "setcanvasSizeY($event)">
     </div>
   </div>
   <div class="settings-section">

@@ -93,12 +93,9 @@ export class PolygonService extends DrawableService {
       if (this.shapeIsEmpty) {
         this.manipulator.removeChild(this.image.nativeElement, this.subElement);
       } else {
-        this.manipulator.removeChild(this.subElement, this.perimeter);
-        this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
-        this.drawStack.addElementWithInfos({
-          target: this.subElement,
-          id: this.ID
-        });
+        this.perimeter.remove();
+        this.perimeterAlternative.remove();
+        this.pushElement();
       }
     }
   }

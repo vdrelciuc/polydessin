@@ -3,10 +3,9 @@ import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-// import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +17,8 @@ export class PencilService extends DrawableService {
   private previousY: number;
   thickness: number;
   isDrawing: boolean;
-  private line: SVGPathElement;
-  private mousePointer: SVGCircleElement;
+  protected line: SVGPathElement;
+  protected mousePointer: SVGCircleElement;
   private color: Color;
   opacity: number;
   attributes: DrawablePropertiesService;
@@ -33,8 +32,8 @@ export class PencilService extends DrawableService {
   }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
-    colorSelectorService: ColorSelectorService,
-    drawStack: DrawStackService): void {
+             colorSelectorService: ColorSelectorService,
+             drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
       this.initializeProperties();
     }
@@ -60,11 +59,14 @@ export class PencilService extends DrawableService {
 
   onMouseOutCanvas(event: MouseEvent): void {
     if (this.isDrawing) {
+      this.addPath(event.clientX, event.clientY);
+      this.isDrawing = false;
       this.pushElement();
     }
-    this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
-    delete(this.mousePointer);
-    this.isDrawing = false;
+    if (this.mousePointer !== undefined) {
+      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      delete(this.mousePointer);
+    }
   }
 
   onMousePress(event: MouseEvent): void {
@@ -92,14 +94,12 @@ export class PencilService extends DrawableService {
   }
 
   onMouseRelease(event: MouseEvent): void {
-    // if (event.button === CONSTANTS.MOUSE_LEFT) { // 0 for the left mouse button
     if (this.isDrawing) {
-        this.endPath();
-        this.isDrawing = false;
-        this.pushElement();
-        this.updateCursor(event.clientX, event.clientY);
-      }
-      // }
+      this.addPath(event.clientX, event.clientY);
+      this.isDrawing = false;
+      this.pushElement();
+      this.updateCursor(event.clientX, event.clientY);
+    }
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -111,11 +111,12 @@ export class PencilService extends DrawableService {
   }
 
   endTool(): void {
-    if(this.isDrawing) {
-      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    if (this.isDrawing) {
+      this.subElement.remove();
+      delete(this.subElement);
     }
     if (this.mousePointer !== undefined) {
-      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      this.mousePointer.remove();
       delete(this.mousePointer);
     }
 
@@ -123,13 +124,13 @@ export class PencilService extends DrawableService {
     this.path = '';
   }
 
-  private beginDraw(clientX: number, clientY: number) {
+  private beginDraw(clientX: number, clientY: number): void {
     this.previousX = clientX;
     this.previousY = clientY;
     this.path = `M ${CoordinatesXY.effectiveX(this.image, clientX)},${CoordinatesXY.effectiveY(this.image, clientY)}`;
   }
 
-  private addPath(clientX: number, clientY: number) {
+  private addPath(clientX: number, clientY: number): void {
     const pathToAdd = ` l ${clientX - this.previousX},${clientY - this.previousY}`;
     this.previousX = clientX;
     this.previousY = clientY;
@@ -137,23 +138,16 @@ export class PencilService extends DrawableService {
     this.manipulator.setAttribute(this.line, 'd', this.path);
   }
 
-  private endPath() {
-    if (this.path.indexOf('l') === -1) {
-      this.path = this.path + (' l 0,0');
-    }
-    this.manipulator.setAttribute(this.line, 'd', this.path);
-  }
-
-  private updateCursor(clientX: number, clientY: number) {
+  private updateCursor(clientX: number, clientY: number): void {
     if (this.mousePointer === undefined) {
-      this.createCircle(clientX, clientY);
+      this.createCircle(CoordinatesXY.effectiveX(this.image, clientX), CoordinatesXY.effectiveY(this.image, clientY));
     } else {
       this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
       this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
     }
   }
 
-  private createCircle(x: number, y: number): void {
+  protected createCircle(x: number, y: number): void {
     this.mousePointer = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, this.color.getHex());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.globalOpacity, this.opacity.toString());

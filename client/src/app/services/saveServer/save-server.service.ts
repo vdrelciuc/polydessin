@@ -14,20 +14,17 @@ export class SaveServerService {
   private readonly REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,16}$/; // Alphanumeric, space and dash: 3 to 16 chars
   private readonly REGEX_TAG: RegExp = /^[A-Za-z0-9]{1,10}$/; // Alphanumeric, 1 to 10 chars
   private readonly HTTP_STATUS_OK: number = 201;
-  innerHtml: string;
+  private innerHtml: string;
   refToSvg: ElementRef<SVGElement>;
 
-  constructor(private http: HttpClient,
-              private snacks: MatSnackBar) {
-    this.innerHtml = '';
+  constructor(
+    private http: HttpClient,
+    private snacks: MatSnackBar) {
+      this.innerHtml = '';
   }
 
   checkTitleValidity(title: string): boolean {
     return this.REGEX_TITLE.test(title);
-  }
-
-  private checkTagValidity(tag: string): boolean {
-    return this.REGEX_TAG.test(tag);
   }
 
   addTag(etiquette: string, data: Set<string>): boolean {
@@ -65,5 +62,9 @@ export class SaveServerService {
         background: this.refToSvg.nativeElement.style.backgroundColor
       }
     );
+  }
+
+  private checkTagValidity(tag: string): boolean {
+    return this.REGEX_TAG.test(tag);
   }
 }
