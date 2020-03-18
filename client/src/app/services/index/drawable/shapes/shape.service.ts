@@ -143,7 +143,7 @@ export abstract class ShapeService extends DrawableService {
 
   endTool(): void {
     this.shiftPressed = false;
-    if (this.subElement !== undefined) {
+    if (this.subElement !== undefined && this.isChanging) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
   }

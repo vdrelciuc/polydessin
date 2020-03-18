@@ -33,15 +33,12 @@ export class UndoRedoService {
       );
       this.drawStack.addedToRedo.subscribe(
         () => {
-          // const svg = this.drawStack.addedToRedo.value;
-          // if(svg !== undefined) {
           const svg = this.drawStack.addedToRedo.value;
           if(svg !== undefined) {
             this.removed.push_back(this.currentSVG);
             this.currentSVG = svg;
             this.drawStack.addedToRedo.next(undefined);
           }
-          // }
         }
       );
       this.drawStack.reset.subscribe(
