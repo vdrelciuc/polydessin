@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { Image } from '../../interfaces/image';
-import {SVGProperties} from "../../classes/svg-properties";
+import {SVGProperties} from "../../classes/svg-html-properties";
 
 @Injectable({
   providedIn: 'root'

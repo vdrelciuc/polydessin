@@ -1,5 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { SVGProperties } from '../../../../classes/svg-properties';
+import { SVGProperties } from '../../../../classes/svg-html-properties';
 import { ColorSelectorService } from '../../../color-selector.service';
 import { DrawStackService } from '../../../tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
@@ -90,11 +90,11 @@ export class ColorApplicatorService extends DrawableService {
 
   private shapeChange(clickedElement: SVGElement, newColor: string, newOpacity: string, isFill: boolean): void {
     this.manipulator.setAttribute(clickedElement, isFill ? SVGProperties.fill : SVGProperties.color, newColor);
-    this.manipulator.setAttribute(clickedElement, isFill ? SVGProperties.fillOpacity : SVGProperties.colorOpacity, newOpacity);
+    this.manipulator.setAttribute(clickedElement, isFill ? SVGProperties.fillOpacity : SVGProperties.borderOpacity, newOpacity);
   }
 
   private pathChange(clickedElement: SVGElement, newColor: string, newOpacity: string): void {
     this.manipulator.setAttribute(clickedElement, SVGProperties.color, newColor);
-    this.manipulator.setAttribute(clickedElement, SVGProperties.colorOpacity, newOpacity);
+    this.manipulator.setAttribute(clickedElement, SVGProperties.borderOpacity, newOpacity);
   }
 }

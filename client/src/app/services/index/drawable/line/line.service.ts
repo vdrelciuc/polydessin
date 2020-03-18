@@ -122,7 +122,7 @@ export class LineService extends DrawableService {
     }
     this.manipulator.setAttribute(
         this.line,
-        SVGProperties.pointsList,
+        SVGProperties.points,
         previewPoints
     );
   }
@@ -243,7 +243,7 @@ export class LineService extends DrawableService {
     let previewPoints = this.pointsToString();
     // Removing last 8 characters, which correspond to a point in SVG attribute
     previewPoints = previewPoints.slice(0, -this.SIZEOF_POINT);
-    this.manipulator.setAttribute(this.line, SVGProperties.pointsList, previewPoints);
+    this.manipulator.setAttribute(this.line, SVGProperties.points, previewPoints);
   }
 
   getLineIsDone(): boolean { return this.isDone; }
@@ -251,7 +251,7 @@ export class LineService extends DrawableService {
   private updateLine(): void {
     this.manipulator.setAttribute(
       this.line,
-      SVGProperties.pointsList,
+      SVGProperties.points,
       this.pointsToString()
     );
   }

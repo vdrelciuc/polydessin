@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ElementRef, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
-import { SVGProperties } from '../../classes/svg-properties';
+import { SVGProperties } from '../../classes/svg-html-properties';
 import { Image } from '../../interfaces/image';
 
 @Injectable({
