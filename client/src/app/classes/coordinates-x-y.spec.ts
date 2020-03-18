@@ -1,4 +1,5 @@
 import { CoordinatesXY } from './coordinates-x-y';
+import { ElementRef } from '@angular/core';
 
 describe('CoordinatedXY', () => {
 
@@ -19,11 +20,39 @@ describe('CoordinatedXY', () => {
   });
 
   it('#effectiveX should get effective x', () => {
-    // TODO: create test one day
+    expect(
+      CoordinatesXY.effectiveX(
+        {
+          nativeElement: {
+            getBoundingClientRect: () => (
+              {
+                left: 100,
+                top: 100
+              }
+            )
+          } as unknown as SVGElement
+        } as unknown as ElementRef<SVGElement>,
+        1000
+      )
+    ).toEqual(900);
   });
 
   it('#effectiveY should get effective y', () => {
-    // TODO: create test one day
+    expect(
+      CoordinatesXY.effectiveY(
+        {
+          nativeElement: {
+            getBoundingClientRect: () => (
+              {
+                left: 100,
+                top: 100
+              }
+            )
+          } as unknown as SVGElement
+        } as unknown as ElementRef<SVGElement>,
+        1000
+      )
+    ).toEqual(900);
   });
 
   it('#getCoords should get coordinates', () => {
@@ -89,13 +118,26 @@ describe('CoordinatedXY', () => {
     expect(closest.getY()).toEqual(0);
   });
 
-  it('#inRadius should not be in radius', () => {
+  it('#inRadius should be in radius', () => {
+    point = new CoordinatesXY(100, 100);
     expect(
       point.inRadius({
-        right: 100,
-        left: -1,
-        top: -1,
-        bottom: 100
+        right: 101,
+        left: 99,
+        top: 99,
+        bottom: 101
+      } as DOMRect)
+    ).toEqual(true);
+  });
+
+  it('#inRadius should NOT be in radius', () => {
+    point = new CoordinatesXY(100, 100);
+    expect(
+      point.inRadius({
+        right: 99,
+        left: 99,
+        top: 99,
+        bottom: 101
       } as DOMRect)
     ).toEqual(false);
   });
