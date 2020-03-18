@@ -14,7 +14,7 @@ export enum TransformType {
 export class Transform {
 
   static needsUpdate: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  private static elementsToTransform: SVGGElement[] = [];
+  static elementsToTransform: SVGGElement[] = [];
   private static manipulator: Renderer2;
 
   static setElements(elements: Stack<SVGGElement>, manipulator: Renderer2): void {

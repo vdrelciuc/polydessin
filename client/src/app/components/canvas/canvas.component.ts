@@ -14,6 +14,7 @@ import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import {SaveServerService} from "../../services/saveServer/save-server.service";
 import {GalleryService} from "../../services/gallery/gallery.service";
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 
 @Component({
   selector: 'app-canvas',
@@ -53,6 +54,7 @@ export class CanvasComponent implements OnInit {
     this.filters = this.image.nativeElement.innerHTML;
     this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack,this.invisibleCanvas);
     this.exportService.initialize(this.image);
+    ClipboardService.initialize(this.manipulator, this.image, this.drawStack);
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
     this.eventListener.initializeEvents();
     this.gridService = this.toolSelector.getGrid();

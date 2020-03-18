@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Transform } from 'src/app/classes/transformations';
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 
 @Injectable({
@@ -11,10 +12,15 @@ export class SelectionTransformShortcutService {
   readonly moveDelay: number  = 100;
   readonly unitMove: number  = 3;
 
+  private readonly REGEX_ARROW: RegExp = /^Arrow/i;
   readonly left: string = 'ArrowLeft';
   readonly down: string = 'ArrowDown';
   readonly right: string = 'ArrowRight';
   readonly up: string = 'ArrowUp';
+  readonly ctrl: string = 'Control';
+  readonly x: string = 'x';
+  readonly c: string = 'c';
+  readonly v: string = 'v';
 
   private lastKeyPressed: string;
 
@@ -22,6 +28,7 @@ export class SelectionTransformShortcutService {
   private rightArrowIsPressed: boolean;
   private upArrowIsPressed: boolean;
   private downArrowIsPressed: boolean;
+  private ctrlIsPressed: boolean;
 
   private manipulator: Renderer2;
   private image: ElementRef<SVGElement>;
@@ -54,6 +61,36 @@ export class SelectionTransformShortcutService {
   }
 
   private onKeyDown(keyPressed: string): void {
+    if (this.REGEX_ARROW.test(keyPressed)) {
+      this.arrowPressed(keyPressed);
+    } else {
+      switch (keyPressed) {
+        case this.ctrl:
+          this.ctrlIsPressed = true;
+          break;
+          case this.x:
+            if (this.ctrlIsPressed) {
+              /* wow */
+            }
+            break;
+          case this.c:
+            if (this.ctrlIsPressed) {
+              ClipboardService.copy();
+            }
+            break;
+          case this.v:
+            if (this.ctrlIsPressed) {
+              ClipboardService.paste();
+            }
+            break;
+        default:
+          break;
+      }
+    }
+    this.lastKeyPressed = keyPressed;
+  }
+
+  private arrowPressed(keyPressed: string): void {
     switch (keyPressed) {
       case this.left:
         this.leftArrowIsPressed = true;
@@ -79,9 +116,7 @@ export class SelectionTransformShortcutService {
           Transform.translate(0, this.unitMove);
         }
         break;
-      default:
-        break;
-    }
+      }
 
     this.isMoving = true;
     if (!this.autoMoveHasInstance && (this.upArrowIsPressed || this.downArrowIsPressed
@@ -89,12 +124,13 @@ export class SelectionTransformShortcutService {
       this.autoMoveHasInstance = true;
       this.autoMove();
     }
-
-    this.lastKeyPressed = keyPressed;
   }
 
   private onKeyUp(keyReleased: string): void {
     switch (keyReleased) {
+      case this.ctrl:
+        this.ctrlIsPressed = false;
+        break;
       case this.left:
         this.leftArrowIsPressed = false;
         break;

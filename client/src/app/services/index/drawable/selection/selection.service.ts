@@ -7,6 +7,7 @@ import { Transform } from 'src/app/classes/transformations';
 import { SelectionState } from 'src/app/enums/selection-states';
 import { Tools } from 'src/app/enums/tools';
 import { BoundingBox } from 'src/app/interfaces/bounding-box';
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
@@ -43,6 +44,10 @@ export class SelectionService extends DrawableService {
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
     this.setupProperties();
     Transform.needsUpdate.subscribe( () => { this.setGeneratedAreaBorders(); } );
+    ClipboardService.pastedElements.subscribe( (paste) => {
+      this.selectedElements.clear();
+      for (const element of paste) { this.selectedElements.push_back(element); }
+      this.setGeneratedAreaBorders(); } );
   }
   initializeProperties(): void { /* No properties to initialize */ }
   cancelSelection(): void {
@@ -72,8 +77,7 @@ export class SelectionService extends DrawableService {
     const target = (event.target as SVGElement).parentNode as SVGGElement;
     this.clickedElement = (target.tagName === 'APP-CANVAS' || target === this.resizeGroup) ? null : target;
 
-    if (this.state !== SelectionState.idle) {
-      this.onMouseRelease(event);
+    if (this.state !== SelectionState.idle) { this.onMouseRelease(event);
     } else if (event.button === 0) {
       // Left click
       if (controlPointClicked >= 0) {
@@ -255,7 +259,6 @@ export class SelectionService extends DrawableService {
 
   private addOrInvertEachElementInRect(): void {
     const stack = new Stack<SVGGElement>();
-
     for (let i = 1; i < this.image.nativeElement.childNodes.length; i++) {
       const element = this.image.nativeElement.childNodes[i] as SVGGElement;
       if (element !== this.resizeGroup && element !== this.subElement) {
