@@ -74,7 +74,7 @@ describe('PolygonService', () => {
   });
 
   it('#constructor should set default properties', () => {
-    expect(service['nSides']).toEqual(service['DEFAULT_NSIDES']);
+    expect(service['nSides']).toEqual(CONSTANT.DEFAULT_NSIDES);
     expect(service['shapeIsEmpty']).toBe(true);
     expect(service.frenchName).toEqual('Polygone');
     expect(service.shapeStyle.thickness).toEqual(CONSTANT.THICKNESS_DEFAULT);
@@ -185,12 +185,14 @@ describe('PolygonService', () => {
   });
 
   it('#onMouseRelease should create shape', () => {
-    const spy = spyOn(service['drawStack'], 'addElementWithInfos');
     service.onMousePress(eventMocker('Hello ', 0, 0, 0));
     const randomMovePosition = 50;
     service.onMouseMove(eventMocker('it\'s ', 0, randomMovePosition, randomMovePosition));
+    const spy = (service['pushElement'] = jasmine.createSpy().and.callFake(() => null));
+    const spy2 = (service['perimeter'].remove = jasmine.createSpy().and.callFake(() => null));
     service.onMouseRelease(eventMocker('me!', 0, randomMovePosition, randomMovePosition));
-    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy2).toHaveBeenCalledTimes(2);
   });
 
   it('#onMouseInCanvas should update shape', () => {

@@ -17,8 +17,8 @@ export class PencilService extends DrawableService {
   private previousY: number;
   thickness: number;
   isDrawing: boolean;
-  private line: SVGPathElement;
-  private mousePointer: SVGCircleElement;
+  protected line: SVGPathElement;
+  protected mousePointer: SVGCircleElement;
   private color: Color;
   opacity: number;
   attributes: DrawablePropertiesService;
@@ -112,11 +112,11 @@ export class PencilService extends DrawableService {
 
   endTool(): void {
     if (this.isDrawing) {
-      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+      this.subElement.remove();
       delete(this.subElement);
     }
     if (this.mousePointer !== undefined) {
-      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      this.mousePointer.remove();
       delete(this.mousePointer);
     }
 
@@ -140,14 +140,14 @@ export class PencilService extends DrawableService {
 
   private updateCursor(clientX: number, clientY: number): void {
     if (this.mousePointer === undefined) {
-      this.createCircle(clientX, clientY);
+      this.createCircle(CoordinatesXY.effectiveX(this.image, clientX), CoordinatesXY.effectiveY(this.image, clientY));
     } else {
       this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
       this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
     }
   }
 
-  private createCircle(x: number, y: number): void {
+  protected createCircle(x: number, y: number): void {
     this.mousePointer = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, this.color.getHex());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.globalOpacity, this.opacity.toString());

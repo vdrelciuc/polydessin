@@ -1,22 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Stack } from 'src/app/classes/stack';
-import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { BehaviorSubject } from 'rxjs';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { Stack } from 'src/app/classes/stack';
+import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DrawStackService {
-
-  private elements: Stack<SVGElementInfos>;
-  private nextId: number;
-  isAdding: BehaviorSubject<boolean>;
-  changeAt: BehaviorSubject<number>
-  addedSVG: BehaviorSubject<SVGElement | undefined>;
-  addedToRedo: BehaviorSubject<SVGElement | undefined>;
-  reset: BehaviorSubject<boolean>;
-  newSVG: BehaviorSubject<boolean>;
 
   constructor() {
     this.elements = new Stack<SVGElementInfos>();
@@ -29,11 +20,30 @@ export class DrawStackService {
     this.newSVG = new BehaviorSubject<boolean>(false);
   }
 
+  private elements: Stack<SVGElementInfos>;
+  private nextId: number;
+  isAdding: BehaviorSubject<boolean>;
+  changeAt: BehaviorSubject<number>;
+  addedSVG: BehaviorSubject<SVGElement | undefined>;
+  addedToRedo: BehaviorSubject<SVGElement | undefined>;
+  reset: BehaviorSubject<boolean>;
+  newSVG: BehaviorSubject<boolean>;
+
+  static findTopElementAt(position: CoordinatesXY, elements: Stack<SVGElementInfos>): SVGElementInfos | undefined {
+    const array = elements.getAll();
+    for (let i: number = array.length - 1; i >= 0; i--) {
+      if (position.inRadius(array[i].target.getBoundingClientRect())) {
+        return array[i];
+      }
+    }
+    return undefined;
+  }
+
   getAll(): Stack<SVGElementInfos> { return this.elements; }
 
   addElementWithInfos(toAdd: SVGElementInfos): void {
-    if(toAdd !== undefined && !this.exists(toAdd.id)) {
-      if(toAdd.id < this.nextId) {
+    if (toAdd !== undefined && !this.exists(toAdd.id)) {
+      if (toAdd.id < this.nextId) {
         this.changeAt.next(toAdd.id);
       }
       this.isAdding.next(true);
@@ -49,8 +59,8 @@ export class DrawStackService {
   // }
 
   removeElement(toRemove: number): void  {
-    for(const element of this.elements.getAll()) {
-      if(element.id === toRemove) {
+    for (const element of this.elements.getAll()) {
+      if (element.id === toRemove) {
         this.elements.delete(element);
         this.nextId--;
       }
@@ -59,7 +69,7 @@ export class DrawStackService {
 
   removeLastElement(): SVGElementInfos | undefined {
     const lastElement = this.elements.pop_back();
-    if(lastElement !== undefined) {
+    if (lastElement !== undefined) {
       this.isAdding.next(false);
       this.nextId--;
     }
@@ -67,12 +77,12 @@ export class DrawStackService {
   }
 
   removeElements(from: number): Stack<SVGElementInfos> {
-    let toRemove = new Stack<SVGElementInfos>();
+    const toRemove = new Stack<SVGElementInfos>();
     let poped = this.elements.pop_back();
-    while(poped !== undefined) {
+    while (poped !== undefined) {
       toRemove.push_front(poped);
       poped = this.elements.pop_back();
-      if(poped !== undefined && poped.id < from) {
+      if (poped !== undefined && poped.id < from) {
         this.elements.push_back(poped);
         break;
       }
@@ -110,16 +120,6 @@ export class DrawStackService {
     return DrawStackService.findTopElementAt(position, this.elements);
   }
 
-  static findTopElementAt(position: CoordinatesXY, elements: Stack<SVGElementInfos>): SVGElementInfos | undefined {
-    const array = elements.getAll();
-    for(let i: number = array.length - 1; i >= 0; i--) {
-      if(position.inRadius(array[i].target.getBoundingClientRect())) {
-        return array[i];
-      }
-    }
-    return undefined;
-  }
-
   hasElementIn(elementID: number, zone: DOMRect): SVGElementInfos | undefined {
     const element = this.elements.getAll()[elementID].target.getBoundingClientRect();
     const isIncludedX = zone.left <= element.right && zone.right >= element.left;
@@ -127,7 +127,7 @@ export class DrawStackService {
 
     return (isIncludedX && isIncludedY) ? this.elements.getAll()[elementID] : undefined;
   }
-  
+
   getRoot(): SVGElementInfos | undefined {
     return this.elements.getRoot();
   }
@@ -135,8 +135,8 @@ export class DrawStackService {
   getNextID(): number { return this.nextId; }
 
   private exists(id: number): boolean {
-    for(const element of this.elements.getAll()) {
-      if(element.id === id) {
+    for (const element of this.elements.getAll()) {
+      if (element.id === id) {
         return true;
       }
     }

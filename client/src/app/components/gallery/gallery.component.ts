@@ -7,6 +7,7 @@ import { Image } from '../../interfaces/image';
 import { GalleryService } from '../../services/gallery/gallery.service';
 import { SaveServerService } from '../../services/saveServer/save-server.service';
 import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
+import { TILE_WIDTH_PX } from 'src/app/classes/constants'
 
 @Component({
   selector: 'app-gallery',
@@ -22,8 +23,6 @@ export class GalleryComponent implements OnInit {
   tagName: string;
   hoveredIndex: number;
   isLoading: boolean;
-
-  readonly TILE_WIDTH_PX: number = 250;
 
   constructor(private dialogRef: MatDialogRef<GalleryComponent>,
               private saveService: SaveServerService,
@@ -153,7 +152,7 @@ export class GalleryComponent implements OnInit {
   getTableWidth(): string {
     const rows = Math.floor((this.resultImages.length / 2)) +
       (this.resultImages.length % 2); // we want 1-2 to take 1st row, 3-4 to take 2nd row...
-    const width = rows * this.TILE_WIDTH_PX;
+    const width = rows * TILE_WIDTH_PX;
     return width + 'px';
   }
 

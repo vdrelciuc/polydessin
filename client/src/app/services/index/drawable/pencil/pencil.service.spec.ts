@@ -152,21 +152,31 @@ describe('PencilService', () => {
   });
 
   it('#endTool should remove everything', () => {
+    const mockedRemoveChild = (el: SVGGElement): void => { /*Much Wow*/ };
     service.onMousePress(eventMocker('mousemouve', 0));
+    const removeChild = (service['subElement'].remove = jasmine.createSpy().and.callFake(mockedRemoveChild));
+    let removeCount = removeChild.calls.count();
     service.onMouseMove(eventMocker('mousemouve', 0));
     expect(service['subElement']).not.toBeUndefined();
     expect(service['mousePointer']).toBeUndefined();
+    expect(removeChild.calls.count()).toEqual(removeCount);
+    removeCount = removeChild.calls.count();
 
     service['endTool']();
     expect(service['subElement']).toBeUndefined();
     expect(service['mousePointer']).toBeUndefined();
+    expect(removeChild.calls.count()).toBeGreaterThan(removeCount);
+    removeCount = removeChild.calls.count();
 
     service.onMouseMove(eventMocker('mousemouve', 0));
     expect(service['subElement']).toBeUndefined();
     expect(service['mousePointer']).not.toBeUndefined();
+    expect(removeChild.calls.count()).toEqual(removeCount);
+    removeCount = removeChild.calls.count();
 
     service['endTool']();
     expect(service['subElement']).toBeUndefined();
     expect(service['mousePointer']).toBeUndefined();
+    expect(removeChild.calls.count()).toBeGreaterThan(removeCount);
   });
 });
