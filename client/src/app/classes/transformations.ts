@@ -50,4 +50,11 @@ export class Transform {
     }
     Transform.needsUpdate.next(true);
   }
+
+  static delete(): void {
+    for (const element of Transform.elementsToTransform) {
+      element.remove();
+    }
+    Transform.needsUpdate.next(true);
+  }
 }

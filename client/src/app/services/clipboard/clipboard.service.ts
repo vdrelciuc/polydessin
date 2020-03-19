@@ -28,15 +28,11 @@ export class ClipboardService {
 
   static paste(): void {
     const pasteElements = new Stack<SVGGElement>();
-    console.log(ClipboardService.selectedElements.getAll());
-
     for (const element of ClipboardService.selectedElements.getAll()) {
       const copy = element.cloneNode(true) as SVGGElement;
       ClipboardService.manipulator.appendChild(ClipboardService.image.nativeElement, copy);
       pasteElements.push_back(copy);
     }
-    console.log(ClipboardService.image.nativeElement.getBoundingClientRect().bottom);
-    console.log(ClipboardService.image.nativeElement.getBoundingClientRect().right);
 
     if (ClipboardService.copyTop + ClipboardService.OFFSET_FOR_EACH < ClipboardService.image.nativeElement.getBoundingClientRect().bottom &&
     ClipboardService.copyLeft + ClipboardService.OFFSET_FOR_EACH < ClipboardService.image.nativeElement.getBoundingClientRect().right) {
@@ -64,7 +60,11 @@ export class ClipboardService {
     ClipboardService.shift = ClipboardService.OFFSET_FOR_EACH;
     ClipboardService.copyTop = top;
     ClipboardService.copyLeft = left;
-    console.log(left);
+  }
 
+  static cut(): void {
+    ClipboardService.copy();
+    Transform.delete();
+    ClipboardService.drawStack.addSVG(ClipboardService.image.nativeElement.cloneNode(true) as SVGElement);
   }
 }

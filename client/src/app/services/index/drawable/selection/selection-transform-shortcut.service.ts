@@ -72,7 +72,7 @@ export class SelectionTransformShortcutService {
           break;
           case this.x:
             if (this.ctrlIsPressed) {
-              /* wow */
+              ClipboardService.cut();
             }
             break;
           case this.c:
