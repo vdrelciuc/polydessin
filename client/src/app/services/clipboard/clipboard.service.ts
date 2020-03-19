@@ -73,21 +73,27 @@ export class ClipboardService {
     const duplicateElements = new Stack<SVGGElement>();
     let top: number = ClipboardService.image.nativeElement.getBoundingClientRect().bottom;
     let left: number = ClipboardService.image.nativeElement.getBoundingClientRect().right;
+    let bot: number = ClipboardService.image.nativeElement.getBoundingClientRect().top;
+    let right: number = ClipboardService.image.nativeElement.getBoundingClientRect().left;
     for (const element of Transform.elementsToTransform) {
       const copy = element.cloneNode(true) as SVGGElement;
       ClipboardService.manipulator.appendChild(ClipboardService.image.nativeElement, copy);
       top = Math.min(top, element.getBoundingClientRect().top);
       left = Math.min(left, element.getBoundingClientRect().left);
+      bot = Math.max(bot, element.getBoundingClientRect().bottom);
+      right = Math.max(right, element.getBoundingClientRect().right);
       duplicateElements.push_back(copy);
     }
     Transform.setElements(duplicateElements, ClipboardService.manipulator);
-    const imageWidth = ClipboardService.image.nativeElement.getBoundingClientRect().right;
-    const imageHeight = ClipboardService.image.nativeElement.getBoundingClientRect().bottom;
+    const imageRight = ClipboardService.image.nativeElement.getBoundingClientRect().right;
+    const imageBot = ClipboardService.image.nativeElement.getBoundingClientRect().bottom;
+    const imageWidth = ClipboardService.image.nativeElement.getBoundingClientRect().width;
+    const imageHeight = ClipboardService.image.nativeElement.getBoundingClientRect().height;
     Transform.translate(
-      (left + ClipboardService.INCREMENT_BETWEEN < imageWidth) ?
-      ClipboardService.INCREMENT_BETWEEN : ClipboardService.INCREMENT_BETWEEN - imageWidth,
-      (top + ClipboardService.INCREMENT_BETWEEN < imageHeight) ?
-      ClipboardService.INCREMENT_BETWEEN : ClipboardService.INCREMENT_BETWEEN - imageHeight
+      (left + ClipboardService.INCREMENT_BETWEEN < imageRight) ?
+      ClipboardService.INCREMENT_BETWEEN : ClipboardService.INCREMENT_BETWEEN - imageWidth - right + left,
+      (top + ClipboardService.INCREMENT_BETWEEN < imageBot) ?
+      ClipboardService.INCREMENT_BETWEEN : ClipboardService.INCREMENT_BETWEEN - imageHeight - bot + top
     );
     ClipboardService.drawStack.addSVG(ClipboardService.image.nativeElement.cloneNode(true) as SVGElement);
     ClipboardService.pastedElements.next(duplicateElements.getAll());

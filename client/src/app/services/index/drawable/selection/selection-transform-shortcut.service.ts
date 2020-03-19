@@ -51,7 +51,7 @@ export class SelectionTransformShortcutService {
     this.image = image;
     this.selectionGroup = selectionGroup;
     this.shortcutListener.push(manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
-      this.onKeyDown(event.key);
+      this.onKeyDown(event);
       console.log(event.key);
 
     }));
@@ -64,11 +64,11 @@ export class SelectionTransformShortcutService {
     this.shortcutListener.forEach((listener) => listener());
   }
 
-  private onKeyDown(keyPressed: string): void {
-    if (this.REGEX_ARROW.test(keyPressed)) {
-      this.arrowPressed(keyPressed);
+  private onKeyDown(event: KeyboardEvent): void {
+    if (this.REGEX_ARROW.test(event.key)) {
+      this.arrowPressed(event.key);
     } else {
-      switch (keyPressed) {
+      switch (event.key) {
         case this.delete:
           Transform.delete();
           this.selectionGroup.remove();
@@ -95,13 +95,14 @@ export class SelectionTransformShortcutService {
           case this.d:
             if (this.ctrlIsPressed) {
               ClipboardService.duplicate();
+              event.preventDefault();
             }
             break;
         default:
           break;
       }
     }
-    this.lastKeyPressed = keyPressed;
+    this.lastKeyPressed = event.key;
   }
 
   private arrowPressed(keyPressed: string): void {
