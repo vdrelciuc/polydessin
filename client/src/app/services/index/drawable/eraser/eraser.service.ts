@@ -86,7 +86,7 @@ export class EraserService extends DrawableService {
   }
 
   onMousePress(event: MouseEvent): void {
-    this.movePreview(new CoordinatesXY(event.clientX, event.clientY));
+    this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
     if (event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = true;
       this.brushDelete = new Stack<SVGElementInfos>();
@@ -94,14 +94,18 @@ export class EraserService extends DrawableService {
   }
 
   onMouseRelease(event: MouseEvent): void {
-    this.movePreview(new CoordinatesXY(event.clientX, event.clientY));
+    this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
     if (event.button === CONSTANTS.MOUSE_LEFT) {
       this.leftClick = false;
       if (!this.brushDelete.isEmpty()) {
+        console.log('add');
+
         this.mousePointer.remove();
-        this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+        if (this.selectedElement !== undefined) {
+          this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+        }
+        this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
         this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
-        this.onMouseMove(event);
       }
     }
   }
@@ -143,7 +147,7 @@ export class EraserService extends DrawableService {
           this.brushDelete.push_back(previous);
         }
         this.brushDelete.push_back(elementOnTop);
-        this.manipulator.removeChild(this.image.nativeElement, elementOnTop.target);
+        elementOnTop.target.remove();
         this.drawStack.removeElement(elementOnTop.id);
       } else {
         if (this.selectedElement === undefined) {
@@ -165,9 +169,9 @@ export class EraserService extends DrawableService {
     if (this.selectedElement !== undefined) {
       this.manipulator.setAttribute(this.selectedElement.target.firstChild as SVGElement, SVGProperties.color, this.oldBorder);
       this.drawStack.removeElement(this.selectedElement.id);
-      this.manipulator.removeChild(this.image, this.selectedElement.target);
+      this.selectedElement.target.remove();
       this.mousePointer.remove();
-      this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
       this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
     }
   }
