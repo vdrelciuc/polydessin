@@ -8,13 +8,12 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import { OFFSET_MIN, SIZEOF_POINT } from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LineService extends DrawableService {
-  readonly OFFSET_MIN: number = 3;
-  readonly SIZEOF_POINT: number = 8;
 
   attributes: DrawablePropertiesService;
   thickness: number;
@@ -122,7 +121,7 @@ export class LineService extends DrawableService {
     }
     this.manipulator.setAttribute(
         this.line,
-        SVGProperties.pointsList,
+        SVGProperties.points,
         previewPoints
     );
   }
@@ -151,7 +150,7 @@ export class LineService extends DrawableService {
       if (firstPoint !== undefined) {
         const differenceOfCoordinatesX = Math.abs(firstPoint.getX() - effectiveX);
         const differenceOfCoordinatesY = Math.abs(firstPoint.getY() - effectiveY);
-        const isWithin3Px: boolean = differenceOfCoordinatesX <= this.OFFSET_MIN && differenceOfCoordinatesY <= this.OFFSET_MIN;
+        const isWithin3Px: boolean = differenceOfCoordinatesX <= OFFSET_MIN && differenceOfCoordinatesY <= OFFSET_MIN;
         if (isWithin3Px) {
           this.removeLastPoint();
           this.points.push_back(firstPoint);
@@ -242,8 +241,8 @@ export class LineService extends DrawableService {
 
     let previewPoints = this.pointsToString();
     // Removing last 8 characters, which correspond to a point in SVG attribute
-    previewPoints = previewPoints.slice(0, -this.SIZEOF_POINT);
-    this.manipulator.setAttribute(this.line, SVGProperties.pointsList, previewPoints);
+    previewPoints = previewPoints.slice(0, - SIZEOF_POINT);
+    this.manipulator.setAttribute(this.line, SVGProperties.points, previewPoints);
   }
 
   getLineIsDone(): boolean { return this.isDone; }
@@ -251,7 +250,7 @@ export class LineService extends DrawableService {
   private updateLine(): void {
     this.manipulator.setAttribute(
       this.line,
-      SVGProperties.pointsList,
+      SVGProperties.points,
       this.pointsToString()
     );
   }

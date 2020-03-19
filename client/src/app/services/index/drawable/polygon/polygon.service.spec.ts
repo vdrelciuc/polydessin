@@ -74,7 +74,7 @@ describe('PolygonService', () => {
   });
 
   it('#constructor should set default properties', () => {
-    expect(service['nSides']).toEqual(service['DEFAULT_NSIDES']);
+    expect(service['nSides']).toEqual(CONSTANT.DEFAULT_NSIDES);
     expect(service['shapeIsEmpty']).toBe(true);
     expect(service.frenchName).toEqual('Polygone');
     expect(service.shapeStyle.thickness).toEqual(CONSTANT.THICKNESS_DEFAULT);

@@ -95,7 +95,7 @@ export class EraserService extends DrawableService {
 
   onMouseRelease(event: MouseEvent): void {
     this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
-    if (event.button === CONSTANTS.MOUSE_LEFT) {
+    if(event.button === CONSTANTS.LEFT_CLICK) {
       this.leftClick = false;
       if (!this.brushDelete.isEmpty()) {
         console.log('add');

@@ -3,6 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageExportType } from 'src/app/enums/export-type';
 import { ImageFormat } from 'src/app/enums/image-format';
+import { EXPORT_MAX_WIDTH, EXPORT_MAX_HEIGHT } from 'src/app/classes/constants';
+import { REGEX_TITLE } from 'src/app/classes/regular-expressions';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +17,8 @@ export class ExportService {
   currentFormat: BehaviorSubject<ImageFormat>;
   currentFilter: BehaviorSubject<ImageFilter>;
   currentExportType: BehaviorSubject<ImageExportType>;
-  isTitleValid: BehaviorSubject<boolean>;
+  isTitleValid: BehaviorSubject<boolean>
 
-  private readonly REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,16}$/; // Alphanumeric, space and dash: 3 to 16 chars
-  private readonly MAX_WIDTH: number = 300;
-  private readonly MAX_HEIGHT: number = 270;
   private image: ElementRef<SVGElement>; // My actual svg
   private serialized: XMLSerializer;
   private cloneSVG: ElementRef<SVGElement>; // copy of SVG element to set filters on it
@@ -39,7 +38,7 @@ export class ExportService {
   }
 
   validateTitle(title: string): void {
-    this.isTitleValid.next(this.REGEX_TITLE.test(title));
+    this.isTitleValid.next(REGEX_TITLE.test(title));
   }
 
   export(imageTitle: string): void {
@@ -60,8 +59,8 @@ export class ExportService {
     if (contextBinded !== null) {
       contextBinded.clearRect(0, 0, contextBinded.canvas.width, contextBinded.canvas.height);
       this.applyFilterForPreview(contextBinded);
-      let scaleX = this.MAX_HEIGHT / this.originalCanvas.width;
-      let scaleY = (this.MAX_WIDTH / this.originalCanvas.height) / 2;
+      let scaleX = EXPORT_MAX_HEIGHT / this.originalCanvas.width;
+      let scaleY = (EXPORT_MAX_WIDTH / this.originalCanvas.height) / 2;
       if (scaleX > 1) {
         scaleX = 1;
       }
