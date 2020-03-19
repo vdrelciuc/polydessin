@@ -7,13 +7,12 @@ import { ColorType } from '../enums/color-types';
 import { ColorSelectorService } from './color-selector.service';
 import { DrawableService } from './index/drawable/drawable.service';
 import { DrawStackService } from './tools/draw-stack/draw-stack.service';
+import { LEFT_CLICK, RIGHT_CLICK} from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PipetteService extends DrawableService {
-  readonly LEFT_CLICK: number = 0;
-  readonly RIGHT_CLICK: number = 2;
 
   hiddenCanvas: HTMLCanvasElement;
 
@@ -82,8 +81,8 @@ export class PipetteService extends DrawableService {
   onClick(event: MouseEvent): void {
     const position = CoordinatesXY.getEffectiveCoords(this.image, event);
     const newColor = this.getColorAtPosition(position);
-    if (newColor != null && (event.button === this.LEFT_CLICK || event.button === this.RIGHT_CLICK)) {
-      if (event.button === this.LEFT_CLICK) {
+    if (newColor != null && (event.button === LEFT_CLICK || event.button === RIGHT_CLICK)) {
+      if (event.button === LEFT_CLICK) {
         this.colorSelectorService.colorToChange = ColorType.Primary;
       } else {
         this.colorSelectorService.colorToChange = ColorType.Secondary;

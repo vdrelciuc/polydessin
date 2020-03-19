@@ -1,20 +1,12 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Transform } from 'src/app/classes/transformations';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SelectionTransformShortcutService {
-
-  readonly FIRST_DELAY: number = 500;
-  readonly MOVE_DELAY: number  = 100;
-  readonly UNIT_MOVE: number  = 3;
-
-  readonly LEFT: string = 'ArrowLeft';
-  readonly DOWN: string = 'ArrowDown';
-  readonly RIGHT: string = 'ArrowRight';
-  readonly UP: string = 'ArrowUp';
 
   private lastKeyPressed: string;
 
@@ -55,28 +47,28 @@ export class SelectionTransformShortcutService {
 
   private onKeyDown(keyPressed: string): void {
     switch (keyPressed) {
-      case this.LEFT:
+      case CONSTANTS.LEFT:
         this.leftArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(-this.UNIT_MOVE, 0);
+          Transform.translate(-CONSTANTS.UNIT_MOVE, 0);
         }
         break;
-      case this.RIGHT:
+      case CONSTANTS.RIGHT:
         this.rightArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(this.UNIT_MOVE, 0);
+          Transform.translate(CONSTANTS.UNIT_MOVE, 0);
         }
         break;
-      case this.UP:
+      case CONSTANTS.UP:
         this.upArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(0, -this.UNIT_MOVE);
+          Transform.translate(0, -CONSTANTS.UNIT_MOVE);
         }
         break;
-      case this.DOWN:
+      case CONSTANTS.DOWN:
         this.downArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(0, this.UNIT_MOVE);
+          Transform.translate(0, CONSTANTS.UNIT_MOVE);
         }
         break;
       default:
@@ -95,16 +87,16 @@ export class SelectionTransformShortcutService {
 
   private onKeyUp(keyReleased: string): void {
     switch (keyReleased) {
-      case this.LEFT:
+      case CONSTANTS.LEFT:
         this.leftArrowIsPressed = false;
         break;
-      case this.RIGHT:
+      case CONSTANTS.RIGHT:
         this.rightArrowIsPressed = false;
         break;
-      case this.UP:
+      case CONSTANTS.UP:
         this.upArrowIsPressed = false;
         break;
-      case this.DOWN:
+      case CONSTANTS.DOWN:
         this.downArrowIsPressed = false;
         break;
       default:
@@ -122,10 +114,10 @@ export class SelectionTransformShortcutService {
     if (this.isMoving) {
       if (this.hasWaitedHalfSec) {
         this.translate();
-        setTimeout(() => this.autoMove(), this.MOVE_DELAY);
+        setTimeout(() => this.autoMove(), CONSTANTS.MOVE_DELAY);
       } else {
         this.hasWaitedHalfSec = true;
-        setTimeout(() => this.autoMove(), this.FIRST_DELAY);
+        setTimeout(() => this.autoMove(), CONSTANTS.FIRST_DELAY);
       }
     } else {
       this.hasWaitedHalfSec = false;
@@ -138,8 +130,8 @@ export class SelectionTransformShortcutService {
   }
 
   private translate(): void {
-    const translateX = (this.leftArrowIsPressed ? - this.UNIT_MOVE : 0) + (this.rightArrowIsPressed ? this.UNIT_MOVE : 0);
-    const translateY = (this.upArrowIsPressed ? - this.UNIT_MOVE : 0) + (this.downArrowIsPressed ? this.UNIT_MOVE : 0);
+    const translateX = (this.leftArrowIsPressed ? - CONSTANTS.UNIT_MOVE : 0) + (this.rightArrowIsPressed ? CONSTANTS.UNIT_MOVE : 0);
+    const translateY = (this.upArrowIsPressed ? - CONSTANTS.UNIT_MOVE : 0) + (this.downArrowIsPressed ? CONSTANTS.UNIT_MOVE : 0);
 
     Transform.translate(translateX, translateY);
   }

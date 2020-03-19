@@ -294,7 +294,7 @@ describe('EraserService', () => {
 
   it('#onMousePress should start removing elements', () => {
     service['leftClick'] = false;
-    service.onMousePress(new MouseEvent('mousedown', {button: CONSTANTS.MOUSE_LEFT}));
+    service.onMousePress(new MouseEvent('mousedown', {button: CONSTANTS.LEFT_CLICK}));
     expect(service['brushDelete'].getAll().length).toEqual(0);
     expect(service['leftClick']).toBeTruthy();
   });
@@ -302,7 +302,7 @@ describe('EraserService', () => {
   it('#onMouseRelease should stop removing elements (none removed)', () => {
     service['leftClick'] = true;
     service['brushDelete'] = new Stack<SVGElementInfos>();
-    service.onMouseRelease(new MouseEvent('mouseup', {button: CONSTANTS.MOUSE_LEFT}));
+    service.onMouseRelease(new MouseEvent('mouseup', {button: CONSTANTS.LEFT_CLICK}));
     expect(service['leftClick']).not.toBeTruthy();
   });
 
@@ -313,7 +313,7 @@ describe('EraserService', () => {
     const spy = spyOn(service['drawStack'], 'addSVGToRedo');
     const spy2 = spyOn(service, 'onMouseMove');
     const event = new MouseEvent('mouseup', {
-      button: CONSTANTS.MOUSE_LEFT,
+      button: CONSTANTS.LEFT_CLICK,
       clientX: 100,
       clientY: 100
     });
