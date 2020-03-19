@@ -48,13 +48,14 @@ export class SaveServerComponent implements  AfterViewInit {
   saveConfirmation(): void {
     if (!this.isValidTitle) {
       const warning = this.dialog.open(ErrorOnSaveComponent, {disableClose: true});
-      warning.componentInstance.errorTitle = this.isValidTitle;
+      if(warning !== undefined) {
+        warning.componentInstance.errorTitle = this.isValidTitle;
+      }
     } else {
       this.addImage().then(() => {
         this.onDialogClose();
       });
     }
-
   }
 
   addTag(tag: string): void {
