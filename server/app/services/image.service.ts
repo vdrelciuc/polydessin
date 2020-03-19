@@ -8,7 +8,7 @@ const DATABASE_COLLECTION = 'Image';
 const REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,16}$/; // Alphanumeric, space and dash: 3 to 16 chars
 const REGEX_TAG: RegExp = /^[A-Za-z0-9]{1,10}$/; // Alphanumeric, 1 to 10 chars
 const SVG_SERIAL_SIGNATURE: string = 'data:image/svg+xml;';
-const SVG_HTML_TAG: string = '</svg>';
+const SVG_HTML_TAG: string = '<defs';
 const MAX_TAGS_ALLOWED = 5;
 
 @injectable()
@@ -102,4 +102,5 @@ export class ImageService {
         const validBackground = image.background !== null && image.background !== '';
         return containsValidTitle && containsCorrectTags && validWidth && validHeight && validSerial && validHtml && validBackground;
     }
+
 }
