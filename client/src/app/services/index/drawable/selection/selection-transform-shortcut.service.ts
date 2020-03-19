@@ -18,6 +18,7 @@ export class SelectionTransformShortcutService {
   readonly right: string = 'ArrowRight';
   readonly up: string = 'ArrowUp';
   readonly ctrl: string = 'Control';
+  readonly delete: string = 'Delete';
   readonly x: string = 'x';
   readonly c: string = 'c';
   readonly v: string = 'v';
@@ -50,7 +51,7 @@ export class SelectionTransformShortcutService {
     this.selectionGroup = selectionGroup;
     this.shortcutListener.push(manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
       this.onKeyDown(event.key);
-      console.log('press');
+      console.log(event.key);
 
     }));
     this.shortcutListener.push(manipulator.listen(window, 'keyup', (event: KeyboardEvent) => {
@@ -67,6 +68,11 @@ export class SelectionTransformShortcutService {
       this.arrowPressed(keyPressed);
     } else {
       switch (keyPressed) {
+        case this.delete:
+          Transform.delete();
+          this.selectionGroup.remove();
+          this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+          break;
         case this.ctrl:
           this.ctrlIsPressed = true;
           break;
