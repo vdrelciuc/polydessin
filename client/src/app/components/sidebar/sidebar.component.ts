@@ -43,7 +43,79 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  bypassBrowserShortcuts(): void {
+  selectTool(tool: Tools): void {
+    this.toolSelectorService.setCurrentTool(tool);
+  }
+
+  saveServerProject(): void {
+    if (this.galleryService.refToSvg.nativeElement.childElementCount > 0 ||
+      !this.drawStackService.isEmpty()
+    ) {
+      this.prepareDialogLaunch();
+      this.exportService.SVGToCanvas().then(() => {
+        this.bypassBrowserShortcuts();
+        this.saveServerDialog = this.dialog.open(SaveServerComponent, {disableClose: true});
+        this.saveServerDialog.afterClosed().subscribe(() => {
+          this.setupShortcuts();
+        });
+      });
+    } else {
+      this.snackBar.open('Vous ne pouvez pas sauvegarder un canvas vide', '', {
+        duration: 2000,
+      });
+    }
+  }
+
+  createNewProject(): void {
+    this.prepareDialogLaunch();
+    this.createNewDialog = this.dialog.open(CreateNewComponent, { disableClose: true });
+    this.createNewDialog.afterClosed().subscribe( () => {
+      this.setupShortcuts();
+    });
+  }
+
+  openGallery(): void {
+    this.prepareDialogLaunch();
+    this.bypassBrowserShortcuts();
+    this.galleryDialog = this.dialog.open(GalleryComponent, { disableClose: true });
+    this.galleryDialog.afterClosed().subscribe( () => {
+      this.setupShortcuts();
+    });
+  }
+
+  exportProject(): void {
+    if ((this.galleryService.refToSvg.nativeElement.childElementCount >0)
+      || !this.drawStackService.isEmpty()) {
+      this.prepareDialogLaunch();
+      this.exportService.SVGToCanvas().then(() => {
+        this.bypassBrowserShortcuts();
+        this.exportDialog = this.dialog.open(ExportComponent, { disableClose: true });
+        this.exportDialog.afterClosed().subscribe( () => {
+          this.setupShortcuts();
+        });
+      });
+    } else {
+      this.snackBar.open('Vous ne pouvez pas exporter un canvas vide', '', {
+        duration: 2000,
+      });
+    }
+  }
+
+  openDialog(): void {
+    this.dialog.open(UserGuideComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%'
+    });
+  }
+
+  private prepareDialogLaunch(): void {
+    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+    this.dialog.closeAll();
+  }
+
+  private bypassBrowserShortcuts(): void {
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.e', description: 'block search tab' }).subscribe(
       (event) => {
         // do nothing
@@ -64,7 +136,7 @@ export class SidebarComponent implements OnInit {
     );
   }
 
-  setupShortcuts(): void {
+  private   setupShortcuts(): void {
     this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 's', description: 'Selecting selection with shortcut' }).subscribe(
         (event) => {
@@ -218,80 +290,7 @@ export class SidebarComponent implements OnInit {
           grid.decrementThickness();
         }
       }
-    )
-  );
+     )
+    );
   }
-
-  selectTool(tool: Tools): void {
-    this.toolSelectorService.setCurrentTool(tool);
-  }
-
-  saveServerProject(): void {
-    if (this.galleryService.refToSvg.nativeElement.childElementCount > 0 ||
-      !this.drawStackService.isEmpty()
-    ) {
-      this.prepareDialogLaunch();
-      this.exportService.SVGToCanvas().then(() => {
-        this.bypassBrowserShortcuts();
-        this.saveServerDialog = this.dialog.open(SaveServerComponent, {disableClose: true});
-        this.saveServerDialog.afterClosed().subscribe(() => {
-          this.setupShortcuts();
-        });
-      });
-    } else {
-      this.snackBar.open('Vous ne pouvez pas sauvegarder un canvas vide', '', {
-        duration: 2000,
-      });
-    }
-  }
-
-  createNewProject(): void {
-    this.prepareDialogLaunch();
-    this.createNewDialog = this.dialog.open(CreateNewComponent, { disableClose: true });
-    this.createNewDialog.afterClosed().subscribe( () => {
-      this.setupShortcuts();
-    });
-  }
-
-  openGallery(): void {
-    this.prepareDialogLaunch();
-    this.bypassBrowserShortcuts();
-    this.galleryDialog = this.dialog.open(GalleryComponent, { disableClose: true });
-    this.galleryDialog.afterClosed().subscribe( () => {
-      this.setupShortcuts();
-    });
-  }
-
-  exportProject(): void {
-    if ((this.galleryService.refToSvg.nativeElement.childElementCount >0)
-      || !this.drawStackService.isEmpty()) {
-      this.prepareDialogLaunch();
-      this.exportService.SVGToCanvas().then(() => {
-        this.bypassBrowserShortcuts();
-        this.exportDialog = this.dialog.open(ExportComponent, { disableClose: true });
-        this.exportDialog.afterClosed().subscribe( () => {
-          this.setupShortcuts();
-        });
-      });
-    } else {
-      this.snackBar.open('Vous ne pouvez pas exporter un canvas vide', '', {
-        duration: 2000,
-      });
-    }
-  }
-
-  openDialog(): void {
-    this.dialog.open(UserGuideComponent, {
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      height: '100%',
-      width: '100%'
-    });
-  }
-
-  private prepareDialogLaunch(): void {
-    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
-    this.dialog.closeAll();
-  }
-
 }
