@@ -7,14 +7,14 @@ import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.s
 })
 export class SelectionTransformShortcutService {
 
-  readonly firstDelay: number = 500;
-  readonly moveDelay: number  = 100;
-  readonly unitMove: number  = 3;
+  readonly FIRST_DELAY: number = 500;
+  readonly MOVE_DELAY: number  = 100;
+  readonly UNIT_MOVE: number  = 3;
 
-  readonly left: string = 'ArrowLeft';
-  readonly down: string = 'ArrowDown';
-  readonly right: string = 'ArrowRight';
-  readonly up: string = 'ArrowUp';
+  readonly LEFT: string = 'ArrowLeft';
+  readonly DOWN: string = 'ArrowDown';
+  readonly RIGHT: string = 'ArrowRight';
+  readonly UP: string = 'ArrowUp';
 
   private lastKeyPressed: string;
 
@@ -55,28 +55,28 @@ export class SelectionTransformShortcutService {
 
   private onKeyDown(keyPressed: string): void {
     switch (keyPressed) {
-      case this.left:
+      case this.LEFT:
         this.leftArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(-this.unitMove, 0);
+          Transform.translate(-this.UNIT_MOVE, 0);
         }
         break;
-      case this.right:
+      case this.RIGHT:
         this.rightArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(this.unitMove, 0);
+          Transform.translate(this.UNIT_MOVE, 0);
         }
         break;
-      case this.up:
+      case this.UP:
         this.upArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(0, -this.unitMove);
+          Transform.translate(0, -this.UNIT_MOVE);
         }
         break;
-      case this.down:
+      case this.DOWN:
         this.downArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(0, this.unitMove);
+          Transform.translate(0, this.UNIT_MOVE);
         }
         break;
       default:
@@ -95,16 +95,16 @@ export class SelectionTransformShortcutService {
 
   private onKeyUp(keyReleased: string): void {
     switch (keyReleased) {
-      case this.left:
+      case this.LEFT:
         this.leftArrowIsPressed = false;
         break;
-      case this.right:
+      case this.RIGHT:
         this.rightArrowIsPressed = false;
         break;
-      case this.up:
+      case this.UP:
         this.upArrowIsPressed = false;
         break;
-      case this.down:
+      case this.DOWN:
         this.downArrowIsPressed = false;
         break;
       default:
@@ -122,24 +122,24 @@ export class SelectionTransformShortcutService {
     if (this.isMoving) {
       if (this.hasWaitedHalfSec) {
         this.translate();
-        setTimeout(() => this.autoMove(), this.moveDelay);
+        setTimeout(() => this.autoMove(), this.MOVE_DELAY);
       } else {
         this.hasWaitedHalfSec = true;
-        setTimeout(() => this.autoMove(), this.firstDelay);
+        setTimeout(() => this.autoMove(), this.FIRST_DELAY);
       }
     } else {
       this.hasWaitedHalfSec = false;
       this.autoMoveHasInstance = false;
 
       this.selectionGroup.remove();
-      this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
       this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
     }
   }
 
   private translate(): void {
-    const translateX = (this.leftArrowIsPressed ? - this.unitMove : 0) + (this.rightArrowIsPressed ? this.unitMove : 0);
-    const translateY = (this.upArrowIsPressed ? - this.unitMove : 0) + (this.downArrowIsPressed ? this.unitMove : 0);
+    const translateX = (this.leftArrowIsPressed ? - this.UNIT_MOVE : 0) + (this.rightArrowIsPressed ? this.UNIT_MOVE : 0);
+    const translateY = (this.upArrowIsPressed ? - this.UNIT_MOVE : 0) + (this.downArrowIsPressed ? this.UNIT_MOVE : 0);
 
     Transform.translate(translateX, translateY);
   }
