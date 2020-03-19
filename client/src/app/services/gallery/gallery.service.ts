@@ -34,11 +34,12 @@ export class GalleryService {
     return this.http.delete<void>(`${CONSTANTS.REST_API_ROOT}/${id}`);
   }
 
-  private verifyImage(image: Image): boolean {
+  verifyImage(image: Image): boolean {
     const validWidth = image.width !== null && image.width > 0;
     const validHeight = image.height !== null && image.height > 0;
     const validSerial = image.serial !== null && (image.serial).toString().includes(CONSTANTS.SVG_SERIAL_SIGNATURE);
     const validHtml = image.innerHtml !== null && (image.innerHtml).toString().includes(CONSTANTS.SVG_HTML_TAG);
     return validWidth && validHeight && validSerial && validHtml;
   }
+
 }

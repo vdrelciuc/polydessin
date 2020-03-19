@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { GalleryComponent } from './gallery.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatFormFieldModule, MatChipsModule, MatGridListModule, MatDialogRef, MatSnackBarModule, MatDialogModule, MatInputModule } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatChipsModule, MatDialogModule, MatDialogRef, MatFormFieldModule,
+  MatGridListModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GalleryComponent } from './gallery.component';
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;

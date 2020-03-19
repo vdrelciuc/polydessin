@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TILE_WIDTH_PX } from 'src/app/classes/constants';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { Image } from '../../interfaces/image';
 import { GalleryService } from '../../services/gallery/gallery.service';
 import { SaveServerService } from '../../services/saveServer/save-server.service';
 import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
-import { TILE_WIDTH_PX } from 'src/app/classes/constants'
 
 @Component({
   selector: 'app-gallery',

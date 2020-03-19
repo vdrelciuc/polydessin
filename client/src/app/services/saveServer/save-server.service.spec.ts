@@ -1,19 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SaveServerService } from './save-server.service';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material';
-import { Observable } from 'rxjs';
-import { Image } from 'src/app/interfaces/image';
+import { SaveServerService } from './save-server.service';
 
 describe('SaveServerService', () => {
   let service: SaveServerService;
-  beforeEach(() => { 
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientModule,
         MatSnackBarModule,
-        
+
       ]
     });
     service = TestBed.get(SaveServerService);
@@ -32,21 +30,21 @@ describe('SaveServerService', () => {
   });
 
   it('#addTag should add valid tag', () => {
-    let setOfData = new Set<string>();
+    const setOfData = new Set<string>();
     const ret = service.addTag('tag', setOfData);
     expect(setOfData.has('tag')).toEqual(true);
     expect(ret).toEqual(true);
   });
 
   it('#addTag should not add invalid tag', () => {
-    let setOfData = new Set<string>();
+    const setOfData = new Set<string>();
     const ret = service.addTag('!!!!!!', setOfData);
     expect(setOfData.has('!!!!!!')).toEqual(false);
     expect(ret).toEqual(false);
   });
 
   it('#removeTag should remove tag', () => {
-    let setOfData = new Set<string>();
+    const setOfData = new Set<string>();
     setOfData.add('tag');
     expect(setOfData.has('tag')).toEqual(true);
     service.removeTag('tag', setOfData);
@@ -60,7 +58,7 @@ describe('SaveServerService', () => {
     }));
     expect(spy).toHaveBeenCalledWith('Votre image a été sauvegardé avec succès', '', {duration: 1500});
   });
-  
+
   it('#handleError should return error message', () => {
     const spy = spyOn(service['snacks'], 'open');
     service.handleError(new HttpErrorResponse({
@@ -80,13 +78,11 @@ describe('SaveServerService', () => {
         outerHTML: '<svg><g></g></svg>'
       } as unknown as SVGElement
     };
-    let tags = new Set<string>();
+    const tags = new Set<string>();
     tags.add('tag1');
     tags.add('tag2');
     tags.add('tag3');
-    const ret: Observable<Image> = service.addImage('iamge', tags, 'src/img/');
-    console.log('HERE I AM OUT');
-    console.log(ret);
+    service.addImage('iamge', tags, 'src/img/');
     expect(spy).toHaveBeenCalled();
   });
 });
