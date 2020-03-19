@@ -50,6 +50,8 @@ export class SelectionTransformShortcutService {
     this.selectionGroup = selectionGroup;
     this.shortcutListener.push(manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
       this.onKeyDown(event.key);
+      console.log('press');
+
     }));
     this.shortcutListener.push(manipulator.listen(window, 'keyup', (event: KeyboardEvent) => {
       this.onKeyUp(event.key);
