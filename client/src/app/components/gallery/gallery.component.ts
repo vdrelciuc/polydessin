@@ -75,7 +75,7 @@ export class GalleryComponent implements OnInit {
     this.filterWithTag();
   }
 
-  filterWithTag(): void {
+  private filterWithTag(): void {
     if (this.tags.size === 0) {
       this.resultImages = this.images;
       return;
@@ -93,7 +93,6 @@ export class GalleryComponent implements OnInit {
         }
       }
     }
-
     if (this.resultImages.length === 0) {
       this.snacks.open('Aucun résultat ne correspond à votre recherche.', '', {duration: 3500});
     }
