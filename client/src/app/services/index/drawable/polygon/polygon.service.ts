@@ -12,7 +12,6 @@ import { DrawableService } from '../drawable.service';
   providedIn: 'root'
 })
 export class PolygonService extends DrawableService {
-  private readonly DEFAULT_NSIDES: number = 3;
 
   shapeStyle: ShapeStyle;
   nSides: number;
@@ -35,7 +34,7 @@ export class PolygonService extends DrawableService {
 
   constructor() {
     super();
-    this.nSides = this.DEFAULT_NSIDES;
+    this.nSides = CONSTANT.DEFAULT_NSIDES;
     this.shapeIsEmpty = true;
     this.frenchName = 'Polygone';
     this.shapeStyle = {
@@ -93,12 +92,9 @@ export class PolygonService extends DrawableService {
       if (this.shapeIsEmpty) {
         this.manipulator.removeChild(this.image.nativeElement, this.subElement);
       } else {
-        this.manipulator.removeChild(this.subElement, this.perimeter);
-        this.manipulator.removeChild(this.subElement, this.perimeterAlternative);
-        this.drawStack.addElementWithInfos({
-          target: this.subElement,
-          id: this.ID
-        });
+        this.perimeter.remove();
+        this.perimeterAlternative.remove();
+        this.pushElement();
       }
     }
   }
@@ -194,6 +190,7 @@ export class PolygonService extends DrawableService {
       this.manipulator.setAttribute(this.polygon, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
     } else {
       this.manipulator.setAttribute(this.polygon, SVGProperties.color, 'none');
+      this.manipulator.setAttribute(this.polygon, SVGProperties.thickness, '0');
     }
     this.manipulator.setAttribute(this.perimeter, SVGProperties.color, 'black');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.color, 'white');

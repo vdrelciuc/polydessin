@@ -1,20 +1,12 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Transform } from 'src/app/classes/transformations';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SelectionTransformShortcutService {
-
-  readonly firstDelay: number = 500;
-  readonly moveDelay: number  = 100;
-  readonly unitMove: number  = 3;
-
-  readonly left: string = 'ArrowLeft';
-  readonly down: string = 'ArrowDown';
-  readonly right: string = 'ArrowRight';
-  readonly up: string = 'ArrowUp';
 
   private lastKeyPressed: string;
 
@@ -23,8 +15,10 @@ export class SelectionTransformShortcutService {
   private upArrowIsPressed: boolean;
   private downArrowIsPressed: boolean;
 
+  private manipulator: Renderer2;
   private image: ElementRef<SVGElement>;
   private drawStack: DrawStackService;
+  private selectionGroup: SVGGElement;
 
   private isMoving: boolean;
   private hasWaitedHalfSec: boolean;
@@ -33,10 +27,12 @@ export class SelectionTransformShortcutService {
 
   private shortcutListener: (() => void)[] = [];
 
-  setupShortcuts(manipulator: Renderer2, drawStack: DrawStackService, image: ElementRef<SVGElement>): void {
+  setupShortcuts(manipulator: Renderer2, drawStack: DrawStackService, image: ElementRef<SVGElement>, selectionGroup: SVGGElement): void {
     this.deleteShortcuts();
+    this.manipulator = manipulator;
     this.drawStack = drawStack;
     this.image = image;
+    this.selectionGroup = selectionGroup;
     this.shortcutListener.push(manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
       this.onKeyDown(event.key);
     }));
@@ -51,28 +47,28 @@ export class SelectionTransformShortcutService {
 
   private onKeyDown(keyPressed: string): void {
     switch (keyPressed) {
-      case this.left:
+      case CONSTANTS.left:
         this.leftArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(-this.unitMove, 0);
+          Transform.translate(-CONSTANTS.unitMove, 0);
         }
         break;
-      case this.right:
+      case CONSTANTS.right:
         this.rightArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(this.unitMove, 0);
+          Transform.translate(CONSTANTS.unitMove, 0);
         }
         break;
-      case this.up:
+      case CONSTANTS.up:
         this.upArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(0, -this.unitMove);
+          Transform.translate(0, -CONSTANTS.unitMove);
         }
         break;
-      case this.down:
+      case CONSTANTS.down:
         this.downArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(0, this.unitMove);
+          Transform.translate(0, CONSTANTS.unitMove);
         }
         break;
       default:
@@ -91,16 +87,16 @@ export class SelectionTransformShortcutService {
 
   private onKeyUp(keyReleased: string): void {
     switch (keyReleased) {
-      case this.left:
+      case CONSTANTS.left:
         this.leftArrowIsPressed = false;
         break;
-      case this.right:
+      case CONSTANTS.right:
         this.rightArrowIsPressed = false;
         break;
-      case this.up:
+      case CONSTANTS.up:
         this.upArrowIsPressed = false;
         break;
-      case this.down:
+      case CONSTANTS.down:
         this.downArrowIsPressed = false;
         break;
       default:
@@ -118,23 +114,24 @@ export class SelectionTransformShortcutService {
     if (this.isMoving) {
       if (this.hasWaitedHalfSec) {
         this.translate();
-        setTimeout(() => this.autoMove(), this.moveDelay);
+        setTimeout(() => this.autoMove(), CONSTANTS.moveDelay);
       } else {
         this.hasWaitedHalfSec = true;
-        setTimeout(() => this.autoMove(), this.firstDelay);
+        setTimeout(() => this.autoMove(), CONSTANTS.firstDelay);
       }
     } else {
       this.hasWaitedHalfSec = false;
       this.autoMoveHasInstance = false;
-      console.log('');
 
+      this.selectionGroup.remove();
       this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
     }
   }
 
   private translate(): void {
-    const translateX = (this.leftArrowIsPressed ? - this.unitMove : 0) + (this.rightArrowIsPressed ? this.unitMove : 0);
-    const translateY = (this.upArrowIsPressed ? - this.unitMove : 0) + (this.downArrowIsPressed ? this.unitMove : 0);
+    const translateX = (this.leftArrowIsPressed ? - CONSTANTS.unitMove : 0) + (this.rightArrowIsPressed ? CONSTANTS.unitMove : 0);
+    const translateY = (this.upArrowIsPressed ? - CONSTANTS.unitMove : 0) + (this.downArrowIsPressed ? CONSTANTS.unitMove : 0);
 
     Transform.translate(translateX, translateY);
   }

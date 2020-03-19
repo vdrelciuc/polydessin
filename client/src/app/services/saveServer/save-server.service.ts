@@ -4,30 +4,24 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { Image } from '../../interfaces/image';
-import {SVGProperties} from "../../classes/svg-properties";
+import { SVGProperties } from '../../classes/svg-html-properties';
+import { REGEX_TAG, REGEX_TITLE } from 'src/app/classes/regular-expressions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SaveServerService {
-
-  private readonly REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,16}$/; // Alphanumeric, space and dash: 3 to 16 chars
-  private readonly REGEX_TAG: RegExp = /^[A-Za-z0-9]{1,10}$/; // Alphanumeric, 1 to 10 chars
-  private readonly HTTP_STATUS_OK: number = 201;
-  innerHtml: string;
+  private innerHtml: string;
   refToSvg: ElementRef<SVGElement>;
 
-  constructor(private http: HttpClient,
-              private snacks: MatSnackBar) {
-    this.innerHtml = '';
+  constructor(
+    private http: HttpClient,
+    private snacks: MatSnackBar) {
+      this.innerHtml = '';
   }
 
   checkTitleValidity(title: string): boolean {
-    return this.REGEX_TITLE.test(title);
-  }
-
-  private checkTagValidity(tag: string): boolean {
-    return this.REGEX_TAG.test(tag);
+    return REGEX_TITLE.test(title);
   }
 
   addTag(etiquette: string, data: Set<string>): boolean {
@@ -43,7 +37,7 @@ export class SaveServerService {
   }
 
   handleError(error: HttpErrorResponse): void {
-    if (error.status === this.HTTP_STATUS_OK) {
+    if (error.status === CONSTANTS.HTTP_STATUS_OK) {
       this.snacks.open('Votre image a été sauvegardé avec succès', '', {duration: 1500});
     } else {
       // The backend returned an unsuccessful response code.
@@ -53,7 +47,10 @@ export class SaveServerService {
 
   addImage(title: string, tagsSet: Set<string>, imgSrc: string): Observable<Image> {
     let tags: string[];
-    this.innerHtml = this.refToSvg.nativeElement.outerHTML;
+    console.log(this.refToSvg.nativeElement.innerHTML);
+    console.log(this.refToSvg.nativeElement.outerHTML);
+
+    this.innerHtml = this.refToSvg.nativeElement.innerHTML;
     tags = [];
     tagsSet.forEach((e) => {
       tags.push(e);
@@ -65,5 +62,9 @@ export class SaveServerService {
         background: this.refToSvg.nativeElement.style.backgroundColor
       }
     );
+  }
+
+  private checkTagValidity(tag: string): boolean {
+    return REGEX_TAG.test(tag);
   }
 }

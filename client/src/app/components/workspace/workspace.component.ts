@@ -11,14 +11,13 @@ import { WorkspaceService } from 'src/app/services/workspace.service';
 export class WorkspaceComponent implements OnInit {
   backgroundColor: Color;
 
-    ngOnInit() {
-      this.backgroundColor = this.workspaceService.backgroundColor;
-    }
+  constructor(protected workspaceService: WorkspaceService) {};
 
-    onResize(event: any) {
-      this.workspaceService.Size.next(new CoordinatesXY(Math.floor(event.target.offsetWidth), Math.floor(event.target.offsetHeight)));
-    }
-  constructor(protected workspaceService: WorkspaceService) {
-  };
+  ngOnInit() {
+    this.backgroundColor = this.workspaceService.backgroundColor;
+  }
 
+  onResize(event: any) {
+    this.workspaceService.Size.next(new CoordinatesXY(Math.floor(event.target.offsetWidth), Math.floor(event.target.offsetHeight)));
+  }
 }

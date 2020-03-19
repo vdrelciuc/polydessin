@@ -10,6 +10,16 @@ import { RectangleGuideComponent } from '../guideTemplaates/rectangle-guide/rect
 import { HomeComponent } from '../home/home.component';
 import {UserGuideComponent} from '../user-guide/user-guide.component';
 import { WorkingAreaComponent } from '../working-area/working-area.component';
+import {EllipseGuideComponent} from '../guideTemplaates/ellipse-guide/ellipse-guide.component';
+import {PolygoneGuideComponent} from '../guideTemplaates/polygone-guide/polygone-guide.component';
+import {PipetteGuideComponent} from '../guideTemplaates/pipette-guide/pipette-guide.component';
+import {AerosolGuideComponent} from '../guideTemplaates/aerosol-guide/aerosol-guide.component';
+import {ApplicateurCouleurGuideComponent} from '../guideTemplaates/applicateur-couleur-guide/applicateur-couleur-guide.component';
+import {ExportGuideComponent} from '../guideTemplaates/export-guide/export-guide.component';
+import {GalleryGuideComponent} from '../guideTemplaates/gallery-guide/gallery-guide.component';
+import {GridGuideComponent} from '../guideTemplaates/grid-guide/grid-guide.component';
+import {SaveServerGuideComponent} from '../guideTemplaates/save-server-guide/save-server-guide.component';
+import {UndoRedoComponent} from '../guideTemplaates/undo-redo/undo-redo.component';
 
 const routes: Routes = [
   {path : 'dessin' , component : WorkingAreaComponent},
@@ -22,8 +32,18 @@ const secondaryRoutes: Routes = [
   {path : 'pinceau' , component : PinceauGuideComponent  , outlet: 'guideSubCategory'},
   {path : 'crayon',  component : CrayonGuideComponent , outlet: 'guideSubCategory'},
   {path : 'rectangle',  component : RectangleGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'polygone',  component : PolygoneGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'ellipse',  component : EllipseGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'aerosol',  component : AerosolGuideComponent , outlet: 'guideSubCategory'},
   {path : 'couleur',  component : CouleurGuideComponent , outlet: 'guideSubCategory'},
   {path : 'nouveauDessin', component : NouveauDessinComponent , outlet: 'guideSubCategory'},
+  {path : 'applyer', component : ApplicateurCouleurGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'export', component : ExportGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'saveServer', component : SaveServerGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'gallery', component : GalleryGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'pipette', component : PipetteGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'grid', component : GridGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'undo', component : UndoRedoComponent , outlet: 'guideSubCategory'}
 ]
 
 @NgModule({

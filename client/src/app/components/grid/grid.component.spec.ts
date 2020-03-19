@@ -48,11 +48,11 @@ describe('GridComponent', () => {
 
   it('#setOpacity should set new opacity value', () => {
     component.setOpacity({value: 0.5} as MatSliderChange)
-    expect(component.service.thickness.value).toEqual(0.5);
+    expect(component.service.opacity.value).toEqual(0.5);
   });
 
   it('#setOpacity should NOT set new opacity value', () => {
     component.setOpacity({value: null} as MatSliderChange)
-    expect(component.service.thickness.value).toEqual(CONSTANT.OPACITY_DEFAULT);
+    expect(component.service.opacity.value).toEqual(CONSTANT.OPACITY_DEFAULT);
   });
 });

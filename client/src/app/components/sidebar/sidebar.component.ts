@@ -73,6 +73,16 @@ export class SidebarComponent implements OnInit {
       )
     );
 
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.a', description: 'Select all elements on canvas' }).subscribe(
+      (event) => {
+        if (this.toolSelectorService.$currentTool.getValue() !== Tools.Selection) {
+          this.toolSelectorService.setCurrentTool(Tools.Selection);
+        }
+        this.toolSelectorService.getSelection().selectAllElements();
+      }
+      )
+    );
+
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'l', description: 'Selecting line with shortcut' }).subscribe(
         (event) => {
           this.toolSelectorService.setCurrentTool(Tools.Line);

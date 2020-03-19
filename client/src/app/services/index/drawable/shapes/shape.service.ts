@@ -8,16 +8,12 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
+import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class ShapeService extends DrawableService {
-
-  private readonly FIRST_QUADRANT: number = 1;
-  private readonly SECOND_QUADRANT: number = 2;
-  private readonly THIRD_QUADRANT: number = 3;
-  private readonly FOURTH_QUADRANT: number = 4;
 
   attributes: DrawablePropertiesService;
   colorSelectorService: ColorSelectorService;
@@ -143,7 +139,7 @@ export abstract class ShapeService extends DrawableService {
 
   endTool(): void {
     this.shiftPressed = false;
-    if (this.drawOnNextMove) {
+    if (this.subElement !== undefined && this.isChanging) {
       this.manipulator.removeChild(this.image.nativeElement, this.subElement);
     }
   }
@@ -156,12 +152,12 @@ export abstract class ShapeService extends DrawableService {
       this.mousePositionOnShiftPress = new CoordinatesXY(this.mousePosition.getX(), this.mousePosition.getY());
       const quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
       if (width > height) {
-        if (quadrant === this.SECOND_QUADRANT || quadrant === this.THIRD_QUADRANT) {
+        if (quadrant === CONSTANTS.SECOND_QUADRANT || quadrant === CONSTANTS.THIRD_QUADRANT) {
           this.mousePosition.setX(this.mousePosition.getX() + (width - height)); // Faking mouse position
         }
         width = height;
       } else {
-        if (quadrant === this.FIRST_QUADRANT || quadrant === this.SECOND_QUADRANT) {
+        if (quadrant === CONSTANTS.FIRST_QUADRANT || quadrant === CONSTANTS.SECOND_QUADRANT) {
           this.mousePosition.setY(this.mousePosition.getY() + (height - width)); // Faking mouse position
         }
         height = width;
@@ -228,7 +224,7 @@ export abstract class ShapeService extends DrawableService {
   protected alignShapeOrigin(width: number, height: number): void {
     const quadrant = this.mousePosition.getQuadrant(this.shapeOrigin);
 
-    if (quadrant === this.FIRST_QUADRANT || quadrant === this.FOURTH_QUADRANT) {
+    if (quadrant === CONSTANTS.FIRST_QUADRANT || quadrant === CONSTANTS.FOURTH_QUADRANT) {
       this.setShapeOriginFromRightQuadrants(width);
       this.manipulator.setAttribute(this.text, SVGProperties.x, (this.shapeOrigin.getX() + width / 2).toString());
       this.manipulator.setAttribute(this.perimeter, SVGProperties.x, this.shapeOrigin.getX().toString());
@@ -238,7 +234,7 @@ export abstract class ShapeService extends DrawableService {
       this.manipulator.setAttribute(this.perimeter, SVGProperties.x, this.mousePosition.getX().toString());
     }
 
-    if (quadrant === this.THIRD_QUADRANT || quadrant === this.FOURTH_QUADRANT) {
+    if (quadrant === CONSTANTS.THIRD_QUADRANT || quadrant === CONSTANTS.FOURTH_QUADRANT) {
       this.setShapeOriginFromLowerQuadrants(height);
       this.manipulator.setAttribute(this.text, SVGProperties.y, (this.shapeOrigin.getY() + height / 2).toString());
       this.manipulator.setAttribute(this.perimeter, SVGProperties.y, this.shapeOrigin.getY().toString());

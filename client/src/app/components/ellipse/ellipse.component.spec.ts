@@ -57,4 +57,28 @@ describe('EllipseComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('#ngOnInit should init properties', () => {
+    const spy = spyOn(component['service'], 'initializeProperties');
+    component.ngOnInit();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#ngOnDestroy should cancel ongoing shape', () => {
+    const spy = spyOn(component['service'], 'cancelShapeIfOngoing');
+    component.ngOnDestroy();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#updateBorder should update tracing type', () => {
+    const spy = spyOn(component['service'], 'updateTracingType');
+    component.updateBorder();
+    expect(spy).toHaveBeenCalledWith('border');
+  });
+
+  it('#updateFill should update tracing type', () => {
+    const spy = spyOn(component['service'], 'updateTracingType');
+    component.updateFill();
+    expect(spy).toHaveBeenCalledWith('fill');
+  });
 });

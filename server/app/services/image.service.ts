@@ -1,15 +1,8 @@
 import { injectable } from 'inversify';
 import { Collection, MongoClient, MongoClientOptions, ObjectId } from 'mongodb';
+import * as CONSTANTS from '../constants';
+import { REGEX_TAG, REGEX_TITLE} from '../regular-expressions';
 import { Image } from './../interfaces/image';
-
-const DATABASE_URL = 'mongodb+srv://polyUser:2S9bKFzIPaMdTHHT!@projects-3dncm.mongodb.net/test?retryWrites=true&w=majority';
-const DATABASE_NAME = 'Polydessin';
-const DATABASE_COLLECTION = 'Image';
-const REGEX_TITLE: RegExp = /^[A-Za-z0-9- ]{3,16}$/; // Alphanumeric, space and dash: 3 to 16 chars
-const REGEX_TAG: RegExp = /^[A-Za-z0-9]{1,10}$/; // Alphanumeric, 1 to 10 chars
-const SVG_SERIAL_SIGNATURE: string = 'data:image/svg+xml;';
-const SVG_HTML_TAG: string = '<defs';
-const MAX_TAGS_ALLOWED = 5;
 
 @injectable()
 export class ImageService {
@@ -22,9 +15,9 @@ export class ImageService {
     };
 
     constructor() {
-        MongoClient.connect(DATABASE_URL, this.options)
+        MongoClient.connect(CONSTANTS.DATABASE_URL, this.options)
             .then((client: MongoClient) => {
-                this.collection = client.db(DATABASE_NAME).collection(DATABASE_COLLECTION);
+                this.collection = client.db(CONSTANTS.DATABASE_NAME).collection(CONSTANTS.DATABASE_COLLECTION);
             })
             .catch(() => {
                 console.error('CONNECTION ERROR. EXITING PROCESS');
@@ -89,7 +82,7 @@ export class ImageService {
             }
             tagCount++;
         });
-        return listIsValid && (tagCount <= MAX_TAGS_ALLOWED);
+        return listIsValid && (tagCount <= CONSTANTS.MAX_TAGS_ALLOWED);
     }
 
     validateImage(image: Image): boolean {
@@ -97,8 +90,8 @@ export class ImageService {
         const containsCorrectTags = this.validateTags(image.tags);
         const validWidth = image.width !== null && image.width > 0;
         const validHeight = image.height !== null && image.height > 0;
-        const validSerial = image.serial !== null && (image.serial).toString().includes(SVG_SERIAL_SIGNATURE);
-        const validHtml = image.innerHtml !== null && (image.innerHtml).toString().includes(SVG_HTML_TAG);
+        const validSerial = image.serial !== null && (image.serial).toString().includes(CONSTANTS.SVG_SERIAL_SIGNATURE);
+        const validHtml = image.innerHtml !== null && (image.innerHtml).toString().includes(CONSTANTS.SVG_HTML_TAG);
         const validBackground = image.background !== null && image.background !== '';
         return containsValidTitle && containsCorrectTags && validWidth && validHeight && validSerial && validHtml && validBackground;
     }

@@ -3,11 +3,9 @@ import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-import { BehaviorSubject } from 'rxjs';
-// import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +16,9 @@ export class PencilService extends DrawableService {
   private previousX: number;
   private previousY: number;
   thickness: number;
-  isDrawing: BehaviorSubject<boolean>;
-  private line: SVGPathElement;
-  private mousePointer: SVGCircleElement;
+  isDrawing: boolean;
+  protected line: SVGPathElement;
+  protected mousePointer: SVGCircleElement;
   private color: Color;
   opacity: number;
   attributes: DrawablePropertiesService;
@@ -29,26 +27,18 @@ export class PencilService extends DrawableService {
   constructor() {
     super();
     this.frenchName = 'Crayon';
-    this.isDrawing = new BehaviorSubject<boolean>(false);
+    this.isDrawing = false;
     this.path = '';
   }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
-    colorSelectorService: ColorSelectorService,
-    drawStack: DrawStackService): void {
+             colorSelectorService: ColorSelectorService,
+             drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
       this.initializeProperties();
-      this.isDrawing.subscribe(
-        () => {
-          if(!this.isDrawing.value && this.subElement !== undefined) {
-            this.pushElement();
-          }
-        }
-      )
-      this.mousePointer = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
     }
 
-      initializeProperties(): void {
+    initializeProperties(): void {
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.color = color;
     });
@@ -65,22 +55,30 @@ export class PencilService extends DrawableService {
 
   onMouseInCanvas(event: MouseEvent): void {
     this.createCircle(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
-
-    this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
-    this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
   }
 
   onMouseOutCanvas(event: MouseEvent): void {
-    this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
-    this.isDrawing.next(false);
+    if (this.isDrawing) {
+      this.addPath(event.clientX, event.clientY);
+      this.isDrawing = false;
+      this.pushElement();
+    }
+    if (this.mousePointer !== undefined) {
+      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      delete(this.mousePointer);
+    }
   }
 
   onMousePress(event: MouseEvent): void {
-    this.isDrawing.next(true);
+    if (this.mousePointer !== undefined) {
+      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+      delete(this.mousePointer);
+    }
+    this.isDrawing = true;
     this.beginDraw(event.clientX, event.clientY);
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.subElement, SVGProperties.title, 'pencil-path');
     this.line = this.manipulator.createElement('path', 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.subElement, SVGProperties.title, 'pencil-path');
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color.getHex());
     this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
@@ -92,24 +90,20 @@ export class PencilService extends DrawableService {
     this.manipulator.appendChild(this.subElement, this.line);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
 
-    this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
     this.addPath(event.clientX, event.clientY);
-    this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'hidden');
   }
 
   onMouseRelease(event: MouseEvent): void {
-    // if (event.button === CONSTANTS.MOUSE_LEFT) { // 0 for the left mouse button
-      if (this.isDrawing.value) {
-        this.isDrawing.next(false);
-        this.endPath();
-        this.updateCursor(event.clientX, event.clientY);
-        this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
-      }
-    // }
+    if (this.isDrawing) {
+      this.addPath(event.clientX, event.clientY);
+      this.isDrawing = false;
+      this.pushElement();
+      this.updateCursor(event.clientX, event.clientY);
+    }
   }
 
   onMouseMove(event: MouseEvent): void {
-    if (this.isDrawing.value) {
+    if (this.isDrawing) {
       this.addPath(event.clientX, event.clientY);
     } else {
       this.updateCursor(event.clientX, event.clientY);
@@ -117,25 +111,26 @@ export class PencilService extends DrawableService {
   }
 
   endTool(): void {
-    if(this.isDrawing.value) {
-      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+    if (this.isDrawing) {
+      this.subElement.remove();
+      delete(this.subElement);
     }
-    if(this.mousePointer !== undefined) {
-      this.manipulator.removeChild(this.image.nativeElement, this.mousePointer);
+    if (this.mousePointer !== undefined) {
+      this.mousePointer.remove();
+      delete(this.mousePointer);
     }
-    delete(this.subElement);
-    this.isDrawing.next(false);
+
+    this.isDrawing = false;
     this.path = '';
-    this.manipulator.setAttribute(this.mousePointer, SVGProperties.visibility, 'visible');
   }
 
-  private beginDraw(clientX: number, clientY: number) {
+  private beginDraw(clientX: number, clientY: number): void {
     this.previousX = clientX;
     this.previousY = clientY;
     this.path = `M ${CoordinatesXY.effectiveX(this.image, clientX)},${CoordinatesXY.effectiveY(this.image, clientY)}`;
   }
 
-  private addPath(clientX: number, clientY: number) {
+  private addPath(clientX: number, clientY: number): void {
     const pathToAdd = ` l ${clientX - this.previousX},${clientY - this.previousY}`;
     this.previousX = clientX;
     this.previousY = clientY;
@@ -143,28 +138,22 @@ export class PencilService extends DrawableService {
     this.manipulator.setAttribute(this.line, 'd', this.path);
   }
 
-  private endPath() {
-    if (this.path.indexOf('l') === -1) {
-      this.path = this.path + (' l 0,0');
-    }
-    this.manipulator.setAttribute(this.line, 'd', this.path);
-
-    this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
-  }
-
-  private updateCursor(clientX: number, clientY: number) {
+  private updateCursor(clientX: number, clientY: number): void {
     if (this.mousePointer === undefined) {
-      this.createCircle(clientX, clientY);
+      this.createCircle(CoordinatesXY.effectiveX(this.image, clientX), CoordinatesXY.effectiveY(this.image, clientY));
+    } else {
+      this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
+      this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
     }
-    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, CoordinatesXY.effectiveX(this.image, clientX).toString());
-    this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, CoordinatesXY.effectiveY(this.image, clientY).toString());
   }
 
-  private createCircle(x: number, y: number): void {
+  protected createCircle(x: number, y: number): void {
+    this.mousePointer = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, this.color.getHex());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerX, x.toString());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.centerY, y.toString());
+    this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
   }
 }
