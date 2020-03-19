@@ -3,9 +3,9 @@ import { ElementRef, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
-import { Image } from '../../interfaces/image';
-import { SVGProperties } from '../../classes/svg-html-properties';
 import { REGEX_TAG, REGEX_TITLE } from 'src/app/classes/regular-expressions';
+import { SVGProperties } from '../../classes/svg-html-properties';
+import { Image } from '../../interfaces/image';
 
 @Injectable({
   providedIn: 'root'
@@ -47,8 +47,6 @@ export class SaveServerService {
 
   addImage(title: string, tagsSet: Set<string>, imgSrc: string): Observable<Image> {
     let tags: string[];
-    console.log(this.refToSvg.nativeElement.innerHTML);
-    console.log(this.refToSvg.nativeElement.outerHTML);
 
     this.innerHtml = this.refToSvg.nativeElement.innerHTML;
     tags = [];
@@ -58,7 +56,7 @@ export class SaveServerService {
     return this.http.post<Image>(CONSTANTS.REST_API_ROOT,
       {title, tags, serial: imgSrc, innerHtml: this.innerHtml,
         width: this.refToSvg.nativeElement.getAttribute(SVGProperties.width),
-        height:this.refToSvg.nativeElement.getAttribute(SVGProperties.height),
+        height: this.refToSvg.nativeElement.getAttribute(SVGProperties.height),
         background: this.refToSvg.nativeElement.style.backgroundColor
       }
     );
