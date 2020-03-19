@@ -87,7 +87,7 @@ export class EraserService extends DrawableService {
 
   onMousePress(event: MouseEvent): void {
     this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
-    if (event.button === CONSTANTS.MOUSE_LEFT) {
+    if (event.button === CONSTANTS.LEFT_CLICK) {
       this.leftClick = true;
       this.brushDelete = new Stack<SVGElementInfos>();
     }
@@ -98,8 +98,6 @@ export class EraserService extends DrawableService {
     if(event.button === CONSTANTS.LEFT_CLICK) {
       this.leftClick = false;
       if (!this.brushDelete.isEmpty()) {
-        console.log('add');
-
         this.mousePointer.remove();
         if (this.selectedElement !== undefined) {
           this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
