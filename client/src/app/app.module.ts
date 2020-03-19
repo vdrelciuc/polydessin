@@ -49,6 +49,17 @@ import { ResizeObserverDirective } from './components/workspace/resize-observer.
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
+import { EllipseGuideComponent } from './components/guideTemplaates/ellipse-guide/ellipse-guide.component';
+import { PolygoneGuideComponent } from './components/guideTemplaates/polygone-guide/polygone-guide.component';
+import { SelectionDeplacementGuideComponent } from './components/guideTemplaates/selection-deplacement-guide/selection-deplacement-guide.component';
+import { PipetteGuideComponent } from './components/guideTemplaates/pipette-guide/pipette-guide.component';
+import { ApplicateurCouleurGuideComponent } from './components/guideTemplaates/applicateur-couleur-guide/applicateur-couleur-guide.component';
+import { GridGuideComponent } from './components/guideTemplaates/grid-guide/grid-guide.component';
+import { AerosolGuideComponent } from './components/guideTemplaates/aerosol-guide/aerosol-guide.component';
+import { UndoRedoComponent } from './components/guideTemplaates/undo-redo/undo-redo.component';
+import { SaveServerGuideComponent } from './components/guideTemplaates/save-server-guide/save-server-guide.component';
+import { GalleryGuideComponent } from './components/guideTemplaates/gallery-guide/gallery-guide.component';
+import { ExportGuideComponent } from './components/guideTemplaates/export-guide/export-guide.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +102,18 @@ import { DrawablePropertiesService } from './services/index/drawable/properties/
     ExportComponent,
     SaveServerComponent,
     ErrorOnSaveComponent,
-    GalleryComponent
+    GalleryComponent,
+    EllipseGuideComponent,
+    PolygoneGuideComponent,
+    SelectionDeplacementGuideComponent,
+    PipetteGuideComponent,
+    ApplicateurCouleurGuideComponent,
+    GridGuideComponent,
+    AerosolGuideComponent,
+    UndoRedoComponent,
+    SaveServerGuideComponent,
+    GalleryGuideComponent,
+    ExportGuideComponent
   ],
   entryComponents: [
     ColorPickerComponent,
