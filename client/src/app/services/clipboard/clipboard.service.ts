@@ -9,7 +9,7 @@ import { DrawStackService } from '../tools/draw-stack/draw-stack.service';
 })
 export class ClipboardService {
   static pastedElements: BehaviorSubject<SVGGElement[]> = new BehaviorSubject<SVGGElement[]>([]);
-  private static readonly OFFSET_FOR_EACH: number = 5;
+  private static readonly INCREMENT_BETWEEN: number = 5;
 
   private static manipulator: Renderer2;
   private static image: ElementRef<SVGElement>;
@@ -18,7 +18,7 @@ export class ClipboardService {
   private static selectedElements: Stack<SVGGElement> = new Stack<SVGGElement>();
   private static copyTop: number;
   private static copyLeft: number;
-  private static shift: number;
+  private static currentShift: number;
 
   static initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, drawStack: DrawStackService): void {
     ClipboardService.manipulator = manipulator;
@@ -33,16 +33,17 @@ export class ClipboardService {
       ClipboardService.manipulator.appendChild(ClipboardService.image.nativeElement, copy);
       pasteElements.push_back(copy);
     }
-
-    if (ClipboardService.copyTop + ClipboardService.OFFSET_FOR_EACH < ClipboardService.image.nativeElement.getBoundingClientRect().bottom &&
-    ClipboardService.copyLeft + ClipboardService.OFFSET_FOR_EACH < ClipboardService.image.nativeElement.getBoundingClientRect().right) {
-      if (ClipboardService.copyTop + ClipboardService.shift >= ClipboardService.image.nativeElement.getBoundingClientRect().bottom ||
-      ClipboardService.copyLeft + ClipboardService.shift >= ClipboardService.image.nativeElement.getBoundingClientRect().right) {
-        ClipboardService.shift = ClipboardService.OFFSET_FOR_EACH;
+    const imageWidth = ClipboardService.image.nativeElement.getBoundingClientRect().right;
+    const imageHeight = ClipboardService.image.nativeElement.getBoundingClientRect().bottom;
+    if (ClipboardService.copyTop + ClipboardService.INCREMENT_BETWEEN < imageHeight &&
+    ClipboardService.copyLeft + ClipboardService.INCREMENT_BETWEEN < imageWidth) {
+      if (ClipboardService.copyTop + ClipboardService.currentShift >= imageHeight ||
+      ClipboardService.copyLeft + ClipboardService.currentShift >= imageWidth) {
+        ClipboardService.currentShift = ClipboardService.INCREMENT_BETWEEN;
       }
       Transform.setElements(pasteElements, ClipboardService.manipulator);
-      Transform.translate(ClipboardService.shift, ClipboardService.shift);
-      ClipboardService.shift += ClipboardService.OFFSET_FOR_EACH;
+      Transform.translate(ClipboardService.currentShift, ClipboardService.currentShift);
+      ClipboardService.currentShift += ClipboardService.INCREMENT_BETWEEN;
       }
     ClipboardService.drawStack.addSVG(ClipboardService.image.nativeElement.cloneNode(true) as SVGElement);
     ClipboardService.pastedElements.next(pasteElements.getAll());
@@ -57,7 +58,7 @@ export class ClipboardService {
       top = Math.min(top, element.getBoundingClientRect().top);
       left = Math.min(left, element.getBoundingClientRect().left);
     }
-    ClipboardService.shift = ClipboardService.OFFSET_FOR_EACH;
+    ClipboardService.currentShift = ClipboardService.INCREMENT_BETWEEN;
     ClipboardService.copyTop = top;
     ClipboardService.copyLeft = left;
   }
@@ -70,13 +71,24 @@ export class ClipboardService {
 
   static duplicate(): void {
     const duplicateElements = new Stack<SVGGElement>();
+    let top: number = ClipboardService.image.nativeElement.getBoundingClientRect().bottom;
+    let left: number = ClipboardService.image.nativeElement.getBoundingClientRect().right;
     for (const element of Transform.elementsToTransform) {
       const copy = element.cloneNode(true) as SVGGElement;
       ClipboardService.manipulator.appendChild(ClipboardService.image.nativeElement, copy);
+      top = Math.min(top, element.getBoundingClientRect().top);
+      left = Math.min(left, element.getBoundingClientRect().left);
       duplicateElements.push_back(copy);
     }
     Transform.setElements(duplicateElements, ClipboardService.manipulator);
-    Transform.translate(ClipboardService.OFFSET_FOR_EACH, ClipboardService.OFFSET_FOR_EACH);
+    const imageWidth = ClipboardService.image.nativeElement.getBoundingClientRect().right;
+    const imageHeight = ClipboardService.image.nativeElement.getBoundingClientRect().bottom;
+    Transform.translate(
+      (left + ClipboardService.INCREMENT_BETWEEN < imageWidth) ?
+      ClipboardService.INCREMENT_BETWEEN : ClipboardService.INCREMENT_BETWEEN - imageWidth,
+      (top + ClipboardService.INCREMENT_BETWEEN < imageHeight) ?
+      ClipboardService.INCREMENT_BETWEEN : ClipboardService.INCREMENT_BETWEEN - imageHeight
+    );
     ClipboardService.drawStack.addSVG(ClipboardService.image.nativeElement.cloneNode(true) as SVGElement);
     ClipboardService.pastedElements.next(duplicateElements.getAll());
   }
