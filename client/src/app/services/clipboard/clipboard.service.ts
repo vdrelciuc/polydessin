@@ -53,7 +53,7 @@ export class ClipboardService {
     let top: number = ClipboardService.image.nativeElement.getBoundingClientRect().bottom;
     let left: number = ClipboardService.image.nativeElement.getBoundingClientRect().right;
     for (const element of Transform.elementsToTransform) {
-      ClipboardService.selectedElements.push_back(element);
+      ClipboardService.selectedElements.push_back(element.cloneNode(true) as SVGGElement);
       top = Math.min(top, element.getBoundingClientRect().top);
       left = Math.min(left, element.getBoundingClientRect().left);
     }
@@ -66,5 +66,18 @@ export class ClipboardService {
     ClipboardService.copy();
     Transform.delete();
     ClipboardService.drawStack.addSVG(ClipboardService.image.nativeElement.cloneNode(true) as SVGElement);
+  }
+
+  static duplicate(): void {
+    const duplicateElements = new Stack<SVGGElement>();
+    for (const element of Transform.elementsToTransform) {
+      const copy = element.cloneNode(true) as SVGGElement;
+      ClipboardService.manipulator.appendChild(ClipboardService.image.nativeElement, copy);
+      duplicateElements.push_back(copy);
+    }
+    Transform.setElements(duplicateElements, ClipboardService.manipulator);
+    Transform.translate(ClipboardService.OFFSET_FOR_EACH, ClipboardService.OFFSET_FOR_EACH);
+    ClipboardService.drawStack.addSVG(ClipboardService.image.nativeElement.cloneNode(true) as SVGElement);
+    ClipboardService.pastedElements.next(duplicateElements.getAll());
   }
 }

@@ -22,6 +22,7 @@ export class SelectionTransformShortcutService {
   readonly x: string = 'x';
   readonly c: string = 'c';
   readonly v: string = 'v';
+  readonly d: string = 'd';
 
   private lastKeyPressed: string;
 
@@ -89,6 +90,11 @@ export class SelectionTransformShortcutService {
           case this.v:
             if (this.ctrlIsPressed) {
               ClipboardService.paste();
+            }
+            break;
+          case this.d:
+            if (this.ctrlIsPressed) {
+              ClipboardService.duplicate();
             }
             break;
         default:
