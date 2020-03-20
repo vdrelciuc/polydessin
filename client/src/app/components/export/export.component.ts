@@ -21,11 +21,11 @@ export class ExportComponent implements AfterViewInit {
   exportTypes: string[];
   selectedExportType: string;
   title: string;
-  isTitleValid: boolean;
+  isTitleValid: boolean; // variable never used
 
-  formatsMap: Map<string, ImageFormat>;
-  filtersMap: Map<string, ImageFilter>;
-  exportTypeMap: Map<string, ImageExportType>;
+  private formatsMap: Map<string, ImageFormat>;
+  private filtersMap: Map<string, ImageFilter>;
+  private exportTypeMap: Map<string, ImageExportType>;
 
   @ViewChild('mydrawing', {static: false}) canvas: ElementRef;
   @ViewChild('myDownload', {static : false}) myDownload: ElementRef;
@@ -118,5 +118,4 @@ export class ExportComponent implements AfterViewInit {
       this.exportation.validateTitle((event.target as HTMLInputElement).value);
     }
   }
-
 }

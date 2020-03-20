@@ -66,6 +66,7 @@ export class EraserService extends DrawableService {
 
   onMouseOutCanvas(): void {
     this.canErase = false;
+    this.leftClick = false;
   }
 
   onMouseInCanvas(): void {
@@ -87,14 +88,14 @@ export class EraserService extends DrawableService {
   }
 
   onMousePress(event: MouseEvent): void {
-    if(event.button === CONSTANTS.MOUSE_LEFT) {
+    if(event.button === CONSTANTS.LEFT_CLICK) {
       this.leftClick = true;
       this.brushDelete = new Stack<SVGElementInfos>();
     }
   }
 
   onMouseRelease(event: MouseEvent): void {
-    if(event.button === CONSTANTS.MOUSE_LEFT) {
+    if(event.button === CONSTANTS.LEFT_CLICK) {
       this.leftClick = false;
       if(!this.brushDelete.isEmpty()) {
         this.manipulator.removeChild(this.image, this.preview);

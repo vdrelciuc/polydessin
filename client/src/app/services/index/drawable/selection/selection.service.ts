@@ -11,12 +11,12 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
+import { CONTROL_SIZE } from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SelectionService extends DrawableService {
-  private readonly CONTROL_SIZE: number = 6;
   private selectionOrigin: CoordinatesXY;
   private clickedElement: SVGGElement | null;
   private state: SelectionState = SelectionState.idle;
@@ -218,8 +218,8 @@ export class SelectionService extends DrawableService {
       this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.color, 'black');
       this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.thickness, '1');
       this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.title, `control-point${i + 1}`);
-      this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.height, this.CONTROL_SIZE.toString());
-      this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.width, this.CONTROL_SIZE.toString());
+      this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.height, CONTROL_SIZE.toString());
+      this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.width, CONTROL_SIZE.toString());
       this.manipulator.appendChild(this.resizeGroup, this.controlPoints[i]);
       this.manipulator.setAttribute(this.controlPoints[i], CursorProperties.cursor,
         (i < 2) ? CursorProperties.vertical : CursorProperties.horizontal);
@@ -313,14 +313,14 @@ export class SelectionService extends DrawableService {
       this.manipulator.setAttribute(this.selectionRect, SVGProperties.height, (bottom - top).toString());
       // Set control points positions : Top - Bottom - Left - Right
       let point = 0;
-      this.manipulator.setAttribute(this.controlPoints[point], SVGProperties.x, ((right + left) / 2 - this.CONTROL_SIZE / 2).toString());
-      this.manipulator.setAttribute(this.controlPoints[point++], SVGProperties.y, (top - this.CONTROL_SIZE / 2).toString());
-      this.manipulator.setAttribute(this.controlPoints[point], SVGProperties.x, ((right + left) / 2 - this.CONTROL_SIZE / 2).toString());
-      this.manipulator.setAttribute(this.controlPoints[point++], SVGProperties.y, (bottom - this.CONTROL_SIZE / 2).toString());
-      this.manipulator.setAttribute(this.controlPoints[point], SVGProperties.x, (left - this.CONTROL_SIZE / 2).toString());
-      this.manipulator.setAttribute(this.controlPoints[point++], SVGProperties.y, ((top + bottom) / 2 - this.CONTROL_SIZE / 2).toString());
-      this.manipulator.setAttribute(this.controlPoints[point], SVGProperties.x, (right - this.CONTROL_SIZE / 2).toString());
-      this.manipulator.setAttribute(this.controlPoints[point++], SVGProperties.y, ((top + bottom) / 2 - this.CONTROL_SIZE / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[point], SVGProperties.x, ((right + left) / 2 - CONTROL_SIZE / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[point++], SVGProperties.y, (top - CONTROL_SIZE / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[point], SVGProperties.x, ((right + left) / 2 - CONTROL_SIZE / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[point++], SVGProperties.y, (bottom - CONTROL_SIZE / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[point], SVGProperties.x, (left - CONTROL_SIZE / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[point++], SVGProperties.y, ((top + bottom) / 2 - CONTROL_SIZE / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[point], SVGProperties.x, (right - CONTROL_SIZE / 2).toString());
+      this.manipulator.setAttribute(this.controlPoints[point++], SVGProperties.y, ((top + bottom) / 2 - CONTROL_SIZE / 2).toString());
       this.manipulator.appendChild(this.image.nativeElement, this.resizeGroup);
       Transform.setElements(this.selectedElements, this.manipulator);
     } else {

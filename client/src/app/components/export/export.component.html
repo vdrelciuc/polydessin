@@ -40,7 +40,7 @@
           </mat-form-field>
           <div class="icon" [matTooltip]="'Le titre doit avoir de 3 à 16 caractères et peut contenir ' +
            'des lettres, des chiffres, des espaces et des tirets (-).'"
-                matTooltipPosition="below">
+               matTooltipPosition="below">
             <button mat-button>
               <img src="../../../assets/icons/guide.svg">
             </button>
@@ -60,6 +60,5 @@
 </div>
 <div class="button-section">
   <button mat-button id="cancel-button" (click)="onDialogClose()">Annuler</button>
-  <a #myDownload *ngIf="isTitleValid"><button mat-button id="confirm-button" (click)="exportConfirmation()">Exporter</button></a>
-  <a #myDownload *ngIf="!isTitleValid"><button mat-button disabled id="confirm-button" (click)="exportConfirmation()">Exporter</button></a>
+  <a #myDownload><button mat-button id="confirm-button" (click)="exportConfirmation()">Exporter</button></a>
 </div>

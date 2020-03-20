@@ -18,6 +18,8 @@ export enum SVGProperties {
   transform = 'transform',
   pattern = 'pattern',
   id = 'id',
+  joint = 'stroke-linejoin',
+  position = 'viewBox',
 
   // Circle and Ellipse
   centerX = 'cx',
@@ -32,7 +34,6 @@ export enum SVGProperties {
 
   // Line
   polyLine = 'polyline',
-  pointsList = 'points',
 
   // Point
   x = 'x',

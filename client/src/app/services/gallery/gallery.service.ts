@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ElementRef, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
-import { SVGProperties } from '../../classes/svg-properties';
+import { SVGProperties } from '../../classes/svg-html-properties';
 import { Image } from '../../interfaces/image';
 
 @Injectable({
@@ -11,8 +11,6 @@ import { Image } from '../../interfaces/image';
 export class GalleryService {
 
   refToSvg: ElementRef<SVGElement>;
-  private readonly SVG_SERIAL_SIGNATURE: string = 'data:image/svg+xml;';
-  private readonly SVG_HTML_TAG: string = '</svg>';
 
   constructor(private http: HttpClient) {
   }
@@ -36,11 +34,12 @@ export class GalleryService {
     return this.http.delete<void>(`${CONSTANTS.REST_API_ROOT}/${id}`);
   }
 
-  private verifyImage(image: Image): boolean {
+  verifyImage(image: Image): boolean {
     const validWidth = image.width !== null && image.width > 0;
     const validHeight = image.height !== null && image.height > 0;
-    const validSerial = image.serial !== null && (image.serial).toString().includes(this.SVG_SERIAL_SIGNATURE);
-    const validHtml = image.innerHtml !== null && (image.innerHtml).toString().includes(this.SVG_HTML_TAG);
+    const validSerial = image.serial !== null && (image.serial).toString().includes(CONSTANTS.SVG_SERIAL_SIGNATURE);
+    const validHtml = image.innerHtml !== null && (image.innerHtml).toString().includes(CONSTANTS.SVG_HTML_TAG);
     return validWidth && validHeight && validSerial && validHtml;
   }
+
 }

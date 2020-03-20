@@ -76,6 +76,7 @@ export class CanvasComponent implements OnInit {
       this.manipulator.setAttribute(this.rectangle.nativeElement , SVGProperties.width , `${canvasSize.getX()}`);
       this.manipulator.setAttribute(this.rectangle.nativeElement , SVGProperties.height, `${canvasSize.getY()}`);
       this.resetCanvas();
+      this.toolSelector.memory.clear();
     });
 
     this.gridService.thickness.subscribe( (value) => {

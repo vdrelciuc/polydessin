@@ -25,7 +25,8 @@ export class CreateNewComponent implements OnInit, OnDestroy {
 
   backgroundColor: Color;
   previewColor: Color;
-  workspaceSize: CoordinatesXY;
+  workspaceSizeX: number;
+  workspaceSizeY: number;
   private changed: boolean;
   private subscriptions: Subscription[] = [];
 
@@ -49,6 +50,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+    this.workspaceService.Size.next(this.workspaceService.Size.value);
   }
 
   ngOnInit(): void {
@@ -63,16 +65,17 @@ export class CreateNewComponent implements OnInit, OnDestroy {
     this.colorSelectorService.temporaryColor.next(new Color(DEFAULT_SECONDARY_COLOR));
     this.workspaceService.Size.subscribe((size: CoordinatesXY) => {
       if (!this.changed) {
-        this.workspaceSize = size;
+        this.workspaceSizeX = size.getX();
+        this.workspaceSizeY = size.getY();
       }
     });
   }
   setcanvasSizeX(event: any): void {
-    this.workspaceSize.setX(event.target.value);
+    this.workspaceSizeX = event.target.value;
     this.changed = true;
   }
   setcanvasSizeY(event: any): void {
-    this.workspaceSize.setY(event.target.value);
+    this.workspaceSizeY = event.target.value;
     this.changed = true;
   }
 
@@ -117,8 +120,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
   private setUpNewWorkingSpace(): void {
     this.colorSelectorService.colorToChange = ColorType.Background;
     this.colorSelectorService.updateColor(this.previewColor);
-    this.createNewService.canvasSize.next(new CoordinatesXY(this.workspaceSize.getX(), this.workspaceSize.getY()));
-    this.shortcutManager.setupShortcuts();
+    this.createNewService.canvasSize.next(new CoordinatesXY(this.workspaceSizeX, this.workspaceSizeY));
     this.dialogRef.close();
     history.state.comingFromEntryPoint = false;
   }

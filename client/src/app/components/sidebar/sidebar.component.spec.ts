@@ -74,7 +74,7 @@ describe('SidebarComponent', () => {
   it('#selectTool should select current tool', () => {
     component.selectTool(Tools.Line);
     expect(selector.$currentTool.value).toEqual(Tools.Line);
-    expect(component['subscriptions'].length).toEqual(20);
+    expect(component['subscriptions'].length).toEqual(21);
   });
 
   it('#openDialog should open dialog', () => {

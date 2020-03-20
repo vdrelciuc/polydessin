@@ -6,6 +6,7 @@ import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { SprayService } from './spray.service';
+// tslint:disable: no-magic-numbers no-any
 
 describe('SprayService', () => {
   let service: SprayService;
@@ -19,6 +20,8 @@ describe('SprayService', () => {
   };
   const eventMocker = (event: string, keyUsed: number, x: number, y: number) =>
       new MouseEvent(event, {button: keyUsed, clientX: x, clientY: y});
+
+  let spyPushSVG: jasmine.Spy<InferableFunction>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -64,6 +67,8 @@ describe('SprayService', () => {
     service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
+
+    spyPushSVG = (service['pushElement'] = jasmine.createSpy().and.callFake(() => null));
   });
 
   it('should be created', () => {
@@ -86,30 +91,24 @@ describe('SprayService', () => {
     expect(service['opacity']).toEqual(randomTestValueOpacity);
   });
 
-  it('#onMouseOutCanvas should stop drawing', () => {
-    service['isDrawing'].next(true);
-    service.onMouseOutCanvas(eventMocker('mousemove', 0, 0, 0));
-    expect(service['isDrawing'].value).not.toBeTruthy();
-  });
-
-  it('#onMouseRelease should stop drawing', () => {
-    service['isDrawing'].next(true);
+  it('#onMouseRelease should stop drawing and save SVG', () => {
+    service.onMousePress(eventMocker('mousemove', 0, 0, 0));
     service.onMouseRelease(eventMocker('mousemove', 0, 0, 0));
     expect(service['isDrawing'].value).not.toBeTruthy();
+    expect(spyPushSVG).toHaveBeenCalled();
   });
 
-  it('#onMouseOutCanvas should add new element to drawStack', () => {
+  it('#onMouseOutCanvas should stop drawing and save SVG', () => {
     service.onMousePress(eventMocker('mousepress', 0, 0, 0));
-    const spy = spyOn(service['drawStack'], 'addElementWithInfos');
     service.onMouseOutCanvas(eventMocker('mousemove', 0, 0, 0));
-    expect(spy).toHaveBeenCalled();
+    expect(service['isDrawing'].value).not.toBeTruthy();
+    expect(spyPushSVG).toHaveBeenCalled();
   });
 
   it('#onMouseOutCanvas should not add new element to drawStack', () => {
     service.onMouseRelease(eventMocker('mousepress', 0, 0, 0));
-    const spy = spyOn(service['drawStack'], 'addElementWithInfos');
     service.onMouseOutCanvas(eventMocker('mousemove', 0, 0, 0));
-    expect(spy).not.toHaveBeenCalled();
+    expect(spyPushSVG).not.toHaveBeenCalled();
   });
 
   it('#generateRandom should generate random nuber between 0 and 1', () => {
@@ -143,9 +142,8 @@ describe('SprayService', () => {
     const spy = spyOn(manipulator, 'createElement');
     const currentSprays = spy.calls.count();
     const waitTime = 1500;
-    setTimeout(() =>
-      expect(spy.calls.count()).toBeGreaterThan(currentSprays)
-    , waitTime);
+    jasmine.clock().tick(waitTime);
+    expect(spy.calls.count()).toBeGreaterThan(currentSprays);
     expect(service['isDrawing']).toBeTruthy();
     service.onMouseRelease(eventMocker('mousemove', 0, 0, 0));
   });

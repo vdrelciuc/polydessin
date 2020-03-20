@@ -140,12 +140,12 @@ describe('WorkingAreaComponent', () => {
   });
 
   it('#getDrawerStatus should drawer be open', () => {
-    expect(component.getDrawerStatus()).toBeTruthy();
+    expect(component.getDrawerStatus()).toEqual(true);
   });
 
   it('#getDrawerStatus should drawer be closed', () => {
     const drawer = TestBed.get<DrawerService>(DrawerService);
     drawer.navIsOpened = false;
-    expect(component.getDrawerStatus()).toBe(false);
+    expect(component.getDrawerStatus()).toEqual(false);
   });
 });*/

@@ -51,7 +51,10 @@ export class UserGuideComponent implements OnInit {
         nom: 'Formes',
         elements: [
           { nom: 'Ligne', path: 'ligne'},
-          { nom: 'Rectangle', path: 'rectangle'}
+          { nom: 'Rectangle', path: 'rectangle'},
+          { nom: 'Ellipse', path: 'ellipse'},
+          { nom: 'Aerosol', path: 'aerosol'},
+          { nom: 'Polygone', path: 'polygone'}
         ]
       }
     },
@@ -60,6 +63,14 @@ export class UserGuideComponent implements OnInit {
       type: {
         nom: 'Fonctionalites',
         elements: [
+          { nom: 'Pipette', path: 'pipette' },
+          { nom: 'Applicateur de Couleur', path: 'applyer' },
+          { nom: 'Selection et déplacement', path: 'selection' },
+          { nom: 'Grille', path: 'grid' },
+          { nom: 'Exportation', path: 'export' },
+          { nom: 'Gallerie', path: 'gallery' },
+          { nom: 'Sauvegarde sur serveur', path: 'saveServer' },
+          { nom: 'Annuler refaire', path: 'undo' },
           { nom: 'Nouveau Dessin', path: 'nouveauDessin' }
 
         ]
@@ -94,7 +105,7 @@ export class UserGuideComponent implements OnInit {
    *
    *
    */
-  findIndex(nom: string): any[] {
+  findIndex(nom: string): [number, number, boolean] {
     for (let i = 0 ; i < this.categories.length ; ++i) {
       for (let j = 0 ; j < this.categories[i].type.elements.length ; ++j) {
         if (nom === this.categories[i].type.elements[j].nom) {

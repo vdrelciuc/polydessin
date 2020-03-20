@@ -6,16 +6,13 @@ import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
+import * as CONSTANT from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SprayService extends DrawableService {
-  private readonly DOT_RADIUS: number = 1;
-  private readonly DOTS_PER_SPRAY: number = 20;
-  private readonly DEFAULT_RADIUS: number = 5;
-  private readonly DEFAULT_FREQUENCY: number = 4;
-  private readonly MS_PER_S: number = 1000;
+
 
   private spraying: boolean;
   private color: Color;
@@ -30,8 +27,8 @@ export class SprayService extends DrawableService {
     super();
     this.frenchName = 'Aérosol';
     this.isDrawing = new BehaviorSubject<boolean>(false);
-    this.radius = this.DEFAULT_RADIUS;
-    this.frequency = this.DEFAULT_FREQUENCY;
+    this.radius = CONSTANT.DEFAULT_RADIUS;
+    this.frequency = CONSTANT.DEFAULT_FREQUENCY;
     this.spraying = false;
   }
 
@@ -98,7 +95,7 @@ export class SprayService extends DrawableService {
   }
 
   private printSpray(): void {
-    for (let i = 0; i < this.DOTS_PER_SPRAY; i++) {
+    for (let i = 0; i < CONSTANT.DOTS_PER_SPRAY; i++) {
       const radius = this.radius * this.generateRandom();
       const angle = 2 * Math.PI * this.generateRandom();
       this.createDot(this.mousePosition.getX() + radius * Math.cos(angle), this.mousePosition.getY() + radius * Math.sin(angle));
@@ -111,7 +108,7 @@ export class SprayService extends DrawableService {
     const dot = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(dot, SVGProperties.fill, this.color.getHex());
     this.manipulator.setAttribute(dot, SVGProperties.globalOpacity, this.opacity.toString());
-    this.manipulator.setAttribute(dot, SVGProperties.radius, (this.DOT_RADIUS / 2).toString());
+    this.manipulator.setAttribute(dot, SVGProperties.radius, (CONSTANT.DOT_RADIUS / 2).toString());
     this.manipulator.setAttribute(dot, SVGProperties.centerX, x.toString());
     this.manipulator.setAttribute(dot, SVGProperties.centerY, y.toString());
     this.manipulator.appendChild(this.subElement, dot);
@@ -120,7 +117,7 @@ export class SprayService extends DrawableService {
   private async Spray(): Promise<void> {
     if (this.isDrawing.value) {
       this.printSpray();
-      setTimeout(() => this.Spray(), this.MS_PER_S / this.frequency);
+      setTimeout(() => this.Spray(), CONSTANT.MS_PER_S / this.frequency);
     } else {
       this.spraying = false;
     }
