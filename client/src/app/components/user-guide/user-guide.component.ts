@@ -62,6 +62,7 @@ export class UserGuideComponent implements OnInit {
         elements: [
           { nom: 'Pipette', path: 'pipette' },
           { nom: 'Applicateur de Couleur', path: 'applyer' },
+          { nom: 'Selection et déplacement', path: 'selection' },
           { nom: 'Grille', path: 'grid' },
           { nom: 'Exportation', path: 'export' },
           { nom: 'Gallerie', path: 'gallery' },
