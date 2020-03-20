@@ -1,14 +1,14 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
-import { DrawableService } from '../drawable.service';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Color } from 'src/app/classes/color';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { Stack } from 'src/app/classes/stack';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import * as CONSTANTS from '../../../../classes/constants';
-import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
-import { Color } from 'src/app/classes/color';
-import { Stack } from 'src/app/classes/stack';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { BehaviorSubject } from 'rxjs';
+import { DrawableService } from '../drawable.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,21 +20,21 @@ export class EraserService extends DrawableService {
   private oldBorder: string;
   private elements: Stack<SVGElementInfos>;
   private leftClick: boolean;
-  private preview: SVGRectElement;
-  private canErase: boolean;
+  private mousePointer: SVGRectElement;
   private brushDelete: Stack<SVGElementInfos>;
+  private clicked: boolean;
 
   constructor() {
     super();
     this.frenchName = 'Efface';
     this.leftClick = false;
-    this.canErase = true;
     this.thickness = new BehaviorSubject(CONSTANTS.THICKNESS_DEFAULT);
+    this.clicked = false;
   }
 
   initialize(
     manipulator: Renderer2,
-    image:ElementRef<SVGElement>,
+    image: ElementRef<SVGElement>,
     colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
@@ -44,40 +44,44 @@ export class EraserService extends DrawableService {
 
   initializeProperties(): void {
     this.thickness.subscribe(() => {
-      if(this.preview !== undefined) {
-        this.updatePreview();
+      if(this.mousePointer !== undefined) {
+        this.mousePointer.remove();
       }
+      delete(this.mousePointer);
     });
   }
 
   onMouseMove(event: MouseEvent): void {
-    if(this.canErase) {
-      this.movePreview(new CoordinatesXY(event.clientX, event.clientY));
-      if(this.selectedElement !== undefined)
-      {
-        const elementBounds = this.selectedElement.target.getBoundingClientRect();
-        if(!this.getInBounds(elementBounds as DOMRect, new CoordinatesXY(event.clientX, event.clientY))) {
-          this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
-          this.selectedElement = undefined as unknown as SVGElementInfos;
-        }
+    this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
+    if (this.selectedElement !== undefined) {
+      const elementBounds = this.selectedElement.target.getBoundingClientRect();
+      if (!this.getInBounds(elementBounds as DOMRect, new CoordinatesXY(event.clientX, event.clientY))) {
+        this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+        this.selectedElement = undefined as unknown as SVGElementInfos;
       }
     }
+
   }
 
   onMouseOutCanvas(): void {
-    this.canErase = false;
+    if (this.mousePointer !== undefined) {
+      this.mousePointer.remove();
+      delete(this.mousePointer);
+    }
     this.leftClick = false;
   }
 
-  onMouseInCanvas(): void {
-    this.canErase = true;
+  onMouseInCanvas(event: MouseEvent): void {
+    this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
   }
 
   onClick(event: MouseEvent): void {
+    this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
+    this.clicked = true;
     const target = (event.target as SVGGElement);
-    if(
-      target !== this.image.nativeElement 
-      && this.getInBounds( 
+    if (
+      target !== this.image.nativeElement
+      && this.getInBounds(
         target.getBoundingClientRect() as DOMRect,
         new CoordinatesXY(event.clientX, event.clientY)
       )
@@ -88,128 +92,140 @@ export class EraserService extends DrawableService {
   }
 
   onMousePress(event: MouseEvent): void {
-    if(event.button === CONSTANTS.LEFT_CLICK) {
+    this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
+    if (event.button === CONSTANTS.LEFT_CLICK) {
+      this.clicked = true;
       this.leftClick = true;
       this.brushDelete = new Stack<SVGElementInfos>();
     }
   }
 
   onMouseRelease(event: MouseEvent): void {
-    if(event.button === CONSTANTS.LEFT_CLICK) {
+    this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
+    if(event.button === CONSTANTS.LEFT_CLICK && this.clicked) {
+      this.clicked = false;
       this.leftClick = false;
-      if(!this.brushDelete.isEmpty()) {
-        this.manipulator.removeChild(this.image, this.preview);
-        this.drawStack.addSVGToRedo(this.image.nativeElement.cloneNode(true) as SVGElement);
-        this.manipulator.appendChild(this.image.nativeElement, this.preview);
-        this.onMouseMove(event);
+      if (!this.brushDelete.isEmpty()) {
+        this.mousePointer.remove();
+        if (this.selectedElement !== undefined) {
+          this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
+        }
+        this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
+        this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
       }
     }
   }
 
   endTool(): void {
     this.leftClick = false;
-    this.manipulator.removeChild(this.image.nativeElement, this.preview);
-    if(this.selectedElement !== undefined) {
+    if (this.mousePointer !== undefined) {
+      this.mousePointer.remove();
+      delete(this.mousePointer);
+    }
+    if (this.selectedElement !== undefined) {
       this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
       this.selectedElement = undefined as unknown as SVGElementInfos;
     }
-    for(let element of this.elements.getAll()) {
+    for (const element of this.elements.getAll()) {
       element.target.onmouseover = null;
     }
-    delete(this.preview);
+    delete(this.mousePointer);
   }
 
   onSelect(): void {
     this.updateSVGElements();
-    for(let element of this.elements.getAll()) {
-      element.target.onmouseover = (element) => {
-        if (element.target !== null){
-          this.addingMouseMoveEvent(element);
+    for (const element of this.elements.getAll()) {
+      element.target.onmouseover = (elementSVGInfo) => {
+        if (elementSVGInfo.target !== null) {
+          this.addingMouseMoveEvent(elementSVGInfo as unknown as SVGElementInfos);
         }
-      }
+      };
     }
-    if(this.preview === undefined) {
-      this.preview = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
-      this.preview.setAttribute('style', 'pointer-events:none;')
-      this.preview.setAttribute(SVGProperties.color, 'black');
-      this.preview.setAttribute(SVGProperties.fill, 'white');
-      this.preview.setAttribute(SVGProperties.thickness, '5');
-      this.preview.setAttribute(SVGProperties.x, '0');
-      this.preview.setAttribute(SVGProperties.y, '0');
-    }
-    this.manipulator.appendChild(this.image.nativeElement, this.preview);
-    this.updatePreview();
   }
 
   selectElement(element: SVGGElement): void {
     const elementOnTop = { target: element, id: Number(element.getAttribute(SVGProperties.title))};
-    if(elementOnTop.target !== undefined) {      
-      if(this.leftClick) {
+    if (elementOnTop.target !== undefined) {
+      if (this.leftClick) {
         const previous = this.brushDelete.pop_back();
-        if(previous !== undefined) {
+        if (previous !== undefined) {
           previous.deleteWith = elementOnTop.id;
           this.brushDelete.push_back(previous);
         }
         this.brushDelete.push_back(elementOnTop);
-        this.manipulator.removeChild(this.image.nativeElement, elementOnTop.target);
+        elementOnTop.target.remove();
         this.drawStack.removeElement(elementOnTop.id);
       } else {
-        if(this.selectedElement === undefined) {
+        if (this.selectedElement === undefined) {
           this.selectedElement = elementOnTop;
           this.getColor();
         }
-        if(this.selectedElement !== elementOnTop) {
+        if (this.selectedElement !== elementOnTop) {
           this.manipulator.setAttribute(this.selectedElement.target.firstChild, SVGProperties.color, this.oldBorder);
           this.selectedElement = elementOnTop;
           this.getColor();
         }
-        this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ? 
+        this.setOutline((new Color(this.oldBorder).isSimilarTo(new Color(CONSTANTS.ERASER_OUTLINE))) ?
             CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
       }
     }
   }
 
   private deleteSelectedElement(): void {
-    if(this.selectedElement !== undefined) {
+    if (this.selectedElement !== undefined) {
       this.manipulator.setAttribute(this.selectedElement.target.firstChild as SVGElement, SVGProperties.color, this.oldBorder);
       this.drawStack.removeElement(this.selectedElement.id);
-      this.manipulator.removeChild(this.image, this.selectedElement.target);
-      this.manipulator.removeChild(this.image, this.preview);
-      this.drawStack.addSVGToRedo(this.image.nativeElement.cloneNode(true) as SVGElement);
-      this.manipulator.appendChild(this.image.nativeElement, this.preview);
-      this.updatePreview();
+      this.selectedElement.target.remove();
+      this.mousePointer.remove();
+      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
     }
   }
 
-  private addingMouseMoveEvent(element : any){
-    this.selectElement(element.target.parentElement as SVGGElement);
+  private addingMouseMoveEvent(element: SVGElementInfos): void {
+    this.selectElement(element.target.parentElement as unknown as SVGGElement);
   }
 
   private getInBounds(elementBounds: DOMRect, mouse: CoordinatesXY): boolean {
-  return (    
+  return (
       elementBounds.left   < mouse.getX() + this.thickness.value / 2 &&
       elementBounds.right  > mouse.getX() - this.thickness.value / 2 &&
       elementBounds.top    < mouse.getY() + this.thickness.value / 2 &&
-      elementBounds.bottom > mouse.getY() - this.thickness.value / 2  
+      elementBounds.bottom > mouse.getY() - this.thickness.value / 2
     );
   }
 
   private movePreview(mouse: CoordinatesXY): void {
     this.manipulator.setAttribute(
-      this.preview,
+      this.mousePointer,
       SVGProperties.x,
       (CoordinatesXY.effectiveX(this.image, mouse.getX()) - this.thickness.value / 2).toString()
     );
     this.manipulator.setAttribute(
-      this.preview,
+      this.mousePointer,
       SVGProperties.y,
       (CoordinatesXY.effectiveY(this.image, mouse.getY()) - this.thickness.value / 2).toString()
     );
   }
 
-  private updatePreview(): void {
-    this.manipulator.setAttribute(this.preview, SVGProperties.height, this.thickness.value.toString());
-    this.manipulator.setAttribute(this.preview, SVGProperties.width, this.thickness.value.toString());
+  private updatePreview(mouse: CoordinatesXY): void {
+    if (this.mousePointer === undefined) {
+      this.createPreview(mouse);
+    } else {
+      this.movePreview(mouse);
+    }
+  }
+
+  protected createPreview(mouse: CoordinatesXY): void {
+    this.mousePointer = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(this.mousePointer, 'style', 'pointer-events:none;');
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.color, 'black');
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, 'white');
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.thickness, '5');
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.height, this.thickness.value.toString());
+    this.manipulator.setAttribute(this.mousePointer, SVGProperties.width, this.thickness.value.toString());
+    this.manipulator.appendChild(this.image.nativeElement, this.mousePointer);
+    this.movePreview(mouse);
   }
 
   private setOutline(colorToSet: string): void {
@@ -218,7 +234,7 @@ export class EraserService extends DrawableService {
 
   private getColor(): void {
     const color = (this.selectedElement.target.firstChild as SVGElement).getAttribute(SVGProperties.color);
-    if(color !== null) {
+    if (color !== null) {
       this.oldBorder = color;
     }
   }
@@ -228,7 +244,7 @@ export class EraserService extends DrawableService {
     this.elements = new Stack<SVGElementInfos>();
     inSVG.forEach((element) => {
       const id = element.getAttribute(SVGProperties.title);
-      if(id !== null) {
+      if (id !== null) {
         this.elements.push_back({
           target: element,
           id: Number(id)

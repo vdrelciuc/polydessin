@@ -19,17 +19,6 @@ export class Color {
       }
   }
 
-  static areVisuallyEqualForRed(color1: Color, color2: Color): boolean {
-    const redOfColor1HSL = color1.getRGB()[0] / CONSTANT.COLOR_MAX_VALUE;
-    const redOfColor2HSL = color2.getRGB()[0] / CONSTANT.COLOR_MAX_VALUE;
-    const maxPercentage = 1 - (CONSTANT.VISUAL_DIFFERENCE / 100);
-    if (redOfColor1HSL >= maxPercentage && redOfColor2HSL >= maxPercentage) {
-      return false;
-    }
-    const difference = (redOfColor1HSL - redOfColor2HSL) * 100;
-    return difference < CONSTANT.VISUAL_DIFFERENCE && CONSTANT.VISUAL_DIFFERENCE > -15;
-  }
-
   private static rgbToHex(value: number): string {
       let hex = Number(value).toString(CONSTANT.HEX_BASE);
       if (hex.length < 2) {

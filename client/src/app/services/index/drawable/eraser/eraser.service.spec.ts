@@ -1,23 +1,25 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { EraserService } from './eraser.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { Stack } from 'src/app/classes/stack';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import * as CONSTANTS from '../../../../classes/constants';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
-import { Stack } from 'src/app/classes/stack';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { EraserService } from './eraser.service';
+// tslint:disable: no-magic-numbers no-any max-file-line-count
 
 describe('EraserService', () => {
   let service: EraserService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
   const mockedSVGInfo = {
-    id: 1, 
+    id: 1,
     target: {
       firstChild: null,
+      remove: () => null,
       getBoundingClientRect: () => {
         const boundleft = 0;
         const boundtop = 0;
@@ -68,7 +70,7 @@ describe('EraserService', () => {
                 },
                 getAttribute: () => null,
                 querySelectorAll: () => [
-                  { 
+                  {
                     getBoundingClientRect: () => {
                       const boundleft = 0;
                       const boundtop = 0;
@@ -84,8 +86,8 @@ describe('EraserService', () => {
                     onmouseover: null,
                     cloneNode: () => null,
                     parentElement: mockedSVGInfo.target
-                  }, 
-                  { 
+                  },
+                  {
                     getBoundingClientRect: () => {
                       const boundleft = 0;
                       const boundtop = 0;
@@ -117,8 +119,8 @@ describe('EraserService', () => {
     });
     service = TestBed.get(EraserService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
-    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>)
-    service.initialize(manipulator, image, 
+    image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
+    service.initialize(manipulator, image,
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
   });
@@ -130,11 +132,9 @@ describe('EraserService', () => {
   it('#initialize should be initialize element', () => {
     service['elements'] = new Stack<SVGElementInfos>();
     expect(service['elements'].getAll().length).toEqual(0);
-    console.log('IN HERE');
     service.initialize(manipulator, image,
     getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
     getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
-    console.log('DONE');
     expect(service['elements'].getAll().length).toEqual(2);
   });
 
@@ -145,42 +145,39 @@ describe('EraserService', () => {
 
   it('#initializeProperties should init subscriptions', () => {
     service.initializeProperties();
-    service['preview'] = mockedSVGInfo.target as unknown as SVGRectElement;
-    const spy = spyOn(manipulator, 'setAttribute');
     service.thickness.next(50);
-    expect(spy).toHaveBeenCalledWith(service['preview'], SVGProperties.height, '50');
-    expect(spy).toHaveBeenCalledWith(service['preview'], SVGProperties.width, '50');
+    expect(service['mousePointer']).toEqual(undefined as unknown as SVGRectElement);
   });
 
   it('#onMouseMove should not select', () => {
     service.onMouseOutCanvas();
-    const spy = spyOn<any>(service, 'movePreview');
+    const spy = spyOn(manipulator, 'setAttribute');
+    const spy2 = spyOn(manipulator, 'createElement');
     service.onMouseMove({} as unknown as MouseEvent);
-    expect(spy).not.toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith(service['mousePointer'], SVGProperties.width, CONSTANTS.THICKNESS_DEFAULT.toString() );
+    expect(spy).toHaveBeenCalledTimes(8);
+    expect(spy2).toHaveBeenCalledWith(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
   });
 
-
   it('#onMouseMove should change preview, but should not select', () => {
-    service.onMouseInCanvas();
-    expect(service['canErase']).toEqual(true);
+    service.onMouseInCanvas(new MouseEvent('mousemove', {clientX: 100, clientY: 100}));
     const spy = spyOn(manipulator, 'setAttribute');
     service.onMouseMove(new MouseEvent('mousemove', {clientX: 100, clientY: 100}));
     expect(service['selectedElement']).toEqual(undefined as unknown as SVGElementInfos);
     expect(spy).toHaveBeenCalledWith(
-      service['preview'], 
+      service['mousePointer'],
       SVGProperties.x,
       (CoordinatesXY.effectiveX(image, 100) - service.thickness.value / 2).toString()
     );
     expect(spy).toHaveBeenCalledWith(
-      service['preview'], 
+      service['mousePointer'],
       SVGProperties.y,
       (CoordinatesXY.effectiveY(image, 100) - service.thickness.value / 2).toString()
     );
   });
 
-
   it('#onMouseMove should change preview and select element', () => {
-    service.onMouseInCanvas();
+    service.onMouseInCanvas(new MouseEvent('mousemove', {clientX: 100, clientY: 100}));
     service['selectedElement'] = mockedSVGInfo;
     const spy = spyOn<any>(service, 'movePreview');
     service.onMouseMove({
@@ -205,17 +202,14 @@ describe('EraserService', () => {
     expect(spy).toHaveBeenCalledWith(new CoordinatesXY(100, 100));
   });
 
-  it('#onMouseOutCanvas should stop erasing', () => {
-    expect(service['canErase']).toEqual(true);
+  it('#onMouseOutCanvas should remove eraser', () => {
     service.onMouseOutCanvas();
-    expect(service['canErase']).toEqual(false);
+    expect(service['mousePointer']).not.toBeTruthy();
   });
 
-  it('#onMouseInCanvas should start erasing', () => {
-    service['canErase'] = false;
-    expect(service['canErase']).toEqual(false);
-    service.onMouseInCanvas();
-    expect(service['canErase']).toEqual(true);
+  it('#onMouseInCanvas should display eraser', () => {
+    service.onMouseInCanvas(new MouseEvent('mousemove', {clientX: 100, clientY: 100}));
+    expect(service['mousePointer']).toBeTruthy();
   });
 
   it('#onClick should not remove, element is empty', () => {
@@ -263,10 +257,11 @@ describe('EraserService', () => {
   });
 
   it('#onClick should remove', () => {
-    const spy = spyOn(manipulator, 'removeChild');
     service['thickness'].next(1);
     service['selectedElement'] = mockedSVGInfo;
-    console.log('Watching here');
+    service['mousePointer'] = mockedSVGInfo.target as unknown as SVGRectElement;
+    const spy = spyOn(manipulator, 'setAttribute');
+    const spy2 = spyOn(service['mousePointer'], 'remove');
     service.onClick({
       clientX: 1,
       clientY: 10,
@@ -282,14 +277,15 @@ describe('EraserService', () => {
             };
             return boundRect;
         },
+        remove: () => null,
         getAttribute: () => 'black',
         querySelectorAll: () => [],
         clientHeight: 100,
         cloneNode: () => null,
     } as unknown as SVGGElement
     } as any);
-    console.log('AFter watch')
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(3);
+    expect(spy2).toHaveBeenCalled();
   });
 
   it('#onMousePress should start removing elements', () => {
@@ -302,6 +298,7 @@ describe('EraserService', () => {
   it('#onMouseRelease should stop removing elements (none removed)', () => {
     service['leftClick'] = true;
     service['brushDelete'] = new Stack<SVGElementInfos>();
+    service['clicked'] = true;
     service.onMouseRelease(new MouseEvent('mouseup', {button: CONSTANTS.LEFT_CLICK}));
     expect(service['leftClick']).not.toBeTruthy();
   });
@@ -309,9 +306,14 @@ describe('EraserService', () => {
   it('#onMouseRelease should stop removing elements ', () => {
     service['brushDelete'] = new Stack<SVGElementInfos>();
     service['brushDelete'].push_back(mockedSVGInfo);
+    service['mousePointer'] = {
+      remove: () => null
+    } as unknown as SVGRectElement
     service['leftClick'] = true;
-    const spy = spyOn(service['drawStack'], 'addSVGToRedo');
-    const spy2 = spyOn(service, 'onMouseMove');
+    service['clicked'] = true;
+    const spy = spyOn(service['drawStack'], 'addSVGWithNewElement');
+    const spy2 = spyOn(service['mousePointer'], 'remove');
+    const spy3 = spyOn(manipulator, 'setAttribute');
     const event = new MouseEvent('mouseup', {
       button: CONSTANTS.LEFT_CLICK,
       clientX: 100,
@@ -320,7 +322,8 @@ describe('EraserService', () => {
     service.onMouseRelease(event);
     expect(service['leftClick']).not.toBeTruthy();
     expect(spy).toHaveBeenCalled();
-    expect(spy2).toHaveBeenCalledWith(event);
+    expect(spy2).toHaveBeenCalled();
+    expect(spy3).toHaveBeenCalledTimes(2);
   });
 
   it('#endTool should end the tool', () => {
@@ -333,39 +336,37 @@ describe('EraserService', () => {
   });
 
   it('#onSelect should init tool', () => {
+    const spy = spyOn(service['image'].nativeElement, 'querySelectorAll');
     expect(service['elements'].getAll().length).toEqual(2);
-    const spy = spyOn(manipulator, 'setAttribute');
-    const spy2 = spyOn(manipulator, 'createElement');
     service.onSelect();
     expect(service['elements'].getAll().length).toEqual(2);
-    expect(spy).toHaveBeenCalledWith(service['preview'], SVGProperties.width, CONSTANTS.THICKNESS_DEFAULT.toString() )
-    expect(spy2).toHaveBeenCalledWith(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+    expect(spy).toHaveBeenCalledWith('g');
   });
 
   it('#selectElement should select element first time', () => {
     const spy = spyOn<any>(service, 'getColor');
     const spy2 = spyOn<any>(service, 'setOutline');
     service.selectElement({
-      getAttribute: () => '#FFFFFF',
+      getAttribute: () => '#FF0000',
     } as unknown as SVGGElement);
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy2).toHaveBeenCalledWith('#8B0000');
+    expect(spy2).toHaveBeenCalledWith('#FF0000');
   });
 
   it('#selectElement should select element different than the selected one', () => {
     service.selectElement({
-      getAttribute: () => '#FFFFFF',
+      getAttribute: () => '#FF0000',
       firstChild: {
-        getAttribute: () => '#000000'
+        getAttribute: () => '#FF0000'
       }
     } as unknown as SVGGElement);
 
     const spy = spyOn(manipulator, 'setAttribute');
     const spy2 = spyOn<any>(service, 'setOutline');
     service.selectElement({
-      getAttribute: () => '#FFFFFB',
+      getAttribute: () => '#FF0000',
       firstChild: {
-        getAttribute: () => '#00000B'
+        getAttribute: () => '#FF0000'
       }
     } as unknown as SVGGElement);
     expect(spy).toHaveBeenCalled();
@@ -373,22 +374,24 @@ describe('EraserService', () => {
   });
 
   it('#selectElement should select element different than the selected one with left click', () => {
-    const spy = spyOn(manipulator, 'removeChild');
     service.onMousePress(new MouseEvent('mousepress', {button: 0}));
     service.selectElement({
       getAttribute: () => '#FFFFFF',
+      remove: () => null,
       firstChild: {
         getAttribute: () => '#000000'
       }
     } as unknown as SVGGElement);
+    const spy = spyOn(service['drawStack'], 'removeElement');
     expect(service['brushDelete'].getAll().length).toEqual(1);
     service.selectElement({
       getAttribute: () => '#FFFFFB',
+      remove: () => null,
       firstChild: {
         getAttribute: () => '#00000B'
       }
     } as unknown as SVGGElement);
     expect(service['brushDelete'].getAll().length).toEqual(2);
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 });

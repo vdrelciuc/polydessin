@@ -9,13 +9,6 @@ describe('Color', () => {
         color = new Color();
     });
 
-    it('#areVisuallyEqualForRed should not be equal', () => {
-        expect(Color.areVisuallyEqualForRed(
-            new Color([220, 100, 100]),
-            new Color([220, 100, 100]))
-        ).toEqual(false);
-    });
-
     it('should have default color if none is specified', () => {
         expect(color.getHex()).toEqual(defaultColor);
     });
