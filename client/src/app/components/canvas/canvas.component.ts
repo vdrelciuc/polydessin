@@ -103,10 +103,14 @@ export class CanvasComponent implements OnInit {
 
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        localStorage.setItem('myInnerSvg', this.image.nativeElement.innerHTML);
-        localStorage.setItem('myOuterSvg', this.image.nativeElement.outerHTML);
-
-
+        // We verify that our element has been created
+        if (this.image.nativeElement.getAttribute(SVGProperties.width )!== '0'){
+          localStorage.setItem('myInnerSvg', this.image.nativeElement.innerHTML);
+          localStorage.setItem('myOuterSvg', this.image.nativeElement.outerHTML);
+          localStorage.setItem('myWidth', this.image.nativeElement.getAttribute(SVGProperties.width) as string);
+          localStorage.setItem('myHeight', this.image.nativeElement.getAttribute(SVGProperties.height) as string);
+          localStorage.setItem('myColor', this.image.nativeElement.style.backgroundColor as string);
+        }
 
       });
     });
@@ -120,19 +124,19 @@ export class CanvasComponent implements OnInit {
 
     if (history.state.continueDrawing){
 
-      this.image.nativeElement.innerHTML = localStorage.getItem('myOuterHtml') as string;
 
-      const width = this.image.nativeElement.getAttribute(SVGProperties.width) as string;
-      const height = this.image.nativeElement.getAttribute(SVGProperties.height) as string;
-      const color = this.image.nativeElement.style.backgroundColor as string;
+      const width = localStorage.getItem('myWidth' ) as string ;
+      const height = localStorage.getItem('myHeight' )  as string;
+      const color = localStorage.getItem('myColor' ) as string ;
 
       console.log(height);
       console.log(width);
-
+      console.log(color);
 
       this.image.nativeElement.setAttribute(SVGProperties.height, height) ;
       this.image.nativeElement.setAttribute(SVGProperties.width, width) ;
       this.image.nativeElement.style.backgroundColor = color;
+
       this.image.nativeElement.innerHTML = localStorage.getItem('myInnerSvg') as string;
     }
 
