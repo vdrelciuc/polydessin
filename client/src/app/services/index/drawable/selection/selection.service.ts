@@ -45,7 +45,7 @@ export class SelectionService extends DrawableService {
     Transform.needsUpdate.subscribe( () => { this.setGeneratedAreaBorders(); } );
   }
   initializeProperties(): void { /* No properties to initialize */ }
-  cancelSelection(): void {
+  endTool(): void {
     this.selectedElements = new Stack<SVGGElement>();
     this.elementsToInvert = new Stack<SVGGElement>();
     if (this.subElement !== undefined) {
@@ -118,7 +118,7 @@ export class SelectionService extends DrawableService {
     this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image, this.resizeGroup);
     this.state = SelectionState.idle;
     if (this.selectedElements.isEmpty()) {
-      this.cancelSelection();
+      this.endTool();
     }
   }
 
@@ -272,7 +272,7 @@ export class SelectionService extends DrawableService {
 
   selectAllElements(): void {
     this.onMouseRelease(new MouseEvent(''));
-    this.cancelSelection();
+    this.endTool();
     for (const element of [].slice.call(this.image.nativeElement.childNodes, 1)) {
       if (element !== this.subElement && element !== this.resizeGroup && element.tagName === 'g') {
         this.selectedElements.push_back(element);

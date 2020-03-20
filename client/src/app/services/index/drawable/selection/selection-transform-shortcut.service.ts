@@ -71,13 +71,11 @@ export class SelectionTransformShortcutService {
           Transform.translate(0, CONSTANTS.UNIT_MOVE);
         }
         break;
-      default:
-        break;
     }
 
     this.isMoving = true;
-    if (!this.autoMoveHasInstance && (this.upArrowIsPressed || this.downArrowIsPressed
-       || this.leftArrowIsPressed || this.rightArrowIsPressed)) {
+    const hasAKeyPressed = this.upArrowIsPressed || this.downArrowIsPressed || this.leftArrowIsPressed || this.rightArrowIsPressed;
+    if (!this.autoMoveHasInstance && hasAKeyPressed) {
       this.autoMoveHasInstance = true;
       this.autoMove();
     }
@@ -98,8 +96,6 @@ export class SelectionTransformShortcutService {
         break;
       case CONSTANTS.DOWN:
         this.downArrowIsPressed = false;
-        break;
-      default:
         break;
     }
 
