@@ -31,6 +31,12 @@
               Afficher le guide d'Utilisation
             </a>
           </div>
+          <div>
+            <a *ngIf="hasDrawing" class="btn btn-warning btn-center " routerLink = '/dessin'
+               role="button" [state]="{path : '', continueDrawing : true}">
+              Continuer un dessin
+            </a>
+          </div>
         </div>
       </div>
     </div>
