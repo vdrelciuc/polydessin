@@ -11,7 +11,7 @@ import * as CONSTANTS from '../../../../classes/constants';
 import { EraserService } from './eraser.service';
 // tslint:disable: no-magic-numbers no-any max-file-line-count
 
-fdescribe('EraserService', () => {
+describe('EraserService', () => {
   let service: EraserService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
@@ -345,26 +345,26 @@ fdescribe('EraserService', () => {
     const spy = spyOn<any>(service, 'getColor');
     const spy2 = spyOn<any>(service, 'setOutline');
     service.selectElement({
-      getAttribute: () => '#FFFFFF',
+      getAttribute: () => '#FF0000',
     } as unknown as SVGGElement);
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy2).toHaveBeenCalledWith('#8B0000');
+    expect(spy2).toHaveBeenCalledWith('#FF0000');
   });
 
   it('#selectElement should select element different than the selected one', () => {
     service.selectElement({
-      getAttribute: () => '#FFFFFF',
+      getAttribute: () => '#FF0000',
       firstChild: {
-        getAttribute: () => '#000000'
+        getAttribute: () => '#FF0000'
       }
     } as unknown as SVGGElement);
 
     const spy = spyOn(manipulator, 'setAttribute');
     const spy2 = spyOn<any>(service, 'setOutline');
     service.selectElement({
-      getAttribute: () => '#FFFFFB',
+      getAttribute: () => '#FF0000',
       firstChild: {
-        getAttribute: () => '#00000B'
+        getAttribute: () => '#FF0000'
       }
     } as unknown as SVGGElement);
     expect(spy).toHaveBeenCalled();
