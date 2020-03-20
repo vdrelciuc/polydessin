@@ -13,6 +13,8 @@ export class UndoRedoService {
   private elements: Stack<SVGElement>;
   private currentSVG: SVGElement;
   changed: BehaviorSubject<boolean>;
+  undoElements: BehaviorSubject<number>;
+  redoElements: BehaviorSubject<number>;
 
   constructor(
     private drawStack: DrawStackService,
@@ -21,6 +23,8 @@ export class UndoRedoService {
       this.changed = new BehaviorSubject<boolean>(false);
       this.removed = new Stack<SVGElement>();
       this.elements = new Stack<SVGElement>();
+      this.undoElements = new BehaviorSubject<number>(0);
+      this.redoElements = new BehaviorSubject<number>(0);
       this.setCurrent(this.image.nativeElement.cloneNode(true) as SVGElement);
       this.drawStack.addedSVG.subscribe(
         () => {
@@ -36,6 +40,7 @@ export class UndoRedoService {
           const svg = this.drawStack.addedToRedo.value;
           if(svg !== undefined) {
             this.removed.push_back(this.currentSVG);
+            this.redoElements.next(this.redoElements.value + 1);
             this.currentSVG = svg;
             this.drawStack.addedToRedo.next(undefined);
           }
@@ -62,8 +67,10 @@ export class UndoRedoService {
   undo(): void {
     const toUndo = this.elements.pop_back();
     if(toUndo !== undefined) {
+      this.undoElements.next(this.undoElements.value - 1);
       if(this.currentSVG.childElementCount > 1) {
         this.removed.push_back(this.currentSVG);
+        this.redoElements.next(this.redoElements.value + 1);
       }
       this.currentSVG = toUndo;
       if(this.isEmpty()) {
@@ -74,21 +81,14 @@ export class UndoRedoService {
     }
   }
 
-  canUndo(): boolean {
-    return !this.isEmpty();
-  }
-
   redo(): void{
     const toRedo = this.removed.pop_back();
     if(toRedo !== undefined) {
+      this.redoElements.next(this.redoElements.value - 1);
       this.setCurrent(toRedo);
       this.replace(toRedo);
       this.changed.next(true);
     }
-  }
-
-  canRedo(): boolean {
-    return this.removed.getAll().length > 0;
   }
 
   clear(): void {
@@ -118,12 +118,17 @@ export class UndoRedoService {
   private setCurrent(current: SVGElement): void {
     if(this.currentSVG !== undefined) {
       this.elements.push_back(this.currentSVG);
+      this.undoElements.next(this.undoElements.value + 1);
+      if(current.childElementCount === 1) {
+        this.undoElements.next(this.elements.getAll().length);
+      }
     }
     this.currentSVG = current;
   }
 
   private addElement(toAdd: SVGElement): void {
     this.elements.push_back(toAdd);
+    this.undoElements.next(1);
   }
 
   private isEmpty(): boolean {

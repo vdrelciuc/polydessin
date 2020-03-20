@@ -207,7 +207,9 @@
     <div class="bottom">
       <div class="left-column">
         <div class="icon">
-          <button mat-button (click)="toolSelectorService.memory.undo()">
+          <button mat-button 
+          [disabled]="toolSelectorService.disableUndo"
+          (click)="toolSelectorService.memory.undo()">
             <img src="../../../assets/icons/undo1.svg">
           </button>
         </div>
@@ -229,7 +231,9 @@
       </div>
       <div class="right-column">
         <div class="icon">
-          <button mat-button (click)="toolSelectorService.memory.redo()">
+          <button mat-button 
+          [disabled]="toolSelectorService.disableRedo"
+          (click)="toolSelectorService.memory.redo()">
             <img src="../../../assets/icons/redo.svg">
           </button>
         </div>
