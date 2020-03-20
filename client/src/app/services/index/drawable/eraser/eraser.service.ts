@@ -22,12 +22,14 @@ export class EraserService extends DrawableService {
   private leftClick: boolean;
   private mousePointer: SVGRectElement;
   private brushDelete: Stack<SVGElementInfos>;
+  private clicked: boolean;
 
   constructor() {
     super();
     this.frenchName = 'Efface';
     this.leftClick = false;
     this.thickness = new BehaviorSubject(CONSTANTS.THICKNESS_DEFAULT);
+    this.clicked = false;
   }
 
   initialize(
@@ -42,6 +44,9 @@ export class EraserService extends DrawableService {
 
   initializeProperties(): void {
     this.thickness.subscribe(() => {
+      if(this.mousePointer !== undefined) {
+        this.mousePointer.remove();
+      }
       delete(this.mousePointer);
     });
   }
@@ -72,6 +77,7 @@ export class EraserService extends DrawableService {
 
   onClick(event: MouseEvent): void {
     this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
+    this.clicked = true;
     const target = (event.target as SVGGElement);
     if (
       target !== this.image.nativeElement
@@ -88,6 +94,7 @@ export class EraserService extends DrawableService {
   onMousePress(event: MouseEvent): void {
     this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
     if (event.button === CONSTANTS.LEFT_CLICK) {
+      this.clicked = true;
       this.leftClick = true;
       this.brushDelete = new Stack<SVGElementInfos>();
     }
@@ -95,7 +102,8 @@ export class EraserService extends DrawableService {
 
   onMouseRelease(event: MouseEvent): void {
     this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
-    if(event.button === CONSTANTS.LEFT_CLICK) {
+    if(event.button === CONSTANTS.LEFT_CLICK && this.clicked) {
+      this.clicked = false;
       this.leftClick = false;
       if (!this.brushDelete.isEmpty()) {
         this.mousePointer.remove();
