@@ -100,10 +100,30 @@ export class CanvasComponent implements OnInit {
       this.canvasService.layerCount = (this.image.nativeElement.children.length - 1);
       }
     });
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        localStorage.setItem('mySvg', this.image.nativeElement.outerHTML);
+
+      });
+    });
+
+    observer.observe(this.image.nativeElement, {
+      attributes: true,
+      childList: true,
+      characterData: true,
+      subtree : true
+    });
+
+
   }
 
   resetCanvas() {
     this.image.nativeElement.innerHTML = this.filters;
   }
+
+
+
+
 
 }
