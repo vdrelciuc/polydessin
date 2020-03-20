@@ -103,10 +103,9 @@ export class CanvasComponent implements OnInit {
 
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        localStorage.setItem('mySvg', this.image.nativeElement.innerHTML);
-        localStorage.setItem('myHeight', this.image.nativeElement.getAttribute(SVGProperties.height) as string);
-        localStorage.setItem('myWidth', this.image.nativeElement.getAttribute(SVGProperties.width) as string);
-        localStorage.setItem('myColor', this.image.nativeElement.style.backgroundColor as string);
+        localStorage.setItem('myInnerSvg', this.image.nativeElement.innerHTML);
+        localStorage.setItem('myOuterSvg', this.image.nativeElement.outerHTML);
+
 
 
       });
@@ -120,11 +119,21 @@ export class CanvasComponent implements OnInit {
     });
 
     if (history.state.continueDrawing){
-      alert('hello');
-      this.image.nativeElement.setAttribute(SVGProperties.width, localStorage.getItem('myWidth') as string);
-      this.image.nativeElement.setAttribute(SVGProperties.height, localStorage.getItem('myHeight') as string);
-      this.image.nativeElement.style.backgroundColor = localStorage.getItem('myColor') as string;
-      this.image.nativeElement.innerHTML = localStorage.getItem('mySvg') as string;
+
+      this.image.nativeElement.innerHTML = localStorage.getItem('myOuterHtml') as string;
+
+      const width = this.image.nativeElement.getAttribute(SVGProperties.width) as string;
+      const height = this.image.nativeElement.getAttribute(SVGProperties.height) as string;
+      const color = this.image.nativeElement.style.backgroundColor as string;
+
+      console.log(height);
+      console.log(width);
+
+
+      this.image.nativeElement.setAttribute(SVGProperties.height, height) ;
+      this.image.nativeElement.setAttribute(SVGProperties.width, width) ;
+      this.image.nativeElement.style.backgroundColor = color;
+      this.image.nativeElement.innerHTML = localStorage.getItem('myInnerSvg') as string;
     }
 
 

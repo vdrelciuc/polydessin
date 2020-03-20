@@ -20,7 +20,7 @@ export class HomeComponent {
   messageDescriptif = "A tout dessin un artiste, et cet artiste, c'est vous!";
 
 constructor(public dialog: MatDialog) {
-  if (localStorage.getItem('mySvg') !== null && localStorage.getItem('mySvg') !== undefined){
+  if (localStorage.getItem('myInnerSvg') !== null && localStorage.getItem('myInnerSvg') !== undefined){
     this.hasDrawing = true;
   }
 }
