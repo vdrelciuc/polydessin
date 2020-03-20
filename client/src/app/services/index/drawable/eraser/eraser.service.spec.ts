@@ -298,6 +298,7 @@ describe('EraserService', () => {
   it('#onMouseRelease should stop removing elements (none removed)', () => {
     service['leftClick'] = true;
     service['brushDelete'] = new Stack<SVGElementInfos>();
+    service['clicked'] = true;
     service.onMouseRelease(new MouseEvent('mouseup', {button: CONSTANTS.LEFT_CLICK}));
     expect(service['leftClick']).not.toBeTruthy();
   });
@@ -309,6 +310,7 @@ describe('EraserService', () => {
       remove: () => null
     } as unknown as SVGRectElement
     service['leftClick'] = true;
+    service['clicked'] = true;
     const spy = spyOn(service['drawStack'], 'addSVGWithNewElement');
     const spy2 = spyOn(service['mousePointer'], 'remove');
     const spy3 = spyOn(manipulator, 'setAttribute');
