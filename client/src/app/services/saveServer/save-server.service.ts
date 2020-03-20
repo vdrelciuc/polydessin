@@ -26,7 +26,7 @@ export class SaveServerService {
 
   addTag(etiquette: string, data: Set<string>): boolean {
     if (this.checkTagValidity(etiquette)) {
-      data.add(etiquette);
+      data.add(etiquette.toUpperCase());
       return true;
     }
     return false;
