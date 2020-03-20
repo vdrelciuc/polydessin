@@ -2,12 +2,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MAX_TAGS_ALLOWED } from 'src/app/classes/constants';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { Image } from '../../interfaces/image';
 import { ExportService } from '../../services/export/export.service';
 import { SaveServerService } from '../../services/saveServer/save-server.service';
 import { ErrorOnSaveComponent } from './error-on-save/error-on-save.component';
-import { MAX_TAGS_ALLOWED } from 'src/app/classes/constants';
 
 @Component({
   selector: 'app-save-server',
@@ -46,13 +46,12 @@ export class SaveServerComponent implements  AfterViewInit {
 
   onDialogClose(): void {
     this.dialogRef.close();
-    this.shortcutManager.setupShortcuts();
   }
 
   saveConfirmation(): void {
     if (!this.isValidTitle) {
       const warning = this.dialog.open(ErrorOnSaveComponent, {disableClose: true});
-      if(warning !== undefined) {
+      if (warning !== undefined) {
         warning.componentInstance.errorTitle = this.isValidTitle;
       }
     } else {

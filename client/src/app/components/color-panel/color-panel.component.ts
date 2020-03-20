@@ -5,6 +5,7 @@ import * as CONSTANTS from 'src/app/classes/constants';
 import { ColorPickerComponent } from 'src/app/components/color-picker/color-picker.component';
 import { ColorType } from 'src/app/enums/color-types';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
 @Component({
   selector: 'app-color-panel',
@@ -21,6 +22,7 @@ export class ColorPanelComponent implements OnInit {
 
   constructor(
     private colorSelectorService: ColorSelectorService,
+    private shortcutManager: ShortcutManagerService,
     private dialog: MatDialog
     ) { }
 
@@ -87,7 +89,9 @@ export class ColorPanelComponent implements OnInit {
   }
 
   private launchDialog(): void {
-    this.dialog.open(ColorPickerComponent, { disableClose: true });
+    this.dialog.open(ColorPickerComponent, { disableClose: true }).afterClosed().subscribe(() => {
+      this.shortcutManager.setupShortcuts();
+    });
   }
 
 }

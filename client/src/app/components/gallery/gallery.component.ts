@@ -65,7 +65,6 @@ export class GalleryComponent implements OnInit {
 
   onDialogClose(): void {
     this.dialogRef.close();
-    this.shortcutManager.setupShortcuts();
     history.state.goingToGallery = false;
     if (history.state.comingFromEntryPoint) {
       this.router.navigateByUrl('/');

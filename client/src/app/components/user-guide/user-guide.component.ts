@@ -78,33 +78,25 @@ export class UserGuideComponent implements OnInit {
     }
   ];
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (history.state.path !== null && history.state.path !== undefined) {
       this.previousModuleRoute = history.state.path;
     }
   }
 
-  openAll() {
+  openAll(): void {
     this.myPanels.openAll();
   }
 
-  /**
-   *
-   *
-   */
   getCurrentSubCategorie(): string {
     return this.currentSubCategorie;
   }
 
-  setCurrentSubCategorie(value: string) {
+  setCurrentSubCategorie(value: string): void {
     this.currentSubCategorie = value;
     this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}], { skipLocationChange: true });
   }
 
-  /**
-   *
-   *
-   */
   findIndex(nom: string): [number, number, boolean] {
     for (let i = 0 ; i < this.categories.length ; ++i) {
       for (let j = 0 ; j < this.categories[i].type.elements.length ; ++j) {
@@ -167,7 +159,7 @@ export class UserGuideComponent implements OnInit {
     return this.categories[indexes[0]].type.elements[indexes[1]].path;
   }
 
-  closeGuide() {
+  closeGuide(): void {
     this.dialogRef.close();
     this.shortcutManager.setupShortcuts();
     this.router.navigate([{outlets: {guideSubCategory: null}}]);

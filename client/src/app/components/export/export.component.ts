@@ -105,7 +105,6 @@ export class ExportComponent implements AfterViewInit {
 
   onDialogClose(): void {
     this.dialogRef.close();
-    this.shortcutManager.setupShortcuts();
   }
 
   exportConfirmation(): void {

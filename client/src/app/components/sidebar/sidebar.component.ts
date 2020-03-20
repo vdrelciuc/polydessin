@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 import { Tools } from '../../enums/tools';
 import { ToolSelectorService } from '../../services/tools/tool-selector.service';
 import { WorkingAreaComponent } from '../working-area/working-area.component';
+import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,6 +17,7 @@ export class SidebarComponent implements OnInit {
   constructor(
     public toolSelectorService: ToolSelectorService,
     private workingAreaComponent: WorkingAreaComponent,
+    public router: Router,
     protected dialog: MatDialog) {
   }
 
@@ -46,6 +49,16 @@ export class SidebarComponent implements OnInit {
 
   openUserGuide(): void {
     this.workingAreaComponent.openUserGuide();
+  }
+
+  goHome(): void {
+    const warning = this.dialog.open(WarningDialogComponent, { disableClose: true });
+
+    warning.afterClosed().subscribe((result) => {
+      if (!result) {
+        this.router.navigateByUrl('/');
+      }
+    });
   }
 
 }

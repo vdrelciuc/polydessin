@@ -99,7 +99,6 @@ export class CreateNewComponent implements OnInit, OnDestroy {
 
   onCloseDialog(): void {
     this.dialogRef.close();
-    this.shortcutManager.setupShortcuts();
     if (history.state.comingFromEntryPoint) {
       this.router.navigateByUrl('/');
     }

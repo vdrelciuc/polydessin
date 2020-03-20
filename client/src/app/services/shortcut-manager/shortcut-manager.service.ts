@@ -24,13 +24,11 @@ export class ShortcutManagerService {
   }
 
   disableShortcuts(): void {
-    console.log('disable shortcut');
-    this.bypassBrowserShortcuts();
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+    this.bypassBrowserShortcuts();
   }
 
   setupShortcuts(): void {
-    console.log('setyp shortcut');
     this.bypassBrowserShortcuts();
     this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 's', description: 'Selecting selection with shortcut' }).subscribe(
@@ -203,6 +201,12 @@ export class ShortcutManagerService {
       )
     );
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.g', description: 'bypass search chrome' }).subscribe(
+      (event) => {
+        // do nothing
+      }
+      )
+    );
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.s', description: 'bypass open to save from chrome' }).subscribe(
       (event) => {
         // do nothing
       }

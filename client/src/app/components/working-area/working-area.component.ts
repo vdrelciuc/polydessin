@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { ExportService } from 'src/app/services/export/export.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
 import { ExportComponent } from '../export/export.component';
@@ -28,14 +27,12 @@ export class WorkingAreaComponent implements OnInit {
   constructor(
     private drawerService: DrawerService,
     private exportService: ExportService,
-    private drawStackService: DrawStackService,
     private snackBar: MatSnackBar,
     private galleryService: GalleryService,
     private shortcutManager: ShortcutManagerService,
     public route: Router,
     protected dialog: MatDialog) {
-      this.shortcutManager.setWorkingAreaComponent(this);
-      this.shortcutManager.setupShortcuts();
+      this.prepareWorkingAreaShortcuts();
   }
 
   ngOnInit(): void {
@@ -46,19 +43,22 @@ export class WorkingAreaComponent implements OnInit {
     }
   }
 
+  prepareWorkingAreaShortcuts(): void {
+    this.shortcutManager.setWorkingAreaComponent(this);
+    this.shortcutManager.setupShortcuts();
+  }
+
   getDrawerStatus(): boolean {
     return this.drawerService.navIsOpened;
   }
 
   saveServerProject(): void {
-    if (this.galleryService.refToSvg.nativeElement.childElementCount > 0 ||
-      !this.drawStackService.isEmpty()
-    ) {
+    if (this.galleryService.refToSvg.nativeElement.childElementCount > 1) {
       this.prepareDialogLaunch();
       this.exportService.SVGToCanvas().then(() => {
         this.saveServerDialog = this.dialog.open(SaveServerComponent, {disableClose: true});
         this.saveServerDialog.afterClosed().subscribe(() => {
-          this.dialog.closeAll();
+          this.prepareWorkingAreaShortcuts();
         });
       });
     } else {
@@ -72,7 +72,7 @@ export class WorkingAreaComponent implements OnInit {
     this.prepareDialogLaunch();
     this.createNewDialog = this.dialog.open(CreateNewComponent, { disableClose: true });
     this.createNewDialog.afterClosed().subscribe( () => {
-      this.dialog.closeAll();
+      this.prepareWorkingAreaShortcuts();
     });
   }
 
@@ -80,18 +80,17 @@ export class WorkingAreaComponent implements OnInit {
     this.prepareDialogLaunch();
     this.galleryDialog = this.dialog.open(GalleryComponent, { disableClose: true });
     this.galleryDialog.afterClosed().subscribe( () => {
-      this.dialog.closeAll();
+      this.prepareWorkingAreaShortcuts();
     });
   }
 
   exportProject(): void {
-    if ((this.galleryService.refToSvg.nativeElement.childElementCount > 0)
-      || !this.drawStackService.isEmpty()) {
+    if (this.galleryService.refToSvg.nativeElement.childElementCount > 1) {
       this.prepareDialogLaunch();
       this.exportService.SVGToCanvas().then(() => {
         this.exportDialog = this.dialog.open(ExportComponent, { disableClose: true });
         this.exportDialog.afterClosed().subscribe( () => {
-          this.dialog.closeAll();
+          this.prepareWorkingAreaShortcuts();
         });
       });
     } else {

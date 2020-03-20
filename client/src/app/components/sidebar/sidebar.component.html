@@ -222,7 +222,7 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button disabled>
+          <button mat-button (click)="goHome()">
             <img src="../../../assets/icons/home.svg">
           </button>
         </div>
@@ -246,7 +246,7 @@
         <div class="icon" >
           <a  [routerLink]="['' ,{outlets : { guideSubCategory : ['bienvenue']}}]"
               skipLocationChange
-              role="button" (click)="openDialog()">
+              role="button" (click)="openUserGuide()">
             <button mat-button>
               <img src="../../../assets/icons/guide.svg">
             </button>
