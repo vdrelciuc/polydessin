@@ -18,7 +18,7 @@ export const THICKNESS_MINIMUM_ERASER = 3;
 // Polygone
 export const DEFAULT_NSIDES = 3;
 
-// Spray 
+// Spray
 export const DOT_RADIUS = 1;
 export const DOTS_PER_SPRAY = 20;
 export const DEFAULT_RADIUS = 5;
@@ -68,7 +68,7 @@ export const ERASER_OUTLINE_RED_ELEMENTS = '#8B0000';
 // Grid
 export const GRID_MINIMUM    = 5;
 export const GRID_MAXIMUM    = 100;
-export const OPACITY_MINIMUM = 0.1;
+export const OPACITY_MINIMUM = 0.3;
 export const OPACITY_MAXIMUM = 1;
 export const THICKNESS_STEP = 5;
 // export const OPACITY_STEP = 0.1;
@@ -76,12 +76,12 @@ export const THICKNESS_STEP = 5;
 // Gallery
 export const TILE_WIDTH_PX = 250;
 export const SVG_SERIAL_SIGNATURE = 'data:image/svg+xml;';
-export const SVG_HTML_TAG = '</svg>';
+export const SVG_HTML_TAG = '<defs';
 
 // SaveServer
 export const MAX_TAGS_ALLOWED = 5;
 
-// Export 
+// Export
 export const EXPORT_MAX_WIDTH: number = 300;
 export const EXPORT_MAX_HEIGHT: number = 270;
 

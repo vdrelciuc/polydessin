@@ -13,7 +13,7 @@ describe('ImageController', () => {
         title: 'My image',
         tags: ['tag1', 'tag2', 'tag3'],
         serial: 'data:image/svg+xml;base64,PHN2Z',
-        innerHtml: '<svg></svg>',
+        innerHtml: '<defs',
         width: 300,
         height: 300,
         background: 'rgb(255, 255, 255)'

@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
 import { Collection, MongoClient, MongoClientOptions, ObjectId } from 'mongodb';
-import { Image } from './../interfaces/image';
-import { REGEX_TITLE, REGEX_TAG} from '../regular-expressions';
 import * as CONSTANTS from '../constants';
+import { REGEX_TAG, REGEX_TITLE} from '../regular-expressions';
+import { Image } from './../interfaces/image';
 
 @injectable()
 export class ImageService {
@@ -95,4 +95,5 @@ export class ImageService {
         const validBackground = image.background !== null && image.background !== '';
         return containsValidTitle && containsCorrectTags && validWidth && validHeight && validSerial && validHtml && validBackground;
     }
+
 }
