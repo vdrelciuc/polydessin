@@ -157,7 +157,7 @@ export class EraserService extends DrawableService {
           this.selectedElement = elementOnTop;
           this.getColor();
         }
-        this.setOutline(Color.areVisuallyEqualForRed(new Color(this.oldBorder), new Color(CONSTANTS.ERASER_OUTLINE)) ?
+        this.setOutline((new Color(this.oldBorder).isSimilarTo(new Color(CONSTANTS.ERASER_OUTLINE))) ?
             CONSTANTS.ERASER_OUTLINE_RED_ELEMENTS : CONSTANTS.ERASER_OUTLINE);
       }
     }
