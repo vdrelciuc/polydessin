@@ -103,7 +103,11 @@ export class CanvasComponent implements OnInit {
 
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        localStorage.setItem('mySvg', this.image.nativeElement.outerHTML);
+        localStorage.setItem('mySvg', this.image.nativeElement.innerHTML);
+        localStorage.setItem('myHeight', this.image.nativeElement.getAttribute(SVGProperties.height) as string);
+        localStorage.setItem('myWidth', this.image.nativeElement.getAttribute(SVGProperties.width) as string);
+        localStorage.setItem('myColor', this.image.nativeElement.style.backgroundColor as string);
+
 
       });
     });
@@ -114,6 +118,14 @@ export class CanvasComponent implements OnInit {
       characterData: true,
       subtree : true
     });
+
+    if (history.state.continueDrawing){
+      alert('hello');
+      this.image.nativeElement.setAttribute(SVGProperties.width, localStorage.getItem('myWidth') as string);
+      this.image.nativeElement.setAttribute(SVGProperties.height, localStorage.getItem('myHeight') as string);
+      this.image.nativeElement.style.backgroundColor = localStorage.getItem('myColor') as string;
+      this.image.nativeElement.innerHTML = localStorage.getItem('mySvg') as string;
+    }
 
 
   }
