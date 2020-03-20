@@ -8,6 +8,7 @@ import { UserGuideComponent } from '../user-guide/user-guide.component';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  hasDrawing: boolean;
   options: object[] =
     [
       {description : 'Creer un nouveau dessin', optionPath : '/dessin' , show : true},
@@ -18,7 +19,11 @@ export class HomeComponent {
   messageAccueil = 'Bienvenue a PolyDessin';
   messageDescriptif = "A tout dessin un artiste, et cet artiste, c'est vous!";
 
-constructor(public dialog: MatDialog) {}
+constructor(public dialog: MatDialog) {
+  if (localStorage.getItem('mySvg') !== null && localStorage.getItem('mySvg') !== undefined){
+    this.hasDrawing = true;
+  }
+}
 
   openDialog(): void {
     this.dialog.open(UserGuideComponent, {
