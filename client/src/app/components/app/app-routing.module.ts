@@ -20,6 +20,7 @@ import {GalleryGuideComponent} from '../guideTemplaates/gallery-guide/gallery-gu
 import {GridGuideComponent} from '../guideTemplaates/grid-guide/grid-guide.component';
 import {SaveServerGuideComponent} from '../guideTemplaates/save-server-guide/save-server-guide.component';
 import {UndoRedoComponent} from '../guideTemplaates/undo-redo/undo-redo.component';
+import {SelectionDeplacementGuideComponent} from "../guideTemplaates/selection-deplacement-guide/selection-deplacement-guide.component";
 
 const routes: Routes = [
   {path : 'dessin' , component : WorkingAreaComponent},
@@ -43,6 +44,7 @@ const secondaryRoutes: Routes = [
   {path : 'gallery', component : GalleryGuideComponent , outlet: 'guideSubCategory'},
   {path : 'pipette', component : PipetteGuideComponent , outlet: 'guideSubCategory'},
   {path : 'grid', component : GridGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'selection', component : SelectionDeplacementGuideComponent , outlet: 'guideSubCategory'},
   {path : 'undo', component : UndoRedoComponent , outlet: 'guideSubCategory'}
 ]
 
