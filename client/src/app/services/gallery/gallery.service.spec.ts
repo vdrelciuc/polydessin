@@ -14,7 +14,7 @@ describe('GalleryService', () => {
     width: 300,
     height: 300,
     background: 'rgb(255, 255, 255)'
- } as Image;
+  } as Image;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -60,8 +60,12 @@ describe('GalleryService', () => {
   });
 
   it('#verifyImage should accept a valid image', () => {
-    const result = service.verifyImage(validImage);
-    expect(result).toBeTruthy();
+    expect(service.verifyImage({
+      width: 100,
+      height: 100,
+      serial: 'data:image/svg+xml;base64,PHN2Z',
+      innerHtml: '<defs...'
+    } as Image)).toEqual(true);
   });
 
   it('#verifyImage should deny an invalid width', () => {

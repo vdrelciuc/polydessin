@@ -9,6 +9,7 @@ import { REGEX_TAG } from 'src/app/classes/regular-expressions';
 import { SaveServerService } from 'src/app/services/saveServer/save-server.service';
 import { GalleryComponent } from './gallery.component';
 import { RouterModule, Router } from '@angular/router';
+import { APP_BASE_HREF } from '@angular/common';
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
@@ -54,7 +55,8 @@ describe('GalleryComponent', () => {
           useValue: {
             navigateByUrl: () => null,
           }
-        }
+        },
+        [{provide: APP_BASE_HREF, useValue : '/' }]
       ],
       imports: [
         MatFormFieldModule,
