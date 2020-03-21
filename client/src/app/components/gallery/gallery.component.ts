@@ -84,29 +84,6 @@ export class GalleryComponent implements OnInit {
     this.filterWithTag();
   }
 
-  private filterWithTag(): void {
-    if (this.tags.size === 0) {
-      this.resultImages = this.images;
-      return;
-    }
-    this.resultImages = [];
-    // could have used a forEach but would add the same image more than one time if it has more
-    // than one corresponding ticket because u cant break a foreach loop in typescript
-    /* tslint:disable-next-line: prefer-for-of */
-    for (let i = 0; i < this.images.length; i++) {
-      /* tslint:disable-next-line: prefer-for-of */
-      for (let j = 0; j < this.images[i].tags.length; j++) {
-        if (this.tags.has(this.images[i].tags[j])) {
-          this.resultImages.push(this.images[i]);
-          break;
-        }
-      }
-    }
-    if (this.resultImages.length === 0) {
-      this.snacks.open('Aucun résultat ne correspond à votre recherche.', '', {duration: 3500});
-    }
-  }
-
   deleteImage(id: string): void {
     this.isLoading = true;
     this.galleryService.deleteImage(id).subscribe((data) => {
@@ -184,5 +161,28 @@ export class GalleryComponent implements OnInit {
       }
     }
     return 'tags : ' + list;
+  }
+
+  private filterWithTag(): void {
+    if (this.tags.size === 0) {
+      this.resultImages = this.images;
+      return;
+    }
+    this.resultImages = [];
+    // could have used a forEach but would add the same image more than one time if it has more
+    // than one corresponding ticket because u cant break a foreach loop in typescript
+    /* tslint:disable-next-line: prefer-for-of */
+    for (let i = 0; i < this.images.length; i++) {
+      /* tslint:disable-next-line: prefer-for-of */
+      for (let j = 0; j < this.images[i].tags.length; j++) {
+        if (this.tags.has(this.images[i].tags[j])) {
+          this.resultImages.push(this.images[i]);
+          break;
+        }
+      }
+    }
+    if (this.resultImages.length === 0) {
+      this.snacks.open('Aucun résultat ne correspond à votre recherche.', '', {duration: 3500});
+    }
   }
 }

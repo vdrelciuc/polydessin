@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { REGEX_TAG } from 'src/app/classes/regular-expressions';
 import { SaveServerService } from 'src/app/services/saveServer/save-server.service';
 import { GalleryComponent } from './gallery.component';
+import { RouterModule, Router } from '@angular/router';
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
@@ -46,6 +47,12 @@ describe('GalleryComponent', () => {
               }
               return false;
             }
+          },
+        },
+        {
+          provide: Router,
+          useValue: {
+            navigateByUrl: () => null,
           }
         }
       ],
@@ -57,7 +64,12 @@ describe('GalleryComponent', () => {
         MatSnackBarModule,
         MatDialogModule,
         MatInputModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        RouterModule.forRoot(
+          [{
+            path : '' , component : GalleryComponent
+          }]
+        ),
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -72,9 +84,23 @@ describe('GalleryComponent', () => {
   });
 
   it('#onDialogClose should close dialog', () => {
+    history.pushState({
+      comingFromEntryPoint: false
+    }, 'mockState');
     const spy = spyOn(component['dialogRef'], 'close');
     component.onDialogClose();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('#onDialogClose should close dialog', () => {
+    history.pushState({
+      comingFromEntryPoint: true
+    }, 'mockState');
+    const spy = spyOn(component['dialogRef'], 'close');
+    const spy2 = spyOn(component['router'], 'navigateByUrl');
+    component.onDialogClose();
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledWith('/');
   });
 
   it('#addTag should add valid tag', () => {
@@ -101,6 +127,24 @@ describe('GalleryComponent', () => {
     expect(component['tagName']).toEqual('');
     expect(component['resultImages'][0]).not.toEqual(mockedImage);
     expect(spy).toHaveBeenCalledWith('Aucun résultat ne correspond à votre recherche.', '', {duration: 3500});
+  });
+
+  it('#removeTag should remove valid tag', () => {
+    let setOfTags = new Set<string>();
+    setOfTags.add('tag1');
+    component['tags'] = setOfTags;
+    expect(component['tags'].size).toEqual(1);
+    component.removeTag('tag1');
+    expect(component['tags'].size).toEqual(0);
+  });
+
+  it('#removeTag should not remove inexistant tag', () => {
+    let setOfTags = new Set<string>();
+    setOfTags.add('tag1');
+    component['tags'] = setOfTags;
+    expect(component['tags'].size).toEqual(1);
+    component.removeTag('tag2');
+    expect(component['tags'].size).toEqual(1);
   });
 
   it('#deleteImage should not delete invalid image id', () => {
@@ -137,7 +181,10 @@ describe('GalleryComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('#loadImage should load image successfully, not currently drawing', () => {
+  it('#loadImage should load image successfully, not currently drawing', () => { 
+    history.pushState({
+      comingFromEntryPoint: false
+    }, 'mockState');
     const spy = spyOn(component['galleryService'], 'loadImage').and.callFake((image) => true); ;
     const spy2 = spyOn(component['snacks'], 'open');
     component.loadImage(mockedImage);
@@ -156,6 +203,9 @@ describe('GalleryComponent', () => {
   });
 
   it('#loadImage should load image, currently drawing', () => {
+    history.pushState({
+      comingFromEntryPoint: false
+    }, 'mockState');
     component['drawStackService'].addElementWithInfos({
       target: {} as unknown as SVGGElement,
       id: 10

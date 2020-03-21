@@ -146,11 +146,10 @@ describe('WorkingAreaComponent', () => {
   });
 
   it('#prepareWorkingAreaShortcuts should setup shortcuts', () => {
-    component['toolSelectorService'].$currentTool.next(Tools.Brush);
     component['shortcutManager'].saveCurrentTool();
     component.prepareWorkingAreaShortcuts();
     expect(component['shortcutManager']['workingAreaComponent']).toEqual(component);
-    expect(component['toolSelectorService'].$currentTool.value).toEqual(Tools.Brush);
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.None);
     expect(component['shortcutManager']['subscriptions'].length).toEqual(numberOfSubscription);
   });
 
@@ -178,7 +177,6 @@ describe('WorkingAreaComponent', () => {
   });
 
   it('#saveServerProject should save valid canvas', () => {
-    component['toolSelectorService'].$currentTool.next(Tools.Brush);
     component['galleryService'].refToSvg = {
       nativeElement: {
         childElementCount: 2
@@ -187,8 +185,7 @@ describe('WorkingAreaComponent', () => {
     const spy = spyOn(component['snackBar'], 'open');
     const spy2 = spyOn(component['dialog'], 'closeAll');
     component.saveServerProject();
-    expect(component['toolSelectorService'].$currentTool.value).toEqual(Tools.None);
-    expect(component['shortcutManager']['savedTool']).toEqual(Tools.Brush);
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.None);
     expect(spy).not.toHaveBeenCalled();
     expect(spy2).toHaveBeenCalled();
   });
@@ -228,25 +225,21 @@ describe('WorkingAreaComponent', () => {
 
   it('#exportProject should export valid svg', () => {
     const spy = spyOn(component['dialog'], 'closeAll');
-    component['toolSelectorService'].$currentTool.next(Tools.Brush);
     component['galleryService'].refToSvg = {
       nativeElement: {
         childElementCount: 1
       } as SVGGElement
     };
     component.exportProject();
-    expect(component['toolSelectorService'].$currentTool.value).toEqual(Tools.None);
-    expect(component['shortcutManager']['savedTool']).toEqual(Tools.Brush);
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.None);
     expect(spy).toHaveBeenCalled();
   });
 
   it('#openUserGuide should open user guide', () => {
     const spy = spyOn(component['dialog'], 'open');
     const spy2 = spyOn(component['dialog'], 'closeAll');
-    component['toolSelectorService'].$currentTool.next(Tools.Brush);
     component.openUserGuide();
-    expect(component['toolSelectorService'].$currentTool.value).toEqual(Tools.None);
-    expect(component['shortcutManager']['savedTool']).toEqual(Tools.Brush);
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.None);
     expect(spy).toHaveBeenCalled();
     expect(spy2).toHaveBeenCalled();
   });
