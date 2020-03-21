@@ -6,7 +6,7 @@ import { NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
-fdescribe('CanvasComponent', () => {
+describe('CanvasComponent', () => {
   let component: CanvasComponent;
   let fixture: ComponentFixture<CanvasComponent>;
 
