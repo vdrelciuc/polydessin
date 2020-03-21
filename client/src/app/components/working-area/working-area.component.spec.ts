@@ -44,8 +44,10 @@ import { SelectionComponent } from '../selection/selection.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { Tools } from 'src/app/enums/tools';
+import { GalleryComponent } from '../gallery/gallery.component';
+import { Observable } from 'rxjs';
 
-fdescribe('WorkingAreaComponent', () => {
+describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
   let fixture: ComponentFixture<WorkingAreaComponent>;
 
@@ -160,5 +162,92 @@ fdescribe('WorkingAreaComponent', () => {
     const drawer = TestBed.get<DrawerService>(DrawerService);
     drawer.navIsOpened = false;
     expect(component.getDrawerStatus()).toEqual(false);
+  });
+
+  it('#saveServerProject should not save empty canvas', () => {
+    component['galleryService'].refToSvg = {
+      nativeElement: {
+        childElementCount: 0
+      } as SVGGElement
+    };
+    const spy = spyOn(component['snackBar'], 'open');
+    component.saveServerProject();
+    expect(spy).toHaveBeenCalledWith('Vous ne pouvez pas sauvegarder un canvas vide', '', {
+      duration: 2000,
+    });
+  });
+
+  it('#saveServerProject should save valid canvas', () => {
+    component['toolSelectorService'].$currentTool.next(Tools.Brush);
+    component['galleryService'].refToSvg = {
+      nativeElement: {
+        childElementCount: 2
+      } as SVGGElement
+    };
+    const spy = spyOn(component['snackBar'], 'open');
+    const spy2 = spyOn(component['dialog'], 'closeAll');
+    component.saveServerProject();
+    expect(component['toolSelectorService'].$currentTool.value).toEqual(Tools.None);
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.Brush);
+    expect(spy).not.toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
+  });
+
+  it('#createNewProject should open new project dialog', () => {
+    const spy = spyOn(component['dialog'], 'closeAll');
+    const spy2 = spyOn(component['dialog'], 'open');
+    const spy3 = spyOn(component['createNewDialog'], 'afterClosed').and.callFake(() => new Observable());
+    component.openGallery();
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledWith(CreateNewComponent, { disableClose: true });
+    expect(spy3).toHaveBeenCalled();
+  });
+
+  it('#openGallery should open gallery', () => {
+    const spy = spyOn(component['dialog'], 'closeAll');
+    const spy2 = spyOn(component['dialog'], 'open');
+    const spy3 = spyOn(component['galleryDialog'], 'afterClosed').and.callFake(() => new Observable());
+    component.openGallery();
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledWith(GalleryComponent, { disableClose: true });
+    expect(spy3).toHaveBeenCalled();
+  });
+
+  it('#exportProject should not export empty svg', () => {
+    const spy = spyOn(component['snackBar'], 'open');
+    component['galleryService'].refToSvg = {
+      nativeElement: {
+        childElementCount: 0
+      } as SVGGElement
+    };
+    component.exportProject();
+    expect(spy).toHaveBeenCalledWith('Vous ne pouvez pas exporter un canvas vide', '', {
+      duration: 2000,
+    });
+  });
+
+  it('#exportProject should export valid svg', () => {
+    const spy = spyOn(component['dialog'], 'closeAll');
+    component['toolSelectorService'].$currentTool.next(Tools.Brush);
+    component['galleryService'].refToSvg = {
+      nativeElement: {
+        childElementCount: 1
+      } as SVGGElement
+    };
+    component.exportProject();
+    expect(component['toolSelectorService'].$currentTool.value).toEqual(Tools.None);
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.Brush);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#openUserGuide should open user guide', () => {
+    const spy = spyOn(component['dialog'], 'open');
+    const spy2 = spyOn(component['dialog'], 'closeAll');
+    component['toolSelectorService'].$currentTool.next(Tools.Brush);
+    component.openUserGuide();
+    expect(component['toolSelectorService'].$currentTool.value).toEqual(Tools.None);
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.Brush);
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
   });
 });
