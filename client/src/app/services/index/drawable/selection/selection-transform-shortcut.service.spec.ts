@@ -1,10 +1,11 @@
+// tslint:disable: no-any
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import * as CONSTANTS from 'src/app/classes/constants';
 import { Stack } from 'src/app/classes/stack';
 import { Transform } from 'src/app/classes/transformations';
-import * as CONSTANTS from 'src/app/classes/constants';
+import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
 
 describe('SelectionTransformShortcutService', () => {
   let service: SelectionTransformShortcutService;
@@ -30,21 +31,21 @@ describe('SelectionTransformShortcutService', () => {
     } else if (eventName === 'keyup') {
       window.addEventListener<'keyup'>(eventName, () => service['onKeyUp'](mockedEvent.key));
     }
-
-    return () => {};
-  }
+    return () => undefined;
+  };
 
   const setupElementsToTransform = (): void => {
     elementsToTransform = new Stack<SVGGElement>();
 
-    for (let i = 0; i < 10; i++) {
+    const elementCount = 10;
+    for (let i = 0; i < elementCount; i++) {
       const element: SVGGElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       elementsToTransform.push_back(element);
     }
     Transform.setElements(elementsToTransform, manipulator);
 
     selectionGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  }
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -158,9 +159,9 @@ describe('SelectionTransformShortcutService', () => {
     window.dispatchEvent(mockedEvent);
 
     jasmine.clock().tick(CONSTANTS.FIRST_DELAY - 1);
-    expect(transformSpy).toHaveBeenCalledTimes(1)
+    expect(transformSpy).toHaveBeenCalledTimes(1);
     jasmine.clock().tick(2);
-    expect(transformSpy).toHaveBeenCalledTimes(2)
+    expect(transformSpy).toHaveBeenCalledTimes(2);
 
     jasmine.clock().uninstall();
   });
@@ -172,16 +173,17 @@ describe('SelectionTransformShortcutService', () => {
     const transformSpy = spyOn<any>(Transform, 'translate').and.callThrough();
     window.dispatchEvent(mockedEvent);
 
+    let callCount = 2;
     jasmine.clock().tick(CONSTANTS.FIRST_DELAY);
-    expect(transformSpy).toHaveBeenCalledTimes(2)
+    expect(transformSpy).toHaveBeenCalledTimes(callCount++);
     jasmine.clock().tick(CONSTANTS.MOVE_DELAY);
-    expect(transformSpy).toHaveBeenCalledTimes(3)
+    expect(transformSpy).toHaveBeenCalledTimes(callCount++);
     jasmine.clock().tick(CONSTANTS.MOVE_DELAY);
-    expect(transformSpy).toHaveBeenCalledTimes(4)
+    expect(transformSpy).toHaveBeenCalledTimes(callCount++);
     jasmine.clock().tick(CONSTANTS.MOVE_DELAY);
-    expect(transformSpy).toHaveBeenCalledTimes(5)
+    expect(transformSpy).toHaveBeenCalledTimes(callCount++);
     jasmine.clock().tick(CONSTANTS.MOVE_DELAY);
-    expect(transformSpy).toHaveBeenCalledTimes(6)
+    expect(transformSpy).toHaveBeenCalledTimes(callCount++);
 
     jasmine.clock().uninstall();
   });
