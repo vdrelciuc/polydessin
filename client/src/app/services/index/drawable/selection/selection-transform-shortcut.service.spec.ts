@@ -186,6 +186,14 @@ describe('SelectionTransformShortcutService', () => {
     jasmine.clock().uninstall();
   });
 
+  it('#autoMove should reset when selection is no longer moving and allow undo/redo', () => {
+    service['isMoving'] = false;
+    service['autoMove']();
+
+    expect(service['hasWaitedHalfSec']).toBe(false);
+    expect(service['autoMoveHasInstance']).toBe(false);
+  });
+
   it('#onKeyUp should set corresponding released keys to false', () => {
     service['leftArrowIsPressed'] = true;
     service['rightArrowIsPressed'] = true;

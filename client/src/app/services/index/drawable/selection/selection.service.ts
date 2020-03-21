@@ -74,8 +74,7 @@ export class SelectionService extends DrawableService {
 
     if (this.state !== SelectionState.idle) {
       this.onMouseRelease(event);
-    } else if (event.button === 0) {
-      // Left click
+    } else if (event.button === 0) { // Left click
       if (controlPointClicked >= 0) {
         this.state = SelectionState.resizingTop + controlPointClicked;
       } else if (this.isInSelectionArea(new CoordinatesXY(event.clientX, event.clientY))
@@ -85,7 +84,7 @@ export class SelectionService extends DrawableService {
         this.state = SelectionState.singleLeftClickOutOfSelection;
         this.onSingleClick();
       }
-    } else { // Right click
+    } else if (event.button === 2) { // Right click
       this.state = SelectionState.singleRightClick;
     }
   }
