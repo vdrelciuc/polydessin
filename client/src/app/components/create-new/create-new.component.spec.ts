@@ -104,22 +104,16 @@ describe('CreateNewComponent', () => {
     history.pushState({
       comingFromEntryPoint: false
     }, 'mockState');
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      component.onConfirm();
-      expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
-      expect(component['colorSelectorService'].colorToChange).toEqual(ColorType.Background);
-    });
+    component.onConfirm();
+    expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
+    expect(component['colorSelectorService'].colorToChange).toEqual(ColorType.Background);
   });
 
   it('#onConfirm should open warning message', () => {
     component['canvasService']['layerCount'] = 1;
     const spy = (component.openDialogWarning = jasmine.createSpy().and.callFake(() => null));
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      component.onConfirm();
-      expect(spy).toHaveBeenCalled();
-    });
+    component.onConfirm();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#onCloseDialog should close', () => {
@@ -128,11 +122,8 @@ describe('CreateNewComponent', () => {
       comingFromEntryPoint: false
     }, 'mockState');
     component.onCloseDialog();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(spy).toHaveBeenCalled();
-      expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
-    });
+    expect(spy).toHaveBeenCalled();
+    expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
   });
 
   it('#onCloseDialog should close', () => {
@@ -142,20 +133,15 @@ describe('CreateNewComponent', () => {
     const spy = spyOn(component['dialogRef'], 'close');
     const spy2 = spyOn(component['router'], 'navigateByUrl');
     component.onCloseDialog();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(spy).toHaveBeenCalled();
-      expect(spy2).toHaveBeenCalledWith('/');
-      expect(history.state['comingFromEntryPoint']).toBeTruthy();
-    });
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledWith('/');
+    expect(history.state['comingFromEntryPoint']).toBeTruthy();
    });
 
   it('#openDialogWarning should open warning dialog', () => {
     const spy = spyOn(component['dialog'], 'open');
     component.openDialogWarning();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(spy).toHaveBeenCalled();
-    });
+    fixture.detectChanges();
+    expect(spy).toHaveBeenCalled();
   });
 });

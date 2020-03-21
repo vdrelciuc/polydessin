@@ -78,10 +78,8 @@ describe('SaveServerComponent', () => {
   it('#saveConfirmation should save', async () => {
     component['isValidTitle'] = true;
     component['isSaving'] = true;
-    const spy = spyOn(component['dialog'], 'open');
     const spy2 = spyOn(component['snacks'], 'open');
     await component.saveConfirmation();
-    expect(spy).not.toHaveBeenCalledWith(ErrorOnSaveComponent, {disableClose: true});
     expect(spy2).toHaveBeenCalledWith('Début de la sauvegarde', '', {duration : 1400} );
   });
 
