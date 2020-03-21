@@ -15,7 +15,7 @@ describe('RectangleComponent', () => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
