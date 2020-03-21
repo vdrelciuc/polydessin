@@ -20,15 +20,18 @@ describe('EraserComponent', () => {
       ]
     })
     .compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(EraserComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('#changeThickness should update thickness', () => {
+    expect(component['service'].thickness.value).toEqual(3);
+    component.changeThickness(10);
+    expect(component['service'].thickness.value).toEqual(10);
   });
 });

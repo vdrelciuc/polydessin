@@ -23,6 +23,7 @@ describe('PolygonComponent', () => {
     .compileComponents();
     fixture = TestBed.createComponent(PolygonComponent);
     component = fixture.componentInstance;
+    component.ngOnInit();
   }));
 
   it('should create', () => {

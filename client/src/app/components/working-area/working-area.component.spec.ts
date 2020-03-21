@@ -16,7 +16,8 @@ import {
   MatSliderModule,
   MatSlideToggleModule,
   MatTooltipModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatDialogRef
 } from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -52,7 +53,6 @@ describe('WorkingAreaComponent', () => {
   let fixture: ComponentFixture<WorkingAreaComponent>;
 
   const numberOfSubscription = 29;
-  // const numberOfPreventedDefault = 4;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -76,7 +76,6 @@ describe('WorkingAreaComponent', () => {
         EraserComponent,
         PolygonComponent,
         SelectionComponent
-
       ],
       imports: [
         BrowserAnimationsModule,
@@ -134,7 +133,11 @@ describe('WorkingAreaComponent', () => {
   });
 
   it('#ngOnInit shouldn open', () => {
-    const spy = spyOn(component['dialog'], 'open');
+    const spy = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable
+    } as unknown as MatDialogRef<{}, {}>);
     history.pushState({
       comingFromEntryPoint: true
     }, 'mockState');
@@ -192,22 +195,26 @@ describe('WorkingAreaComponent', () => {
 
   it('#createNewProject should open new project dialog', () => {
     const spy = spyOn(component['dialog'], 'closeAll');
-    const spy2 = spyOn(component['dialog'], 'open');
-    const spy3 = spyOn(component['createNewDialog'], 'afterClosed').and.callFake(() => new Observable());
-    component.openGallery();
+    const spy2 = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable
+    } as unknown as MatDialogRef<{}, {}>);
+    component.createNewProject();
     expect(spy).toHaveBeenCalled();
     expect(spy2).toHaveBeenCalledWith(CreateNewComponent, { disableClose: true });
-    expect(spy3).toHaveBeenCalled();
   });
 
   it('#openGallery should open gallery', () => {
     const spy = spyOn(component['dialog'], 'closeAll');
-    const spy2 = spyOn(component['dialog'], 'open');
-    const spy3 = spyOn(component['galleryDialog'], 'afterClosed').and.callFake(() => new Observable());
+    const spy2 = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable
+    } as unknown as MatDialogRef<{}, {}>);
     component.openGallery();
     expect(spy).toHaveBeenCalled();
     expect(spy2).toHaveBeenCalledWith(GalleryComponent, { disableClose: true });
-    expect(spy3).toHaveBeenCalled();
   });
 
   it('#exportProject should not export empty svg', () => {
@@ -227,7 +234,7 @@ describe('WorkingAreaComponent', () => {
     const spy = spyOn(component['dialog'], 'closeAll');
     component['galleryService'].refToSvg = {
       nativeElement: {
-        childElementCount: 1
+        childElementCount: 2
       } as SVGGElement
     };
     component.exportProject();
@@ -236,7 +243,11 @@ describe('WorkingAreaComponent', () => {
   });
 
   it('#openUserGuide should open user guide', () => {
-    const spy = spyOn(component['dialog'], 'open');
+    const spy = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable
+    } as unknown as MatDialogRef<{}, {}>);
     const spy2 = spyOn(component['dialog'], 'closeAll');
     component.openUserGuide();
     expect(component['shortcutManager']['savedTool']).toEqual(Tools.None);

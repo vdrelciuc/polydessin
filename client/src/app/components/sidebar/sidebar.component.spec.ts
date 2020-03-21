@@ -2,18 +2,29 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { MatDialog, MatSnackBarModule, MatTooltipModule } from '@angular/material';
+import { MatDialog, MatSnackBarModule, MatTooltipModule, MatDialogModule, MatDialogRef } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { SidebarComponent } from './sidebar.component';
 import { WorkingAreaComponent } from '../working-area/working-area.component';
+import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
+import { of, Observable } from 'rxjs';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
   let selector: ToolSelectorService;
+
+  // https://medium.com/@aleixsuau/testing-angular-components-with-material-dialog-mddialog-1ae658b4e4b3
+  class MdDialogMock {
+    open() {
+      return {
+        afterClosed: () => of(WarningDialogComponent)
+      };
+    }
+  }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -22,20 +33,14 @@ describe('SidebarComponent', () => {
         ToolSelectorService,
         WorkingAreaComponent,
         HotkeysService,
-        {
-          provide: MatDialog,
-          useValue: {
-            open: () => null,
-            afterColsed: ()  => null,
-            closeAll: () => null
-          }
-        },
+        {provide: MatDialog, useClass: MdDialogMock},
         {provide: APP_BASE_HREF, useValue : '/' }
       ],
       imports: [
         MatSnackBarModule,
         HttpClientModule,
         MatTooltipModule,
+        MatDialogModule,
         RouterModule.forRoot(
           [
             { path: '', component: SidebarComponent}
@@ -100,5 +105,15 @@ describe('SidebarComponent', () => {
     const spy = spyOn(component['workingAreaComponent'], 'openUserGuide');
     component.openUserGuide();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('#goHome should go home with warning', () => {
+    const spy = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable
+    } as unknown as MatDialogRef<{}, {}>);
+    component.goHome();
+    expect(spy).toHaveBeenCalledWith(WarningDialogComponent, { disableClose: true });
   });
 });

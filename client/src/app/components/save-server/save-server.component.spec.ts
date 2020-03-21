@@ -25,7 +25,14 @@ describe('SaveServerComponent', () => {
           },
         },
         MatSnackBar,
-        MatDialog,
+        {
+          provide: MatDialog,
+          useValue: () => ({
+            componentInstance: {
+              errorTitle: 'bla',
+            },
+          }),
+        },
         SaveServerService,
         ExportService
       ],

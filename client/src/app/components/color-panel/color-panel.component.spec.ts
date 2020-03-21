@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FormsModule } from '@angular/forms';
-import { MatDialog, MatSliderModule } from '@angular/material';
-import { BehaviorSubject } from 'rxjs';
+import { MatDialog, MatSliderModule, MatDialogRef } from '@angular/material';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { ColorType } from 'src/app/enums/color-types';
@@ -22,7 +22,9 @@ describe('ColorPanelComponent', () => {
         {
           provide: MatDialog,
           useValue: {
-            open: () => true,
+            open: () => {
+              ({ afterClose: () => new Observable})
+            },
           },
         },
         {
@@ -96,19 +98,37 @@ describe('ColorPanelComponent', () => {
     expect(service.secondaryColor.value.getHex()).toBe(mockedColor.getHex());
   });
 
-  it('#onPrimaryColorChange should ', () => {
+  it('#onPrimaryColorChange should update primary color', () => {
+    const spy = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable
+    } as unknown as MatDialogRef<{}, {}>);
     component.onPrimaryColorChange();
     expect(service.colorToChange).toEqual(ColorType.Primary);
+    expect(spy).toHaveBeenCalled();
   });
 
-  it('#onSecondaryColorChange should ', () => {
+  it('#onSecondaryColorChange should update secondary color', () => {
+    const spy = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable
+    } as unknown as MatDialogRef<{}, {}>);
     component.onSecondaryColorChange();
     expect(service.colorToChange).toEqual(ColorType.Secondary);
+    expect(spy).toHaveBeenCalled();
   });
 
-  it('#onBackgroundChange should ', () => {
+  it('#onBackgroundChange should update background color', () => {
+    const spy = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable
+    } as unknown as MatDialogRef<{}, {}>);
     component.onBackgroundChange();
     expect(service.colorToChange).toEqual(ColorType.Background);
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#onColorInversion should invert primary and secondary colors', () => {

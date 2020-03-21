@@ -74,7 +74,7 @@ describe('LineComponent', () => {
     expect(spy2).toHaveBeenCalled();
   });
 
-  it('#setupShortcuts should try shortcuts with line is done', () => {
+  it('#setupShortcuts should try shortcuts with line is not done', () => {
     const spy = spyOn(component['service'], 'deleteLine');
     component['service']['isDone'] = false;
     document.dispatchEvent(new KeyboardEvent('keydown', {
@@ -82,5 +82,21 @@ describe('LineComponent', () => {
       bubbles: true
     }));
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('#setupShortcuts should try shortcuts with line is done', () => {
+    const spy = spyOn(component['service'], 'deleteLine');
+    component['service']['isDone'] = true;
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'escape',
+      bubbles: true
+    }));
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('#updateJunctionType should update junction type', () => {
+    component['service'].jointIsDot = false;
+    component.updateJunctionType();
+    expect(component['service'].jointIsDot).toEqual(true);
   });
 });

@@ -28,7 +28,7 @@ export class EraserService extends DrawableService {
     super();
     this.frenchName = 'Efface';
     this.leftClick = false;
-    this.thickness = new BehaviorSubject(CONSTANTS.THICKNESS_DEFAULT);
+    this.thickness = new BehaviorSubject(CONSTANTS.THICKNESS_MINIMUM_ERASER);
     this.clicked = false;
   }
 

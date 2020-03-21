@@ -53,7 +53,7 @@ export class SidebarComponent implements OnInit {
 
   goHome(): void {
     const warning = this.dialog.open(WarningDialogComponent, { disableClose: true });
-
+    console.log(warning);
     warning.afterClosed().subscribe((result) => {
       if (!result) {
         this.router.navigateByUrl('/');

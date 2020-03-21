@@ -43,7 +43,7 @@ constructor(
     });
   }
 
-  setupShortcuts(): void {
+  private setupShortcuts(): void {
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
       (event) => {
         this.createNewBtn.nativeElement.click();

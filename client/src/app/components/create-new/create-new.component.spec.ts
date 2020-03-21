@@ -10,6 +10,7 @@ import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { CreateNewComponent } from './create-new.component';
+import { Observable } from 'rxjs';
 describe('CreateNewComponent', () => {
   let component: CreateNewComponent;
   let fixture: ComponentFixture<CreateNewComponent>;
@@ -87,7 +88,11 @@ describe('CreateNewComponent', () => {
 
   it('#onColorSelect should be able to select color', () => {
     component['previewColor'] = new Color('#FFFFFF');
-    const spy2 = spyOn(component['dialog'], 'open');
+    const spy2 = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable
+    } as unknown as MatDialogRef<{}, {}>);
     const spy = spyOn(component['colorSelectorService'], 'updateColor');
     component.onColorSelect();
     expect(spy).toHaveBeenCalledWith(new Color('#FFFFFF'));
