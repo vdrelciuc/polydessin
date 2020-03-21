@@ -35,7 +35,11 @@ export class ShortcutManagerService {
   }
 
   disableShortcuts(): void {
-    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
+    for(let i: number = this.subscriptions.length - 1; i >= 0; --i) {
+      this.subscriptions[i].unsubscribe();
+      this.subscriptions.pop();
+    }
+    // this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
     this.bypassBrowserShortcuts();
   }
 

@@ -1,4 +1,4 @@
-/*import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -56,25 +56,9 @@ describe('SidebarComponent', () => {
     expect(component.currentTool).toEqual(Tools.Selection);
   });
 
-  it('#setupShortcuts should setup shortcuts', () => {
-    component.setupShortcuts();
-    const spy = spyOn(selector, 'setCurrentTool');
-    const spy2 = spyOn(component, 'createNewProject');
-    const keys = ['l', 'c', '1', 'w', 'control.o'];
-    for (const element of keys) {
-      document.dispatchEvent(new KeyboardEvent('keydown', {
-        key: element,
-        bubbles: true
-      }));
-    }
-    expect(spy).toHaveBeenCalledTimes(8);
-    expect(spy2).toHaveBeenCalled();
-  });
-
   it('#selectTool should select current tool', () => {
     component.selectTool(Tools.Line);
     expect(selector.$currentTool.value).toEqual(Tools.Line);
-    expect(component['subscriptions'].length).toEqual(21);
   });
 
   it('#openDialog should open dialog', () => {
@@ -82,4 +66,4 @@ describe('SidebarComponent', () => {
     component.openUserGuide();
     expect(spy).toHaveBeenCalled();
   });
-});*/
+});
