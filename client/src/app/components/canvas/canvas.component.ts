@@ -110,7 +110,6 @@ export class CanvasComponent implements OnInit {
           localStorage.setItem('myHeight', this.image.nativeElement.getAttribute(SVGProperties.height) as string);
           localStorage.setItem('myColor', this.image.nativeElement.style.backgroundColor as string);
         }
-
       });
     });
 
@@ -133,16 +132,9 @@ export class CanvasComponent implements OnInit {
       // We load the inner svg elements
       this.image.nativeElement.innerHTML = localStorage.getItem('myInnerSvg') as string;
     }
-
-
   }
 
   resetCanvas() {
     this.image.nativeElement.innerHTML = this.filters;
   }
-
-
-
-
-
 }
