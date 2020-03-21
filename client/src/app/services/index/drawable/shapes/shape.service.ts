@@ -145,6 +145,13 @@ export abstract class ShapeService extends DrawableService {
   }
 
   protected updateSize(): void {
+    const uniqueShapeID = `${this.svgHtmlTag}-${this.shapeOrigin.getX()}-${this.shapeOrigin.getY()}` +
+    `-${this.mousePosition.getX()}-${this.mousePosition.getY()}-${this.shiftPressed}`;
+    this.manipulator.setAttribute(this.shape, 'id', uniqueShapeID);
+    this.manipulator.setAttribute(this.clip, 'id', `clip${uniqueShapeID}`);
+    this.manipulator.setAttribute(this.shape, 'clip-path', `url(#clip${uniqueShapeID})`);
+    this.manipulator.setAttribute(this.use, 'href', `#${uniqueShapeID}`);
+
     let width = Math.abs(this.mousePosition.getX() - this.shapeOrigin.getX());
     let height = Math.abs(this.mousePosition.getY() - this.shapeOrigin.getY());
 
@@ -175,9 +182,8 @@ export abstract class ShapeService extends DrawableService {
 
   protected setupProperties(): void {
     // Creating elements
-    const shapeID = this.drawStack.getNextID();
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.subElement, SVGProperties.title, shapeID.toString());
+    this.manipulator.setAttribute(this.subElement, SVGProperties.title, this.drawStack.getNextID().toString());
     this.shape = this.manipulator.createElement(this.svgHtmlTag, 'http://www.w3.org/2000/svg');
     this.text = this.manipulator.createElement('text', 'http://www.w3.org/2000/svg');
     this.perimeter = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
@@ -189,8 +195,6 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.shape, SVGProperties.color, this.shapeStyle.borderColor.getHex());
     this.manipulator.setAttribute(this.shape, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
     this.manipulator.setAttribute(this.shape, SVGProperties.fillOpacity, this.shapeStyle.fillOpacity.toString());
-    const uniqueShapeID = `${this.svgHtmlTag}${shapeID}-${this.shapeOrigin.getX()}-${this.shapeOrigin.getY()}`;
-    this.manipulator.setAttribute(this.shape, 'id', uniqueShapeID);
 
     // Adding text properties
     const color = this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getInvertedColor(true).getHex() : 'black';
@@ -208,10 +212,7 @@ export abstract class ShapeService extends DrawableService {
 
     // Removing border outside of shape
     this.clip = this.manipulator.createElement('clipPath', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.clip, 'id', `clip${uniqueShapeID}`);
     this.use = this.manipulator.createElement('use', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.shape, 'clip-path', `url(#clip${uniqueShapeID})`);
-    this.manipulator.setAttribute(this.use, 'href', `#${uniqueShapeID}`);
 
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.shape);
