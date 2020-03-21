@@ -45,12 +45,12 @@ export class SelectionService extends DrawableService {
     Transform.needsUpdate.subscribe( () => { this.setGeneratedAreaBorders(); } );
   }
   initializeProperties(): void { /* No properties to initialize */ }
-  cancelSelection(): void {
+  endTool(): void {
     this.selectedElements = new Stack<SVGGElement>();
     this.elementsToInvert = new Stack<SVGGElement>();
     if (this.subElement !== undefined) {
-      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
-      this.manipulator.removeChild(this.image.nativeElement, this.resizeGroup);
+      this.subElement.remove();
+      this.resizeGroup.remove();
     }
     this.transformShortcuts.deleteShortcuts();
   }
@@ -74,8 +74,7 @@ export class SelectionService extends DrawableService {
 
     if (this.state !== SelectionState.idle) {
       this.onMouseRelease(event);
-    } else if (event.button === 0) {
-      // Left click
+    } else if (event.button === 0) { // Left click
       if (controlPointClicked >= 0) {
         this.state = SelectionState.resizingTop + controlPointClicked;
       } else if (this.isInSelectionArea(new CoordinatesXY(event.clientX, event.clientY))
@@ -85,7 +84,7 @@ export class SelectionService extends DrawableService {
         this.state = SelectionState.singleLeftClickOutOfSelection;
         this.onSingleClick();
       }
-    } else { // Right click
+    } else if (event.button === 2) { // Right click
       this.state = SelectionState.singleRightClick;
     }
   }
@@ -110,7 +109,7 @@ export class SelectionService extends DrawableService {
         break;
       case SelectionState.moving:
         this.resizeGroup.remove();
-        this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+        this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
         this.manipulator.appendChild(this.image.nativeElement, this.resizeGroup);
         break;
     }
@@ -118,7 +117,7 @@ export class SelectionService extends DrawableService {
     this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image, this.resizeGroup);
     this.state = SelectionState.idle;
     if (this.selectedElements.isEmpty()) {
-      this.cancelSelection();
+      this.endTool();
     }
   }
 
@@ -272,7 +271,7 @@ export class SelectionService extends DrawableService {
 
   selectAllElements(): void {
     this.onMouseRelease(new MouseEvent(''));
-    this.cancelSelection();
+    this.endTool();
     for (const element of [].slice.call(this.image.nativeElement.childNodes, 1)) {
       if (element !== this.subElement && element !== this.resizeGroup && element.tagName === 'g') {
         this.selectedElements.push_back(element);

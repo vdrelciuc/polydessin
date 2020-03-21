@@ -27,13 +27,13 @@ export const MS_PER_S = 1000;
 
 // Selection
 export const CONTROL_SIZE = 6;
-export const firstDelay = 500;
-export const moveDelay = 100;
-export const unitMove = 3;
-export const left = 'ArrowLeft';
-export const down = 'ArrowDown';
-export const right = 'ArrowRight';
-export const up = 'ArrowUp';
+export const FIRST_DELAY = 500;
+export const MOVE_DELAY = 100;
+export const UNIT_MOVE = 3;
+export const LEFT = 'ArrowLeft';
+export const DOWN = 'ArrowDown';
+export const RIGHT = 'ArrowRight';
+export const UP = 'ArrowUp';
 
 // Colors
 export const DEFAULT_PRIMARY_COLOR = '#000000';

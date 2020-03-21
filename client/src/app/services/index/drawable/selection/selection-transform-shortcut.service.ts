@@ -47,37 +47,35 @@ export class SelectionTransformShortcutService {
 
   private onKeyDown(keyPressed: string): void {
     switch (keyPressed) {
-      case CONSTANTS.left:
+      case CONSTANTS.LEFT:
         this.leftArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(-CONSTANTS.unitMove, 0);
+          Transform.translate(-CONSTANTS.UNIT_MOVE, 0);
         }
         break;
-      case CONSTANTS.right:
+      case CONSTANTS.RIGHT:
         this.rightArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(CONSTANTS.unitMove, 0);
+          Transform.translate(CONSTANTS.UNIT_MOVE, 0);
         }
         break;
-      case CONSTANTS.up:
+      case CONSTANTS.UP:
         this.upArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(0, -CONSTANTS.unitMove);
+          Transform.translate(0, -CONSTANTS.UNIT_MOVE);
         }
         break;
-      case CONSTANTS.down:
+      case CONSTANTS.DOWN:
         this.downArrowIsPressed = true;
         if (this.lastKeyPressed !== keyPressed) {
-          Transform.translate(0, CONSTANTS.unitMove);
+          Transform.translate(0, CONSTANTS.UNIT_MOVE);
         }
-        break;
-      default:
         break;
     }
 
     this.isMoving = true;
-    if (!this.autoMoveHasInstance && (this.upArrowIsPressed || this.downArrowIsPressed
-       || this.leftArrowIsPressed || this.rightArrowIsPressed)) {
+    const hasAKeyPressed = this.upArrowIsPressed || this.downArrowIsPressed || this.leftArrowIsPressed || this.rightArrowIsPressed;
+    if (!this.autoMoveHasInstance && hasAKeyPressed) {
       this.autoMoveHasInstance = true;
       this.autoMove();
     }
@@ -87,19 +85,17 @@ export class SelectionTransformShortcutService {
 
   private onKeyUp(keyReleased: string): void {
     switch (keyReleased) {
-      case CONSTANTS.left:
+      case CONSTANTS.LEFT:
         this.leftArrowIsPressed = false;
         break;
-      case CONSTANTS.right:
+      case CONSTANTS.RIGHT:
         this.rightArrowIsPressed = false;
         break;
-      case CONSTANTS.up:
+      case CONSTANTS.UP:
         this.upArrowIsPressed = false;
         break;
-      case CONSTANTS.down:
+      case CONSTANTS.DOWN:
         this.downArrowIsPressed = false;
-        break;
-      default:
         break;
     }
 
@@ -114,24 +110,24 @@ export class SelectionTransformShortcutService {
     if (this.isMoving) {
       if (this.hasWaitedHalfSec) {
         this.translate();
-        setTimeout(() => this.autoMove(), CONSTANTS.moveDelay);
+        setTimeout(() => this.autoMove(), CONSTANTS.MOVE_DELAY);
       } else {
         this.hasWaitedHalfSec = true;
-        setTimeout(() => this.autoMove(), CONSTANTS.firstDelay);
+        setTimeout(() => this.autoMove(), CONSTANTS.FIRST_DELAY);
       }
     } else {
       this.hasWaitedHalfSec = false;
       this.autoMoveHasInstance = false;
 
       this.selectionGroup.remove();
-      this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
       this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
     }
   }
 
   private translate(): void {
-    const translateX = (this.leftArrowIsPressed ? - CONSTANTS.unitMove : 0) + (this.rightArrowIsPressed ? CONSTANTS.unitMove : 0);
-    const translateY = (this.upArrowIsPressed ? - CONSTANTS.unitMove : 0) + (this.downArrowIsPressed ? CONSTANTS.unitMove : 0);
+    const translateX = (this.leftArrowIsPressed ? - CONSTANTS.UNIT_MOVE : 0) + (this.rightArrowIsPressed ? CONSTANTS.UNIT_MOVE : 0);
+    const translateY = (this.upArrowIsPressed ? - CONSTANTS.UNIT_MOVE : 0) + (this.downArrowIsPressed ? CONSTANTS.UNIT_MOVE : 0);
 
     Transform.translate(translateX, translateY);
   }

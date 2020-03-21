@@ -137,7 +137,7 @@ describe('SprayService', () => {
   });
 
   it('#holding mouse should draw continuously', () => {
-
+    jasmine.clock().install();
     service.onMousePress(eventMocker('mousepress', 0, 0, 0));
     const spy = spyOn(manipulator, 'createElement');
     const currentSprays = spy.calls.count();
@@ -146,6 +146,7 @@ describe('SprayService', () => {
     expect(spy.calls.count()).toBeGreaterThan(currentSprays);
     expect(service['isDrawing']).toBeTruthy();
     service.onMouseRelease(eventMocker('mousemove', 0, 0, 0));
+    jasmine.clock().uninstall();
   });
 
 });
