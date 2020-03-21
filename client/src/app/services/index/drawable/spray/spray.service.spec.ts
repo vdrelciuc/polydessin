@@ -10,7 +10,7 @@ import { SprayService } from './spray.service';
 
 // tslint:disable: no-magic-numbers no-any
 
-fdescribe('SprayService', () => {
+describe('SprayService', () => {
   let service: SprayService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGGElement>;
