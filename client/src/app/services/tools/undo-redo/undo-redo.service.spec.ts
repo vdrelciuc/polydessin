@@ -5,7 +5,7 @@ import { Renderer2, ElementRef } from '@angular/core';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { Stack } from 'src/app/classes/stack';
 
-fdescribe('UndoRedoService', () => {
+describe('UndoRedoService', () => {
 
   let service: UndoRedoService;
   let drawStack: DrawStackService;
