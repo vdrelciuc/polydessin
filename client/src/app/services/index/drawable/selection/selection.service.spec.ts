@@ -139,6 +139,8 @@ describe('SelectionService', () => {
     service['selectionRect'].getBoundingClientRect = jasmine.createSpy().and.callFake(mockedBBox);
     service['transformShortcuts'].setupShortcuts = jasmine.createSpy().and.callFake(() => {});
     service['image'].nativeElement.cloneNode = jasmine.createSpy().and.returnValue(undefined);
+    service['subElement'].remove = jasmine.createSpy().and.returnValue(mockedRendered);
+    service['resizeGroup'].remove = jasmine.createSpy().and.returnValue(mockedRendered);
     service['state'] = SelectionState.idle;
     setupElementsInCanvas();
   });
@@ -147,16 +149,8 @@ describe('SelectionService', () => {
     expect(service).toBeTruthy();
   });
 
-  /*it('#isInSelectionArea should return true when position is in area', () => {
-    const position = new CoordinatesXY(50, 50);
-    const isInSelection = service['isInSelectionArea'](position);
-    expect(isInSelection).toBe(true);
-  });*/
-
   it('#endTool should reset selection tool', () => {
-    const spy = spyOn<any>(service['manipulator'], 'removeChild');
     service.endTool();
-    expect(spy).toHaveBeenCalled();
     expect(service['selectedElements'].getAll().length).toBe(0);
     expect(service['elementsToInvert'].getAll().length).toBe(0);
   });

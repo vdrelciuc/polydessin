@@ -49,8 +49,8 @@ export class SelectionService extends DrawableService {
     this.selectedElements = new Stack<SVGGElement>();
     this.elementsToInvert = new Stack<SVGGElement>();
     if (this.subElement !== undefined) {
-      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
-      this.manipulator.removeChild(this.image.nativeElement, this.resizeGroup);
+      this.subElement.remove();
+      this.resizeGroup.remove();
     }
     this.transformShortcuts.deleteShortcuts();
   }
