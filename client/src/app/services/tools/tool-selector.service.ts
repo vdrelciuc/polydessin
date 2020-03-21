@@ -41,6 +41,8 @@ export class ToolSelectorService {
   private ellipse: EllipseService;
   private eraser: EraserService;
   private pipette: PipetteService;
+  disableUndo: boolean;
+  disableRedo: boolean;
 
   constructor(private drawerService: DrawerService) { // Add every tool that is going to be used with it's name format (name, toolService)
     this.tools = new Map<Tools, DrawableService>();
@@ -71,6 +73,9 @@ export class ToolSelectorService {
     this.tools.set(Tools.Grid, this.grid);
     this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
     this.setCurrentTool(Tools.Selection);
+
+    this.disableRedo = true;
+    this.disableUndo = true;
   }
 
   initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService, canvas: ElementRef<HTMLCanvasElement>): void {
@@ -90,6 +95,12 @@ export class ToolSelectorService {
         }
       }
     );
+    this.memory.undoElements.subscribe( () => {
+      this.disableUndo = this.memory.undoElements.value <= 1;
+    });
+    this.memory.redoElements.subscribe( () => {
+      this.disableRedo = this.memory.redoElements.value === 0;
+    });
   }
 
   getCurrentTool(): DrawableService | undefined { return this.tool; }
@@ -117,6 +128,12 @@ export class ToolSelectorService {
       this.tool.onSelect();
       this.$currentTool.next(tool);
       this.drawerService.updateDrawer(this.$currentTool.getValue());
+    } else if (tool === Tools.None) {
+      if (this.tool !== undefined) {
+        this.tool.endTool();
+      }
+      this.$currentTool.next(tool);
+      this.drawerService.navIsOpened = true;
     }
   }
 

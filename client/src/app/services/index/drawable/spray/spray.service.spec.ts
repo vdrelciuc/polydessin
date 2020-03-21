@@ -142,9 +142,8 @@ describe('SprayService', () => {
     const spy = spyOn(manipulator, 'createElement');
     const currentSprays = spy.calls.count();
     const waitTime = 1500;
-    setTimeout(() =>
-      expect(spy.calls.count()).toBeGreaterThan(currentSprays)
-    , waitTime);
+    jasmine.clock().tick(waitTime);
+    expect(spy.calls.count()).toBeGreaterThan(currentSprays);
     expect(service['isDrawing']).toBeTruthy();
     service.onMouseRelease(eventMocker('mousemove', 0, 0, 0));
   });

@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { TILE_WIDTH_PX } from 'src/app/classes/constants';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { Image } from '../../interfaces/image';
 import { GalleryService } from '../../services/gallery/gallery.service';
 import { SaveServerService } from '../../services/saveServer/save-server.service';
 import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
-import { TILE_WIDTH_PX } from 'src/app/classes/constants'
 
 @Component({
   selector: 'app-gallery',
@@ -29,9 +31,12 @@ export class GalleryComponent implements OnInit {
               private snacks: MatSnackBar,
               private sanitizer: DomSanitizer,
               private galleryService: GalleryService,
+              public router: Router,
               private drawStackService: DrawStackService,
+              private shortcutManager: ShortcutManagerService,
               private dialog: MatDialog
   ) {
+    this.shortcutManager.disableShortcuts();
     this.tags = new Set<string>();
     /* tslint:disable-next-line: no-magic-numbers */
     this.hoveredIndex = -1;
@@ -60,6 +65,10 @@ export class GalleryComponent implements OnInit {
 
   onDialogClose(): void {
     this.dialogRef.close();
+    history.state.goingToGallery = false;
+    if (history.state.comingFromEntryPoint) {
+      this.router.navigateByUrl('/');
+    }
   }
 
   addTag(tag: string): void {
@@ -75,7 +84,7 @@ export class GalleryComponent implements OnInit {
     this.filterWithTag();
   }
 
-  filterWithTag(): void {
+  private filterWithTag(): void {
     if (this.tags.size === 0) {
       this.resultImages = this.images;
       return;
@@ -93,7 +102,6 @@ export class GalleryComponent implements OnInit {
         }
       }
     }
-
     if (this.resultImages.length === 0) {
       this.snacks.open('Aucun résultat ne correspond à votre recherche.', '', {duration: 3500});
     }
@@ -142,6 +150,7 @@ export class GalleryComponent implements OnInit {
 
     if (isImageLoadable) {
       this.snacks.open('Image chargée avec succès.', '', {duration: 2000});
+      history.state.comingFromEntryPoint = false;
       this.drawStackService.addingNewSVG();
       this.onDialogClose();
     } else {

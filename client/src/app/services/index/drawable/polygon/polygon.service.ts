@@ -28,7 +28,8 @@ export class PolygonService extends DrawableService {
   protected perimeter: SVGPolygonElement;
   protected perimeterAlternative: SVGPolygonElement;
   protected ratioYX: number;
-  protected ID: number;
+  protected clip: SVGClipPathElement;
+  protected use: SVGUseElement;
 
   private shapeIsEmpty: boolean;
 
@@ -77,11 +78,11 @@ export class PolygonService extends DrawableService {
       // This case happens if the mouse button was released out of canvas: the shaped is confirmed on next mouse click
       this.onMouseRelease(event);
     } else if ((this.shapeStyle.hasBorder || this.shapeStyle.hasFill) && this.shapeStyle.thickness !== 0) {
-      this.ID = this.drawStack.getNextID();
       this.isChanging = true;
       this.startDraw();
       this.shapeCorner = CoordinatesXY.getEffectiveCoords(this.image, event);
       this.updateProperties();
+      this.onMouseMove(event);
     }
   }
 
@@ -154,6 +155,12 @@ export class PolygonService extends DrawableService {
   }
 
   protected updateDraw(): void {
+    const ID = `${this.nSides}<|^.^|>${this.shapeOrigin.getX()}>|^.^|>${this.shapeOrigin.getY()}<|^.^|<${this.radius}|-.-|`;
+    this.manipulator.setAttribute(this.polygon, 'id', `polygon${ID}`);
+    this.manipulator.setAttribute(this.polygon, 'clip-path', `url(#clip${ID})`);
+    this.manipulator.setAttribute(this.clip, 'id', `clip${ID}`);
+    this.manipulator.setAttribute(this.use, 'href', `#polygon${ID}`);
+
     let points = '';
 
     let angle = -Math.PI / 2;
@@ -200,8 +207,7 @@ export class PolygonService extends DrawableService {
     // Creating elements
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.polygon = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.subElement, SVGProperties.title, this.ID.toString());
-    this.manipulator.setAttribute(this.polygon, 'id', `polygon${this.ID}`);
+    this.manipulator.setAttribute(this.subElement, SVGProperties.title, this.drawStack.getNextID().toString());
 
     // Creating perimeter
     this.perimeter = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
@@ -216,19 +222,16 @@ export class PolygonService extends DrawableService {
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.dashedBorderOffset, '4');
 
     // setting clip-path
-    this.manipulator.setAttribute(this.polygon, 'clip-path', `url(#clip${this.ID})`);
-    const clip = this.manipulator.createElement('clipPath', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(clip, 'id', `clip${this.ID}`);
-    const use = this.manipulator.createElement('use', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(use, 'href', `#polygon${this.ID}`);
+    this.clip = this.manipulator.createElement('clipPath', 'http://www.w3.org/2000/svg');
+    this.use = this.manipulator.createElement('use', 'http://www.w3.org/2000/svg');
 
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.polygon);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
     this.manipulator.appendChild(this.subElement, this.perimeter);
     this.manipulator.appendChild(this.subElement, this.perimeterAlternative);
-    this.manipulator.appendChild(this.subElement, clip);
-    this.manipulator.appendChild(clip, use);
+    this.manipulator.appendChild(this.subElement, this.clip);
+    this.manipulator.appendChild(this.clip, this.use);
   }
   endTool(): void {
     if (this.isChanging) {

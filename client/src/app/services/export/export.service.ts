@@ -1,10 +1,10 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { EXPORT_MAX_HEIGHT, EXPORT_MAX_WIDTH } from 'src/app/classes/constants';
+import { REGEX_TITLE } from 'src/app/classes/regular-expressions';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageExportType } from 'src/app/enums/export-type';
 import { ImageFormat } from 'src/app/enums/image-format';
-import { EXPORT_MAX_WIDTH, EXPORT_MAX_HEIGHT } from 'src/app/classes/constants';
-import { REGEX_TITLE } from 'src/app/classes/regular-expressions';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +17,13 @@ export class ExportService {
   currentFormat: BehaviorSubject<ImageFormat>;
   currentFilter: BehaviorSubject<ImageFilter>;
   currentExportType: BehaviorSubject<ImageExportType>;
-  isTitleValid: BehaviorSubject<boolean>
+  isTitleValid: BehaviorSubject<boolean>;
 
   private image: ElementRef<SVGElement>; // My actual svg
   private serialized: XMLSerializer;
   private cloneSVG: ElementRef<SVGElement>; // copy of SVG element to set filters on it
   private filtersMap: Map<ImageFilter, string>;
-  
+
   constructor() {
     this.currentFormat = new BehaviorSubject<ImageFormat>(ImageFormat.JPEG);
     this.currentFilter = new BehaviorSubject<ImageFilter>(ImageFilter.Aucun);

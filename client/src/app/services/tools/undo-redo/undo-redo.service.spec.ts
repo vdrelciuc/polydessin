@@ -140,10 +140,6 @@ describe('UndoRedoService', () => {
     expect(service['changed'].value).toEqual(false);
   });
 
-  it('#canUndo shouldn\'t be able to undo', () => {
-    expect(service.canUndo()).not.toBeTruthy();
-  });
-
   it('#redo should be able to redo last action', () => {
     service['removed'].push_back(mockedSVG as unknown as SVGElement);
     expect(service['changed'].value).toEqual(false);
@@ -159,9 +155,5 @@ describe('UndoRedoService', () => {
     service.redo();
     expect(service['currentSVG']).toEqual(mockedSVG as unknown as SVGElement);
     expect(service['changed'].value).toEqual(false);
-  });
-
-  it('#canRedo shouldn\'t be able to redo', () => {
-    expect(service.canRedo()).not.toBeTruthy();
   });
 });

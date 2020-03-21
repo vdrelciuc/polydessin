@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatAccordion} from '@angular/material/expansion';
 import { Router } from '@angular/router';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
 @Component({
   selector: 'app-user-guide',
@@ -11,10 +12,12 @@ import { Router } from '@angular/router';
 
 export class UserGuideComponent implements OnInit {
 
-  constructor(public router: Router,
-              public dialogRef: MatDialogRef<UserGuideComponent>
-              ) {
-
+  constructor(
+    private shortcutManager: ShortcutManagerService,
+    public router: Router,
+    public dialogRef: MatDialogRef<UserGuideComponent>
+    ) {
+      this.shortcutManager.disableShortcuts();
   }
 
   @ViewChild('myaccordion', {static: true}) myPanels: MatAccordion;
@@ -62,6 +65,7 @@ export class UserGuideComponent implements OnInit {
         elements: [
           { nom: 'Pipette', path: 'pipette' },
           { nom: 'Applicateur de Couleur', path: 'applyer' },
+          { nom: 'Selection et déplacement', path: 'selection' },
           { nom: 'Grille', path: 'grid' },
           { nom: 'Exportation', path: 'export' },
           { nom: 'Gallerie', path: 'gallery' },
@@ -74,33 +78,25 @@ export class UserGuideComponent implements OnInit {
     }
   ];
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (history.state.path !== null && history.state.path !== undefined) {
       this.previousModuleRoute = history.state.path;
     }
   }
 
-  openAll() {
+  openAll(): void {
     this.myPanels.openAll();
   }
 
-  /**
-   *
-   *
-   */
   getCurrentSubCategorie(): string {
     return this.currentSubCategorie;
   }
 
-  setCurrentSubCategorie(value: string) {
+  setCurrentSubCategorie(value: string): void {
     this.currentSubCategorie = value;
     this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}], { skipLocationChange: true });
   }
 
-  /**
-   *
-   *
-   */
   findIndex(nom: string): [number, number, boolean] {
     for (let i = 0 ; i < this.categories.length ; ++i) {
       for (let j = 0 ; j < this.categories[i].type.elements.length ; ++j) {
@@ -163,8 +159,9 @@ export class UserGuideComponent implements OnInit {
     return this.categories[indexes[0]].type.elements[indexes[1]].path;
   }
 
-  closeGuide() {
+  closeGuide(): void {
     this.dialogRef.close();
+    this.shortcutManager.setupShortcuts();
     this.router.navigate([{outlets: {guideSubCategory: null}}]);
   }
 
