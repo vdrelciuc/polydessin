@@ -1,6 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { CanvasComponent } from '../canvas/canvas.component';
 import { WorkspaceComponent } from './workspace.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -13,7 +11,7 @@ describe('WorkspaceComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WorkspaceComponent, CanvasComponent ], 
+      declarations: [ WorkspaceComponent ], 
       imports: [
         HttpClientModule,
         MatSnackBarModule,
@@ -38,6 +36,6 @@ describe('WorkspaceComponent', () => {
         offsetHeight: 200
       }
     });
-    expect(component['workspaceService'].Size.value).toEqual(new CoordinatesXY(100, 200));
+    expect(component['workspaceService'].size.value).toEqual(new CoordinatesXY(100, 200));
   });
 });

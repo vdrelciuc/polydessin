@@ -10,9 +10,10 @@ import { Color } from '../classes/color';
 export class WorkspaceService {
 
   backgroundColor: Color;
-  Size: BehaviorSubject<CoordinatesXY> = new BehaviorSubject<CoordinatesXY> (new CoordinatesXY(0, 0));
+  size: BehaviorSubject<CoordinatesXY>;
   constructor() {
     this.backgroundColor = new Color(CONSTANTS.WORKSPACE_BACKGROUND);
+    this.size = new BehaviorSubject<CoordinatesXY> (new CoordinatesXY(0, 0));
   }
 
   checkIfSameBackgroundColor(color: Color): boolean {

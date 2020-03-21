@@ -79,7 +79,7 @@ describe('EventListenerService', () => {
   it('#initializeEvents should initialize events', () => {
     const spyOnListen = spyOn(manipulator, 'listen');
     service.initializeEvents();
-    expect(spyOnListen).toHaveBeenCalledTimes(9);
+    expect(spyOnListen).toHaveBeenCalledTimes(10);
   });
 
   it('#initializeEvents should call window events', () => {

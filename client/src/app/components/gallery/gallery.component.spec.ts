@@ -142,6 +142,7 @@ describe('GalleryComponent', () => {
     let setOfTags = new Set<string>();
     setOfTags.add('tag1');
     component['tags'] = setOfTags;
+    component['images'] = [];
     expect(component['tags'].size).toEqual(1);
     component.removeTag('tag2');
     expect(component['tags'].size).toEqual(1);

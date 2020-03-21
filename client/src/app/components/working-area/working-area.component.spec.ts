@@ -126,10 +126,7 @@ describe('WorkingAreaComponent', () => {
       comingFromEntryPoint: false
     }, 'mockState');
     component.ngOnInit();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(spy).not.toHaveBeenCalled();
-    });
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('#ngOnInit shouldn open', () => {
@@ -142,10 +139,7 @@ describe('WorkingAreaComponent', () => {
       comingFromEntryPoint: true
     }, 'mockState');
     component.ngOnInit();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(spy).toHaveBeenCalledWith(CreateNewComponent, { disableClose: true });
-    });
+    expect(spy).toHaveBeenCalledWith(CreateNewComponent, { disableClose: true });
   });
 
   it('#prepareWorkingAreaShortcuts should setup shortcuts', () => {

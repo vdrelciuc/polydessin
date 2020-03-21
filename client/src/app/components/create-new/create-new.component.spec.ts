@@ -71,7 +71,7 @@ describe('CreateNewComponent', () => {
         value: 10
       }
     });
-    component['workspaceService'].Size.next(new CoordinatesXY(100, 100));
+    component['workspaceService'].size.next(new CoordinatesXY(100, 100));
     // expect(component['workspaceSize'].getX()).toEqual(10);
   });
 
@@ -82,7 +82,7 @@ describe('CreateNewComponent', () => {
         value: 10
       }
     });
-    component['workspaceService'].Size.next(new CoordinatesXY(100, 100));
+    component['workspaceService'].size.next(new CoordinatesXY(100, 100));
     // expect(component['workspaceSize'].getY()).toEqual(10);
   });
 

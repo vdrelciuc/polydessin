@@ -40,6 +40,9 @@ describe('UserGuideComponent', () => {
     fixture = TestBed.createComponent(UserGuideComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    history.pushState({
+      path: 'test'
+    }, 'mockState');
   }));
 
   it('should create', () => {
@@ -47,9 +50,6 @@ describe('UserGuideComponent', () => {
   });
 
   it('#ngOnInit should update previous module', () => {
-    history.pushState({
-      path: 'test'
-    }, 'mockState');
     component.ngOnInit();
     expect(component.previousModuleRoute).toEqual('test');
   });
@@ -59,12 +59,6 @@ describe('UserGuideComponent', () => {
     component['currentSubCategorie'] = mocked;
     expect(component.getCurrentSubCategorie()).toEqual(mocked);
   });
-
-  // it('#setCurrentSubCategorie should return current sub ', () => {
-  //   const mocked = 'mocked';
-  //   component.setCurrentSubCategorie(mocked);
-  //   expect(component['currentSubCategorie']).toEqual(mocked);
-  // });
 
   it('#findIndex should return index of invalid param', () => {
     expect(component.findIndex('mocked')).toEqual([0, 0, true]);
@@ -110,7 +104,9 @@ describe('UserGuideComponent', () => {
 
   it('#closeGuide should close', () => {
     const spy = spyOn(component.dialogRef, 'close');
+    const spy2 = spyOn(component['router'], 'navigate');
     component.closeGuide();
     expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
   });
 });

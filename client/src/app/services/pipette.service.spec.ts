@@ -119,6 +119,14 @@ describe('PipetteService', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('#onSelect should canvas be null', () => {
+    service['image'].nativeElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    service['hiddenCanvas'].getContext = jasmine.createSpy().and.returnValue(null);
+    const spy = spyOn<any>(service['manipulator'], 'setAttribute');
+    service.onSelect();
+    expect(spy).toHaveBeenCalled();
+  });
+
   it('#onClick should set new primary color on left click', () => {
     const mockedEvent: MouseEvent = eventMocker('click', LEFT_CLICK, 0, 0);
     service['image'].nativeElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

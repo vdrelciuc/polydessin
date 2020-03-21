@@ -34,7 +34,7 @@ describe('ColorSelectorService', () => {
   it('#addRecentColor should add to recent color', () => {
     const firstColor = '#FFFFFF';
     const testColors = [firstColor, '#FFFFF1', '#FFFFF2', '#FFFFF3',
-      '#FFFFF4', '#FFFFF5', '#FFFFF6', '#FFFFF7', '#FFFFF8', '#FFFFF9'];
+      '#FFFFF4', '#FFFFF5', '#FFFFF6', '#FFFFF7', '#FFFFF8', '#FFFFF9', '#FFFBF9'];
     for (const element of testColors) {
       service.addRecentColor(new Color(element));
     }
@@ -46,6 +46,7 @@ describe('ColorSelectorService', () => {
         found = true;
       }
     }
+    expect(service['recentColors'].getValue().length).toEqual(10);
     expect(found).not.toBeTruthy();
   });
 

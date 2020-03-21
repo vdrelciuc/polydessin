@@ -50,7 +50,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
-    this.workspaceService.Size.next(this.workspaceService.Size.value);
+    this.workspaceService.size.next(this.workspaceService.size.value);
   }
 
   ngOnInit(): void {
@@ -63,7 +63,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
       this.previewColor = color;
     });
     this.colorSelectorService.temporaryColor.next(new Color(DEFAULT_SECONDARY_COLOR));
-    this.workspaceService.Size.subscribe((size: CoordinatesXY) => {
+    this.workspaceService.size.subscribe((size: CoordinatesXY) => {
       if (!this.changed) {
         this.workspaceSizeX = size.getX();
         this.workspaceSizeY = size.getY();

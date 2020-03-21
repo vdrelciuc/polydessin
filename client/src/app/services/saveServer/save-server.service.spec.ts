@@ -31,8 +31,9 @@ describe('SaveServerService', () => {
 
   it('#addTag should add valid tag', () => {
     const setOfData = new Set<string>();
-    const ret = service.addTag('tag', setOfData);
-    expect(setOfData.has('tag')).toEqual(true);
+    const etiquette = 'tag1';
+    const ret = service.addTag(etiquette, setOfData);
+    expect(setOfData.has(etiquette.toUpperCase())).toEqual(true);
     expect(ret).toEqual(true);
   });
 

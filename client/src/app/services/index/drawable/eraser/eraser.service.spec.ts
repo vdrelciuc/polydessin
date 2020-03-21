@@ -140,7 +140,7 @@ describe('EraserService', () => {
 
   it('#initializeProperties should set default properties', () => {
     service.initializeProperties();
-    expect(service.thickness.value).toEqual(CONSTANTS.THICKNESS_DEFAULT);
+    expect(service.thickness.value).toEqual(CONSTANTS.THICKNESS_MINIMUM_ERASER);
   });
 
   it('#initializeProperties should init subscriptions', () => {
@@ -154,7 +154,7 @@ describe('EraserService', () => {
     const spy = spyOn(manipulator, 'setAttribute');
     const spy2 = spyOn(manipulator, 'createElement');
     service.onMouseMove({} as unknown as MouseEvent);
-    expect(spy).toHaveBeenCalledWith(service['mousePointer'], SVGProperties.width, CONSTANTS.THICKNESS_DEFAULT.toString() );
+    expect(spy).toHaveBeenCalledWith(service['mousePointer'], SVGProperties.width, CONSTANTS.THICKNESS_MINIMUM_ERASER.toString() );
     expect(spy).toHaveBeenCalledTimes(8);
     expect(spy2).toHaveBeenCalledWith(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
   });

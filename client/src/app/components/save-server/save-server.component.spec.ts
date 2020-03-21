@@ -28,9 +28,11 @@ describe('SaveServerComponent', () => {
         {
           provide: MatDialog,
           useValue: () => ({
-            componentInstance: {
-              errorTitle: 'bla',
-            },
+            open: () => ({
+              componentInstance: {
+                errorTitle: 'bla',
+              },
+            })
           }),
         },
         SaveServerService,
@@ -106,7 +108,7 @@ describe('SaveServerComponent', () => {
   it('#addTag should add valid tag', () => {
     const spy = spyOn(component['snacks'], 'open');
     component.addTag('valid');
-    expect(component['tags'].has('valid')).toEqual(true);
+    expect(component['tags'].has('VALID')).toEqual(true);
     expect(component['tagName']).toEqual('');
     expect(spy).not.toHaveBeenCalled();
   });

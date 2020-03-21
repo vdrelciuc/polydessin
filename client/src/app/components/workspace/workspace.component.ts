@@ -18,6 +18,6 @@ export class WorkspaceComponent implements OnInit {
   }
 
   onResize(event: any) {
-    this.workspaceService.Size.next(new CoordinatesXY(Math.floor(event.target.offsetWidth), Math.floor(event.target.offsetHeight)));
+    this.workspaceService.size.next(new CoordinatesXY(Math.floor(event.target.offsetWidth), Math.floor(event.target.offsetHeight)));
   }
 }
