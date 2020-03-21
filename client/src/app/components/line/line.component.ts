@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
@@ -12,13 +13,14 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
   templateUrl: './line.component.html',
   styleUrls: ['./line.component.scss']
 })
-export class LineComponent implements OnInit {
+export class LineComponent implements OnInit, OnDestroy {
 
   readonly name: string = Tools.Line;
   readonly THICKNESS_SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
   readonly THICKNESS_SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
   readonly DIAMETER_SLIDER_MINIMUM = CONSTANT.DIAMETER_MINIMUM;
   readonly DIAMETER_SLIDER_MAXIMUM = CONSTANT.DIAMETER_MAXIMUM;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private shortcuts: HotkeysService,
@@ -34,20 +36,31 @@ export class LineComponent implements OnInit {
     this.setupShortcuts();
   }
 
+  ngOnDestroy(): void {
+    console.log('destroyed line component');
+    this.disableShortcuts();
+  }
+
   setupShortcuts(): void {
-    this.shortcuts.addShortcut({ keys: 'backspace', description: 'Remove last point' }).subscribe(
-      (event) => {
-        this.service.removeLastPoint();
-      }
+    this.subscriptions.push(this.shortcuts.addShortcut({ keys: 'backspace', description: 'Remove last point' }).subscribe(
+        (event) => {
+          this.service.removeLastPoint();
+        }
+      )
     );
 
-    this.shortcuts.addShortcut({ keys: 'escape', description: 'Cancel current line' }).subscribe(
-      (event) => {
-        if (!this.service.getLineIsDone()) {
-          this.service.deleteLine();
+    this.subscriptions.push(this.shortcuts.addShortcut({ keys: 'escape', description: 'Cancel current line' }).subscribe(
+        (event) => {
+          if (!this.service.getLineIsDone()) {
+            this.service.deleteLine();
+          }
         }
-      }
+      )
     );
+  }
+
+  disableShortcuts(): void {
+    this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
   }
 
   updateJunctionType(): void {

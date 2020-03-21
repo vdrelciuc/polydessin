@@ -11,24 +11,37 @@ import { ToolSelectorService } from '../tools/tool-selector.service';
 export class ShortcutManagerService {
   private subscriptions: Subscription[] = [];
   private workingAreaComponent: WorkingAreaComponent;
+  private savedTool: Tools;
 
   constructor(
     public toolSelectorService: ToolSelectorService,
-    private shortcut: HotkeysService,
+    private shortcut: HotkeysService
     ) {
       this.bypassBrowserShortcuts();
+      this.savedTool = Tools.None;
     }
+
+  saveCurrentTool(): void {
+    this.savedTool = this.toolSelectorService.$currentTool.getValue();
+    this.toolSelectorService.setCurrentTool(Tools.Selection);
+  }
+
+  loadSavedTool(): void {
+    this.toolSelectorService.setCurrentTool(this.savedTool);
+  }
 
   setWorkingAreaComponent(component: WorkingAreaComponent): void {
     this.workingAreaComponent = component;
   }
 
   disableShortcuts(): void {
+    console.log('disable');
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
     this.bypassBrowserShortcuts();
   }
 
   setupShortcuts(): void {
+    console.log('setup');
     this.bypassBrowserShortcuts();
     this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 's', description: 'Selecting selection with shortcut' }).subscribe(

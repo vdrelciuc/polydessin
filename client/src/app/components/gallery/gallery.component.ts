@@ -150,6 +150,7 @@ export class GalleryComponent implements OnInit {
 
     if (isImageLoadable) {
       this.snacks.open('Image chargée avec succès.', '', {duration: 2000});
+      history.state.comingFromEntryPoint = false;
       this.drawStackService.addingNewSVG();
       this.onDialogClose();
     } else {

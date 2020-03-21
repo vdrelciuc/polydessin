@@ -46,6 +46,7 @@ export class WorkingAreaComponent implements OnInit {
   prepareWorkingAreaShortcuts(): void {
     this.shortcutManager.setWorkingAreaComponent(this);
     this.shortcutManager.setupShortcuts();
+    this.shortcutManager.loadSavedTool();
   }
 
   getDrawerStatus(): boolean {
@@ -111,6 +112,7 @@ export class WorkingAreaComponent implements OnInit {
   }
 
   private prepareDialogLaunch(): void {
+    this.shortcutManager.saveCurrentTool();
     this.dialog.closeAll();
   }
 
