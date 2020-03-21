@@ -1,7 +1,7 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { SelectionService } from './selection.service';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { Renderer2, Type } from '@angular/core';
 import { ElementRef } from '@angular/core';
+import { SelectionService } from './selection.service';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import * as CONSTANTS from 'src/app/classes/constants';
