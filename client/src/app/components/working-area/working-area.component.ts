@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ExportService } from 'src/app/services/export/export.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { CreateNewComponent } from '../create-new/create-new.component';
 import { ExportComponent } from '../export/export.component';
@@ -30,6 +31,7 @@ export class WorkingAreaComponent implements OnInit {
     private snackBar: MatSnackBar,
     private galleryService: GalleryService,
     private shortcutManager: ShortcutManagerService,
+    private toolSelectorService: ToolSelectorService,
     public route: Router,
     protected dialog: MatDialog) {
       this.prepareWorkingAreaShortcuts();
@@ -113,6 +115,7 @@ export class WorkingAreaComponent implements OnInit {
 
   private prepareDialogLaunch(): void {
     this.shortcutManager.saveCurrentTool();
+    this.toolSelectorService.getSelection().cancelSelection();
     this.dialog.closeAll();
   }
 

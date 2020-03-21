@@ -53,10 +53,9 @@ export class ShortcutManagerService {
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.a', description: 'Select all elements on canvas' }).subscribe(
       (event) => {
-        if (this.toolSelectorService.$currentTool.getValue() !== Tools.Selection) {
-          this.toolSelectorService.setCurrentTool(Tools.Selection);
+        if (this.toolSelectorService.$currentTool.getValue() === Tools.Selection) {
+          this.toolSelectorService.getSelection().selectAllElements();
         }
-        this.toolSelectorService.getSelection().selectAllElements();
       }
       )
     );
