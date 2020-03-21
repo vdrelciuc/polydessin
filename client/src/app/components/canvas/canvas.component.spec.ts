@@ -7,7 +7,7 @@ import { MatSnackBarModule } from '@angular/material';
 import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
 import { UndoRedoService } from 'src/app/services/tools/undo-redo/undo-redo.service';
 
-fdescribe('CanvasComponent', () => {
+describe('CanvasComponent', () => {
   let component: CanvasComponent;
   let fixture: ComponentFixture<CanvasComponent>;
 
@@ -75,9 +75,11 @@ fdescribe('CanvasComponent', () => {
   });
 
   it('#resetCanvas should reset default filters', () => {
-    component['toolSelector'].memory = {
-      clear: () => null
-    } as unknown as UndoRedoService;
+    component['toolSelector'].memory = new UndoRedoService(
+      component['drawStack'], 
+      component['manipulator'],
+      component['image']
+    );
     component['filters'] = 'test';
     component.resetCanvas();
     expect(component['image'].nativeElement.innerHTML).toEqual('test');
