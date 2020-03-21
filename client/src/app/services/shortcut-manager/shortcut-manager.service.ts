@@ -35,13 +35,11 @@ export class ShortcutManagerService {
   }
 
   disableShortcuts(): void {
-    console.log('disable');
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
     this.bypassBrowserShortcuts();
   }
 
   setupShortcuts(): void {
-    console.log('setup');
     this.bypassBrowserShortcuts();
     this.subscriptions.forEach ( (subscription) => subscription.remove(subscription));
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 's', description: 'Selecting selection with shortcut' }).subscribe(
