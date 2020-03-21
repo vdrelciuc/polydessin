@@ -102,6 +102,41 @@ describe('ToolSelectorService', () => {
     expect(spy2).toHaveBeenCalled();
   });
 
+  it('#initialize should initialize elements', () => {
+    service.initialize(
+      {
+        createElement: () => null,
+        setAttribute: () => null,
+        appendChild: () => null,
+        removeChild: () => null,
+      } as unknown as Renderer2, 
+      {
+        nativeElement:  {
+          cloneNode: () => new Array(),
+          querySelectorAll: () => [],
+        }
+      } as unknown as ElementRef<SVGElement>, 
+      {
+        primaryColor: new BehaviorSubject<Color>(new Color('#FFFFFF')),
+        primaryTransparency: new BehaviorSubject<number>(0.5)
+      } as unknown as ColorSelectorService, 
+      {
+        addedSVG: new BehaviorSubject<SVGElement | undefined>(undefined),
+        addedToRedo: new BehaviorSubject<SVGElement | undefined>(undefined),
+        reset: new BehaviorSubject<boolean>(false),
+        newSVG: new BehaviorSubject<boolean>(false),
+      } as unknown as DrawStackService, 
+      {nativeElement: 5} as unknown as ElementRef<HTMLCanvasElement>
+    );
+    const tool = new LineService;
+    service['tool'] = undefined;
+    const spy = spyOn(tool, 'endTool');
+    const spy2 = spyOn(tool, 'onSelect');
+    service.memory.changed.next(true);
+    expect(spy).not.toHaveBeenCalled();
+    expect(spy2).not.toHaveBeenCalled();
+  });
+
   it('#getCurrentTool should return default current tool', () => {
     expect(service.getCurrentTool()).toEqual(service.getSelection());
   });
@@ -163,6 +198,20 @@ describe('ToolSelectorService', () => {
 
   it('#setCurrentTool should set new current tool (not available)', () => {
     service.setCurrentTool('Bla' as Tools);
+    expect(service.getCurrentTool()).toEqual(service.getSelection());
+  });
+
+  it('#setCurrentTool should set none with old being undefined', () => {
+    service['tool'] = undefined;
+    service.setCurrentTool(Tools.None);
+    expect(service.$currentTool.value).toEqual(Tools.None);
+  });
+
+  it('#setCurrentTool should set none with old being undefined', () => {
+    service['tool'] = service.getLine();
+    const spy = spyOn(service['tool'], 'endTool');
+    service.setCurrentTool(Tools.None);
+    expect(spy).toHaveBeenCalled();
     expect(service.getCurrentTool()).toEqual(service.getSelection());
   });
 
