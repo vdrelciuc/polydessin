@@ -1,4 +1,4 @@
-/*import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -43,10 +43,14 @@ import { PolygonComponent } from '../polygon/polygon.component';
 import { SelectionComponent } from '../selection/selection.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { Tools } from 'src/app/enums/tools';
 
-describe('WorkingAreaComponent', () => {
+fdescribe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
   let fixture: ComponentFixture<WorkingAreaComponent>;
+
+  const numberOfSubscription = 29;
+  // const numberOfPreventedDefault = 4;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -139,6 +143,15 @@ describe('WorkingAreaComponent', () => {
     });
   });
 
+  it('#prepareWorkingAreaShortcuts should setup shortcuts', () => {
+    component['toolSelectorService'].$currentTool.next(Tools.Brush);
+    component['shortcutManager'].saveCurrentTool();
+    component.prepareWorkingAreaShortcuts();
+    expect(component['shortcutManager']['workingAreaComponent']).toEqual(component);
+    expect(component['toolSelectorService'].$currentTool.value).toEqual(Tools.Brush);
+    expect(component['shortcutManager']['subscriptions'].length).toEqual(numberOfSubscription);
+  });
+
   it('#getDrawerStatus should drawer be open', () => {
     expect(component.getDrawerStatus()).toEqual(true);
   });
@@ -148,4 +161,4 @@ describe('WorkingAreaComponent', () => {
     drawer.navIsOpened = false;
     expect(component.getDrawerStatus()).toEqual(false);
   });
-});*/
+});

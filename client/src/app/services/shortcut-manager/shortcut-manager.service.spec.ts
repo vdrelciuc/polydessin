@@ -4,7 +4,7 @@ import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.ser
 import { WorkingAreaComponent } from 'src/app/components/working-area/working-area.component';
 import { Tools } from 'src/app/enums/tools';
 
-fdescribe('ShortcutManagerService', () => {
+describe('ShortcutManagerService', () => {
 
   let service: ShortcutManagerService;
   const numberOfSubscription = 29;
