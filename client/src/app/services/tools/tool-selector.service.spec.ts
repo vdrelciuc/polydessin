@@ -207,12 +207,12 @@ describe('ToolSelectorService', () => {
     expect(service.$currentTool.value).toEqual(Tools.None);
   });
 
-  it('#setCurrentTool should set none with old being undefined', () => {
+  it('#setCurrentTool should set none with old being line', () => {
     service['tool'] = service.getLine();
     const spy = spyOn(service['tool'], 'endTool');
     service.setCurrentTool(Tools.None);
     expect(spy).toHaveBeenCalled();
-    expect(service.getCurrentTool()).toEqual(service.getSelection());
+    expect(service.getCurrentTool()).toEqual(service.getLine());
   });
 
   it('#getTool should find Line tool in map', () => {
