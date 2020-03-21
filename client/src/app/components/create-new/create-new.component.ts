@@ -86,7 +86,9 @@ export class CreateNewComponent implements OnInit, OnDestroy {
   }
 
   private launchColorDialog(): void {
-    this.dialog.open(ColorPickerComponent, { disableClose: true });
+    this.dialog.open(ColorPickerComponent, { disableClose: true }).afterClosed().subscribe(() => {
+      this.shortcutManager.disableShortcuts();
+    });
   }
 
   onConfirm(): void {

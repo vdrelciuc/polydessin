@@ -128,6 +128,12 @@ export class ToolSelectorService {
       this.tool.onSelect();
       this.$currentTool.next(tool);
       this.drawerService.updateDrawer(this.$currentTool.getValue());
+    } else if (tool === Tools.None) {
+      if (this.tool !== undefined) {
+        this.tool.endTool();
+      }
+      this.$currentTool.next(tool);
+      this.drawerService.navIsOpened = true;
     }
   }
 

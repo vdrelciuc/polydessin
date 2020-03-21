@@ -23,7 +23,7 @@ export class ShortcutManagerService {
 
   saveCurrentTool(): void {
     this.savedTool = this.toolSelectorService.$currentTool.getValue();
-    this.toolSelectorService.setCurrentTool(Tools.Selection);
+    this.toolSelectorService.setCurrentTool(Tools.None);
   }
 
   loadSavedTool(): void {
