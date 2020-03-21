@@ -62,4 +62,31 @@ describe('ShortcutManagerService', () => {
     expect(spy).toHaveBeenCalledTimes(4);
     expect(service['subscriptions'].length).toEqual(numberOfSubscription);
   });
+
+  it('#setupShortcuts should test shortcuts', () => {
+    service.setupShortcuts();
+    const spy = spyOn(service['toolSelectorService'], 'setCurrentTool');
+    
+    service['toolSelectorService'].$currentTool.next(Tools.Selection);
+    const spy2 = spyOn(service['toolSelectorService'], 'getSelection');  
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'control.a',
+      bubbles: true
+    }));
+    expect(spy2).toHaveBeenCalled();
+    service['toolSelectorService'].getGrid()['visible'].next(false);
+
+    const keys = ['s', 'l', 'r', 'c', 'control.e', '1', '2', '3',
+      'w', 'e', 'A', 'i', 'control.o', 'control.g', 'control.s', 'control.z', 'control.shift.z',
+      'g', '+', '-'
+    ];
+    for(const element of keys) {
+      document.dispatchEvent(new KeyboardEvent('keydown', {
+        key: element,
+        bubbles: true
+      }));
+    }
+    expect(spy).toHaveBeenCalledTimes(11);
+    expect(service['toolSelectorService'].getGrid()['visible'].value).toEqual(true);
+  });
 });
