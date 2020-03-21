@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Color } from 'src/app/classes/color';
+import * as CONSTANTS from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ShapeStyle } from 'src/app/classes/shape-style';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
@@ -8,7 +9,6 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import * as CONSTANTS from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -189,7 +189,8 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.shape, SVGProperties.color, this.shapeStyle.borderColor.getHex());
     this.manipulator.setAttribute(this.shape, SVGProperties.borderOpacity, this.shapeStyle.borderOpacity.toString());
     this.manipulator.setAttribute(this.shape, SVGProperties.fillOpacity, this.shapeStyle.fillOpacity.toString());
-    this.manipulator.setAttribute(this.shape, 'id', `shape${shapeID}`);
+    const uniqueShapeID = `${this.svgHtmlTag}${shapeID}-${this.shapeOrigin.getX()}-${this.shapeOrigin.getY()}`;
+    this.manipulator.setAttribute(this.shape, 'id', uniqueShapeID);
 
     // Adding text properties
     const color = this.shapeStyle.hasFill ? this.shapeStyle.fillColor.getInvertedColor(true).getHex() : 'black';
@@ -207,10 +208,10 @@ export abstract class ShapeService extends DrawableService {
 
     // Removing border outside of shape
     this.clip = this.manipulator.createElement('clipPath', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.clip, 'id', `clip${shapeID}`);
+    this.manipulator.setAttribute(this.clip, 'id', `clip${uniqueShapeID}`);
     this.use = this.manipulator.createElement('use', 'http://www.w3.org/2000/svg');
-    this.manipulator.setAttribute(this.shape, 'clip-path', `url(#clip${shapeID})`);
-    this.manipulator.setAttribute(this.use, 'href', `#shape${shapeID}`);
+    this.manipulator.setAttribute(this.shape, 'clip-path', `url(#clip${uniqueShapeID})`);
+    this.manipulator.setAttribute(this.use, 'href', `#${uniqueShapeID}`);
 
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.shape);
