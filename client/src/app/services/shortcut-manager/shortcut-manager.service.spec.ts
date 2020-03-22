@@ -67,9 +67,9 @@ describe('ShortcutManagerService', () => {
   it('#setupShortcuts should test shortcuts', () => {
     service.setupShortcuts();
     const spy = spyOn(service['toolSelectorService'], 'setCurrentTool');
-    
+
     service['toolSelectorService'].$currentTool.next(Tools.Selection);
-    const spy2 = spyOn(service['toolSelectorService'], 'getSelection');  
+    const spy2 = spyOn(service['toolSelectorService'], 'getSelection');
     document.dispatchEvent(new KeyboardEvent('keydown', {
       key: 'control.a',
       bubbles: true
@@ -81,12 +81,13 @@ describe('ShortcutManagerService', () => {
       'w', 'e', 'A', 'i', 'control.o', 'control.g', 'control.s', 'control.z', 'control.shift.z',
       'g', '+', '-'
     ];
-    for(const element of keys) {
+    for (const element of keys) {
       document.dispatchEvent(new KeyboardEvent('keydown', {
         key: element,
         bubbles: true
       }));
     }
+    // tslint:disable-next-line: no-magic-numbers | Reason : amount of shortcuts currently available
     expect(spy).toHaveBeenCalledTimes(11);
     expect(service['toolSelectorService'].getGrid()['visible'].value).toEqual(true);
   });

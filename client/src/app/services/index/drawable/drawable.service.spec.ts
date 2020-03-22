@@ -1,19 +1,18 @@
+import { ElementRef, Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
-import { DrawableService } from './drawable.service';
-import { LineService } from './line/line.service';
-import { Renderer2, ElementRef } from '@angular/core';
-import { ColorSelectorService } from '../../color-selector.service';
-import { DrawStackService } from '../../tools/draw-stack/draw-stack.service';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
+import { ColorSelectorService } from '../../color-selector.service';
+import { DrawStackService } from '../../tools/draw-stack/draw-stack.service';
+import { DrawableService } from './drawable.service';
+import { LineService } from './line/line.service';
 
 describe('DrawableService', () => {
 
   let service: DrawableService;
-  let lineService: LineService
+  let lineService: LineService;
   beforeEach(() => {
-    TestBed.configureTestingModule({})
+    TestBed.configureTestingModule({});
     service = TestBed.get(DrawableService);
     lineService = new LineService();
     lineService.initialize(
@@ -23,7 +22,7 @@ describe('DrawableService', () => {
       } as unknown as Renderer2,
       {
         nativeElement: {
-          getBoundingClientRect: () => new DOMRect(1,1,1,1),
+          getBoundingClientRect: () => new DOMRect(1, 1, 1, 1),
           getAttribute: () => '1',
           cloneNode: () => 'bla' as unknown as SVGElement
         }
@@ -56,6 +55,6 @@ describe('DrawableService', () => {
       clientY: 100
     } as unknown as MouseEvent);
     expect(spy).toHaveBeenCalled();
-    expect(spy2).toHaveBeenCalledWith('bla' as unknown as SVGElement)
+    expect(spy2).toHaveBeenCalledWith('bla' as unknown as SVGElement);
   });
 });
