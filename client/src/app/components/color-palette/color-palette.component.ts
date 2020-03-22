@@ -49,7 +49,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
       this.display();
       const newPosition = this.currentSelectedPosition;
       if (newPosition) {
-        this.newColor.emit(this.getColorAtPosition(newPosition.x, newPosition.y))
+        this.newColor.emit(this.getColorAtPosition(newPosition.x, newPosition.y));
       }
     }
   }

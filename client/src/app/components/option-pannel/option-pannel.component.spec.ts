@@ -17,17 +17,17 @@ import { ColorPaletteComponent } from '../color-palette/color-palette.component'
 import { ColorPanelComponent } from '../color-panel/color-panel.component';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { ColorSliderComponent } from '../color-slider/color-slider.component';
+import { EllipseComponent } from '../ellipse/ellipse.component';
+import { EraserComponent } from '../eraser/eraser.component';
+import { GridComponent } from '../grid/grid.component';
 import { LineComponent } from '../line/line.component';
 import { PencilComponent } from '../pencil/pencil.component';
-import { RectangleComponent } from '../rectangle/rectangle.component';
-import { EllipseComponent } from '../ellipse/ellipse.component';
-import { OptionPannelComponent } from './option-pannel.component';
-import { PolygonComponent } from '../polygon/polygon.component';
-import { GridComponent } from '../grid/grid.component';
-import { SelectionComponent } from '../selection/selection.component';
-import { EraserComponent } from '../eraser/eraser.component';
 import { PipetteComponent } from '../pipette/pipette.component';
+import { PolygonComponent } from '../polygon/polygon.component';
+import { RectangleComponent } from '../rectangle/rectangle.component';
+import { SelectionComponent } from '../selection/selection.component';
 import { SprayComponent } from '../spray/spray.component';
+import { OptionPannelComponent } from './option-pannel.component';
 
 describe('OptionPannelComponent', () => {
   let component: OptionPannelComponent;

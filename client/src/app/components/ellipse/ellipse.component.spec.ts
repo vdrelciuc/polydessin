@@ -1,14 +1,14 @@
-import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
+import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
-import { EllipseComponent } from './ellipse.component';
 import { Renderer2, Type } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatSliderModule, MatSlideToggleModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { EllipseService } from 'src/app/services/index/drawable/ellipse/ellipse.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
-import { MatSliderModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatInputModule, MatSlideToggleModule } from '@angular/material';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { EllipseComponent } from './ellipse.component';
 
 describe('EllipseComponent', () => {
   let component: EllipseComponent;
@@ -17,7 +17,7 @@ describe('EllipseComponent', () => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

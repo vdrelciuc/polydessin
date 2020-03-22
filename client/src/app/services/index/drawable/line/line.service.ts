@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Color } from 'src/app/classes/color';
+import { OFFSET_MIN, SIZEOF_POINT } from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
@@ -8,7 +9,6 @@ import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
-import { OFFSET_MIN, SIZEOF_POINT } from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'

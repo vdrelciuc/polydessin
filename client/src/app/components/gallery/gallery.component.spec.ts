@@ -1,15 +1,15 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatChipsModule, MatDialogModule, MatDialogRef, MatFormFieldModule,
   MatGridListModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { REGEX_TAG } from 'src/app/classes/regular-expressions';
 import { SaveServerService } from 'src/app/services/saveServer/save-server.service';
 import { GalleryComponent } from './gallery.component';
-import { RouterModule, Router } from '@angular/router';
-import { APP_BASE_HREF } from '@angular/common';
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
@@ -132,7 +132,7 @@ describe('GalleryComponent', () => {
   });
 
   it('#removeTag should remove valid tag', () => {
-    let setOfTags = new Set<string>();
+    const setOfTags = new Set<string>();
     setOfTags.add('tag1');
     component['tags'] = setOfTags;
     expect(component['tags'].size).toEqual(1);
@@ -141,7 +141,7 @@ describe('GalleryComponent', () => {
   });
 
   it('#removeTag should not remove inexistant tag', () => {
-    let setOfTags = new Set<string>();
+    const setOfTags = new Set<string>();
     setOfTags.add('tag1');
     component['tags'] = setOfTags;
     component['images'] = [];
@@ -184,11 +184,11 @@ describe('GalleryComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('#loadImage should load image successfully, not currently drawing', () => { 
+  it('#loadImage should load image successfully, not currently drawing', () => {
     history.pushState({
       comingFromEntryPoint: false
     }, 'mockState');
-    const spy = spyOn(component['galleryService'], 'loadImage').and.callFake((image) => true); ;
+    const spy = spyOn(component['galleryService'], 'loadImage').and.callFake((image) => true); 
     const spy2 = spyOn(component['snacks'], 'open');
     component.loadImage(mockedImage);
     expect(spy).toHaveBeenCalledWith(mockedImage);

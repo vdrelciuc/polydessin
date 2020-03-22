@@ -1,8 +1,8 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { ColorSelectorService } from '../../color-selector.service';
-import { DrawablePropertiesService } from './properties/drawable-properties.service';
-import { DrawStackService } from '../../tools/draw-stack/draw-stack.service';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { ColorSelectorService } from '../../color-selector.service';
+import { DrawStackService } from '../../tools/draw-stack/draw-stack.service';
+import { DrawablePropertiesService } from './properties/drawable-properties.service';
 
 @Injectable({
   providedIn: 'root'
@@ -45,8 +45,8 @@ export abstract class DrawableService {
     colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService,
     ): void;
-    
-  initializeProperties(): void { /*To Override if needed*/};
+
+  initializeProperties(): void { /*To Override if needed*/}
   onMouseInCanvas(event: MouseEvent): void { /*To Override if needed*/}
   onMouseOutCanvas(event: MouseEvent): void { /*To Override if needed*/}
   onMousePress(event: MouseEvent): void { /*To Override if needed*/}

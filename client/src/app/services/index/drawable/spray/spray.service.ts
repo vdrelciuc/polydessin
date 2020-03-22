@@ -1,18 +1,17 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
+import * as CONSTANT from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
-import * as CONSTANT from 'src/app/classes/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SprayService extends DrawableService {
-
 
   private spraying: boolean;
   private color: Color;

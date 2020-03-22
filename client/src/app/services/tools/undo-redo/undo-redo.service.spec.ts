@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UndoRedoService } from './undo-redo.service';
-import { Renderer2, ElementRef } from '@angular/core';
+import { ElementRef, Renderer2 } from '@angular/core';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
+import { UndoRedoService } from './undo-redo.service';
 
 describe('UndoRedoService', () => {
 
@@ -16,12 +16,12 @@ describe('UndoRedoService', () => {
   };
 
   let mockedSVG = {
-    getBoundingClientRect: 
-      () => new DOMRect(10,10,100,100),
+    getBoundingClientRect:
+      () => new DOMRect(10, 10, 100, 100),
       childElementCount: 1,
       childNodes: () => new Array()
   };
-  
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -66,8 +66,8 @@ describe('UndoRedoService', () => {
     service = TestBed.get(UndoRedoService);
     drawStack = TestBed.get<DrawStackService>(DrawStackService);
     mockedSVG = {
-      getBoundingClientRect: 
-        () => new DOMRect(10,10,100,100),
+      getBoundingClientRect:
+        () => new DOMRect(10, 10, 100, 100),
         childElementCount: 1,
         childNodes: () => new Array()
     };
@@ -81,7 +81,7 @@ describe('UndoRedoService', () => {
     drawStack.addedSVG.next(mockedSVG as unknown as SVGElement);
     expect(service['elements'].getAll().length).toEqual(1);
     expect(service['currentSVG'].getBoundingClientRect()).toEqual(
-      new DOMRect(10,10,100,100)
+      new DOMRect(10, 10, 100, 100)
     );
     expect(drawStack.addedSVG.value).toEqual(undefined);
   });
@@ -90,7 +90,7 @@ describe('UndoRedoService', () => {
     drawStack.addedToRedo.next(mockedSVG as unknown as SVGElement);
     expect(service['removed'].getAll().length).toEqual(1);
     expect(service['currentSVG'].getBoundingClientRect()).toEqual(
-      new DOMRect(10,10,100,100)
+      new DOMRect(10, 10, 100, 100)
     );
     expect(drawStack.addedToRedo.value).toEqual(undefined);
   });
@@ -105,7 +105,7 @@ describe('UndoRedoService', () => {
 
   it('#undo should undo last action (being the only action)', () => {
     service['currentSVG'] = {
-      getBoundingClientRect: () => new DOMRect(10,10,1000,1000),
+      getBoundingClientRect: () => new DOMRect(10, 10, 1000, 1000),
       childElementCount: 0
     } as SVGElement;
     expect(service['currentSVG'].childElementCount).toEqual(0);
@@ -117,7 +117,7 @@ describe('UndoRedoService', () => {
 
   it('#undo should undo last action not the only', () => {
     service['currentSVG'] = {
-      getBoundingClientRect: () => new DOMRect(10,10,1000,1000),
+      getBoundingClientRect: () => new DOMRect(10, 10, 1000, 1000),
       childElementCount: 2
     } as SVGElement;
     expect(service['currentSVG'].childElementCount).toEqual(2);

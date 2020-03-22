@@ -17,10 +17,10 @@ describe('EventListenerService', () => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
   const mockedEventListener = (parentElement: any, name: string, debugInfo: (event: Event) => void): void => {
     window.addEventListener(name, debugInfo);
-  }
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -85,7 +85,7 @@ describe('EventListenerService', () => {
   it('#initializeEvents should call window events', () => {
     service.currentTool = line;
     service.initializeEvents();
-    service['toolSelector'].setCurrentTool(Tools.Line)
+    service['toolSelector'].setCurrentTool(Tools.Line);
     const spy = spyOn(service['currentTool'], 'onKeyPressed');
     const spy2 = spyOn(service['currentTool'], 'onKeyReleased');
     window.dispatchEvent(new MouseEvent('keydown'));

@@ -44,7 +44,7 @@ export class EraserService extends DrawableService {
 
   initializeProperties(): void {
     this.thickness.subscribe(() => {
-      if(this.mousePointer !== undefined) {
+      if (this.mousePointer !== undefined) {
         this.mousePointer.remove();
       }
       delete(this.mousePointer);
@@ -102,7 +102,7 @@ export class EraserService extends DrawableService {
 
   onMouseRelease(event: MouseEvent): void {
     this.updatePreview(new CoordinatesXY(event.clientX, event.clientY));
-    if(event.button === CONSTANTS.LEFT_CLICK && this.clicked) {
+    if (event.button === CONSTANTS.LEFT_CLICK && this.clicked) {
       this.clicked = false;
       this.leftClick = false;
       if (!this.brushDelete.isEmpty()) {

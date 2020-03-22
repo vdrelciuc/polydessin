@@ -1,5 +1,5 @@
-import { CoordinatesXY } from './coordinates-x-y';
 import { ElementRef } from '@angular/core';
+import { CoordinatesXY } from './coordinates-x-y';
 
 describe('CoordinatedXY', () => {
 
@@ -94,7 +94,7 @@ describe('CoordinatedXY', () => {
     expect(point.getQuadrant(new CoordinatesXY(15, 15))).toBe(2);
     expect(point.getQuadrant(new CoordinatesXY(15, -5))).toBe(3);
     expect(point.getQuadrant(new CoordinatesXY(-5, -5))).toBe(4);
-  })
+  });
 
   it('#getClosestPoint should get on a 0degree angle point', () => {
     const closest = point.getClosestPoint(100, 5, verticalLimit);

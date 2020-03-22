@@ -1,21 +1,21 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { DrawableService } from '../drawable.service';
 import * as CONSTANT from 'src/app/classes/constants';
 import { ColorSelectorService } from '../../../color-selector.service';
 import { DrawStackService } from '../../../tools/draw-stack/draw-stack.service';
+import { DrawableService } from '../drawable.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GridService extends DrawableService{
+export class GridService extends DrawableService {
 
   thickness: BehaviorSubject<number>;
   opacity: BehaviorSubject<number>;
   visible: BehaviorSubject<boolean>;
   frenchName: string;
 
-  constructor() { 
+  constructor() {
     super();
     this.visible = new BehaviorSubject<boolean>(false);
     this.thickness = new BehaviorSubject<number>(CONSTANT.GRID_MINIMUM);
@@ -32,13 +32,13 @@ export class GridService extends DrawableService{
   }
 
   incrementThickness(): void {
-    if(this.thickness.value <= CONSTANT.GRID_MAXIMUM - CONSTANT.THICKNESS_STEP) {
+    if (this.thickness.value <= CONSTANT.GRID_MAXIMUM - CONSTANT.THICKNESS_STEP) {
       this.thickness.next(this.thickness.value + CONSTANT.THICKNESS_STEP);
     }
   }
 
   decrementThickness(): void {
-    if(this.thickness.value >= CONSTANT.GRID_MINIMUM + CONSTANT.THICKNESS_STEP) {
+    if (this.thickness.value >= CONSTANT.GRID_MINIMUM + CONSTANT.THICKNESS_STEP) {
       this.thickness.next(this.thickness.value - CONSTANT.THICKNESS_STEP);
     }
   }

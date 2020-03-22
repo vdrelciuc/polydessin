@@ -2,7 +2,7 @@
 import { Directive, ElementRef, EventEmitter, OnDestroy, Output } from '@angular/core';
 // import ResizeObserver from 'resize-observer-polyfill'; //not needed really since > Chrome 64
 
-type ResizeObserverCallback = (entries: ResizeObserverEntry[], observer: ResizeObserver) => void
+type ResizeObserverCallback = (entries: ResizeObserverEntry[], observer: ResizeObserver) => void;
 
 interface ResizeObserverEntry {
     readonly target: Element;
@@ -18,7 +18,7 @@ interface ResizeObserver {
 declare var ResizeObserver: {
   prototype: ResizeObserver;
   new(callback: ResizeObserverCallback): ResizeObserver;
-}
+};
 
 interface ResizeObserver {
   observe(target: Element): void;

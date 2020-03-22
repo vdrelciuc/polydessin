@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GridService } from './grid.service';
 import * as CONSTANT from 'src/app/classes/constants';
+import { GridService } from './grid.service';
 
 describe('GridService', () => {
 
@@ -12,7 +12,7 @@ describe('GridService', () => {
 
     });
     service = TestBed.get(GridService);
-  })
+  });
 
   it('should be created', () => {
     expect(service).toBeTruthy();

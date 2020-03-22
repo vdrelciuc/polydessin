@@ -25,7 +25,7 @@ export class HotkeysService {
 
     defaults: Partial<Options> = {
       element: this.document
-    }
+    };
 
     constructor(
       public eventManager: EventManager,
@@ -38,7 +38,7 @@ export class HotkeysService {
 
       return new Observable((observer) => {
           const handler = (e: Event) => {
-            e.preventDefault()
+            e.preventDefault();
             observer.next(e);
           };
 
@@ -48,6 +48,6 @@ export class HotkeysService {
           return () => {
             dispose();
           };
-      })
+      });
     }
 }

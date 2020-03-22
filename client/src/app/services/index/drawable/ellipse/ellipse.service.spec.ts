@@ -24,7 +24,6 @@ describe('EllipseService', () => {
   const eventMocker = (event: string, keyUsed: number, x: number, y: number) =>
   new MouseEvent(event, {button: keyUsed, clientX: x, clientY: y});
 
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [

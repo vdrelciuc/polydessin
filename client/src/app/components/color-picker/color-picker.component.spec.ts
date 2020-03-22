@@ -109,7 +109,7 @@ describe('ColorPickerComponent', () => {
   it('#onConfirm should update color', () => {
     service['colorToChange'] = ColorType.Primary;
     service['primaryColor'] = new BehaviorSubject<Color>(new Color('#FFFFFF'));
-    component.selectedColor = new Color('#ABCDEF')
+    component.selectedColor = new Color('#ABCDEF');
     component.onConfirm();
     expect(service['primaryColor'].value.getHex()).toEqual('#ABCDEF');
   });

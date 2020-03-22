@@ -86,9 +86,9 @@ export class ToolSelectorService {
     this.pipette.setupCanvas(canvas.nativeElement);
     this.memory.changed.subscribe(
       () => {
-        if(this.memory.changed.value) {
+        if (this.memory.changed.value) {
           this.memory.changed.next(false);
-          if(this.tool !== undefined) {
+          if (this.tool !== undefined) {
             this.tool.endTool();
             this.tool.onSelect();
           }

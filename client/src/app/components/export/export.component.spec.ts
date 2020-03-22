@@ -2,16 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialogRef, MatGridListModule, MatRadioModule } from '@angular/material';
-import { ExportComponent } from './export.component';
 // import { ExportService } from 'src/app/services/export/export.service';
 import { ImageFilter } from 'src/app/enums/color-filter';
-import { ImageFormat } from 'src/app/enums/image-format';
 import { ImageExportType } from 'src/app/enums/export-type';
+import { ImageFormat } from 'src/app/enums/image-format';
+import { ExportComponent } from './export.component';
 
 describe('ExportComponent', () => {
   let component: ExportComponent;
   let fixture: ComponentFixture<ExportComponent>;
-
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

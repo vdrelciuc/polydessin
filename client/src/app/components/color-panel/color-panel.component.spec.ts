@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FormsModule } from '@angular/forms';
-import { MatDialog, MatSliderModule, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSliderModule } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANTS from 'src/app/classes/constants';
@@ -23,7 +23,7 @@ describe('ColorPanelComponent', () => {
           provide: MatDialog,
           useValue: {
             open: () => {
-              ({ afterClose: () => new Observable})
+              ({ afterClose: () => new Observable});
             },
           },
         },

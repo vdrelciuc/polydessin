@@ -23,7 +23,7 @@ describe('SVGService', () => {
       },
     ]
     });
-    stack = getTestBed().get(SVGService)
+    stack = getTestBed().get(SVGService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
   });
 
@@ -61,5 +61,5 @@ describe('SVGService', () => {
 
   it('#removeLastElement should be get undefined last element', () => {
     expect(stack.removeLastElement()).toBe(undefined);
-  })
+  });
 });

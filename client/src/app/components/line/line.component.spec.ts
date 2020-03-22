@@ -12,12 +12,12 @@ import { LineComponent } from './line.component';
 
 describe('LineComponent', () => {
   let component: LineComponent;
-  let fixture: ComponentFixture<LineComponent>
+  let fixture: ComponentFixture<LineComponent>;
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

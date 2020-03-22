@@ -1,8 +1,8 @@
-import { Injectable, Renderer2, ElementRef } from '@angular/core';
-import { DrawStackService } from '../draw-stack/draw-stack.service';
-import { Stack } from 'src/app/classes/stack';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Stack } from 'src/app/classes/stack';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class UndoRedoService {
   constructor(
     private drawStack: DrawStackService,
     private manipulator: Renderer2,
-    private image: ElementRef<SVGElement>) { 
+    private image: ElementRef<SVGElement>) {
       this.changed = new BehaviorSubject<boolean>(false);
       this.removed = new Stack<SVGElement>();
       this.elements = new Stack<SVGElement>();
@@ -29,7 +29,7 @@ export class UndoRedoService {
       this.drawStack.addedSVG.subscribe(
         () => {
           const svg = this.drawStack.addedSVG.value;
-          if(svg !== undefined) {
+          if (svg !== undefined) {
             this.setCurrent(svg);
             this.drawStack.addedSVG.next(undefined);
           }
@@ -38,7 +38,7 @@ export class UndoRedoService {
       this.drawStack.addedToRedo.subscribe(
         () => {
           const svg = this.drawStack.addedToRedo.value;
-          if(svg !== undefined) {
+          if (svg !== undefined) {
             this.removed.push_back(this.currentSVG);
             this.redoElements.next(this.redoElements.value + 1);
             this.currentSVG = svg;
@@ -48,7 +48,7 @@ export class UndoRedoService {
       );
       this.drawStack.reset.subscribe(
         () => {
-          if(this.drawStack.reset.value) {
+          if (this.drawStack.reset.value) {
             this.removed.clear();
             this.drawStack.reset.next(false);
           }
@@ -56,7 +56,7 @@ export class UndoRedoService {
       );
       this.drawStack.newSVG.subscribe(
         () => {
-          if(this.drawStack.newSVG.value) {
+          if (this.drawStack.newSVG.value) {
             this.clear();
             this.drawStack.newSVG.next(false);
           }
@@ -66,14 +66,14 @@ export class UndoRedoService {
 
   undo(): void {
     const toUndo = this.elements.pop_back();
-    if(toUndo !== undefined) {
+    if (toUndo !== undefined) {
       this.undoElements.next(this.undoElements.value - 1);
-      if(this.currentSVG.childElementCount > 1) {
+      if (this.currentSVG.childElementCount > 1) {
         this.removed.push_back(this.currentSVG);
         this.redoElements.next(this.redoElements.value + 1);
       }
       this.currentSVG = toUndo;
-      if(this.isEmpty()) {
+      if (this.isEmpty()) {
         this.addElement(toUndo);
       }
       this.replace(toUndo);
@@ -81,9 +81,9 @@ export class UndoRedoService {
     }
   }
 
-  redo(): void{
+  redo(): void {
     const toRedo = this.removed.pop_back();
-    if(toRedo !== undefined) {
+    if (toRedo !== undefined) {
       this.redoElements.next(this.redoElements.value - 1);
       this.setCurrent(toRedo);
       this.replace(toRedo);
@@ -98,7 +98,7 @@ export class UndoRedoService {
   }
 
   private replace(by: SVGElement): void {
-    let children = this.image.nativeElement.childNodes;
+    const children = this.image.nativeElement.childNodes;
     children.forEach(
       (child) => {
         this.drawStack.removeElement( Number((child as SVGGElement).getAttribute(SVGProperties.title)) );
@@ -106,20 +106,20 @@ export class UndoRedoService {
       }
     );
     const newChildren = Array.from(by.childNodes);
-    for(const child of newChildren) {
+    for (const child of newChildren) {
       this.drawStack.addElementWithInfos( {
         target: (child as SVGGElement),
-        id: Number((child as SVGGElement).getAttribute(SVGProperties.title)) 
+        id: Number((child as SVGGElement).getAttribute(SVGProperties.title))
       });
       this.manipulator.appendChild(this.image.nativeElement, child.cloneNode(true) as SVGGElement);
     }
   }
 
   private setCurrent(current: SVGElement): void {
-    if(this.currentSVG !== undefined) {
+    if (this.currentSVG !== undefined) {
       this.elements.push_back(this.currentSVG);
       this.undoElements.next(this.undoElements.value + 1);
-      if(current.childElementCount === 1) {
+      if (current.childElementCount === 1) {
         this.undoElements.next(this.elements.getAll().length);
       }
     }

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Tools } from 'src/app/enums/tools';
-import * as CONSTANT from 'src/app/classes/constants';
 import { MatSliderChange } from '@angular/material';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import * as CONSTANT from 'src/app/classes/constants';
+import { Tools } from 'src/app/enums/tools';
 import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 
 @Component({
   selector: 'app-grid',
@@ -27,17 +27,16 @@ export class GridComponent {
 
   setThickness(event: MatSliderChange): void {
     const value = event.value;
-    if(value !== null) {
+    if (value !== null) {
       this.service.thickness.next(value);
     }
   }
 
   setOpacity(event: MatSliderChange): void {
     const value = event.value;
-    if(value !== null) {
+    if (value !== null) {
       this.service.opacity.next(value);
     }
   }
-
 
 }

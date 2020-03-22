@@ -2,15 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { MatDialog, MatSnackBarModule, MatTooltipModule, MatDialogModule, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogModule, MatDialogRef, MatSnackBarModule, MatTooltipModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { SidebarComponent } from './sidebar.component';
-import { WorkingAreaComponent } from '../working-area/working-area.component';
 import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
-import { of, Observable } from 'rxjs';
+import { WorkingAreaComponent } from '../working-area/working-area.component';
+import { SidebarComponent } from './sidebar.component';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;

@@ -308,7 +308,7 @@ describe('EraserService', () => {
     service['brushDelete'].push_back(mockedSVGInfo);
     service['mousePointer'] = {
       remove: () => null
-    } as unknown as SVGRectElement
+    } as unknown as SVGRectElement;
     service['leftClick'] = true;
     service['clicked'] = true;
     const spy = spyOn(service['drawStack'], 'addSVGWithNewElement');

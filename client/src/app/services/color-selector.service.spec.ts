@@ -10,7 +10,7 @@ describe('ColorSelectorService', () => {
   const colors = ['#ABCDEF', '#ABCDE1', '#ABCDE2', '#ABCDE3'];
 
   beforeEach(() => {
-    TestBed.configureTestingModule({})
+    TestBed.configureTestingModule({});
     service = TestBed.get(ColorSelectorService);
 
   });

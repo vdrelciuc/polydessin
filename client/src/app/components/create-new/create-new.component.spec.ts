@@ -5,12 +5,12 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { CreateNewComponent } from './create-new.component';
-import { Observable } from 'rxjs';
 describe('CreateNewComponent', () => {
   let component: CreateNewComponent;
   let fixture: ComponentFixture<CreateNewComponent>;

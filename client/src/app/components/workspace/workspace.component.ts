@@ -11,7 +11,7 @@ import { WorkspaceService } from 'src/app/services/workspace.service';
 export class WorkspaceComponent implements OnInit {
   backgroundColor: Color;
 
-  constructor(protected workspaceService: WorkspaceService) {};
+  constructor(protected workspaceService: WorkspaceService) {}
 
   ngOnInit() {
     this.backgroundColor = this.workspaceService.backgroundColor;

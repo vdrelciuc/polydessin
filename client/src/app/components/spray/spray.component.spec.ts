@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SprayComponent } from './spray.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatSliderModule } from '@angular/material';
+import { SprayComponent } from './spray.component';
 
 describe('SprayComponent', () => {
   let component: SprayComponent;

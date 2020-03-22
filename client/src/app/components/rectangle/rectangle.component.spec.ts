@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
+import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, NO_ERRORS_SCHEMA, Renderer2, Type } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { RectangleComponent } from './rectangle.component';
-import { BehaviorSubject } from 'rxjs';
-import { Color } from 'src/app/classes/color';
 
 describe('RectangleComponent', () => {
   let component: RectangleComponent;

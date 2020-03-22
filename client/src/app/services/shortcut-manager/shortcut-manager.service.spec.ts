@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
 import { WorkingAreaComponent } from 'src/app/components/working-area/working-area.component';
 import { Tools } from 'src/app/enums/tools';
+import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
 
 describe('ShortcutManagerService', () => {
 
@@ -10,8 +10,8 @@ describe('ShortcutManagerService', () => {
   const numberOfSubscription = 29;
   const numberOfDefaultToPrevent = 4;
 
-  beforeEach(() => { 
-    TestBed.configureTestingModule({})
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
     service = TestBed.get(ShortcutManagerService);
   });
 
