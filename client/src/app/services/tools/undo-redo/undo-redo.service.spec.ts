@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-
+// tslint:disable: no-magic-numbers | Reason : testing with arbitrary values
 import { ElementRef, Renderer2 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { UndoRedoService } from './undo-redo.service';
 
@@ -9,7 +9,8 @@ describe('UndoRedoService', () => {
   let service: UndoRedoService;
   let drawStack: DrawStackService;
 
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  // tslint:disable-next-line: no-any | Reason : parentElement: Element creates an issue
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;

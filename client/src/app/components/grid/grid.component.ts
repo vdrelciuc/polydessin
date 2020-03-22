@@ -13,10 +13,10 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 export class GridComponent {
 
   readonly name: string = Tools.Grid;
-  readonly THICKNESS_SLIDER_MINIMUM = CONSTANT.GRID_MINIMUM;
-  readonly THICKNESS_SLIDER_MAXIMUM = CONSTANT.GRID_MAXIMUM;
-  readonly OPACITY_SLIDER_MINIMUM = CONSTANT.OPACITY_MINIMUM;
-  readonly OPACITY_SLIDER_MAXIMUM = CONSTANT.OPACITY_MAXIMUM;
+  readonly THICKNESS_SLIDER_MINIMUM: number = CONSTANT.GRID_MINIMUM;
+  readonly THICKNESS_SLIDER_MAXIMUM: number = CONSTANT.GRID_MAXIMUM;
+  readonly OPACITY_SLIDER_MINIMUM: number = CONSTANT.OPACITY_MINIMUM;
+  readonly OPACITY_SLIDER_MAXIMUM: number = CONSTANT.OPACITY_MAXIMUM;
 
   constructor(
     public service: GridService,

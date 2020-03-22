@@ -16,10 +16,10 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 export class LineComponent implements OnInit, OnDestroy {
 
   readonly name: string = Tools.Line;
-  readonly THICKNESS_SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
-  readonly THICKNESS_SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
-  readonly DIAMETER_SLIDER_MINIMUM = CONSTANT.DIAMETER_MINIMUM;
-  readonly DIAMETER_SLIDER_MAXIMUM = CONSTANT.DIAMETER_MAXIMUM;
+  readonly THICKNESS_SLIDER_MINIMUM: number = CONSTANT.THICKNESS_MINIMUM;
+  readonly THICKNESS_SLIDER_MAXIMUM: number = CONSTANT.THICKNESS_MAXIMUM;
+  readonly DIAMETER_SLIDER_MINIMUM: number = CONSTANT.DIAMETER_MINIMUM;
+  readonly DIAMETER_SLIDER_MAXIMUM: number = CONSTANT.DIAMETER_MAXIMUM;
   private subscriptions: Subscription[] = [];
 
   constructor(

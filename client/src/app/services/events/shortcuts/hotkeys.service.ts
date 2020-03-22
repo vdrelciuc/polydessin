@@ -12,7 +12,8 @@ import { Observable } from 'rxjs';
       //   });)
 
 interface Options {
-  element: any; // Creates an error with HTMLElement
+  // tslint:disable-next-line: no-any | Reason : Creates an error with typedef HTMLElement
+  element: any;
   description: string;
   keys: string;
 }

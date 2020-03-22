@@ -12,8 +12,8 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 })
 export class EraserComponent {
 
-  readonly THICKNESS_ERASER_MINIMUM = CONSTANT.THICKNESS_MINIMUM_ERASER;
-  readonly THICKNESS_ERASER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
+  readonly THICKNESS_ERASER_MINIMUM: number = CONSTANT.THICKNESS_MINIMUM_ERASER;
+  readonly THICKNESS_ERASER_MAXIMUM: number = CONSTANT.THICKNESS_MAXIMUM;
 
   constructor(
     public service: EraserService,

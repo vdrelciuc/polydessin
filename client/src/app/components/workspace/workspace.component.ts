@@ -13,11 +13,12 @@ export class WorkspaceComponent implements OnInit {
 
   constructor(protected workspaceService: WorkspaceService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.backgroundColor = this.workspaceService.backgroundColor;
   }
 
-  onResize(event: any) {
+  // tslint:disable-next-line: no-any | Reason : unknown typedef of event
+  onResize(event: any): void {
     this.workspaceService.size.next(new CoordinatesXY(Math.floor(event.target.offsetWidth), Math.floor(event.target.offsetHeight)));
   }
 }

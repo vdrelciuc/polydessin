@@ -8,6 +8,7 @@ describe('ColorSelectorService', () => {
 
   let service: ColorSelectorService;
   const colors = ['#ABCDEF', '#ABCDE1', '#ABCDE2', '#ABCDE3'];
+  const RECENT_COLORS_AMOUNT = 10;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -46,7 +47,7 @@ describe('ColorSelectorService', () => {
         found = true;
       }
     }
-    expect(service['recentColors'].getValue().length).toEqual(10);
+    expect(service['recentColors'].getValue().length).toEqual(RECENT_COLORS_AMOUNT);
     expect(found).not.toBeTruthy();
   });
 
@@ -57,6 +58,7 @@ describe('ColorSelectorService', () => {
   });
 
   it('#getCurrentlySelectedColor should return color of currently selected', () => {
+    // tslint:disable: no-magic-numbers | Reason : testing with array indexes
     service['colorToChange'] = ColorType.Primary;
     service.updateColor(new Color(colors[0]));
     expect(service.getCurrentlySelectedColor().getHex()).toEqual(colors[0]);

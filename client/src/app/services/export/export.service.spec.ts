@@ -85,7 +85,7 @@ describe('ExportService', () => {
     const spy = spyOn(service['myDownload'].nativeElement, 'setAttribute');
     service['currentFormat'].next(ImageFormat.SVG);
     service['currentFilter'].next(ImageFilter.Négatif);
-    const spy2 = spyOn(service['serialized'], 'serializeToString').and.callFake( function() {
+    const spy2 = spyOn(service['serialized'], 'serializeToString').and.callFake(() => {
       return 'string';
     });
     service.export('title');
@@ -102,7 +102,7 @@ describe('ExportService', () => {
     service['currentFilter'].next(undefined as unknown as ImageFilter);
     const spy = spyOn(service['originalCanvas'], 'getContext');
     const spy2 = spyOn(service['myDownload'].nativeElement, 'setAttribute');
-    spyOn(service['originalCanvas'], 'toDataURL').and.callFake( function() {
+    spyOn(service['originalCanvas'], 'toDataURL').and.callFake( () => {
       return 'data';
     });
     service['imageAfterDeserialization'] = {

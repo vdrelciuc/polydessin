@@ -1,5 +1,5 @@
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { Color } from 'src/app/classes/color';
 import { ColorSliderComponent } from './color-slider.component';
 

@@ -22,8 +22,8 @@ export class HomeComponent {
       {description : 'Afficher le guide d\'Utilisation', optionPath: '/guide/bienvenue', show : true} ,
       {description : 'Continuer un dessin', show : false}
     ];
-  messageAccueil = 'Bienvenue a PolyDessin';
-  messageDescriptif = "A tout dessin un artiste, et cet artiste, c'est vous!";
+  readonly messageAccueil: string = 'Bienvenue a PolyDessin';
+  readonly messageDescriptif: string = "A tout dessin un artiste, et cet artiste, c'est vous!";
 
 constructor(
   private shortcut: HotkeysService,

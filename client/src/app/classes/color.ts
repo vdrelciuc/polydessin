@@ -1,3 +1,4 @@
+// tslint:disable: no-magic-numbers | Reason : Hex string manipulation requires indices
 import * as CONSTANT from 'src/app/classes/constants';
 import {
   COLOR_REGEX_RGB_VALUE_IN_HEX,

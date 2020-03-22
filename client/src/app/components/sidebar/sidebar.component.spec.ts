@@ -19,7 +19,8 @@ describe('SidebarComponent', () => {
 
   // https://medium.com/@aleixsuau/testing-angular-components-with-material-dialog-mddialog-1ae658b4e4b3
   class MdDialogMock {
-    open() {
+    // tslint:disable-next-line: no-any | Reason : unknown return type
+    open(): any {
       return {
         afterClosed: () => of(WarningDialogComponent)
       };
@@ -111,7 +112,7 @@ describe('SidebarComponent', () => {
     const spy = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     component.goHome();
     expect(spy).toHaveBeenCalledWith(WarningDialogComponent, { disableClose: true });

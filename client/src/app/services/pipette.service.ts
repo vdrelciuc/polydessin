@@ -1,6 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import * as CONSTANTS from 'src/app/classes/constants';
-import { LEFT_CLICK, RIGHT_CLICK} from 'src/app/classes/constants';
 import { Color } from '../classes/color';
 import { CoordinatesXY } from '../classes/coordinates-x-y';
 import { CursorProperties } from '../classes/cursor-properties';
@@ -81,8 +80,8 @@ export class PipetteService extends DrawableService {
   onClick(event: MouseEvent): void {
     const position = CoordinatesXY.getEffectiveCoords(this.image, event);
     const newColor = this.getColorAtPosition(position);
-    if (newColor != null && (event.button === LEFT_CLICK || event.button === RIGHT_CLICK)) {
-      if (event.button === LEFT_CLICK) {
+    if (newColor != null && (event.button === CONSTANTS.LEFT_CLICK || event.button === CONSTANTS.RIGHT_CLICK)) {
+      if (event.button === CONSTANTS.LEFT_CLICK) {
         this.colorSelectorService.colorToChange = ColorType.Primary;
       } else {
         this.colorSelectorService.colorToChange = ColorType.Secondary;

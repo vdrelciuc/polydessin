@@ -49,7 +49,7 @@ export class CanvasComponent implements OnInit {
       this.visible = true;
     }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.filters = this.image.nativeElement.innerHTML;
     this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack, this.invisibleCanvas);
     this.exportService.initialize(this.image);
@@ -104,7 +104,7 @@ export class CanvasComponent implements OnInit {
     });
   }
 
-  resetCanvas() {
+  resetCanvas(): void {
     this.image.nativeElement.innerHTML = this.filters;
   }
 

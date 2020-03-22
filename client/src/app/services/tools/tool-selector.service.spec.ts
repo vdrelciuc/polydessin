@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-
+// tslint:disable: no-magic-numbers | Reason : testing with arbitrary values
 import { ElementRef, Renderer2 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { Tools } from 'src/app/enums/tools';
@@ -60,7 +60,7 @@ describe('ToolSelectorService', () => {
       } as unknown as DrawStackService,
       {nativeElement: 5} as unknown as ElementRef<HTMLCanvasElement>
     );
-    const tool = new LineService;
+    const tool = new LineService();
     service['tool'] = tool;
     const spy = spyOn(tool, 'endTool');
     service.memory.changed.next(false);
@@ -93,7 +93,7 @@ describe('ToolSelectorService', () => {
       } as unknown as DrawStackService,
       {nativeElement: 5} as unknown as ElementRef<HTMLCanvasElement>
     );
-    const tool = new LineService;
+    const tool = new LineService();
     service['tool'] = tool;
     const spy = spyOn(tool, 'endTool');
     const spy2 = spyOn(tool, 'onSelect');

@@ -1,6 +1,6 @@
-import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
-
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { ElementRef, NO_ERRORS_SCHEMA, Renderer2, Type } from '@angular/core';
+import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
@@ -11,7 +11,8 @@ import { RectangleComponent } from './rectangle.component';
 describe('RectangleComponent', () => {
   let component: RectangleComponent;
   let fixture: ComponentFixture<RectangleComponent>;
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  // tslint:disable-next-line: no-any | Reason : parentElement: Element creates an issue
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;

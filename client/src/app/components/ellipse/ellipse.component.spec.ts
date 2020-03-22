@@ -1,8 +1,8 @@
-import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
-
 import { Renderer2, Type } from '@angular/core';
+import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatSliderModule, MatSlideToggleModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatOptionModule,
+  MatSelectModule, MatSliderModule, MatSlideToggleModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { EllipseService } from 'src/app/services/index/drawable/ellipse/ellipse.service';
@@ -13,7 +13,8 @@ import { EllipseComponent } from './ellipse.component';
 describe('EllipseComponent', () => {
   let component: EllipseComponent;
   let fixture: ComponentFixture<EllipseComponent>;
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+    // tslint:disable-next-line: no-any | Reason : parentElement: Element creates an issue
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;

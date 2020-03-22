@@ -4,6 +4,7 @@ export interface Filter {
   imagePath: string;
 }
 
+// tslint:disable-next-line: variable-name | Reason : export components must start with a capital
 export const FilterList: Filter[] = [
   {name: 'Filtre 1', referenceID: 'filter0', imagePath: '../../../assets/filters/filter1.PNG'},
   {name: 'Filtre 2', referenceID: 'filter2', imagePath: '../../../assets/filters/filter2.PNG'},

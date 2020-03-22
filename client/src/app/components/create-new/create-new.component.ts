@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { DEFAULT_SECONDARY_COLOR } from 'src/app/classes/constants';
+import * as CONSTANTS from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
 import { CanvasService } from 'src/app/services/canvas.service';
@@ -62,7 +62,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
     this.colorSelectorService.temporaryColor.subscribe((color: Color) => {
       this.previewColor = color;
     });
-    this.colorSelectorService.temporaryColor.next(new Color(DEFAULT_SECONDARY_COLOR));
+    this.colorSelectorService.temporaryColor.next(new Color(CONSTANTS.DEFAULT_SECONDARY_COLOR));
     this.workspaceService.size.subscribe((size: CoordinatesXY) => {
       if (!this.changed) {
         this.workspaceSizeX = size.getX();
@@ -70,12 +70,12 @@ export class CreateNewComponent implements OnInit, OnDestroy {
       }
     });
   }
-  setcanvasSizeX(event: any): void {
-    this.workspaceSizeX = event.target.value;
+  setcanvasSizeX(event: KeyboardEvent): void {
+    this.workspaceSizeX = parseInt((event.target as HTMLInputElement).value, CONSTANTS.DECIMAL_BASE);
     this.changed = true;
   }
-  setcanvasSizeY(event: any): void {
-    this.workspaceSizeY = event.target.value;
+  setcanvasSizeY(event: KeyboardEvent): void {
+    this.workspaceSizeY = parseInt((event.target as HTMLInputElement).value, CONSTANTS.DECIMAL_BASE);
     this.changed = true;
   }
 

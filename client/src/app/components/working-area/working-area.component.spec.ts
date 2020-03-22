@@ -133,7 +133,7 @@ describe('WorkingAreaComponent', () => {
     const spy = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     history.pushState({
       comingFromEntryPoint: true
@@ -192,7 +192,7 @@ describe('WorkingAreaComponent', () => {
     const spy2 = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     component.createNewProject();
     expect(spy).toHaveBeenCalled();
@@ -204,7 +204,7 @@ describe('WorkingAreaComponent', () => {
     const spy2 = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     component.openGallery();
     expect(spy).toHaveBeenCalled();
@@ -240,7 +240,7 @@ describe('WorkingAreaComponent', () => {
     const spy = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     const spy2 = spyOn(component['dialog'], 'closeAll');
     component.openUserGuide();

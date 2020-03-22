@@ -36,6 +36,7 @@ describe('WorkspaceComponent', () => {
         offsetHeight: 200
       }
     });
+    // tslint:disable-next-line: no-magic-numbers | Reason : testing arbitrary values
     expect(component['workspaceService'].size.value).toEqual(new CoordinatesXY(100, 200));
   });
 });

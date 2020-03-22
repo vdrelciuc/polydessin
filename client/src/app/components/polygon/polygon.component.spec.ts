@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSliderModule, MatSlideToggleModule } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';

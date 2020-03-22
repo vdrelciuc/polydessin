@@ -1,3 +1,4 @@
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { ElementRef } from '@angular/core';
 import { CoordinatesXY } from './coordinates-x-y';
 

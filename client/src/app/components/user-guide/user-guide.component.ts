@@ -12,19 +12,22 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 
 export class UserGuideComponent implements OnInit {
 
+  private currentSubCategorie: string;
+  previousModuleRoute: string;
+
   constructor(
     private shortcutManager: ShortcutManagerService,
     public router: Router,
     public dialogRef: MatDialogRef<UserGuideComponent>
     ) {
       this.shortcutManager.disableShortcuts();
+      this.currentSubCategorie = 'Bienvenue';
+      this.previousModuleRoute = '';
   }
 
   @ViewChild('myaccordion', {static: true}) myPanels: MatAccordion;
 
-  private currentSubCategorie = 'Bienvenue';
-  previousModuleRoute = '';
-
+  // tslint:disable-next-line: no-any | Reason : custom element type
   categories: any[] = [
     {
       type: {
@@ -117,6 +120,7 @@ export class UserGuideComponent implements OnInit {
     if (currentElement === 'Nouveau Dessin') {
       return 'Nouveau Dessin';
     }
+    // tslint:disable-next-line: no-any | Reason : custom element type
     const indexes: any[] = this.findIndex(currentElement);
     if (indexes[2] === true) {
       indexes[0]++;
@@ -138,6 +142,7 @@ export class UserGuideComponent implements OnInit {
     if (currentElement === 'Bienvenue') {
       return 'Bienvenue';
     }
+    // tslint:disable-next-line: no-any | Reason : custom element type
     const indexes: any[] = this.findIndex(currentElement);
     if (indexes[1] === 0) {
       indexes[0]--;
@@ -155,6 +160,7 @@ export class UserGuideComponent implements OnInit {
   }
 
   getPath(): string {
+    // tslint:disable-next-line: no-any | Reason : custom element type
     const indexes: any[] = this.findIndex(this.currentSubCategorie);
     return this.categories[indexes[0]].type.elements[indexes[1]].path;
   }

@@ -59,6 +59,7 @@ describe('ShortcutManagerService', () => {
         bubbles: true
       }));
     }
+    // tslint:disable-next-line: no-magic-numbers | Reason : there are currently 4 shortcuts
     expect(spy).toHaveBeenCalledTimes(4);
     expect(service['subscriptions'].length).toEqual(numberOfSubscription);
   });

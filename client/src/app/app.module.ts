@@ -1,16 +1,16 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {MatListModule} from '@angular/material/list';
+import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import {AppRoutingModule, RoutingComponents} from './components/app/app-routing.module';
+import { AppRoutingModule, RoutingComponents } from './components/app/app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { BrushComponent } from './components/brush/brush.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
@@ -26,6 +26,7 @@ import { ExportComponent } from './components/export/export.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { GridComponent } from './components/grid/grid.component';
 import { AerosolGuideComponent } from './components/guideTemplaates/aerosol-guide/aerosol-guide.component';
+// tslint:disable-next-line: max-line-length | Reason : import cannot be splitted into several lines
 import { ApplicateurCouleurGuideComponent } from './components/guideTemplaates/applicateur-couleur-guide/applicateur-couleur-guide.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
 import { CrayonGuideComponent } from './components/guideTemplaates/crayon-guide/crayon-guide.component';
@@ -40,6 +41,7 @@ import { PipetteGuideComponent } from './components/guideTemplaates/pipette-guid
 import { PolygoneGuideComponent } from './components/guideTemplaates/polygone-guide/polygone-guide.component';
 import { RectangleGuideComponent } from './components/guideTemplaates/rectangle-guide/rectangle-guide.component';
 import { SaveServerGuideComponent } from './components/guideTemplaates/save-server-guide/save-server-guide.component';
+// tslint:disable-next-line: max-line-length | Reason : import cannot be splitted into several lines
 import { SelectionDeplacementGuideComponent } from './components/guideTemplaates/selection-deplacement-guide/selection-deplacement-guide.component';
 import { UndoRedoComponent } from './components/guideTemplaates/undo-redo/undo-redo.component';
 import { HomeComponent } from './components/home/home.component';

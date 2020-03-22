@@ -14,8 +14,8 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 export class PolygonComponent implements OnInit {
 
   readonly name: string = Tools.Polygon;
-  readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
-  readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
+  readonly SLIDER_MINIMUM: number = CONSTANT.THICKNESS_MINIMUM;
+  readonly SLIDER_MAXIMUM: number = CONSTANT.THICKNESS_MAXIMUM;
 
   constructor(
     protected service: PolygonService,

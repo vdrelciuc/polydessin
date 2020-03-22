@@ -15,8 +15,8 @@ export class SprayComponent {
 
   readonly name: string = Tools.Spray;
 
-  readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
-  readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
+  readonly SLIDER_MINIMUM: number = CONSTANT.THICKNESS_MINIMUM;
+  readonly SLIDER_MAXIMUM: number = CONSTANT.THICKNESS_MAXIMUM;
 
   constructor(
     public service: SprayService,

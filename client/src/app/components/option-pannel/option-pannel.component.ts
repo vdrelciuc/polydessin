@@ -12,7 +12,7 @@ export class OptionPannelComponent implements OnInit {
 
   constructor(public toolSelectorService: ToolSelectorService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setTool();
   }
 

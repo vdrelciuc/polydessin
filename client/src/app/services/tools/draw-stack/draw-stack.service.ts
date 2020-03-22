@@ -13,6 +13,7 @@ export class DrawStackService {
     this.elements = new Stack<SVGElementInfos>();
     this.nextId = 0;
     this.isAdding = new BehaviorSubject<boolean>(false);
+    // tslint:disable-next-line: no-magic-numbers | Reason : negative index references to outside of array
     this.changeAt = new BehaviorSubject<number>(-1);
     this.addedSVG = new BehaviorSubject<SVGElement | undefined>(undefined);
     this.addedToRedo = new BehaviorSubject<SVGElement | undefined>(undefined);

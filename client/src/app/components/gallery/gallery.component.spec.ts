@@ -1,3 +1,4 @@
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -188,7 +189,7 @@ describe('GalleryComponent', () => {
     history.pushState({
       comingFromEntryPoint: false
     }, 'mockState');
-    const spy = spyOn(component['galleryService'], 'loadImage').and.callFake((image) => true); 
+    const spy = spyOn(component['galleryService'], 'loadImage').and.callFake((image) => true);
     const spy2 = spyOn(component['snacks'], 'open');
     component.loadImage(mockedImage);
     expect(spy).toHaveBeenCalledWith(mockedImage);

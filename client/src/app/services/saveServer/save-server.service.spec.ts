@@ -72,6 +72,7 @@ describe('SaveServerService', () => {
     const spy = spyOn(service['http'], 'post');
     service['refToSvg'] = {
       nativeElement: {
+        // tslint:disable-next-line: no-magic-numbers | testing with arbitrary value
         getAttribute: () => 100,
         style: {
           backgroundColor: 'red'

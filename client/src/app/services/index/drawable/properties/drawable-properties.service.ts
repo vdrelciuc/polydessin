@@ -27,9 +27,9 @@ import { Junctions } from 'src/app/enums/junctions';
 })
 export class DrawablePropertiesService {
 
-  readonly JUNCTION_DIAMETER_MINIMUM = 1;
-  readonly JUNCTION_DIAMETER_DEFAULT = 5;
-  readonly JUNCTION_DIAMETER_MAXIMUM = 10;
+  readonly JUNCTION_DIAMETER_MINIMUM: number = 1;
+  readonly JUNCTION_DIAMETER_DEFAULT: number = 5;
+  readonly JUNCTION_DIAMETER_MAXIMUM: number = 10;
 
   thickness: BehaviorSubject<number> = new BehaviorSubject(CONSTANT.THICKNESS_DEFAULT);
   dotDiameter: BehaviorSubject<number> = new BehaviorSubject(CONSTANT.DIAMETER_DEFAULT);

@@ -14,7 +14,7 @@ export class SVGService {
 
   getStack(): Stack<SVGGElement> { return this.svgStack; }
 
-  addElement(toAdd: SVGGElement) { this.svgStack.push_back(toAdd); }
+  addElement(toAdd: SVGGElement): void { this.svgStack.push_back(toAdd); }
 
   removeLastElement(): SVGGElement | undefined { return this.svgStack.pop_back(); }
 }

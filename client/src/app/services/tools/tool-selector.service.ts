@@ -78,7 +78,8 @@ export class ToolSelectorService {
     this.disableUndo = true;
   }
 
-  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService, canvas: ElementRef<HTMLCanvasElement>): void {
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService,
+             drawStack: DrawStackService, canvas: ElementRef<HTMLCanvasElement>): void {
     this.memory = new UndoRedoService(drawStack, manipulator, image);
     for (const element of this.tools) {
       element[1].initialize(manipulator, image, colorSelectorService, drawStack);

@@ -23,7 +23,8 @@ export class GridService extends DrawableService {
     this.frenchName = 'Grille';
   }
 
-  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>,
+             colorSelectorService: ColorSelectorService, drawStack: DrawStackService): void {
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
   }
 

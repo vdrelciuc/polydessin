@@ -35,6 +35,8 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
   private ctx: CanvasRenderingContext2D;
   private currentSelectedPosition: {x: number, y: number};
   private isMouseDown: boolean;
+  // tslint:disable-next-line: typedef | Reason : typedef is inferrable (number)
+  private CROSS_WIDTH = 4;
 
   constructor() {
     this.newColor = new EventEmitter(true);
@@ -88,7 +90,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnChanges {
 
     // Draw a cross surrounding the selected color
     if (this.currentSelectedPosition) {
-      this.ctx.lineWidth = 4;
+      this.ctx.lineWidth = this.CROSS_WIDTH;
       this.ctx.strokeStyle = OPAQUE_WHITE_RGBA;
 
       this.ctx.beginPath();

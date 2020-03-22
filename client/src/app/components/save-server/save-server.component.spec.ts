@@ -119,7 +119,7 @@ describe('SaveServerComponent', () => {
   });
 
   it('#checkTitleValidity should return invalid title', () => {
-    const spy = spyOn(component['saveService'], 'checkTitleValidity').and.callFake(function(title: string) {
+    const spy = spyOn(component['saveService'], 'checkTitleValidity').and.callFake((title: string) => {
       return REGEX_TITLE.test(title);
     });
     const ret = component.checkTitleValidity('1');
@@ -128,7 +128,7 @@ describe('SaveServerComponent', () => {
   });
 
   it('#checkTitleValidity should return valid title', () => {
-    const spy = spyOn(component['saveService'], 'checkTitleValidity').and.callFake(function(title: string) {
+    const spy = spyOn(component['saveService'], 'checkTitleValidity').and.callFake((title: string) => {
       return REGEX_TITLE.test(title);
     });
     const ret = component.checkTitleValidity('test');

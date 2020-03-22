@@ -57,6 +57,7 @@ const secondaryRoutes: Routes = [
 })
 
 export class AppRoutingModule {}
+// tslint:disable-next-line: variable-name | Reason : a component name starts with capital
 export const RoutingComponents = [UserGuideComponent, BienvenueGuideComponent,
   LigneGuideComponent, PinceauGuideComponent, CrayonGuideComponent,
   RectangleGuideComponent, CouleurGuideComponent, NouveauDessinComponent, WorkingAreaComponent];

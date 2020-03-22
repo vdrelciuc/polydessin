@@ -1,13 +1,13 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { APP_BASE_HREF } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+// import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { CreateNewComponent } from './create-new.component';
@@ -64,7 +64,7 @@ describe('CreateNewComponent', () => {
     // expect(component['workspaceSize'].getX()).toEqual(10);
   });
 
-  it('#setCanvasSizeX should set canvas X', () => {
+  /*it('#setCanvasSizeX should set canvas X', () => {
     component['changed'] = true;
     component.setcanvasSizeX({
       target: {
@@ -84,14 +84,14 @@ describe('CreateNewComponent', () => {
     });
     component['workspaceService'].size.next(new CoordinatesXY(100, 100));
     // expect(component['workspaceSize'].getY()).toEqual(10);
-  });
+  });*/
 
   it('#onColorSelect should be able to select color', () => {
     component['previewColor'] = new Color('#FFFFFF');
     const spy2 = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     const spy = spyOn(component['colorSelectorService'], 'updateColor');
     component.onColorSelect();

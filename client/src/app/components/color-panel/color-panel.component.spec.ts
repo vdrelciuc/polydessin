@@ -1,5 +1,5 @@
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatSliderModule } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -23,7 +23,8 @@ describe('ColorPanelComponent', () => {
           provide: MatDialog,
           useValue: {
             open: () => {
-              ({ afterClose: () => new Observable});
+              // tslint:disable-next-line: no-unused-expression | Reason : mocked method
+              ({ afterClose: () => new Observable()});
             },
           },
         },
@@ -102,7 +103,7 @@ describe('ColorPanelComponent', () => {
     const spy = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     component.onPrimaryColorChange();
     expect(service.colorToChange).toEqual(ColorType.Primary);
@@ -113,7 +114,7 @@ describe('ColorPanelComponent', () => {
     const spy = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     component.onSecondaryColorChange();
     expect(service.colorToChange).toEqual(ColorType.Secondary);
@@ -124,7 +125,7 @@ describe('ColorPanelComponent', () => {
     const spy = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     component.onBackgroundChange();
     expect(service.colorToChange).toEqual(ColorType.Background);
