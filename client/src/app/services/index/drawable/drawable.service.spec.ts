@@ -8,7 +8,7 @@ import { DrawStackService } from '../../tools/draw-stack/draw-stack.service';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 
-fdescribe('DrawableService', () => {
+describe('DrawableService', () => {
 
   let service: DrawableService;
   let lineService: LineService
