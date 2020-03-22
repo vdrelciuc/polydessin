@@ -1,0 +1,21 @@
+<div id="container">
+    <form id="grid-form">
+      <div class="group">
+        <label class="title" id="tolerance">Pourcentage de Tolérance</label>
+        <mat-slider
+          id="tolerance-slider"
+          name="tolerance-slider"
+          disabled="false"
+          [min]="0"
+          [max]="10"
+          step="1"
+          thumbLabel="true"
+          tickInterval="false"
+          [value]="service.tolerance.value"
+          (change)="setTolerance($event)"
+          vertical="false">
+        </mat-slider>
+      </div>
+    </form>
+  </div>
+  

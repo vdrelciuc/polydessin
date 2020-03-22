@@ -18,6 +18,7 @@ import { SprayService } from '../index/drawable/spray/spray.service';
 import { PipetteService } from '../pipette.service';
 import { DrawStackService } from './draw-stack/draw-stack.service';
 import { UndoRedoService } from './undo-redo/undo-redo.service';
+import { PaintSealService } from '../index/drawable/paint-seal/paint-seal.service';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,7 @@ export class ToolSelectorService {
   private colorApplicator: ColorApplicatorService;
   private spray: SprayService;
   private grid: GridService;
+  private paintSeal: PaintSealService;
 
   private ellipse: EllipseService;
   private eraser: EraserService;
@@ -58,6 +60,7 @@ export class ToolSelectorService {
     this.colorApplicator = new ColorApplicatorService();
     this.spray = new SprayService();
     this.grid = new GridService();
+    this.paintSeal = new PaintSealService();
 
     this.tools.set(Tools.Spray, this.spray);
     this.tools.set(Tools.ColorApplicator, this.colorApplicator);
@@ -71,6 +74,7 @@ export class ToolSelectorService {
     this.tools.set(Tools.Ellipse, this.ellipse);
     this.tools.set(Tools.Eraser, this.eraser);
     this.tools.set(Tools.Grid, this.grid);
+    this.tools.set(Tools.Grid, this.paintSeal);
     this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
     this.setCurrentTool(Tools.Selection);
 
@@ -117,6 +121,7 @@ export class ToolSelectorService {
   getColorApplicator(): ColorApplicatorService { return  this.colorApplicator; }
   getSpray(): SprayService { return  this.spray; }
   getGrid(): GridService { return this.grid; }
+  getPaintSeal(): PaintSealService { return this.paintSeal; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);

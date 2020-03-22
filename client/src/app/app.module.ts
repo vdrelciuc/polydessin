@@ -60,6 +60,7 @@ import { UndoRedoComponent } from './components/guideTemplaates/undo-redo/undo-r
 import { SaveServerGuideComponent } from './components/guideTemplaates/save-server-guide/save-server-guide.component';
 import { GalleryGuideComponent } from './components/guideTemplaates/gallery-guide/gallery-guide.component';
 import { ExportGuideComponent } from './components/guideTemplaates/export-guide/export-guide.component';
+import { PaintSealComponent } from './components/paint-seal/paint-seal.component';
 
 @NgModule({
   declarations: [
@@ -113,7 +114,8 @@ import { ExportGuideComponent } from './components/guideTemplaates/export-guide/
     UndoRedoComponent,
     SaveServerGuideComponent,
     GalleryGuideComponent,
-    ExportGuideComponent
+    ExportGuideComponent,
+    PaintSealComponent
   ],
   entryComponents: [
     ColorPickerComponent,
