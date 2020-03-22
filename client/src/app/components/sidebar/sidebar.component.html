@@ -178,7 +178,11 @@
       </div>
       <div class="right-column">
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('bucket')"
+          <button mat-button 
+                  matTooltipPosition="after"
+                  aria-label="paint-seal-tooltip"
+                  (click)="selectTool('bucket')"
+                  [matTooltip]="this.toolSelectorService.getPaintSeal().frenchName"
                   [ngClass]="{'clicked': currentTool === 'bucket',
             'not-clicked': currentTool !== 'bucket'}">
             <img src="../../../assets/icons/bucket.svg">

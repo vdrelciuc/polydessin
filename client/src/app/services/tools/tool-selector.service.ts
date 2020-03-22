@@ -74,7 +74,7 @@ export class ToolSelectorService {
     this.tools.set(Tools.Ellipse, this.ellipse);
     this.tools.set(Tools.Eraser, this.eraser);
     this.tools.set(Tools.Grid, this.grid);
-    this.tools.set(Tools.Grid, this.paintSeal);
+    this.tools.set(Tools.Bucket, this.paintSeal);
     this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
     this.setCurrentTool(Tools.Selection);
 

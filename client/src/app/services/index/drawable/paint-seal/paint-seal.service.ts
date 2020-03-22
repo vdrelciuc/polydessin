@@ -17,6 +17,7 @@ export class PaintSealService extends DrawableService {
 
   constructor() { 
     super();
+    this.frenchName = 'Sceau de Peinture';
     this.tolerance = new BehaviorSubject<number>(VISUAL_DIFFERENCE);
   }
 
@@ -35,7 +36,7 @@ export class PaintSealService extends DrawableService {
 
   onClick(event: MouseEvent): void {
     const currentSVG = event.target as SVGGElement;
-    const elementsInBounds = this.findAllInBounds(currentSVG.getBoundingClientRect() as DOMRect);
+    this.findAllInBounds(currentSVG.getBoundingClientRect() as DOMRect);
   }
 
 
