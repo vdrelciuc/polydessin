@@ -30,7 +30,6 @@ export class SelectionTransformShortcutService {
   private rightArrowIsPressed: boolean;
   private upArrowIsPressed: boolean;
   private downArrowIsPressed: boolean;
-  private ctrlIsPressed: boolean;
 
   private manipulator: Renderer2;
   private image: ElementRef<SVGElement>;
@@ -52,8 +51,15 @@ export class SelectionTransformShortcutService {
     this.selectionGroup = selectionGroup;
     this.shortcutListener.push(manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
       this.onKeyDown(event);
-      console.log(event.key);
-
+    }));
+    this.shortcutListener.push(manipulator.listen(window, 'wheel', (event: WheelEvent) => {
+      console.log('xd');
+      console.log(event);
+      if (event.shiftKey) {
+        // Transform.rotateEach((event.altKey) ? 1 : 15);
+      } else {
+        // Transform.rotate((event.altKey) ? 1 : 15);
+      }
     }));
     this.shortcutListener.push(manipulator.listen(window, 'keyup', (event: KeyboardEvent) => {
       this.onKeyUp(event.key);
@@ -74,26 +80,23 @@ export class SelectionTransformShortcutService {
           this.selectionGroup.remove();
           this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
           break;
-        case this.ctrl:
-          this.ctrlIsPressed = true;
-          break;
           case this.x:
-            if (this.ctrlIsPressed) {
+            if (event.ctrlKey) {
               ClipboardService.cut();
             }
             break;
           case this.c:
-            if (this.ctrlIsPressed) {
+            if (event.ctrlKey) {
               ClipboardService.copy();
             }
             break;
           case this.v:
-            if (this.ctrlIsPressed) {
+            if (event.ctrlKey) {
               ClipboardService.paste();
             }
             break;
           case this.d:
-            if (this.ctrlIsPressed) {
+            if (event.ctrlKey) {
               ClipboardService.duplicate();
               event.preventDefault();
             }
@@ -143,9 +146,6 @@ export class SelectionTransformShortcutService {
 
   private onKeyUp(keyReleased: string): void {
     switch (keyReleased) {
-      case this.ctrl:
-        this.ctrlIsPressed = false;
-        break;
       case this.left:
         this.leftArrowIsPressed = false;
         break;
