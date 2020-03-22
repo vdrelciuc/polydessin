@@ -34,7 +34,6 @@ export class LineService extends DrawableService {
     this.frenchName = 'Ligne';
     this.points = new Stack<CoordinatesXY>();
     this.circles = new Stack<SVGCircleElement>();
-
   }
 
   static getName(): Tools { return Tools.Line; }

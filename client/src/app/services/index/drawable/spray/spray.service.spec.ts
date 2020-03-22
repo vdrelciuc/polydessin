@@ -6,6 +6,8 @@ import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { SprayService } from './spray.service';
+// import * as CONSTANT from 'src/app/classes/constants';
+
 // tslint:disable: no-magic-numbers no-any
 
 describe('SprayService', () => {
@@ -91,13 +93,6 @@ describe('SprayService', () => {
     expect(service['opacity']).toEqual(randomTestValueOpacity);
   });
 
-  it('#onMouseRelease should stop drawing and save SVG', () => {
-    service.onMousePress(eventMocker('mousemove', 0, 0, 0));
-    service.onMouseRelease(eventMocker('mousemove', 0, 0, 0));
-    expect(service['isDrawing'].value).not.toBeTruthy();
-    expect(spyPushSVG).toHaveBeenCalled();
-  });
-
   it('#onMouseOutCanvas should stop drawing and save SVG', () => {
     service.onMousePress(eventMocker('mousepress', 0, 0, 0));
     service.onMouseOutCanvas(eventMocker('mousemove', 0, 0, 0));
@@ -109,6 +104,35 @@ describe('SprayService', () => {
     service.onMouseRelease(eventMocker('mousepress', 0, 0, 0));
     service.onMouseOutCanvas(eventMocker('mousemove', 0, 0, 0));
     expect(spyPushSVG).not.toHaveBeenCalled();
+  });
+
+  it('#onMousePress should start new drawing not spraying but drawing', () => {
+    const spy = spyOn(manipulator, 'createElement');
+    service['spraying'] = false;
+    service.onMousePress(eventMocker('mousepress', 0, 0, 0));
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(service['spraying']).toEqual(true);
+    expect(service['isDrawing']).toBeTruthy();
+  });
+
+  it('#holding mouse should draw continuously', () => {
+    jasmine.clock().install();
+    service.onMousePress(eventMocker('mousepress', 0, 0, 0));
+    const spy = spyOn(manipulator, 'createElement');
+    const currentSprays = spy.calls.count();
+    const waitTime = 1500;
+    jasmine.clock().tick(waitTime);
+    expect(spy.calls.count()).toBeGreaterThanOrEqual(currentSprays);
+    expect(service['isDrawing']).toBeTruthy();
+    service.onMouseRelease(eventMocker('mousemove', 0, 0, 0));
+    jasmine.clock().uninstall();
+  });
+
+  it('#onMouseRelease should stop drawing and save SVG', () => {
+    service.onMousePress(eventMocker('mousemove', 0, 0, 0));
+    service.onMouseRelease(eventMocker('mousemove', 0, 0, 0));
+    expect(service['isDrawing'].value).not.toBeTruthy();
+    expect(spyPushSVG).toHaveBeenCalled();
   });
 
   it('#generateRandom should generate random nuber between 0 and 1', () => {
@@ -129,24 +153,21 @@ describe('SprayService', () => {
     expect(service['mousePosition'].getY()).toEqual(newY);
   });
 
-  it('#onMousePress should start new drawing', () => {
-    const spy = spyOn(manipulator, 'createElement');
-    service.onMousePress(eventMocker('mousepress', 0, 0, 0));
+  it('#endTool should end tool even if drawing', () => {
+    service['isDrawing'] = new BehaviorSubject<boolean>(true);
+    const spy = spyOn(service['manipulator'], 'removeChild');
+    service.endTool();
+    expect(service['subElement']).toEqual(undefined as unknown as SVGGElement);
+    expect(service['isDrawing'].value).toEqual(false);
     expect(spy).toHaveBeenCalled();
-    expect(service['isDrawing']).toBeTruthy();
   });
 
-  it('#holding mouse should draw continuously', () => {
-    jasmine.clock().install();
-    service.onMousePress(eventMocker('mousepress', 0, 0, 0));
-    const spy = spyOn(manipulator, 'createElement');
-    const currentSprays = spy.calls.count();
-    const waitTime = 1500;
-    jasmine.clock().tick(waitTime);
-    expect(spy.calls.count()).toBeGreaterThan(currentSprays);
-    expect(service['isDrawing']).toBeTruthy();
-    service.onMouseRelease(eventMocker('mousemove', 0, 0, 0));
-    jasmine.clock().uninstall();
+  it('#endTool should end tool', () => {
+    service['isDrawing'] = new BehaviorSubject<boolean>(false);
+    const spy = spyOn(service['manipulator'], 'removeChild');
+    service.endTool();
+    expect(service['subElement']).toEqual(undefined as unknown as SVGGElement);
+    expect(service['isDrawing'].value).toEqual(false);
+    expect(spy).not.toHaveBeenCalled();
   });
-
 });

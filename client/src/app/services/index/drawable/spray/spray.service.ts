@@ -48,7 +48,6 @@ export class SprayService extends DrawableService {
     }
 
   initializeProperties(): void {
-
     this.colorSelectorService.primaryColor.subscribe((color: Color) => {
       this.color = color;
     });
@@ -56,7 +55,6 @@ export class SprayService extends DrawableService {
     this.colorSelectorService.primaryTransparency.subscribe((opacity: number) => {
       this.opacity = opacity;
     });
-
   }
 
   onMouseOutCanvas(event: MouseEvent): void {
@@ -68,19 +66,19 @@ export class SprayService extends DrawableService {
     this.isDrawing.next(true);
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, 'spray');
-
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
     if (!this.spraying) {
       this.spraying = true;
-      this.Spray();
+      this.spray();
     }
-
   }
+
   onMouseRelease(event: MouseEvent): void {
     if (this.isDrawing.value) {
       this.isDrawing.next(false);
     }
   }
+
   onMouseMove(event: MouseEvent): void {
     this.mousePosition = CoordinatesXY.getEffectiveCoords(this.image, event);
   }
@@ -93,6 +91,15 @@ export class SprayService extends DrawableService {
     this.isDrawing.next(false);
   }
 
+  private async spray(): Promise<void> {
+    if (this.isDrawing.value) {
+      this.printSpray();
+      setTimeout(() => this.spray(), CONSTANT.MS_PER_S / this.frequency);
+    } else {
+      this.spraying = false;
+    }
+  }
+
   private printSpray(): void {
     for (let i = 0; i < CONSTANT.DOTS_PER_SPRAY; i++) {
       const radius = this.radius * this.generateRandom();
@@ -103,6 +110,7 @@ export class SprayService extends DrawableService {
   private generateRandom(): number {
     return Math.random();
   }
+
   private createDot(x: number, y: number): void {
     const dot = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(dot, SVGProperties.fill, this.color.getHex());
@@ -111,14 +119,5 @@ export class SprayService extends DrawableService {
     this.manipulator.setAttribute(dot, SVGProperties.centerX, x.toString());
     this.manipulator.setAttribute(dot, SVGProperties.centerY, y.toString());
     this.manipulator.appendChild(this.subElement, dot);
-  }
-
-  private async Spray(): Promise<void> {
-    if (this.isDrawing.value) {
-      this.printSpray();
-      setTimeout(() => this.Spray(), CONSTANT.MS_PER_S / this.frequency);
-    } else {
-      this.spraying = false;
-    }
   }
 }
