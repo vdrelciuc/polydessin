@@ -144,7 +144,6 @@ describe('RectangleService', () => {
   it('#onMouseMove should call setDimensionsAttributes', () => {
     service.colorSelectorService.backgroundColor = new BehaviorSubject<Color>(new Color('ffffff'));
     service.onMousePress(eventMocker('', 0, 0, 0));
-    console.log(service['drawOnNextMove']);
 
     const spy = spyOn(service as any, 'setDimensionsAttributes');
     service.onMouseMove(eventMocker('', 0, 0, 0));

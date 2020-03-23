@@ -3,9 +3,9 @@ import { Subscription } from 'rxjs';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
-import { LineService } from 'src/app/services/index/drawable/line/line.service';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
+import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
+import { LineService } from 'src/app/services/drawable/line/line.service';
+import { DrawablePropertiesService } from 'src/app/services/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({
@@ -37,7 +37,6 @@ export class LineComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('destroyed line component');
     this.disableShortcuts();
   }
 

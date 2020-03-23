@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
+import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { UserGuideComponent } from '../user-guide/user-guide.component';
 

@@ -7,8 +7,8 @@ import { ColorSelectorService } from 'src/app/services/color-selector/color-sele
 import { CreateNewService } from 'src/app/services/create-new/create-new.service';
 import { EventListenerService } from 'src/app/services/events/event-listener.service';
 import { ExportService } from 'src/app/services/export/export.service';
-import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
-import { SVGService } from 'src/app/services/index/svg/svg.service';
+import { GridService } from 'src/app/services/drawable/grid/grid.service';
+import { SVGService } from 'src/app/services/svg/svg.service';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 import { WorkspaceService } from 'src/app/services/workspace/workspace.service';

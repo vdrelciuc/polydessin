@@ -2,9 +2,9 @@ import { ElementRef, Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { ColorSelectorService } from '../../color-selector/color-selector.service';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { DrawableService } from './drawable.service';
+import { ColorSelectorService } from '../color-selector/color-selector.service';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
+import { DrawableService } from '../index/drawable/drawable.service';
 import { LineService } from './line/line.service';
 
 describe('DrawableService', () => {

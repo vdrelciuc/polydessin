@@ -9,7 +9,7 @@ import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service
 import { Image } from '../../interfaces/image';
 import { GalleryService } from '../../services/gallery/gallery.service';
 import { SaveServerService } from '../../services/save-server/save-server.service';
-import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
+import { WarningDialogComponent } from '../warning/warning-dialog.component';
 
 @Component({
   selector: 'app-gallery',

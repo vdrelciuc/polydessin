@@ -4,7 +4,7 @@ import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/test
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
-import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
+import { RectangleService } from 'src/app/services/drawable/rectangle/rectangle.service';
 import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 import { RectangleComponent } from './rectangle.component';
 

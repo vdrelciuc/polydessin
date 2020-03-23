@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { ColorSelectorService } from '../../color-selector/color-selector.service';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ColorSelectorService } from '../color-selector/color-selector.service';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from './properties/drawable-properties.service';
 
 @Injectable({
@@ -35,7 +35,6 @@ export abstract class DrawableService {
       target: this.subElement,
       id: nextID
     });
-    console.log('Next id' + nextID);
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, nextID.toString());
     this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
   }

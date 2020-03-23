@@ -11,7 +11,7 @@ import { BoundingBox } from 'src/app/interfaces/bounding-box';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
-import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
+import { SelectionTransformShortcutService } from '../selection-transform/selection-transform-shortcut.service';
 
 @Injectable({
   providedIn: 'root'

@@ -4,7 +4,7 @@ import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from '../color-selector/color-selector.service';
-import { LineService } from '../index/drawable/line/line.service';
+import { LineService } from '../drawable/line/line.service';
 import { ToolSelectorService } from '../tools-selector/tool-selector.service';
 import { EventListenerService } from './event-listener.service';
 

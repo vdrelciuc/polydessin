@@ -3,8 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatSliderModule } from '@angular/material';
 import * as CONSTANT from 'src/app/classes/constants';
-import { PencilService } from 'src/app/services/index/drawable/pencil/pencil.service';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
+import { PencilService } from 'src/app/services/drawable/pencil/pencil.service';
+import { DrawablePropertiesService } from 'src/app/services/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 import { PencilComponent } from './pencil.component';
 

@@ -19,7 +19,7 @@ import { ColorPanelComponent } from './components/color-panel/color-panel.compon
 import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 import { ColorSliderComponent } from './components/color-slider/color-slider.component';
 import { CreateNewComponent } from './components/create-new/create-new.component';
-import { WarningDialogComponent } from './components/create-new/warning-dialog/warning-dialog.component';
+import { WarningDialogComponent } from './components/warning/warning-dialog.component';
 import { EllipseComponent } from './components/ellipse/ellipse.component';
 import { EraserComponent } from './components/eraser/eraser.component';
 import { ExportComponent } from './components/export/export.component';
@@ -61,7 +61,7 @@ import { WorkingAreaComponent } from './components/working-area/working-area.com
 import { ResizeObserverDirective } from './components/workspace/resize-observer.directive';
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
-import { DrawablePropertiesService } from './services/index/drawable/properties/drawable-properties.service';
+import { DrawablePropertiesService } from './services/drawable/properties/drawable-properties.service';
 
 @NgModule({
   declarations: [

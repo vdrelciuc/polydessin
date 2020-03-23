@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import { RectangleService } from 'src/app/services/index/drawable/rectangle/rectangle.service';
+import { DrawablePropertiesService } from 'src/app/services/drawable/properties/drawable-properties.service';
+import { RectangleService } from 'src/app/services/drawable/rectangle/rectangle.service';
 import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({

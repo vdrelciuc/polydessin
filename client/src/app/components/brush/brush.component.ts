@@ -3,8 +3,8 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { Filter, FilterList } from 'src/app/components/brush/patterns';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
-import { BrushService } from 'src/app/services/index/drawable/brush/brush.service';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
+import { BrushService } from 'src/app/services/drawable/brush/brush.service';
+import { DrawablePropertiesService } from 'src/app/services/drawable/properties/drawable-properties.service';
 import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({
