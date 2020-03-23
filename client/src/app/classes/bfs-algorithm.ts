@@ -73,65 +73,6 @@ export class BFSAlgorithm {
         this.createPathToFill();
     }
 
-    private searchIn(neighborPixels: CoordinatesXY[], closestNeighbor: CoordinatesXY): void {
-        neighborPixels.forEach((neighborPixel: CoordinatesXY) => {
-            if (
-                this.strokesSet.has(`${neighborPixel.getX()} ${neighborPixel.getY()}`) &&
-                !this.visited.has(`${neighborPixel.getX()} ${neighborPixel.getY()}`)
-            ) {
-                closestNeighbor.setX(neighborPixel.getX());
-                closestNeighbor.setY(neighborPixel.getY());
-            }
-        });
-    }
-
-    private searchInDirectNeighbors(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
-        const neighborPixels = [
-            new CoordinatesXY(pixel.getX() - 1, pixel.getY()),
-            new CoordinatesXY(pixel.getX() + 1, pixel.getY()),
-            new CoordinatesXY(pixel.getX(),     pixel.getY() - 1),
-            new CoordinatesXY(pixel.getX(),     pixel.getY() + 1),
-        ];
-        this.searchIn(neighborPixels, closestNeighbor);
-    }
-
-    private searchInIndirectNeighbors(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
-        const neighborPixels = [
-            new CoordinatesXY(pixel.getX() - 1, pixel.getY() - 1),
-            new CoordinatesXY(pixel.getX() - 1, pixel.getY() + 1),
-            new CoordinatesXY(pixel.getX() + 1, pixel.getY() - 1),
-            new CoordinatesXY(pixel.getX() + 1, pixel.getY() + 1),
-        ];
-        this.searchIn(neighborPixels, closestNeighbor);
-    }
-
-    private findClosestPixel(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
-        let closestNeighborDistance = Number.MAX_SAFE_INTEGER;
-        this.strokes.forEach((el: CoordinatesXY) => {
-            if (!this.visited.has(`${el.getX()} ${el.getY()}`)) {
-                const distance = el.distanceTo(pixel);
-                if (distance < closestNeighborDistance) {
-                    closestNeighborDistance = distance;
-                    closestNeighbor.setX(el.getX());
-                    closestNeighbor.setY(el.getY());
-                }
-            }
-        });
-
-        if (closestNeighborDistance > 100 && this.tmpPath.length > 0) {
-            this.pathsToFill.push(this.tmpPath);
-            this.tmpPath = [];
-        }
-    }
-
-    private updateClosestNeighbor(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
-        this.searchInDirectNeighbors(pixel, closestNeighbor);
-        if (!(closestNeighbor.getX() >= 0 && closestNeighbor.getY() >= 0)) {
-            this.searchInIndirectNeighbors(pixel, closestNeighbor);
-            this.findClosestPixel(pixel, closestNeighbor);
-        }
-    }
-
     private createPathToFill() {
         if (this.strokes.length !== 0) {
             this.pathsToFill = [];
@@ -155,6 +96,65 @@ export class BFSAlgorithm {
             this.pathsToFill.push(this.tmpPath);
             this.tmpPath = [];
         }
+    }
+
+    private updateClosestNeighbor(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
+        this.searchInDirectNeighbors(pixel, closestNeighbor);
+        if (!(closestNeighbor.getX() >= 0 && closestNeighbor.getY() >= 0)) {
+            this.searchInIndirectNeighbors(pixel, closestNeighbor);
+            this.findClosestPixel(pixel, closestNeighbor);
+        }
+    }
+
+    private findClosestPixel(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
+        let closestNeighborDistance = Number.MAX_SAFE_INTEGER;
+        this.strokes.forEach((el: CoordinatesXY) => {
+            if (!this.visited.has(`${el.getX()} ${el.getY()}`)) {
+                const distance = el.distanceTo(pixel);
+                if (distance < closestNeighborDistance) {
+                    closestNeighborDistance = distance;
+                    closestNeighbor.setX(el.getX());
+                    closestNeighbor.setY(el.getY());
+                }
+            }
+        });
+
+        if (closestNeighborDistance > 100 && this.tmpPath.length > 0) {
+            this.pathsToFill.push(this.tmpPath);
+            this.tmpPath = [];
+        }
+    }
+
+    private searchInDirectNeighbors(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
+        const neighborPixels = [
+            new CoordinatesXY(pixel.getX() - 1, pixel.getY()),
+            new CoordinatesXY(pixel.getX() + 1, pixel.getY()),
+            new CoordinatesXY(pixel.getX(),     pixel.getY() - 1),
+            new CoordinatesXY(pixel.getX(),     pixel.getY() + 1),
+        ];
+        this.searchIn(neighborPixels, closestNeighbor);
+    }
+
+    private searchInIndirectNeighbors(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
+        const neighborPixels = [
+            new CoordinatesXY(pixel.getX() - 1, pixel.getY() - 1),
+            new CoordinatesXY(pixel.getX() - 1, pixel.getY() + 1),
+            new CoordinatesXY(pixel.getX() + 1, pixel.getY() - 1),
+            new CoordinatesXY(pixel.getX() + 1, pixel.getY() + 1),
+        ];
+        this.searchIn(neighborPixels, closestNeighbor);
+    }
+
+    private searchIn(neighborPixels: CoordinatesXY[], closestNeighbor: CoordinatesXY): void {
+        neighborPixels.forEach((neighborPixel: CoordinatesXY) => {
+            if (
+                this.strokesSet.has(`${neighborPixel.getX()} ${neighborPixel.getY()}`) &&
+                !this.visited.has(`${neighborPixel.getX()} ${neighborPixel.getY()}`)
+            ) {
+                closestNeighbor.setX(neighborPixel.getX());
+                closestNeighbor.setY(neighborPixel.getY());
+            }
+        });
     }
 
     private isValidPosition(pixel: CoordinatesXY): boolean {
