@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { ColorSelectorService } from '../color-selector/color-selector.service';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
-import { DrawableService } from '../index/drawable/drawable.service';
+import { DrawableService } from '../drawable/drawable.service';
 import { LineService } from './line/line.service';
 
 describe('DrawableService', () => {

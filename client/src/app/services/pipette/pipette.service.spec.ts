@@ -5,8 +5,8 @@ import { BehaviorSubject } from 'rxjs';
 import { Color } from '../../classes/color';
 import { ColorType } from '../../enums/color-types';
 import { ColorSelectorService } from '../color-selector/color-selector.service';
-import { DrawablePropertiesService } from '../drawable/properties/drawable-properties.service';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
+import { DrawablePropertiesService } from '../drawable/properties/drawable-properties.service';
 import { PipetteService } from './pipette.service';
 
 describe('PipetteService', () => {

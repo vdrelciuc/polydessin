@@ -19,7 +19,6 @@ import { ColorPanelComponent } from './components/color-panel/color-panel.compon
 import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 import { ColorSliderComponent } from './components/color-slider/color-slider.component';
 import { CreateNewComponent } from './components/create-new/create-new.component';
-import { WarningDialogComponent } from './components/warning/warning-dialog.component';
 import { EllipseComponent } from './components/ellipse/ellipse.component';
 import { EraserComponent } from './components/eraser/eraser.component';
 import { ExportComponent } from './components/export/export.component';
@@ -57,6 +56,7 @@ import { SelectionComponent } from './components/selection/selection.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SprayComponent } from './components/spray/spray.component';
 import { UserGuideComponent } from './components/user-guide/user-guide.component';
+import { WarningDialogComponent } from './components/warning/warning-dialog.component';
 import { WorkingAreaComponent } from './components/working-area/working-area.component';
 import { ResizeObserverDirective } from './components/workspace/resize-observer.directive';
 import { WorkspaceComponent } from './components/workspace/workspace.component';

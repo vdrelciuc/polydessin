@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Tools } from '../../enums/tools';
 import { DrawerService } from '../../services/side-nav-drawer/drawer.service';
 import { ColorSelectorService } from '../color-selector/color-selector.service';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { BrushService } from '../drawable/brush/brush.service';
 import { ColorApplicatorService } from '../drawable/color-applicator/color-applicator.service';
 import { DrawableService } from '../drawable/drawable.service';
@@ -16,7 +17,6 @@ import { RectangleService } from '../drawable/rectangle/rectangle.service';
 import { SelectionService } from '../drawable/selection/selection.service';
 import { SprayService } from '../drawable/spray/spray.service';
 import { PipetteService } from '../pipette/pipette.service';
-import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { UndoRedoService } from '../undo-redo/undo-redo.service';
 
 @Injectable({

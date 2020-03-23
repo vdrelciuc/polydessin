@@ -3,9 +3,9 @@ import { Subscription } from 'rxjs';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
-import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
 import { LineService } from 'src/app/services/drawable/line/line.service';
 import { DrawablePropertiesService } from 'src/app/services/drawable/properties/drawable-properties.service';
+import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
 import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({

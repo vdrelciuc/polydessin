@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatInputModule, MatOptionModule,
   MatSelectModule, MatSliderModule, MatSlideToggleModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
 import { EllipseService } from 'src/app/services/drawable/ellipse/ellipse.service';
 import { DrawablePropertiesService } from 'src/app/services/drawable/properties/drawable-properties.service';
+import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
 import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 import { EllipseComponent } from './ellipse.component';
 

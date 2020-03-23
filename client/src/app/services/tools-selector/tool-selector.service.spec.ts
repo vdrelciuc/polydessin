@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from '../color-selector/color-selector.service';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { BrushService } from '../drawable/brush/brush.service';
 import { ColorApplicatorService } from '../drawable/color-applicator/color-applicator.service';
 import { EllipseService } from '../drawable/ellipse/ellipse.service';
@@ -17,7 +18,6 @@ import { RectangleService } from '../drawable/rectangle/rectangle.service';
 import { SelectionService } from '../drawable/selection/selection.service';
 import { SprayService } from '../drawable/spray/spray.service';
 import { PipetteService } from '../pipette/pipette.service';
-import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { ToolSelectorService } from './tool-selector.service';
 
 describe('ToolSelectorService', () => {
