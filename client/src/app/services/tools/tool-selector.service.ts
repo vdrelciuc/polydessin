@@ -129,6 +129,9 @@ export class ToolSelectorService {
       if (this.tool !== undefined) {
         this.tool.endTool();
       }
+      if(tool === Tools.Bucket) {
+        this.paintSeal.assignPipette(this.pipette);
+      }
       this.tool = foundTool;
       this.tool.onSelect();
       this.$currentTool.next(tool);

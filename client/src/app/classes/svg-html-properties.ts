@@ -1,4 +1,7 @@
 export enum SVGProperties {
+
+  nameSpace = 'http://www.w3.org/2000/svg',
+
   // General
   fill = 'fill',
   color = 'stroke',
