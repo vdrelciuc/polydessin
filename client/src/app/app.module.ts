@@ -61,6 +61,7 @@ import { SaveServerGuideComponent } from './components/guideTemplaates/save-serv
 import { GalleryGuideComponent } from './components/guideTemplaates/gallery-guide/gallery-guide.component';
 import { ExportGuideComponent } from './components/guideTemplaates/export-guide/export-guide.component';
 import { PaintSealComponent } from './components/paint-seal/paint-seal.component';
+import { TextComponent } from './text/text.component';
 
 @NgModule({
   declarations: [
@@ -115,7 +116,8 @@ import { PaintSealComponent } from './components/paint-seal/paint-seal.component
     SaveServerGuideComponent,
     GalleryGuideComponent,
     ExportGuideComponent,
-    PaintSealComponent
+    PaintSealComponent,
+    TextComponent
   ],
   entryComponents: [
     ColorPickerComponent,

@@ -1,0 +1,33 @@
+<div id="container">
+    <form>
+        <label class="title" id="radius">Rayon</label>
+        <mat-slider
+            id="radius-slider"
+            name="radius-slider"
+            disabled="false"
+            [min]="SLIDER_MINIMUM"
+            [max]="SLIDER_MAXIMUM"
+            step="1"
+            thumbLabel="true"
+            tickInterval="false"
+            [(ngModel)]="service.radius"
+            vertical="false">
+        </mat-slider>
+    </form>
+    <form>
+        <label class="title" id="frequency">Fréquence</label>
+        <mat-slider
+            id="frequency-slider"
+            name="frequency-slider"
+            disabled="false"
+            [min]="1"
+            [max]="100"
+            step="1"
+            thumbLabel="true"
+            tickInterval="false"
+            [(ngModel)]="service.frequency"
+            vertical="false">
+        </mat-slider>
+    </form>
+  </div>
+  

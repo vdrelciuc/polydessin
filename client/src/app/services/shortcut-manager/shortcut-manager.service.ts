@@ -144,6 +144,13 @@ export class ShortcutManagerService {
       )
     );
 
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 't', description: 'Selecting text with shortcut' }).subscribe(
+      (event) => {
+        this.toolSelectorService.setCurrentTool(Tools.Text);
+      }
+      )
+    );
+
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
         (event) => {
           this.workingAreaComponent.createNewProject();
