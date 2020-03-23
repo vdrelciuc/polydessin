@@ -8,8 +8,8 @@ import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service
   providedIn: 'root'
 })
 export class SelectionTransformShortcutService {
-  private readonly fastRotate: number  = Math.PI * 15 / 180;
-  private readonly slowRotate: number  = Math.PI / 180;
+  private readonly fastRotate: number  = 15;
+  private readonly slowRotate: number  = 1;
 
   private readonly REGEX_ARROW: RegExp = /^Arrow/i;
   private readonly delete: string = 'Delete';
@@ -52,7 +52,7 @@ export class SelectionTransformShortcutService {
       if (event.shiftKey) {
         Transform.rotateEach(this.getRotate(event));
       } else {
-        // Transform.rotate((event.altKey) ? 1 : 15);
+        Transform.rotate(this.getRotate(event));
       }
     }));
     this.shortcutListener.push(manipulator.listen(window, 'keyup', (event: KeyboardEvent) => {
