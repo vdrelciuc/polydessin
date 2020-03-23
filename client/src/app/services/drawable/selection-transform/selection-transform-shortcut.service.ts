@@ -31,7 +31,6 @@ export class SelectionTransformShortcutService {
   private selectionGroup: SVGGElement;
 
   private isMoving: boolean;
-  private isRotating: boolean;
   private hasWaitedHalfSec: boolean;
 
   private autoMoveHasInstance: boolean;
@@ -48,12 +47,14 @@ export class SelectionTransformShortcutService {
       this.onKeyDown(event);
     }));
     this.shortcutListener.push(manipulator.listen(window, 'wheel', (event: WheelEvent) => {
-      this.isRotating = true;
       if (event.shiftKey) {
         Transform.rotateEach(this.getRotate(event));
       } else {
         Transform.rotate(this.getRotate(event));
       }
+      this.selectionGroup.remove();
+      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
     }));
     this.shortcutListener.push(manipulator.listen(window, 'keyup', (event: KeyboardEvent) => {
       this.onKeyUp(event.key);
@@ -66,21 +67,9 @@ export class SelectionTransformShortcutService {
 
   deleteShortcuts(): void {
     this.shortcutListener.forEach((listener) => listener());
-    if (this.isRotating) {
-      this.selectionGroup.remove();
-      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
-      this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
-      this.isRotating = false;
-    }
   }
 
   private onKeyDown(event: KeyboardEvent): void {
-    if (this.isRotating) {
-      this.selectionGroup.remove();
-      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
-      this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
-      this.isRotating = false;
-    }
     if (this.REGEX_ARROW.test(event.key)) {
       this.arrowPressed(event.key);
     } else {
