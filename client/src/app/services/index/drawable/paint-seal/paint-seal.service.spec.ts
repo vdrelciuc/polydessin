@@ -9,11 +9,10 @@ import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { Renderer2, ElementRef, Type } from '@angular/core';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-// import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
-fdescribe('PaintSealService', () => {
+describe('PaintSealService', () => {
 
   let service: PaintSealService;
   let manipulator: Renderer2;
