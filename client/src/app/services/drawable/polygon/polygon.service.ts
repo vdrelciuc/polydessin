@@ -235,7 +235,7 @@ export class PolygonService extends DrawableService {
   }
   endTool(): void {
     if (this.isChanging) {
-      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+      this.subElement.remove();
       this.isChanging = false;
     }
   }

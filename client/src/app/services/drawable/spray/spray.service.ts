@@ -85,7 +85,7 @@ export class SprayService extends DrawableService {
 
   endTool(): void {
     if (this.isDrawing.value) {
-      this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+      this.subElement.remove();
     }
     delete(this.subElement);
     this.isDrawing.next(false);

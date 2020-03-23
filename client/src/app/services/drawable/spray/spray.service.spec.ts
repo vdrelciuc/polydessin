@@ -154,20 +154,13 @@ describe('SprayService', () => {
   });
 
   it('#endTool should end tool even if drawing', () => {
-    service['isDrawing'] = new BehaviorSubject<boolean>(true);
-    const spy = spyOn(service['manipulator'], 'removeChild');
+    service.onMousePress(eventMocker('mousemove', 0, 0, 0));
+    service.onMousePress(eventMocker('mousemove', 0, 0, 0));
+    const spy = (service['subElement'].remove = jasmine.createSpy().and.callFake(() => null));
+
     service.endTool();
     expect(service['subElement']).toEqual(undefined as unknown as SVGGElement);
     expect(service['isDrawing'].value).toEqual(false);
     expect(spy).toHaveBeenCalled();
-  });
-
-  it('#endTool should end tool', () => {
-    service['isDrawing'] = new BehaviorSubject<boolean>(false);
-    const spy = spyOn(service['manipulator'], 'removeChild');
-    service.endTool();
-    expect(service['subElement']).toEqual(undefined as unknown as SVGGElement);
-    expect(service['isDrawing'].value).toEqual(false);
-    expect(spy).not.toHaveBeenCalled();
   });
 });

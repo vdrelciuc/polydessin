@@ -205,10 +205,11 @@ describe('PolygonService', () => {
 
   it('Changing tool should cancel current shape', () => {
     const spyPushStack = spyOn(service['drawStack'], 'addElementWithInfos');
-    const spyRemove = spyOn(manipulator, 'removeChild');
+
     service.onMousePress(eventMocker('Hello ', 0, 0, 0));
     const randomMovePosition = 50;
     service.onMouseMove(eventMocker('XD ', 0, randomMovePosition, randomMovePosition));
+    const spyRemove = (service['subElement'].remove = jasmine.createSpy().and.callFake(() => null));
     service.endTool();
     expect(spyPushStack).not.toHaveBeenCalled();
     expect(spyRemove).toHaveBeenCalled();
