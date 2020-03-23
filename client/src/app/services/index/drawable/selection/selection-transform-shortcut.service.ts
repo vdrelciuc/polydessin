@@ -11,6 +11,8 @@ export class SelectionTransformShortcutService {
   readonly firstDelay: number = 500;
   readonly moveDelay: number  = 100;
   readonly unitMove: number  = 3;
+  readonly fastRotate: number  = Math.PI * 15 / 180;
+  readonly slowRotate: number  = Math.PI / 180;
 
   private readonly REGEX_ARROW: RegExp = /^Arrow/i;
   readonly left: string = 'ArrowLeft';
@@ -56,7 +58,7 @@ export class SelectionTransformShortcutService {
       console.log('xd');
       console.log(event);
       if (event.shiftKey) {
-        // Transform.rotateEach((event.altKey) ? 1 : 15);
+        Transform.rotateEach((event.altKey) ? this.slowRotate : this.fastRotate);
       } else {
         // Transform.rotate((event.altKey) ? 1 : 15);
       }

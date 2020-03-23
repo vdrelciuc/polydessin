@@ -32,7 +32,7 @@ export class Transform {
         const indexOfOldTranslate = initialElementTransform.indexOf('translate(');
         /*tslint:disable-next-line: no-magic-numbers*/
         if (indexOfOldTranslate === -1) {
-          const newTransform = `${initialElementTransform} ${TransformType.translation}(${translationX}, ${translationY})`;
+          const newTransform = `${TransformType.translation}(${translationX}, ${translationY}) ${initialElementTransform}`;
           Transform.manipulator.setAttribute(element, SVGProperties.transform, newTransform);
         } else {
           const indexOfOldX = initialElementTransform.indexOf('(', indexOfOldTranslate) + 1;
@@ -44,6 +44,35 @@ export class Transform {
           const textAfterParenthesis = initialElementTransform.substring(indexOfOldY);
           const newCoordinates = `${+oldTranslationX + translationX}, ${+oldTranslationY + translationY}`;
           const newTransform = textBeforeParenthesis + newCoordinates + textAfterParenthesis;
+          Transform.manipulator.setAttribute(element, SVGProperties.transform, newTransform);
+        }
+      }
+    }
+    Transform.needsUpdate.next(true);
+  }
+
+  static rotateEach(rotation: number): void {
+    for (const element of Transform.elementsToTransform) {
+      const initialElementTransform = element.getAttribute(SVGProperties.transform);
+      const bBox = element.getBBox();
+      if (initialElementTransform === null) {
+        const newTransform = `${TransformType.rotation}(${rotation}, ${bBox.x + bBox.width / 2}, ${bBox.y + bBox.height / 2})`;
+        Transform.manipulator.setAttribute(element, SVGProperties.transform, newTransform);
+      } else {
+        const indexOfOldTranslate = initialElementTransform.indexOf('rotate(');
+        /*tslint:disable-next-line: no-magic-numbers*/
+        if (indexOfOldTranslate === -1) {
+          const newTransform = ` ${initialElementTransform} ` +
+          `${TransformType.rotation}(${rotation}, ${bBox.x + bBox.width / 2}, ${bBox.y + bBox.height / 2})`;
+          Transform.manipulator.setAttribute(element, SVGProperties.transform, newTransform);
+        } else {
+          const indexOfOldX = initialElementTransform.indexOf('(', indexOfOldTranslate) + 1;
+          const indexOfOldY = initialElementTransform.indexOf(',', indexOfOldTranslate);
+          const oldRotate = initialElementTransform.substring(indexOfOldX, indexOfOldY);
+          const textBeforeParenthesis = initialElementTransform.substring(0, indexOfOldX);
+          const textAfterParenthesis = initialElementTransform.substring(indexOfOldY);
+          const newRotate = `${+oldRotate + rotation}`;
+          const newTransform = textBeforeParenthesis + newRotate + textAfterParenthesis;
           Transform.manipulator.setAttribute(element, SVGProperties.transform, newTransform);
         }
       }
