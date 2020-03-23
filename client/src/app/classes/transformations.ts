@@ -1,4 +1,4 @@
-import { ElementRef, Renderer2 } from '@angular/core';
+import { Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Stack } from './stack';
 import { SVGProperties } from './svg-html-properties';

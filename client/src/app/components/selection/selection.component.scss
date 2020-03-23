@@ -1,0 +1,36 @@
+@import '../../../global-style/colors.scss';
+@import '../../../global-style/dimensions.scss';
+
+#container {
+    color: white;
+    padding: 30px 40px;
+    padding-bottom: 0px;
+
+    .title {
+        font-weight: bold;
+        color: whitesmoke;
+    }
+
+    .group {
+        padding-top: 10px;
+    }
+
+    .group-space-before {
+        padding-top: 40px;
+    }
+
+    #warning {
+      color:red;
+      font-size: 8pt;
+    }
+
+    .basic-action {
+        width: 100px;
+        background-color: $vivid;
+    }
+
+    .delete-action {
+        width: 140px;
+        background-color: #ff726f;
+    }
+}
