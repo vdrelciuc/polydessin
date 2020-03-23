@@ -4,7 +4,7 @@ import { PaintSealComponent } from './paint-seal.component';
 import { MatSliderModule, MatSliderChange } from '@angular/material';
 import { PaintSealService } from 'src/app/services/index/drawable/paint-seal/paint-seal.service';
 
-fdescribe('PaintSealComponent', () => {
+describe('PaintSealComponent', () => {
   let component: PaintSealComponent;
   let fixture: ComponentFixture<PaintSealComponent>;
 

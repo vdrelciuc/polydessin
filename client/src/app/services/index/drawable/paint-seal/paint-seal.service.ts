@@ -93,16 +93,18 @@ export class PaintSealService extends DrawableService {
 
   private generatePathDefinition(): string {
     let pathDefinition = '';
-    this.algorithm.pathsToFill.forEach((array) => {
-      array.forEach((pixel: CoordinatesXY, i: number) => {
-        if(i === 0) {
-          pathDefinition += ` M${pixel.getX() + 0.5} ${pixel.getY() + 0.5}`;
-        } else {
-          pathDefinition += ` L${pixel.getX() + 0.5} ${pixel.getY() + 0.5}`;
-        }
+    if(this.algorithm.pathsToFill !== undefined) {
+      this.algorithm.pathsToFill.forEach((array) => {
+        array.forEach((pixel: CoordinatesXY, i: number) => {
+          if(i === 0) {
+            pathDefinition += ` M${pixel.getX() + 0.5} ${pixel.getY() + 0.5}`;
+          } else {
+            pathDefinition += ` L${pixel.getX() + 0.5} ${pixel.getY() + 0.5}`;
+          }
+        });
+        pathDefinition += ' z';
       });
-      pathDefinition += ' z';
-    });
+    }
     return pathDefinition;
   }
 }

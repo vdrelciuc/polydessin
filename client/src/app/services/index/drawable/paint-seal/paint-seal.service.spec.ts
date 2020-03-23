@@ -11,8 +11,9 @@ import { Renderer2, ElementRef, Type } from '@angular/core';
 import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 // import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
-describe('PaintSealService', () => {
+fdescribe('PaintSealService', () => {
 
   let service: PaintSealService;
   let manipulator: Renderer2;
@@ -50,6 +51,7 @@ describe('PaintSealService', () => {
                     return boundRect;
                 },
                 clientHeight: 100,
+                cloneNode: () => null,
             },
           },
         },
@@ -117,19 +119,32 @@ describe('PaintSealService', () => {
   it('#onClick should find and draw', () => {
     service['mouseDown'] = true;
     const spy = spyOn(service['manipulator'], 'setAttribute');
-    // const spy2 = spyOn(service['algorithm'], 'BFS').and.callFake( () => null);
-    // service['algorithm'].pathsToFill = [
-    //   [new CoordinatesXY(100, 100), new CoordinatesXY(400, 400), new CoordinatesXY(200, 200) ], 
-    //   [ ]
-    // ];
     service.onClick({
       clientX: 100,
       clientY: 100,
     } as unknown as MouseEvent);
     expect(service['mouseDown']).toEqual(false);
-    expect(spy).toHaveBeenCalledTimes(7);
+    expect(spy).toHaveBeenCalledTimes(8);
     expect(spy).toHaveBeenCalledWith(null, SVGProperties.d, '');
-    // expect(spy2).toHaveBeenCalled();
     expect(service['algorithm']).not.toEqual(undefined as unknown as BFSAlgorithm);
+  });
+
+  it('#generatePathDefinition should generate a path defintion attribute', () => {
+    service['algorithm'] = {
+      pathsToFill: [
+        [ new CoordinatesXY(100,100), new CoordinatesXY(400,400), new CoordinatesXY(200, 200)],
+        [ ]
+      ]
+    } as unknown as BFSAlgorithm;
+    const ret = service['generatePathDefinition']();
+    expect(ret).toEqual(' M100.5 100.5 L400.5 400.5 L200.5 200.5 z z');
+  });
+
+  it('#generatePathDefinition should return empty defintion attribute', () => {
+    service['algorithm'] = {
+      pathsToFill: undefined
+    } as unknown as BFSAlgorithm;
+    const ret = service['generatePathDefinition']();
+    expect(ret).toEqual('');
   });
 });
