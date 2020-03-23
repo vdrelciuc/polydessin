@@ -39,7 +39,6 @@ export class ShortcutManagerService {
       this.subscriptions[i].unsubscribe();
       this.subscriptions.pop();
     }
-    // this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
     this.bypassBrowserShortcuts();
   }
 
@@ -124,7 +123,7 @@ export class ShortcutManagerService {
         }
       )
     );
-    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'A', description: 'Selecting spray with shortcut' }).subscribe(
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'a', description: 'Selecting spray with shortcut' }).subscribe(
         (event) => {
           this.toolSelectorService.setCurrentTool(Tools.Spray);
         }
@@ -134,6 +133,13 @@ export class ShortcutManagerService {
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'i', description: 'Selecting pipette with shortcut' }).subscribe(
       (event) => {
         this.toolSelectorService.setCurrentTool(Tools.Pipette);
+      }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'b', description: 'Selecting bucket with shortcut' }).subscribe(
+      (event) => {
+        this.toolSelectorService.setCurrentTool(Tools.Bucket);
       }
       )
     );
