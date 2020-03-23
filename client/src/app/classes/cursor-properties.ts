@@ -3,5 +3,6 @@ export enum CursorProperties {
     default = 'auto',
     vertical = 'n-resize',
     horizontal = 'e-resize',
-    move = 'move'
+    move = 'move',
+    crosshair = 'crosshair'
 }

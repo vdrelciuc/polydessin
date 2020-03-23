@@ -1,10 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { APP_BASE_HREF } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   MatCheckboxModule,
   MatDialogModule,
+  MatDialogRef,
   MatDividerModule,
   MatExpansionModule,
   MatFormFieldModule,
@@ -15,12 +18,14 @@ import {
   MatSidenavModule,
   MatSliderModule,
   MatSlideToggleModule,
-  MatTooltipModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTooltipModule
 } from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Tools } from 'src/app/enums/tools';
 import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
 import { BrushComponent } from '../brush/brush.component';
 import { CanvasComponent } from '../canvas/canvas.component';
@@ -29,24 +34,25 @@ import { ColorPanelComponent } from '../color-panel/color-panel.component';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { ColorSliderComponent } from '../color-slider/color-slider.component';
 import { CreateNewComponent } from '../create-new/create-new.component';
+import { EllipseComponent } from '../ellipse/ellipse.component';
+import { EraserComponent } from '../eraser/eraser.component';
+import { GalleryComponent } from '../gallery/gallery.component';
+import { GridComponent } from '../grid/grid.component';
 import { LineComponent } from '../line/line.component';
 import { OptionPannelComponent } from '../option-pannel/option-pannel.component';
 import { PencilComponent } from '../pencil/pencil.component';
+import { PolygonComponent } from '../polygon/polygon.component';
 import { RectangleComponent } from '../rectangle/rectangle.component';
+import { SelectionComponent } from '../selection/selection.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { WorkspaceComponent } from '../workspace/workspace.component';
 import { WorkingAreaComponent } from './working-area.component';
-import { EllipseComponent } from '../ellipse/ellipse.component';
-import { GridComponent } from '../grid/grid.component';
-import { EraserComponent } from '../eraser/eraser.component';
-import { PolygonComponent } from '../polygon/polygon.component';
-import { SelectionComponent } from '../selection/selection.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 
 describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
   let fixture: ComponentFixture<WorkingAreaComponent>;
+
+  const numberOfSubscription = 29;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -70,7 +76,6 @@ describe('WorkingAreaComponent', () => {
         EraserComponent,
         PolygonComponent,
         SelectionComponent
-
       ],
       imports: [
         BrowserAnimationsModule,
@@ -121,22 +126,28 @@ describe('WorkingAreaComponent', () => {
       comingFromEntryPoint: false
     }, 'mockState');
     component.ngOnInit();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(spy).not.toHaveBeenCalled();
-    });
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('#ngOnInit shouldn open', () => {
-    const spy = spyOn(component['dialog'], 'open');
+    const spy = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable()
+    } as unknown as MatDialogRef<{}, {}>);
     history.pushState({
       comingFromEntryPoint: true
     }, 'mockState');
     component.ngOnInit();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(spy).toHaveBeenCalledWith(CreateNewComponent, { disableClose: true });
-    });
+    expect(spy).toHaveBeenCalledWith(CreateNewComponent, { disableClose: true });
+  });
+
+  it('#prepareWorkingAreaShortcuts should setup shortcuts', () => {
+    component['shortcutManager'].saveCurrentTool();
+    component.prepareWorkingAreaShortcuts();
+    expect(component['shortcutManager']['workingAreaComponent']).toEqual(component);
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.None);
+    expect(component['shortcutManager']['subscriptions'].length).toEqual(numberOfSubscription);
   });
 
   it('#getDrawerStatus should drawer be open', () => {
@@ -147,5 +158,94 @@ describe('WorkingAreaComponent', () => {
     const drawer = TestBed.get<DrawerService>(DrawerService);
     drawer.navIsOpened = false;
     expect(component.getDrawerStatus()).toEqual(false);
+  });
+
+  it('#saveServerProject should not save empty canvas', () => {
+    component['galleryService'].refToSvg = {
+      nativeElement: {
+        childElementCount: 0
+      } as SVGGElement
+    };
+    const spy = spyOn(component['snackBar'], 'open');
+    component.saveServerProject();
+    expect(spy).toHaveBeenCalledWith('Vous ne pouvez pas sauvegarder un canvas vide', '', {
+      duration: 2000,
+    });
+  });
+
+  it('#saveServerProject should save valid canvas', () => {
+    component['galleryService'].refToSvg = {
+      nativeElement: {
+        childElementCount: 2
+      } as SVGGElement
+    };
+    const spy = spyOn(component['snackBar'], 'open');
+    const spy2 = spyOn(component['dialog'], 'closeAll');
+    component.saveServerProject();
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.None);
+    expect(spy).not.toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
+  });
+
+  it('#createNewProject should open new project dialog', () => {
+    const spy = spyOn(component['dialog'], 'closeAll');
+    const spy2 = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable()
+    } as unknown as MatDialogRef<{}, {}>);
+    component.createNewProject();
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledWith(CreateNewComponent, { disableClose: true });
+  });
+
+  it('#openGallery should open gallery', () => {
+    const spy = spyOn(component['dialog'], 'closeAll');
+    const spy2 = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable()
+    } as unknown as MatDialogRef<{}, {}>);
+    component.openGallery();
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledWith(GalleryComponent, { disableClose: true });
+  });
+
+  it('#exportProject should not export empty svg', () => {
+    const spy = spyOn(component['snackBar'], 'open');
+    component['galleryService'].refToSvg = {
+      nativeElement: {
+        childElementCount: 0
+      } as SVGGElement
+    };
+    component.exportProject();
+    expect(spy).toHaveBeenCalledWith('Vous ne pouvez pas exporter un canvas vide', '', {
+      duration: 2000,
+    });
+  });
+
+  it('#exportProject should export valid svg', () => {
+    const spy = spyOn(component['dialog'], 'closeAll');
+    component['galleryService'].refToSvg = {
+      nativeElement: {
+        childElementCount: 2
+      } as SVGGElement
+    };
+    component.exportProject();
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.None);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#openUserGuide should open user guide', () => {
+    const spy = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable()
+    } as unknown as MatDialogRef<{}, {}>);
+    const spy2 = spyOn(component['dialog'], 'closeAll');
+    component.openUserGuide();
+    expect(component['shortcutManager']['savedTool']).toEqual(Tools.None);
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
   });
 });

@@ -56,8 +56,11 @@ describe('Transform', () => {
 
         Transform.translate(10, 20);
         expect(transform).toBe('translate(10, 20)');
+    });
 
-        resetTransform();
+    it('#translate should add transform attribute to SVGGElement if it does not exist (origin)', () => {
+        Transform['elementsToTransform'][0].getAttribute = jasmine.createSpy().and.returnValue(transform);
+
         Transform.translate(0, 0);
         expect(transform).toBe('translate(0, 0)');
     });
@@ -67,12 +70,11 @@ describe('Transform', () => {
 
         Transform.translate(-10, -20);
         expect(transform).toBe('translate(-10, -20)');
+    });
 
-        resetTransform();
-        Transform.translate(-10, 20);
-        expect(transform).toBe('translate(-10, 20)');
+    it('#translate should add transform attribute to SVGGElement if it does not exist (positive and negative values)', () => {
+        Transform['elementsToTransform'][0].getAttribute = jasmine.createSpy().and.returnValue(transform);
 
-        resetTransform();
         Transform.translate(10, -20);
         expect(transform).toBe('translate(10, -20)');
     });
@@ -93,19 +95,23 @@ describe('Transform', () => {
         expect(transform).toBe('rotate(-20) translate(-10, -20)');
     });
 
-    it('#translate should update translate property if transform property and translate attribute exist (positive)', () => {
+    it('#translate should update translate property if transform property and only translate attribute exist (positive)', () => {
         transform = 'translate(5, 15)';
         Transform['elementsToTransform'][0].getAttribute = jasmine.createSpy().and.returnValue(transform);
 
         Transform.translate(10, 20);
         expect(transform).toBe('translate(15, 35)');
+    });
 
+    it('#translate should update translate property if transform property and translate/rotate attribute exist (positive)', () => {
         transform = 'translate(5, 15) rotate(-20)';
         Transform['elementsToTransform'][0].getAttribute = jasmine.createSpy().and.returnValue(transform);
 
         Transform.translate(10, 20);
         expect(transform).toBe('translate(15, 35) rotate(-20)');
+    });
 
+    it('#translate should update translate property if transform property and rotate/translate attribute exist (positive)', () => {
         transform = 'rotate(-20) translate(5, 15)';
         Transform['elementsToTransform'][0].getAttribute = jasmine.createSpy().and.returnValue(transform);
 
@@ -113,19 +119,23 @@ describe('Transform', () => {
         expect(transform).toBe('rotate(-20) translate(15, 35)');
     });
 
-    it('#translate should update translate property if transform property and translate attribute exist (negative)', () => {
+    it('#translate should update translate property if transform property and only translate attribute exist (negative)', () => {
         transform = 'translate(5, 15)';
         Transform['elementsToTransform'][0].getAttribute = jasmine.createSpy().and.returnValue(transform);
 
         Transform.translate(-10, 20);
         expect(transform).toBe('translate(-5, 35)');
+    });
 
+    it('#translate should update translate property if transform property and translate/rotate attribute exist (negative)', () => {
         transform = 'translate(5, 15) rotate(-20)';
         Transform['elementsToTransform'][0].getAttribute = jasmine.createSpy().and.returnValue(transform);
 
         Transform.translate(-10, 20);
         expect(transform).toBe('translate(-5, 35) rotate(-20)');
+    });
 
+    it('#translate should update translate property if transform property and rotate/translate attribute exist (negative)', () => {
         transform = 'rotate(-20) translate(5, 15)';
         Transform['elementsToTransform'][0].getAttribute = jasmine.createSpy().and.returnValue(transform);
 

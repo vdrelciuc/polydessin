@@ -1,15 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { APP_BASE_HREF } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { CreateNewComponent } from './create-new.component';
+
 describe('CreateNewComponent', () => {
   let component: CreateNewComponent;
   let fixture: ComponentFixture<CreateNewComponent>;
@@ -57,37 +58,27 @@ describe('CreateNewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should return drawable width', () => {
-    component['changed'] = true;
-    // component['workspaceSize'] = new CoordinatesXY(10, 10);
-    // expect(component['workspaceSize'].getX()).toEqual(10);
-  });
-
   it('#setCanvasSizeX should set canvas X', () => {
-    component['changed'] = true;
-    component.setcanvasSizeX({
-      target: {
-        value: 10
-      }
-    });
-    component['workspaceService'].Size.next(new CoordinatesXY(100, 100));
-    // expect(component['workspaceSize'].getX()).toEqual(10);
+    const mockedEvent: KeyboardEvent = new KeyboardEvent('keypress', {key: 'c'});
+    Object.defineProperty(mockedEvent, 'target', { value: { value: '2' } });
+    component.setcanvasSizeX(mockedEvent);
+    expect(component['workspaceSizeX']).toEqual(2);
   });
 
   it('#setCanvasSizeY should set canvas Y', () => {
-    component['changed'] = true;
-    component.setcanvasSizeY({
-      target: {
-        value: 10
-      }
-    });
-    component['workspaceService'].Size.next(new CoordinatesXY(100, 100));
-    // expect(component['workspaceSize'].getY()).toEqual(10);
+    const mockedEvent: KeyboardEvent = new KeyboardEvent('keypress', {key: 'c'});
+    Object.defineProperty(mockedEvent, 'target', { value: { value: '2' } });
+    component.setcanvasSizeY(mockedEvent);
+    expect(component['workspaceSizeY']).toEqual(2);
   });
 
   it('#onColorSelect should be able to select color', () => {
     component['previewColor'] = new Color('#FFFFFF');
-    const spy2 = spyOn(component['dialog'], 'open');
+    const spy2 = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable()
+    } as unknown as MatDialogRef<{}, {}>);
     const spy = spyOn(component['colorSelectorService'], 'updateColor');
     component.onColorSelect();
     expect(spy).toHaveBeenCalledWith(new Color('#FFFFFF'));
@@ -99,22 +90,16 @@ describe('CreateNewComponent', () => {
     history.pushState({
       comingFromEntryPoint: false
     }, 'mockState');
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      component.onConfirm();
-      expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
-      expect(component['colorSelectorService'].colorToChange).toEqual(ColorType.Background);
-    });
+    component.onConfirm();
+    expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
+    expect(component['colorSelectorService'].colorToChange).toEqual(ColorType.Background);
   });
 
   it('#onConfirm should open warning message', () => {
     component['canvasService']['layerCount'] = 1;
     const spy = (component.openDialogWarning = jasmine.createSpy().and.callFake(() => null));
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      component.onConfirm();
-      expect(spy).toHaveBeenCalled();
-    });
+    component.onConfirm();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#onCloseDialog should close', () => {
@@ -123,11 +108,8 @@ describe('CreateNewComponent', () => {
       comingFromEntryPoint: false
     }, 'mockState');
     component.onCloseDialog();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(spy).toHaveBeenCalled();
-      expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
-    });
+    expect(spy).toHaveBeenCalled();
+    expect(history.state['comingFromEntryPoint']).not.toBeTruthy();
   });
 
   it('#onCloseDialog should close', () => {
@@ -137,20 +119,15 @@ describe('CreateNewComponent', () => {
     const spy = spyOn(component['dialogRef'], 'close');
     const spy2 = spyOn(component['router'], 'navigateByUrl');
     component.onCloseDialog();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(spy).toHaveBeenCalled();
-      expect(spy2).toHaveBeenCalledWith('/');
-      expect(history.state['comingFromEntryPoint']).toBeTruthy();
-    });
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledWith('/');
+    expect(history.state['comingFromEntryPoint']).toBeTruthy();
    });
 
   it('#openDialogWarning should open warning dialog', () => {
     const spy = spyOn(component['dialog'], 'open');
     component.openDialogWarning();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(spy).toHaveBeenCalled();
-    });
+    fixture.detectChanges();
+    expect(spy).toHaveBeenCalled();
   });
 });

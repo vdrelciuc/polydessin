@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import { EllipseService } from 'src/app/services/index/drawable/ellipse/ellipse.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { EllipseService } from 'src/app/services/drawable/ellipse/ellipse.service';
+import { DrawablePropertiesService } from 'src/app/services/drawable/properties/drawable-properties.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({
   selector: 'app-ellipse',
@@ -14,8 +14,8 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 export class EllipseComponent implements OnInit, OnDestroy {
 
   readonly name: string = Tools.Ellipse;
-  readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
-  readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
+  readonly SLIDER_MINIMUM: number = CONSTANT.THICKNESS_MINIMUM;
+  readonly SLIDER_MAXIMUM: number = CONSTANT.THICKNESS_MAXIMUM;
 
   constructor(
     protected service: EllipseService,

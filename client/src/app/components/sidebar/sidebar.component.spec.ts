@@ -1,39 +1,47 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { APP_BASE_HREF } from '@angular/common';
-import { MatDialog, MatTooltipModule, MatSnackBarModule } from '@angular/material';
-import { RouterModule } from '@angular/router';
-import { Tools } from 'src/app/enums/tools';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { SidebarComponent } from './sidebar.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MatDialog, MatDialogModule, MatDialogRef, MatSnackBarModule, MatTooltipModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { Tools } from 'src/app/enums/tools';
+import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
+import { WarningDialogComponent } from '../warning/warning-dialog.component';
+import { WorkingAreaComponent } from '../working-area/working-area.component';
+import { SidebarComponent } from './sidebar.component';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
   let selector: ToolSelectorService;
 
+  // https://medium.com/@aleixsuau/testing-angular-components-with-material-dialog-mddialog-1ae658b4e4b3
+  class MdDialogMock {
+    // tslint:disable-next-line: no-any | Reason : unknown return type
+    open(): any {
+      return {
+        afterClosed: () => of(WarningDialogComponent)
+      };
+    }
+  }
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ SidebarComponent ],
       providers: [
         ToolSelectorService,
+        WorkingAreaComponent,
         HotkeysService,
-        {
-          provide: MatDialog,
-          useValue: {
-            open: () => null,
-            afterColsed: ()  => null,
-            closeAll: () => null
-          }
-        },
+        {provide: MatDialog, useClass: MdDialogMock},
         {provide: APP_BASE_HREF, useValue : '/' }
       ],
       imports: [
         MatSnackBarModule,
         HttpClientModule,
         MatTooltipModule,
+        MatDialogModule,
         RouterModule.forRoot(
           [
             { path: '', component: SidebarComponent}
@@ -52,34 +60,61 @@ describe('SidebarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should init', () => {
-    expect(component.currentTool).toEqual(Tools.Selection);
+  it('#ngOnInit should init', () => {
+    expect(component.currentTool).toEqual(Tools.None);
+    component['toolSelectorService'].$currentTool.next(Tools.Brush);
+    expect(component.currentTool).toEqual(Tools.Brush);
   });
 
-  it('#setupShortcuts should setup shortcuts', () => {
-    component.setupShortcuts();
-    const spy = spyOn(selector, 'setCurrentTool');
-    const spy2 = spyOn(component, 'createNewProject');
-    const keys = ['l', 'c', '1', 'w', 'control.o'];
-    for (const element of keys) {
-      document.dispatchEvent(new KeyboardEvent('keydown', {
-        key: element,
-        bubbles: true
-      }));
-    }
-    expect(spy).toHaveBeenCalledTimes(8);
-    expect(spy2).toHaveBeenCalled();
+  it('#selectTool should select tool', () => {
+    component.selectTool(Tools.Line);
+    expect(component['toolSelectorService'].$currentTool.value).toEqual(Tools.Line);
+    component.selectTool(Tools.Brush);
+    expect(component['toolSelectorService'].$currentTool.value).toEqual(Tools.Brush);
   });
 
   it('#selectTool should select current tool', () => {
     component.selectTool(Tools.Line);
     expect(selector.$currentTool.value).toEqual(Tools.Line);
-    expect(component['subscriptions'].length).toEqual(21);
   });
 
-  it('#openDialog should open dialog', () => {
-    const spy = spyOn(component['dialog'], 'open');
-    component.openDialog();
+  it('#saveServerProject should open dialog to save on server', () => {
+    const spy = spyOn(component['workingAreaComponent'], 'saveServerProject');
+    component.saveServerProject();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('#createNewProject should open dialog to create a new projet', () => {
+    const spy = spyOn(component['workingAreaComponent'], 'createNewProject');
+    component.createNewProject();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#openGallery should open dialog to for the gallery', () => {
+    const spy = spyOn(component['workingAreaComponent'], 'openGallery');
+    component.openGallery();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#exportProject should open dialog to export current projet', () => {
+    const spy = spyOn(component['workingAreaComponent'], 'exportProject');
+    component.exportProject();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#openUserGuide should open dialog to open the user guide', () => {
+    const spy = spyOn(component['workingAreaComponent'], 'openUserGuide');
+    component.openUserGuide();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#goHome should go home with warning', () => {
+    const spy = spyOn(component['dialog'], 'open')
+    .and
+    .returnValue({
+      afterClosed: () => new Observable()
+    } as unknown as MatDialogRef<{}, {}>);
+    component.goHome();
+    expect(spy).toHaveBeenCalledWith(WarningDialogComponent, { disableClose: true });
   });
 });

@@ -1,3 +1,4 @@
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { Color } from './color';
 
 describe('Color', () => {
@@ -7,13 +8,6 @@ describe('Color', () => {
 
     beforeEach(() => {
         color = new Color();
-    });
-
-    it('#areVisuallyEqualForRed should not be equal', () => {
-        expect(Color.areVisuallyEqualForRed(
-            new Color([220, 100, 100]),
-            new Color([220, 100, 100]))
-        ).toEqual(false);
     });
 
     it('should have default color if none is specified', () => {

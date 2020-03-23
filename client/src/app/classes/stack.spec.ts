@@ -1,3 +1,4 @@
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { Stack } from './stack';
 
 describe('Stack', () => {

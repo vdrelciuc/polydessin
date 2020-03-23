@@ -2,7 +2,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Stack } from 'src/app/classes/stack';
 import { Transform } from 'src/app/classes/transformations';
-import { DrawStackService } from '../tools/draw-stack/draw-stack.service';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'

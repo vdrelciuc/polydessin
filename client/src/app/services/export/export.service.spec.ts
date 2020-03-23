@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ExportService } from './export.service';
-import { ImageFormat } from 'src/app/enums/image-format';
 import { ImageFilter } from 'src/app/enums/color-filter';
+import { ImageFormat } from 'src/app/enums/image-format';
+import { ExportService } from './export.service';
 
 describe('ExportService', () => {
   let service: ExportService;
@@ -65,7 +65,7 @@ describe('ExportService', () => {
   });
 
   it('#initialize should init reference image', () => {
-    const mockedElementRef = { nativeElement: mockedElement }; 
+    const mockedElementRef = { nativeElement: mockedElement };
     expect(service['image'].nativeElement.id).toEqual('100');
     service.initialize(mockedElementRef);
     expect(service['image']).toEqual(mockedElementRef);
@@ -83,9 +83,9 @@ describe('ExportService', () => {
 
   it('#export should export svg with filter', () => {
     const spy = spyOn(service['myDownload'].nativeElement, 'setAttribute');
-    service['currentFormat'].next(ImageFormat.SVG); 
+    service['currentFormat'].next(ImageFormat.SVG);
     service['currentFilter'].next(ImageFilter.Négatif);
-    const spy2 = spyOn(service['serialized'], 'serializeToString').and.callFake( function () {
+    const spy2 = spyOn(service['serialized'], 'serializeToString').and.callFake(() => {
       return 'string';
     });
     service.export('title');
@@ -98,12 +98,12 @@ describe('ExportService', () => {
   });
 
   it('#export should export jpeg without filter', () => {
-    service['currentFormat'].next(ImageFormat.JPEG); 
+    service['currentFormat'].next(ImageFormat.JPEG);
     service['currentFilter'].next(undefined as unknown as ImageFilter);
     const spy = spyOn(service['originalCanvas'], 'getContext');
     const spy2 = spyOn(service['myDownload'].nativeElement, 'setAttribute');
-    spyOn(service['originalCanvas'], 'toDataURL').and.callFake( function() {
-      return 'data'
+    spyOn(service['originalCanvas'], 'toDataURL').and.callFake( () => {
+      return 'data';
     });
     service['imageAfterDeserialization'] = {
       src: '1',

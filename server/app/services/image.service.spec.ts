@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import * as sinon from 'sinon';
 import { testingContainer } from '../../test/test-utils';
 import { Image } from '../interfaces/image';
 import Types from '../types';
@@ -13,13 +14,43 @@ describe('Image Service', () => {
             title: 'Valid title',
             tags: ['tag1', 'tag2'],
             serial: 'data:image/svg+xml;base64, ...',
-            innerHtml: '<svg>...</svg>',
+            innerHtml: '<defs...',
             width: 500,
             height: 300,
             background: 'rgb(0,255,255)'
         } as Image;
         const [container] = await testingContainer();
         imageService = container.get<ImageService>(Types.ImageService);
+    });
+
+    it('#getAllImages should return all images', async () => {
+        const expectedResult: Image[] = [validImage];
+        sinon.stub(ImageService.prototype, 'getAllImages').callsFake(async (): Promise<Image[]> => {
+            return [validImage];
+        });
+        const actualResult = await imageService.getAllImages();
+        expect(actualResult).to.deep.equal(expectedResult);
+    });
+
+    it('#getImage should return an image for a validImageId', async () => {
+        const expectedResult: Image = validImage;
+        sinon.stub(ImageService.prototype, 'getImage').callsFake(async (): Promise<Image> => {
+            return validImage;
+        });
+        const actualResult = await imageService.getImage('validImageId');
+        expect(actualResult).to.deep.equal(expectedResult);
+    });
+
+    it('#addImage should add an image when sent a valid image', async () => {
+        const stub = sinon.stub(ImageService.prototype, 'addImage').calledWith(validImage);
+        await imageService.addImage(validImage);
+        expect(stub);
+    });
+
+    it('#deleteImage should delete an image when sent a validImageId', async () => {
+        const stub = sinon.stub(ImageService.prototype, 'deleteImage').calledWith('validImageId');
+        await imageService.deleteImage('validImageId');
+        expect(stub);
     });
 
     it('#validateTitle should allow a valid title', () => {

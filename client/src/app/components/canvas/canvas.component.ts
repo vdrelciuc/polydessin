@@ -1,20 +1,20 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { CanvasService } from 'src/app/services/canvas.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { CreateNewService } from 'src/app/services/create-new.service';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { CanvasService } from 'src/app/services/canvas/canvas.service';
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { CreateNewService } from 'src/app/services/create-new/create-new.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
+import { GridService } from 'src/app/services/drawable/grid/grid.service';
 import { EventListenerService } from 'src/app/services/events/event-listener.service';
 import { ExportService } from 'src/app/services/export/export.service';
-import { SVGService } from 'src/app/services/index/svg/svg.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { WorkspaceService } from 'src/app/services/workspace.service';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-import {SaveServerService} from "../../services/saveServer/save-server.service";
-import {GalleryService} from "../../services/gallery/gallery.service";
-import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
+import { SVGService } from 'src/app/services/svg/svg.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
+import { WorkspaceService } from 'src/app/services/workspace/workspace.service';
+import {GalleryService} from '../../services/gallery/gallery.service';
+import {SaveServerService} from '../../services/save-server/save-server.service';
 
 @Component({
   selector: 'app-canvas',
@@ -45,14 +45,14 @@ export class CanvasComponent implements OnInit {
     private canvasService: CanvasService,
     private workspaceService: WorkspaceService,
     private exportService: ExportService,
-    private saveService : SaveServerService,
-    private galleryService : GalleryService) {
+    private saveService: SaveServerService,
+    private galleryService: GalleryService) {
       this.visible = true;
     }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.filters = this.image.nativeElement.innerHTML;
-    this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack,this.invisibleCanvas);
+    this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack, this.invisibleCanvas);
     this.exportService.initialize(this.image);
     ClipboardService.initialize(this.manipulator, this.image, this.drawStack);
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
@@ -78,7 +78,9 @@ export class CanvasComponent implements OnInit {
       this.manipulator.setAttribute(this.rectangle.nativeElement , SVGProperties.width , `${canvasSize.getX()}`);
       this.manipulator.setAttribute(this.rectangle.nativeElement , SVGProperties.height, `${canvasSize.getY()}`);
       this.resetCanvas();
-      this.toolSelector.memory.clear();
+      if (this.toolSelector.memory !== undefined) {
+        this.toolSelector.memory.clear();
+      }
     });
 
     this.gridService.thickness.subscribe( (value) => {
@@ -90,7 +92,7 @@ export class CanvasComponent implements OnInit {
     });
 
     this.gridService.visible.subscribe ( (value) => {
-      if(value) {
+      if (value) {
         this.grid.nativeElement.setAttribute(SVGProperties.visibility, 'visible');
       } else {
         this.grid.nativeElement.setAttribute(SVGProperties.visibility, 'hidden');
@@ -104,7 +106,7 @@ export class CanvasComponent implements OnInit {
     });
   }
 
-  resetCanvas() {
+  resetCanvas(): void {
     this.image.nativeElement.innerHTML = this.filters;
   }
 

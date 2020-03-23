@@ -1,13 +1,12 @@
+// tslint:disable: no-magic-numbers | Reason : Hex string manipulation requires indices
 import * as CONSTANT from 'src/app/classes/constants';
+import {
+  COLOR_REGEX_RGB_VALUE_IN_HEX,
+  COLOR_REGEX_WITH_HASHTAG,
+  COLOR_REGEX_WITHOUT_HASHTAG
+} from 'src/app/classes/regular-expressions';
 
 export class Color {
-
-  private static readonly MIN_VALUE: number = 0;
-  private static readonly MAX_VALUE: number = 255;
-  private static readonly BYTES_IN_HEX: number = 3;
-  private readonly REGEX_WITH_HASHTAG: RegExp = /^#[0-9A-F]{6}$/i;
-  private readonly REGEX_WITHOUT_HASHTAG: RegExp = /[0-9A-F]{6}$/i;
-  private readonly REGEX_RGB_VALUE_IN_HEX: RegExp = /[0-9A-F]{2}$/i;
 
   private hex: string;
 
@@ -21,17 +20,6 @@ export class Color {
       }
   }
 
-  static areVisuallyEqualForRed(color1: Color, color2: Color): boolean {
-    const redOfColor1HSL = color1.getRGB()[0] / Color.MAX_VALUE;
-    const redOfColor2HSL = color2.getRGB()[0] / Color.MAX_VALUE;
-    const maxPercentage = 1 - (CONSTANT.VISUAL_DIFFERENCE / 100);
-    if (redOfColor1HSL >= maxPercentage && redOfColor2HSL >= maxPercentage) {
-      return false;
-    }
-    const difference = (redOfColor1HSL - redOfColor2HSL) * 100;
-    return difference < CONSTANT.VISUAL_DIFFERENCE && CONSTANT.VISUAL_DIFFERENCE > -15;
-  }
-
   private static rgbToHex(value: number): string {
       let hex = Number(value).toString(CONSTANT.HEX_BASE);
       if (hex.length < 2) {
@@ -41,7 +29,7 @@ export class Color {
       return hex;
     }
   private static clamp(value: number): number {
-      return Math.min(Math.max(value, Color.MIN_VALUE), Color.MAX_VALUE);
+      return Math.min(Math.max(value, CONSTANT.COLOR_MIN_VALUE), CONSTANT.COLOR_MAX_VALUE);
   }
   getHex(): string {
       return this.hex;
@@ -60,9 +48,9 @@ export class Color {
           padding =  1;
       }
       if (hex.length === (CONSTANT.HEX_LENGTH + padding)) {
-          if (this.REGEX_WITH_HASHTAG.test(hex)) {
+          if (COLOR_REGEX_WITH_HASHTAG.test(hex)) {
               this.hex = hex.toUpperCase();
-          } else if (this.REGEX_WITHOUT_HASHTAG.test(hex)) {
+          } else if (COLOR_REGEX_WITHOUT_HASHTAG.test(hex)) {
               this.hex = '#'.concat(hex).toUpperCase();
           }
       }
@@ -75,7 +63,7 @@ export class Color {
           rgb[2] = Color.clamp(rgb[2]);
 
           this.hex = '#';
-          for (let i = 0; i < Color.BYTES_IN_HEX; i++) {
+          for (let i = 0; i < CONSTANT.BYTES_IN_HEX; i++) {
               this.hex += Color.rgbToHex(rgb[i]);
           }
       }
@@ -95,21 +83,21 @@ export class Color {
 
   setRedHex(red: string): void {
     red = this.correctHexDigit(red);
-    if (this.REGEX_RGB_VALUE_IN_HEX.test(red)) {
+    if (COLOR_REGEX_RGB_VALUE_IN_HEX.test(red)) {
       this.hex = this.hex.charAt(0) + red + this.hex.substr(3);
     }
   }
 
   setGreenHex(green: string): void {
     green = this.correctHexDigit(green);
-    if (this.REGEX_RGB_VALUE_IN_HEX.test(green)) {
+    if (COLOR_REGEX_RGB_VALUE_IN_HEX.test(green)) {
       this.hex = this.hex.substr(0, 3) + green + this.hex.substr(5);
     }
   }
 
   setBlueHex(blue: string): void {
     blue = this.correctHexDigit(blue);
-    if (this.REGEX_RGB_VALUE_IN_HEX.test(blue)) {
+    if (COLOR_REGEX_RGB_VALUE_IN_HEX.test(blue)) {
       this.hex = this.hex.substr(0, 5) + blue;
     }
   }
@@ -152,9 +140,9 @@ export class Color {
     }
 
     // Invert color components
-    red = Color.MAX_VALUE - red;
-    green = Color.MAX_VALUE - green;
-    blue = Color.MAX_VALUE - blue;
+    red = CONSTANT.COLOR_MAX_VALUE - red;
+    green = CONSTANT.COLOR_MAX_VALUE - green;
+    blue = CONSTANT.COLOR_MAX_VALUE - blue;
 
     return new Color([red, green, blue]);
   }
@@ -173,9 +161,9 @@ export class Color {
     const blueOfOtherColor = otherColor.getRGB()[2];
 
     // Calculate differences between reds, greens and blues and limit differences between 0 and 1
-    const redDifference = (Color.MAX_VALUE - Math.abs(redOfThis - redOfOtherColor)) / Color.MAX_VALUE;
-    const greenDifference = (Color.MAX_VALUE - Math.abs(greenOfThis - greenOfOtherColor)) / Color.MAX_VALUE;
-    const blueDifference = (Color.MAX_VALUE - Math.abs(blueOfThis - blueOfOtherColor)) / Color.MAX_VALUE;
+    const redDifference = (CONSTANT.COLOR_MAX_VALUE - Math.abs(redOfThis - redOfOtherColor)) / CONSTANT.COLOR_MAX_VALUE;
+    const greenDifference = (CONSTANT.COLOR_MAX_VALUE - Math.abs(greenOfThis - greenOfOtherColor)) / CONSTANT.COLOR_MAX_VALUE;
+    const blueDifference = (CONSTANT.COLOR_MAX_VALUE - Math.abs(blueOfThis - blueOfOtherColor)) / CONSTANT.COLOR_MAX_VALUE;
 
     // 0 means opposit colors, 1 means same colors
     const isSameColorFactor = 0.98;

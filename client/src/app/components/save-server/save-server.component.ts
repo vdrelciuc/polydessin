@@ -2,9 +2,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MAX_TAGS_ALLOWED } from 'src/app/classes/constants';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { Image } from '../../interfaces/image';
 import { ExportService } from '../../services/export/export.service';
-import { SaveServerService } from '../../services/saveServer/save-server.service';
+import { SaveServerService } from '../../services/save-server/save-server.service';
 import { ErrorOnSaveComponent } from './error-on-save/error-on-save.component';
 
 @Component({
@@ -20,8 +22,6 @@ export class SaveServerComponent implements  AfterViewInit {
   tagName: string;
   isSaving: boolean;
 
-  readonly MAX_TAGS_ALLOWED: number = 5;
-
   @ViewChild('mydrawing', {static: false}) canvas: ElementRef;
   @ViewChild('proccessingCanas', {static : false}) proccessingCanas: ElementRef;
 
@@ -29,11 +29,13 @@ export class SaveServerComponent implements  AfterViewInit {
               private snacks: MatSnackBar,
               private dialog: MatDialog,
               private saveService: SaveServerService,
+              private shortcutManager: ShortcutManagerService,
               private exportation: ExportService) {
     this.tags = new  Set<string>();
     this.tagName = '';
     this.isSaving = false;
     this.isValidTitle = false;
+    this.shortcutManager.disableShortcuts();
   }
 
   ngAfterViewInit(): void {
@@ -49,17 +51,18 @@ export class SaveServerComponent implements  AfterViewInit {
   saveConfirmation(): void {
     if (!this.isValidTitle) {
       const warning = this.dialog.open(ErrorOnSaveComponent, {disableClose: true});
-      warning.componentInstance.errorTitle = this.isValidTitle;
+      if (warning !== undefined) {
+        warning.componentInstance.errorTitle = this.isValidTitle;
+      }
     } else {
       this.addImage().then(() => {
         this.onDialogClose();
       });
     }
-
   }
 
   addTag(tag: string): void {
-    if (this.tags.size < this.MAX_TAGS_ALLOWED) {
+    if (this.tags.size < MAX_TAGS_ALLOWED) {
       const isTagValid = this.saveService.addTag(tag, this.tags);
       if (isTagValid) {
         this.tagName = '';
