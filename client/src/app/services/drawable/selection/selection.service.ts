@@ -110,7 +110,7 @@ export class SelectionService extends DrawableService {
         break;
       case SelectionState.inverting:
       case SelectionState.selecting:
-        this.manipulator.removeChild(this.image.nativeElement, this.subElement);
+        this.subElement.remove();
         break;
       case SelectionState.moving:
         this.resizeGroup.remove();

@@ -31,6 +31,7 @@ export class SelectionTransformShortcutService {
   private selectionGroup: SVGGElement;
 
   private isMoving: boolean;
+  private isRotating: boolean;
   private hasWaitedHalfSec: boolean;
 
   private autoMoveHasInstance: boolean;
@@ -47,8 +48,7 @@ export class SelectionTransformShortcutService {
       this.onKeyDown(event);
     }));
     this.shortcutListener.push(manipulator.listen(window, 'wheel', (event: WheelEvent) => {
-      console.log('xd');
-      console.log(event);
+      this.isRotating = true;
       if (event.shiftKey) {
         Transform.rotateEach(this.getRotate(event));
       } else {
@@ -66,9 +66,21 @@ export class SelectionTransformShortcutService {
 
   deleteShortcuts(): void {
     this.shortcutListener.forEach((listener) => listener());
+    if (this.isRotating) {
+      this.selectionGroup.remove();
+      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
+      this.isRotating = false;
+    }
   }
 
   private onKeyDown(event: KeyboardEvent): void {
+    if (this.isRotating) {
+      this.selectionGroup.remove();
+      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
+      this.isRotating = false;
+    }
     if (this.REGEX_ARROW.test(event.key)) {
       this.arrowPressed(event.key);
     } else {
@@ -160,6 +172,10 @@ export class SelectionTransformShortcutService {
 
     if (!this.leftArrowIsPressed && !this.rightArrowIsPressed && !this.upArrowIsPressed && !this.downArrowIsPressed) {
       this.isMoving = false;
+
+      this.selectionGroup.remove();
+      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
+      this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
     }
 
     this.lastKeyPressed = '';
@@ -177,10 +193,6 @@ export class SelectionTransformShortcutService {
     } else {
       this.hasWaitedHalfSec = false;
       this.autoMoveHasInstance = false;
-
-      this.selectionGroup.remove();
-      this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
-      this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
     }
   }
 
