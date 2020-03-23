@@ -1,8 +1,11 @@
 import { CoordinatesXY } from './coordinates-x-y';
+import { Color } from './color';
+import * as CONSTANTS from './constants';
 
 export class BFSAlgorithm {
-    private maxX: number;
-    private maxY: number;
+    pathsToFill: CoordinatesXY[][];
+    private width: number;
+    private height: number;
     private context2D: CanvasRenderingContext2D;
     private visited: Set<string>;
     private queue: CoordinatesXY[];
@@ -10,17 +13,16 @@ export class BFSAlgorithm {
     private strokesSet: Set<string>;
     private tolerance: number;
     private data: Uint8ClampedArray;
-    pathsToFill: CoordinatesXY[][];
     private tmpPath: CoordinatesXY[];
 
     constructor(
-        maxX: number,
-        maxY: number,
+        width: number,
+        height: number,
         context2D: CanvasRenderingContext2D,
         tolerance: number,
     ) {
-        this.maxX = maxX;
-        this.maxY = maxY;
+        this.width = width;
+        this.height = height;
         this.context2D = context2D;
         this.visited = new Set([]);
         this.queue = [];
@@ -29,17 +31,16 @@ export class BFSAlgorithm {
         this.tolerance = tolerance;
     }
 
-    computeBFS(clickPosition: CoordinatesXY): void {
-        const imageData: ImageData = this.context2D.getImageData(0, 0, this.maxX, this.maxY);
-        this.data = imageData.data;
+    BFS(clickPosition: CoordinatesXY): void {
+        this.data = this.context2D.getImageData(0, 0, this.width, this.height).data;
 
-        const targetColor: number[] = this.getPixelColor(clickPosition);
+        const targetColor: Color = this.getPixelColor(clickPosition);
         this.queue.push(clickPosition);
 
         while (this.queue.length > 0) {
             const pixel: CoordinatesXY = this.queue.pop() as CoordinatesXY;
 
-            if (!this.isSameColor(this.getPixelColor(pixel), targetColor)) {
+            if (!targetColor.isSimilarWithTolerance(this.getPixelColor(pixel), this.tolerance)) {
                 continue;
             }
 
@@ -59,7 +60,7 @@ export class BFSAlgorithm {
                     this.strokesSet.add(`${pixel.getX()} ${pixel.getY()}`);
                     break;
                 }
-                if (this.isSameColor(this.getPixelColor(neighborPixel), targetColor)) {
+                if (targetColor.isSimilarWithTolerance(this.getPixelColor(neighborPixel), this.tolerance)) {
                     this.queue.push(neighborPixel);
                     this.visited.add(`${neighborPixel.getX()} ${neighborPixel.getY()}`);
                 } else {
@@ -127,60 +128,50 @@ export class BFSAlgorithm {
         this.searchInDirectNeighbors(pixel, closestNeighbor);
         if (!(closestNeighbor.getX() >= 0 && closestNeighbor.getY() >= 0)) {
             this.searchInIndirectNeighbors(pixel, closestNeighbor);
-        }
-        if (!(closestNeighbor.getX() >= 0 && closestNeighbor.getY() >= 0)) {
             this.findClosestPixel(pixel, closestNeighbor);
         }
     }
 
     private createPathToFill() {
-        if (this.strokes.length === 0) {
-            return;
-        }
+        if (this.strokes.length !== 0) {
+            this.pathsToFill = [];
+            this.visited = new Set([]);
+            this.tmpPath = [];
 
-        this.pathsToFill = [];
-        this.visited = new Set([]);
-        this.tmpPath = [];
+            const pixel: CoordinatesXY = this.strokes[0];
+            this.visited.add(`${pixel.getX()} ${pixel.getY()}`);
 
-        const pixel: CoordinatesXY = this.strokes[0];
-        this.visited.add(`${pixel.getX()} ${pixel.getY()}`);
+            while ((pixel.getX() >= 0 && pixel.getY() >= 0)) {
+                this.tmpPath.push(pixel.clone());
 
-        while ((pixel.getX() >= 0 && pixel.getY() >= 0)) {
-            this.tmpPath.push(pixel.clone());
+                const closestNeighbor: CoordinatesXY = new CoordinatesXY(-1, -1);
+                this.updateClosestNeighbor(pixel, closestNeighbor);
 
-            const closestNeighbor: CoordinatesXY = new CoordinatesXY(-1, -1);
-            this.updateClosestNeighbor(pixel, closestNeighbor);
+                this.visited.add(`${closestNeighbor.getX()} ${closestNeighbor.getY()}`);
+                pixel.setX(closestNeighbor.getX());
+                pixel.setY(closestNeighbor.getY());
+            }
 
-            this.visited.add(`${closestNeighbor.getX()} ${closestNeighbor.getY()}`);
-            pixel.setX(closestNeighbor.getX());
-            pixel.setY(closestNeighbor.getY());
-        }
-
-        this.pathsToFill.push(this.tmpPath);
-        this.tmpPath = [];
-    }
-
-    private isSameColor(color1: number[], color2: number[]): boolean {
-        if (this.tolerance === 0) {
-            return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
-        } else {
-            const difference =
-                Math.abs(color1[0] - color2[0]) + Math.abs(color1[1] - color2[1]) + Math.abs(color1[2] - color2[2]);
-
-            const sum = 255 * color1.length;
-            return difference <= (this.tolerance / 100) * sum;
+            this.pathsToFill.push(this.tmpPath);
+            this.tmpPath = [];
         }
     }
 
     private isValidPosition(pixel: CoordinatesXY): boolean {
-        return pixel.getX() >= 0 && pixel.getX() < this.maxX && pixel.getY() >= 0 && pixel.getY() < this.maxY;
+        return (
+            pixel.getX() >= 0           && 
+            pixel.getX() <  this.width  && 
+            pixel.getY() >= 0           && 
+            pixel.getY() <  this.height
+        );
     }
 
-    private getPixelColor(pixel: CoordinatesXY): number[] {
-        let index: number = 4 * (pixel.getX() + pixel.getY() * this.maxX);
-        const r: number = this.data[index++];
-        const g: number = this.data[index++];
-        const b: number = this.data[index];
-        return [r, g, b];
+    private getPixelColor(pixel: CoordinatesXY): Color {
+        let index: number = (CONSTANTS.BYTES_IN_HEX + 1) * (pixel.getX() + pixel.getY() * this.width);
+        return new Color([
+            this.data[index++], 
+            this.data[index++], 
+            this.data[index]
+        ]);
     }
 }
