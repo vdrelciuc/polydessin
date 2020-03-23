@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
 import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
-import { UndoRedoService } from 'src/app/services/tools/undo-redo/undo-redo.service';
+import { UndoRedoService } from 'src/app/services/undo-redo/undo-redo.service';
 import { CanvasComponent } from './canvas.component';
 
 describe('CanvasComponent', () => {

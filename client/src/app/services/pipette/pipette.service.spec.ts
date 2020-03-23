@@ -2,12 +2,12 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
-import { Color } from '../classes/color';
-import { ColorType } from '../enums/color-types';
-import { ColorSelectorService } from './color-selector.service';
-import { DrawablePropertiesService } from './index/drawable/properties/drawable-properties.service';
+import { Color } from '../../classes/color';
+import { ColorType } from '../../enums/color-types';
+import { ColorSelectorService } from '../color-selector/color-selector.service';
+import { DrawablePropertiesService } from '../index/drawable/properties/drawable-properties.service';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { PipetteService } from './pipette.service';
-import { DrawStackService } from './tools/draw-stack/draw-stack.service';
 
 describe('PipetteService', () => {
   let service: PipetteService;

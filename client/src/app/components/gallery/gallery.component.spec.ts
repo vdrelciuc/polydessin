@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { REGEX_TAG } from 'src/app/classes/regular-expressions';
-import { SaveServerService } from 'src/app/services/saveServer/save-server.service';
+import { SaveServerService } from 'src/app/services/save-server/save-server.service';
 import { GalleryComponent } from './gallery.component';
 
 describe('GalleryComponent', () => {

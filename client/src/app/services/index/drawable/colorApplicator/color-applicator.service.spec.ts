@@ -3,8 +3,8 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { ColorApplicatorService } from './color-applicator.service';
 

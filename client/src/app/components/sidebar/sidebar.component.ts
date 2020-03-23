@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { Tools } from '../../enums/tools';
-import { ToolSelectorService } from '../../services/tools/tool-selector.service';
+import { ToolSelectorService } from '../../services/tools-selector/tool-selector.service';
 import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
 import { WorkingAreaComponent } from '../working-area/working-area.component';
 

@@ -4,7 +4,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { Stack } from 'src/app/classes/stack';
 import { Transform } from 'src/app/classes/transformations';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
 
 describe('SelectionTransformShortcutService', () => {

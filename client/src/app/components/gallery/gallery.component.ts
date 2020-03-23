@@ -5,10 +5,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { TILE_WIDTH_PX } from 'src/app/classes/constants';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { Image } from '../../interfaces/image';
 import { GalleryService } from '../../services/gallery/gallery.service';
-import { SaveServerService } from '../../services/saveServer/save-server.service';
+import { SaveServerService } from '../../services/save-server/save-server.service';
 import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
 
 @Component({

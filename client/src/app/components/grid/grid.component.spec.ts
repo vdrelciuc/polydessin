@@ -4,7 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSliderChange } from '@angular/material';
 import * as CONSTANT from 'src/app/classes/constants';
 import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 import { GridComponent } from './grid.component';
 
 describe('GridComponent', () => {

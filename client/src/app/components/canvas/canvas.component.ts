@@ -2,18 +2,18 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/co
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { CanvasService } from 'src/app/services/canvas.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { CreateNewService } from 'src/app/services/create-new.service';
+import { CanvasService } from 'src/app/services/canvas/canvas.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { CreateNewService } from 'src/app/services/create-new/create-new.service';
 import { EventListenerService } from 'src/app/services/events/event-listener.service';
 import { ExportService } from 'src/app/services/export/export.service';
 import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
 import { SVGService } from 'src/app/services/index/svg/svg.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { WorkspaceService } from 'src/app/services/workspace.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
+import { WorkspaceService } from 'src/app/services/workspace/workspace.service';
 import {GalleryService} from '../../services/gallery/gallery.service';
-import {SaveServerService} from '../../services/saveServer/save-server.service';
+import {SaveServerService} from '../../services/save-server/save-server.service';
 
 @Component({
   selector: 'app-canvas',

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { EraserService } from 'src/app/services/index/drawable/eraser/eraser.service';
 import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({
   selector: 'app-eraser',

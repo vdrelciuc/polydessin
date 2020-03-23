@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Color } from 'src/app/classes/color';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
 @Component({

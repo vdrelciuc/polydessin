@@ -5,8 +5,8 @@ import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import * as CONSTANTS from '../../../../classes/constants';
 import { DrawableService } from '../drawable.service';
 

@@ -1,12 +1,12 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import * as CONSTANTS from 'src/app/classes/constants';
-import { Color } from '../classes/color';
-import { CoordinatesXY } from '../classes/coordinates-x-y';
-import { CursorProperties } from '../classes/cursor-properties';
-import { ColorType } from '../enums/color-types';
-import { ColorSelectorService } from './color-selector.service';
-import { DrawableService } from './index/drawable/drawable.service';
-import { DrawStackService } from './tools/draw-stack/draw-stack.service';
+import { Color } from '../../classes/color';
+import { CoordinatesXY } from '../../classes/coordinates-x-y';
+import { CursorProperties } from '../../classes/cursor-properties';
+import { ColorType } from '../../enums/color-types';
+import { ColorSelectorService } from '../color-selector/color-selector.service';
+import { DrawableService } from '../index/drawable/drawable.service';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root',

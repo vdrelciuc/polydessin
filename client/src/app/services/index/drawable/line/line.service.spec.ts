@@ -6,8 +6,8 @@ import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { Tools } from 'src/app/enums/tools';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { LineService } from './line.service';
 // tslint:disable: no-magic-numbers no-any

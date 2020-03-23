@@ -4,9 +4,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSliderModule, MatSlideToggleModule } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { PolygonService } from 'src/app/services/index/drawable/polygon/polygon.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 import { PolygonComponent } from './polygon.component';
 
 describe('PolygonComponent', () => {

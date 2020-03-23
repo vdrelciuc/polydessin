@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Color } from '../classes/color';
-import { ColorType } from '../enums/color-types';
+import { Color } from '../../classes/color';
+import { ColorType } from '../../enums/color-types';
 import { ColorSelectorService } from './color-selector.service';
 
 describe('ColorSelectorService', () => {

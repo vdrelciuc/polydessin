@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as CONSTANT from 'src/app/classes/constants';
 import { ColorType } from 'src/app/enums/color-types';
-import { Color } from '../classes/color';
+import { Color } from '../../classes/color';
 
 @Injectable({
   providedIn: 'root'

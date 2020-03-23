@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { WorkingAreaComponent } from 'src/app/components/working-area/working-area.component';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from '../events/shortcuts/hotkeys.service';
-import { ToolSelectorService } from '../tools/tool-selector.service';
+import { ToolSelectorService } from '../tools-selector/tool-selector.service';
 
 @Injectable({
   providedIn: 'root'

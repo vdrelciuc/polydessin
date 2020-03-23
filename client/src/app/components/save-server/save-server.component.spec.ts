@@ -5,7 +5,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog, MatDialogModule, MatDialogRef, MatSnackBar, MatSnackBarModule } from '@angular/material';
 import { REGEX_TITLE } from 'src/app/classes/regular-expressions';
 import { ExportService } from 'src/app/services/export/export.service';
-import { SaveServerService } from 'src/app/services/saveServer/save-server.service';
+import { SaveServerService } from 'src/app/services/save-server/save-server.service';
 import { ErrorOnSaveComponent } from './error-on-save/error-on-save.component';
 import { SaveServerComponent } from './save-server.component';
 

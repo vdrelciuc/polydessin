@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { Color } from '../classes/color';
+import { Color } from '../../classes/color';
 
 @Injectable({
   providedIn: 'root'

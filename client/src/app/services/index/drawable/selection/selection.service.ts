@@ -8,8 +8,8 @@ import { Transform } from 'src/app/classes/transformations';
 import { SelectionState } from 'src/app/enums/selection-states';
 import { Tools } from 'src/app/enums/tools';
 import { BoundingBox } from 'src/app/interfaces/bounding-box';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';
 import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
 

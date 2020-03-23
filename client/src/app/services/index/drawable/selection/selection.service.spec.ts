@@ -5,8 +5,8 @@ import * as CONSTANTS from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Transform } from 'src/app/classes/transformations';
 import { SelectionState } from 'src/app/enums/selection-states';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { SelectionService } from './selection.service';
 
 describe('SelectionService', () => {

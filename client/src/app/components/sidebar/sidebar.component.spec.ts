@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
 import { WorkingAreaComponent } from '../working-area/working-area.component';
 import { SidebarComponent } from './sidebar.component';

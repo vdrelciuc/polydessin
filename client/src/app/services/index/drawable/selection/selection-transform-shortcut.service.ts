@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { Transform } from 'src/app/classes/transformations';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'

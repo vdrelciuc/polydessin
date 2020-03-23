@@ -3,9 +3,9 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Tools } from 'src/app/enums/tools';
-import { ColorSelectorService } from '../color-selector.service';
+import { ColorSelectorService } from '../color-selector/color-selector.service';
 import { LineService } from '../index/drawable/line/line.service';
-import { ToolSelectorService } from '../tools/tool-selector.service';
+import { ToolSelectorService } from '../tools-selector/tool-selector.service';
 import { EventListenerService } from './event-listener.service';
 
 describe('EventListenerService', () => {

@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { ColorSelectorService } from '../../color-selector.service';
-import { DrawStackService } from '../../tools/draw-stack/draw-stack.service';
+import { ColorSelectorService } from '../../color-selector/color-selector.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from './properties/drawable-properties.service';
 
 @Injectable({

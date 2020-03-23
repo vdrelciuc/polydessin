@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { ColorType } from 'src/app/enums/color-types';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { ColorPanelComponent } from './color-panel.component';
 
 describe('ColorPanelComponent', () => {

@@ -6,7 +6,7 @@ import { MAX_TAGS_ALLOWED } from 'src/app/classes/constants';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { Image } from '../../interfaces/image';
 import { ExportService } from '../../services/export/export.service';
-import { SaveServerService } from '../../services/saveServer/save-server.service';
+import { SaveServerService } from '../../services/save-server/save-server.service';
 import { ErrorOnSaveComponent } from './error-on-save/error-on-save.component';
 
 @Component({

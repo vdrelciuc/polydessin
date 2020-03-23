@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { WorkspaceService } from 'src/app/services/workspace.service';
+import { WorkspaceService } from 'src/app/services/workspace/workspace.service';
 
 @Component({
   selector: 'app-workspace',
