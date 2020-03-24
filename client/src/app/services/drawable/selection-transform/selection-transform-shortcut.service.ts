@@ -36,6 +36,7 @@ export class SelectionTransformShortcutService {
   private autoMoveHasInstance: boolean;
 
   private shortcutListener: (() => void)[] = [];
+  private pasteShortcutListener: (() => void);
 
   setupShortcuts(manipulator: Renderer2, drawStack: DrawStackService, image: ElementRef<SVGElement>, selectionGroup: SVGGElement): void {
     this.deleteShortcuts();
@@ -43,8 +44,17 @@ export class SelectionTransformShortcutService {
     this.drawStack = drawStack;
     this.image = image;
     this.selectionGroup = selectionGroup;
+    if (this.pasteShortcutListener === undefined) {
+      this.pasteShortcutListener = manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
+        if (event.key === this.v) {
+          this.onKeyDown(event);
+        }
+      })
+    }
     this.shortcutListener.push(manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
-      this.onKeyDown(event);
+      if (event.key !== this.v) {
+        this.onKeyDown(event);
+      }
     }));
     this.shortcutListener.push(manipulator.listen(window, 'wheel', (event: WheelEvent) => {
       if (event.shiftKey) {
