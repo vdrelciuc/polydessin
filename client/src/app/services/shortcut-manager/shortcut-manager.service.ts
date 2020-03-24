@@ -114,9 +114,16 @@ export class ShortcutManagerService {
     );
 
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'e', description: 'Selecting eraser with shortcut' }).subscribe(
-      (event) => {
-        this.toolSelectorService.setCurrentTool(Tools.Eraser);
-      }
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Eraser);
+        }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'p', description: 'Selecting feather with shortcut' }).subscribe(
+        (event) => {
+          this.toolSelectorService.setCurrentTool(Tools.Feather);
+        }
       )
     );
 
