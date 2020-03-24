@@ -2,19 +2,19 @@
     <form>
         <h6 class="title" id="tracing-type">Actions</h6>
         <div class="group">
-            <button mat-raised-button class="basic-action">Copier</button>
+            <button mat-raised-button class="basic-action" [disabled]="this.copyCutDupDelDisabled()" (click)="this.copy()"><i class="material-icons">flip_to_back</i> Copier</button>
         </div>
         <div class="group">
-            <button mat-raised-button class="basic-action">Coller</button>
+            <button mat-raised-button class="basic-action" [disabled]="this.pasteDisabled()" (click)="this.paste()"><i class="material-icons">flip_to_front</i> Coller</button>
         </div>
         <div class="group">
-            <button mat-raised-button class="basic-action">Couper</button>
+            <button mat-raised-button class="basic-action" [disabled]="this.copyCutDupDelDisabled()" (click)="this.cut()"><i class="material-icons">flip</i> Couper</button>
         </div>
         <div class="group">
-            <button mat-raised-button class="basic-action">Dupliquer</button>
+            <button mat-raised-button class="basic-action" [disabled]="this.copyCutDupDelDisabled()" (click)="this.duplicate()"><i class="material-icons">dynamic_feed</i> Dupliquer</button>
         </div>
         <div class="group-space-before">
-            <button mat-raised-button class="delete-action"><i class="material-icons">delete</i>Supprimer</button>
+            <button mat-raised-button class="delete-action" [disabled]="this.copyCutDupDelDisabled()" (click)="this.delete()"><i class="material-icons">delete</i> Supprimer</button>
         </div>
     </form>
 </div>

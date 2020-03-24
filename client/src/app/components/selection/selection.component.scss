@@ -25,12 +25,14 @@
     }
 
     .basic-action {
-        width: 100px;
         background-color: $vivid;
     }
 
     .delete-action {
-        width: 140px;
         background-color: #ff726f;
+    }
+
+    button {
+        width: 100%;
     }
 }

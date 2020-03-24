@@ -26,6 +26,10 @@ export class ClipboardService {
     ClipboardService.drawStack = drawStack;
   }
 
+  static pasteDisabled(): boolean {
+    return this.selectedElements.isEmpty();
+  }
+
   static paste(): void {
     const pasteElements = new Stack<SVGGElement>();
     for (const element of ClipboardService.selectedElements.getAll()) {

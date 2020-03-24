@@ -60,6 +60,10 @@ export class SelectionService extends DrawableService {
     this.transformShortcuts.deleteShortcuts();
   }
 
+  hasNoSelection(): boolean {
+    return this.selectedElements.isEmpty();
+  }
+
   onMouseOutCanvas(event: MouseEvent): void {
     this.onMouseRelease(event);
   }
