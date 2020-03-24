@@ -13,6 +13,7 @@ export enum TransformType {
 
 export class Transform {
   static needsUpdate: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  static needsButtonDisable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   static elementsToTransform: SVGGElement[] = [];
   private static manipulator: Renderer2;
 
@@ -138,5 +139,6 @@ export class Transform {
       element.remove();
     }
     Transform.needsUpdate.next(true);
+    Transform.needsButtonDisable.next(true);
   }
 }

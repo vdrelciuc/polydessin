@@ -44,6 +44,7 @@ export class SelectionService extends DrawableService {
     this.assignParams(manipulator, image, colorSelectorService, drawStack);
     this.setupProperties();
     Transform.needsUpdate.subscribe( () => { this.setGeneratedAreaBorders(); } );
+    Transform.needsButtonDisable.subscribe( () => { this.selectedElements = new Stack<SVGGElement>(); } );
     ClipboardService.pastedElements.subscribe( (paste) => {
       this.selectedElements.clear();
       for (const element of paste) { this.selectedElements.push_back(element); }

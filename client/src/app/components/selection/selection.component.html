@@ -2,6 +2,9 @@
     <form>
         <h6 class="title" id="tracing-type">Actions</h6>
         <div class="group">
+            <button mat-raised-button class="basic-action" (click)="this.selectAll()"><i class="material-icons">select_all</i> Tout sélectionner</button>
+        </div>
+        <div class="group-space-before">
             <button mat-raised-button class="basic-action" [disabled]="this.copyCutDupDelDisabled()" (click)="this.copy()"><i class="material-icons">flip_to_back</i> Copier</button>
         </div>
         <div class="group">

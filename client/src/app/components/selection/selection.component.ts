@@ -22,6 +22,10 @@ export class SelectionComponent {
     return this.selectionService.hasNoSelection();
   }
 
+  selectAll() {
+    this.selectionService.selectAllElements();
+  }
+
   copy(): void {
     ClipboardService.copy();
   }
