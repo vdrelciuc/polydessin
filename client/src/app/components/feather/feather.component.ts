@@ -25,6 +25,6 @@ export class FeatherComponent {
   }
 
   changeAngle(newAngle: number): void {
-    this.service.thickness.next(newAngle);
+    this.service.angle.next(newAngle);
   }
 }

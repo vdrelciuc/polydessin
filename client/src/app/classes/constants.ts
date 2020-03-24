@@ -60,6 +60,8 @@ export const FIRST_QUADRANT = 1;
 export const SECOND_QUADRANT = 2;
 export const THIRD_QUADRANT = 3;
 export const FOURTH_QUADRANT = 4;
+export const MAX_ANGLE = 360;
+export const MIN_ANGLE = 0;
 
 // Eraser
 export const ERASER_OUTLINE = '#FF0000';
@@ -98,6 +100,10 @@ KEYS_TO_BYPASS.add('|');
 for(let i = 1; i < 13; ++i) {
     KEYS_TO_BYPASS.add('F'+i.toString());
 }
+
+// Feather
+export const MOUSE_ROLL_CHANGE = 15;
+export const MOUSE_ROLL_CHANGE_ALT = 1;
 
 // Gallery
 export const TILE_WIDTH_PX = 250;
