@@ -86,8 +86,62 @@ describe('TextComponent', () => {
     expect(component['service'].properties.value.alignment).toEqual(Alignment.Right);
   });
 
-  it('#setAlignement should not set invalid alignment', () => {
-    component.setAlignement({value: undefined} as unknown as MatRadioChange);
+  it('#setAlignement should not set invalid alignment value', () => {
+    component.setAlignement({value: null} as unknown as MatRadioChange);
     expect(component['service'].properties.value.alignment).toEqual(Alignment.Left);
+  });
+
+  it('#setupShortcuts should move left', () => {
+    const spy = spyOn(component['service'], 'moveLeft');
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'arrowleft',
+      bubbles: true
+    }));
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#setupShortcuts should move right', () => {
+    const spy = spyOn(component['service'], 'moveRight');
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'arrowright',
+      bubbles: true
+    }));
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#setupShortcuts should go to new line', () => {
+    const spy = spyOn(component['service'], 'createCurrentTextBox');
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'enter',
+      bubbles: true
+    }));
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#setupShortcuts should remove next character', () => {
+    const spy = spyOn(component['service'], 'delete');
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'delete',
+      bubbles: true
+    }));
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#setupShortcuts should remove previous character', () => {
+    const spy = spyOn(component['service'], 'backspace');
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'backspace',
+      bubbles: true
+    }));
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#setupShortcuts should delete current text element', () => {
+    const spy = spyOn(component['service'], 'cancel');
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'escape',
+      bubbles: true
+    }));
+    expect(spy).toHaveBeenCalled();
   });
 });

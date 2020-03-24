@@ -134,6 +134,14 @@ describe('TextService', () => {
     expect(service['currentTextbox'].innerHTML).toEqual('1a|');
   });
 
+  it('#onKeyPressed should not append character, element undefined', () => {
+    service['currentTextbox'] = undefined as unknown as SVGTextElement;
+    service.onKeyPressed(new KeyboardEvent('keypress', {
+      key: 'a'
+    }));
+    expect(service['currentTextbox']).toEqual(undefined as unknown as SVGTextElement);
+  });
+
   it('#cancel should cancel svg text', () => {
     service['subElement'] = {remove: () => null} as unknown as SVGGElement;
     const spy = spyOn(service['subElement'], 'remove');
@@ -194,8 +202,21 @@ describe('TextService', () => {
 
   it('#moveLeft should do nothing, current position is the first position of the first box', () => {
     service['currentTextbox'] = { innerHTML: '|aba'} as unknown as SVGTextElement;
+    service['currentBoxNumber'] = 1;
     service.moveLeft();
     expect(service['currentTextbox'].innerHTML).toEqual('|aba');
+  });
+
+  it('#moveLeft should go to previous box', () => {
+    const text0 = { innerHTML: 'box0'} as unknown as SVGTextElement;
+    const text1 = { innerHTML: '|aba'} as unknown as SVGTextElement;
+    service['textBoxes'].set(0, text0);
+    service['textBoxes'].set(1, text1);
+    service['currentBoxNumber'] = 2;
+    service['currentTextbox'] = text1;
+    service.moveLeft();
+    expect(service['currentTextbox'].innerHTML).toEqual('box0|');
+    expect((service['textBoxes'].get(1) as SVGTextElement).innerHTML).toEqual('aba');
   });
 
   it('#moveRight should move current position one index to the right', () => {
@@ -206,9 +227,23 @@ describe('TextService', () => {
 
   it('#moveRight should do nothing, current position is the last position of the last box', () => {
     service['currentTextbox'] = { innerHTML: '1ba|'} as unknown as SVGTextElement;
+    service['currentBoxNumber'] = 1;
     service.moveRight();
     expect(service['currentTextbox'].innerHTML).toEqual('1ba|');
   });
+
+  it('#moveRight should go to next box', () => {
+    const text0 = { innerHTML: 'box0|'} as unknown as SVGTextElement;
+    const text1 = { innerHTML: 'aba'} as unknown as SVGTextElement;
+    service['textBoxes'].set(0, text0);
+    service['textBoxes'].set(1, text1);
+    service['currentBoxNumber'] = 1;
+    service['currentTextbox'] = text0;
+    service.moveRight();
+    expect(service['currentTextbox'].innerHTML).toEqual('|aba');
+    expect((service['textBoxes'].get(0) as SVGTextElement).innerHTML).toEqual('box0');
+  });
+
 
   it('#createCurrentTextBox should create a new textbox on the click position', () => {
     service['clickPosition'] = new CoordinatesXY(100, 100);

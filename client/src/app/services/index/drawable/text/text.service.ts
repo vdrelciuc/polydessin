@@ -117,6 +117,12 @@ export class TextService extends DrawableService{
     const index = text.indexOf('|');
     if(index > 0) {
       this.currentTextbox.innerHTML = text.slice(0, index - 1) + '|' + text[index - 1] + text.slice(index + 1, text.length);
+    } else {
+        if(this.currentBoxNumber !== 1) {
+          this.currentTextbox.innerHTML = text.substr(1);
+          this.currentTextbox = this.textBoxes.get((--this.currentBoxNumber) - 1) as SVGTextElement;
+          this.currentTextbox.innerHTML +=  '|';
+        }
     }
   }
 
@@ -125,6 +131,12 @@ export class TextService extends DrawableService{
     const index = text.indexOf('|');
     if(index < text.length - 1) {
       this.currentTextbox.innerHTML = text.slice(0, index) + text[index + 1] + '|'  + text.slice(index + 2, text.length);
+    } else {
+      if(this.currentBoxNumber < this.textBoxes.size) {
+        this.currentTextbox.innerHTML = text.substr(0, index);
+        this.currentTextbox = this.textBoxes.get(this.currentBoxNumber ++) as SVGTextElement;
+        this.currentTextbox.innerHTML =  '|' + this.currentTextbox.innerHTML;
+      }
     }
   }
 
