@@ -42,7 +42,9 @@ export class FeatherService extends DrawableService {
   }
 
   endTool(): void {
-    this.preview.remove()
+    if(this.preview !== undefined) {
+      this.preview.remove();
+    }
     if(this.subElement !== undefined) {
       this.subElement.remove();
     }
@@ -113,7 +115,6 @@ export class FeatherService extends DrawableService {
       this.createPreview();
     }
     const endCoordiantes = CoordinatesXY.computeCoordinates(mouse, this.angle.value, this.height.value);
-    console.log(endCoordiantes);
     this.manipulator.setAttribute(this.preview, SVGProperties.startX, mouse.getX().toString());
     this.manipulator.setAttribute(this.preview, SVGProperties.startY, mouse.getY().toString());
     this.manipulator.setAttribute(this.preview, SVGProperties.endX  , endCoordiantes.getX().toString());

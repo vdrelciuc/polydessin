@@ -4,7 +4,7 @@ import { FeatherComponent } from './feather.component';
 import { MatSliderModule } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-fdescribe('FeatherComponent', () => {
+describe('FeatherComponent', () => {
   let component: FeatherComponent;
   let fixture: ComponentFixture<FeatherComponent>;
 
