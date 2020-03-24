@@ -9,6 +9,8 @@ import * as CONSTANTS from 'src/app/classes/constants';
 
 const CANVAS_CONTEXT = '2d';
 const INDICATOR_LENGTH = 5;
+const CROSS_WIDTH = 5;
+const WIDTH_OFFSET = 20;
 
 @Component({
   selector: 'app-color-slider',
@@ -21,6 +23,7 @@ export class ColorSliderComponent implements AfterViewInit {
   newHue: EventEmitter<Color>;
 
   @ViewChild('canvas', {static: true})
+  // tslint:disable-next-line: no-any | canvas: ElementRef caused issues when compiling
   canvas: any;
 
   private ctx: CanvasRenderingContext2D;
@@ -48,6 +51,7 @@ export class ColorSliderComponent implements AfterViewInit {
 
     // Create the color gradient
     const colorGradient = this.ctx.createLinearGradient(0, 0, 0, height);
+    // tslint:disable: no-magic-numbers | Reason : arbitrary values used for gradient
     colorGradient.addColorStop(0, 'red');
     colorGradient.addColorStop(0.17, 'yellow');
     colorGradient.addColorStop(0.34, 'green');
@@ -67,7 +71,7 @@ export class ColorSliderComponent implements AfterViewInit {
 
     // Draw a visual indicator surrounding the selected hue
     if (this.currentSelectedHeight) {
-      this.ctx.lineWidth = 4;
+      this.ctx.lineWidth = CROSS_WIDTH;
       this.ctx.strokeStyle = 'white';
 
       this.ctx.beginPath();
@@ -83,7 +87,7 @@ export class ColorSliderComponent implements AfterViewInit {
   }
 
   private getColorAtPosition(y: number): Color {
-    const imageData = this.ctx.getImageData(20, y, 1, 1).data;
+    const imageData = this.ctx.getImageData(WIDTH_OFFSET, y, 1, 1).data;
     const hexValue = '#'
     + this.correctDigits(imageData[0].toString(CONSTANTS.HEX_BASE))
     + this.correctDigits(imageData[1].toString(CONSTANTS.HEX_BASE))

@@ -1,3 +1,4 @@
+// tslint:disable: no-magic-numbers | Reason : quadrant and angle manipulations
 import { ElementRef } from '@angular/core';
 
 export class CoordinatesXY {

@@ -7,7 +7,7 @@ import { By } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { ColorType } from 'src/app/enums/color-types';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { ColorPaletteComponent } from '../color-palette/color-palette.component';
 import { ColorPickerComponent } from './color-picker.component';
 
@@ -109,7 +109,7 @@ describe('ColorPickerComponent', () => {
   it('#onConfirm should update color', () => {
     service['colorToChange'] = ColorType.Primary;
     service['primaryColor'] = new BehaviorSubject<Color>(new Color('#FFFFFF'));
-    component.selectedColor = new Color('#ABCDEF')
+    component.selectedColor = new Color('#ABCDEF');
     component.onConfirm();
     expect(service['primaryColor'].value.getHex()).toEqual('#ABCDEF');
   });

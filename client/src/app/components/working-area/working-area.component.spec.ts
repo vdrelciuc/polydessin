@@ -1,10 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { APP_BASE_HREF } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   MatCheckboxModule,
   MatDialogModule,
+  MatDialogRef,
   MatDividerModule,
   MatExpansionModule,
   MatFormFieldModule,
@@ -15,13 +18,14 @@ import {
   MatSidenavModule,
   MatSliderModule,
   MatSlideToggleModule,
-  MatTooltipModule,
   MatSnackBarModule,
-  MatDialogRef
+  MatTooltipModule
 } from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Tools } from 'src/app/enums/tools';
 import { DrawerService } from 'src/app/services/side-nav-drawer/drawer.service';
 import { BrushComponent } from '../brush/brush.component';
 import { CanvasComponent } from '../canvas/canvas.component';
@@ -30,23 +34,19 @@ import { ColorPanelComponent } from '../color-panel/color-panel.component';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { ColorSliderComponent } from '../color-slider/color-slider.component';
 import { CreateNewComponent } from '../create-new/create-new.component';
+import { EllipseComponent } from '../ellipse/ellipse.component';
+import { EraserComponent } from '../eraser/eraser.component';
+import { GalleryComponent } from '../gallery/gallery.component';
+import { GridComponent } from '../grid/grid.component';
 import { LineComponent } from '../line/line.component';
 import { OptionPannelComponent } from '../option-pannel/option-pannel.component';
 import { PencilComponent } from '../pencil/pencil.component';
+import { PolygonComponent } from '../polygon/polygon.component';
 import { RectangleComponent } from '../rectangle/rectangle.component';
+import { SelectionComponent } from '../selection/selection.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { WorkspaceComponent } from '../workspace/workspace.component';
 import { WorkingAreaComponent } from './working-area.component';
-import { EllipseComponent } from '../ellipse/ellipse.component';
-import { GridComponent } from '../grid/grid.component';
-import { EraserComponent } from '../eraser/eraser.component';
-import { PolygonComponent } from '../polygon/polygon.component';
-import { SelectionComponent } from '../selection/selection.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { Tools } from 'src/app/enums/tools';
-import { GalleryComponent } from '../gallery/gallery.component';
-import { Observable } from 'rxjs';
 
 describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
@@ -133,7 +133,7 @@ describe('WorkingAreaComponent', () => {
     const spy = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     history.pushState({
       comingFromEntryPoint: true
@@ -192,7 +192,7 @@ describe('WorkingAreaComponent', () => {
     const spy2 = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     component.createNewProject();
     expect(spy).toHaveBeenCalled();
@@ -204,7 +204,7 @@ describe('WorkingAreaComponent', () => {
     const spy2 = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     component.openGallery();
     expect(spy).toHaveBeenCalled();
@@ -240,7 +240,7 @@ describe('WorkingAreaComponent', () => {
     const spy = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     const spy2 = spyOn(component['dialog'], 'closeAll');
     component.openUserGuide();

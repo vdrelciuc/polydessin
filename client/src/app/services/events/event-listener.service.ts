@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { DrawableService } from '../index/drawable/drawable.service';
-import { ToolSelectorService } from '../tools/tool-selector.service';
+import { DrawableService } from '../drawable/drawable.service';
+import { ToolSelectorService } from '../tools-selector/tool-selector.service';
 
 @Injectable({
   providedIn: 'root',

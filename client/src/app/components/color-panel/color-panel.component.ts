@@ -4,7 +4,7 @@ import { Color } from 'src/app/classes/color';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { ColorPickerComponent } from 'src/app/components/color-picker/color-picker.component';
 import { ColorType } from 'src/app/enums/color-types';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
 @Component({

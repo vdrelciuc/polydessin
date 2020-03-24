@@ -1,16 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { APP_BASE_HREF } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { CreateNewComponent } from './create-new.component';
-import { Observable } from 'rxjs';
+
 describe('CreateNewComponent', () => {
   let component: CreateNewComponent;
   let fixture: ComponentFixture<CreateNewComponent>;
@@ -58,32 +58,18 @@ describe('CreateNewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should return drawable width', () => {
-    component['changed'] = true;
-    // component['workspaceSize'] = new CoordinatesXY(10, 10);
-    // expect(component['workspaceSize'].getX()).toEqual(10);
-  });
-
   it('#setCanvasSizeX should set canvas X', () => {
-    component['changed'] = true;
-    component.setcanvasSizeX({
-      target: {
-        value: 10
-      }
-    });
-    component['workspaceService'].size.next(new CoordinatesXY(100, 100));
-    // expect(component['workspaceSize'].getX()).toEqual(10);
+    const mockedEvent: KeyboardEvent = new KeyboardEvent('keypress', {key: 'c'});
+    Object.defineProperty(mockedEvent, 'target', { value: { value: '2' } });
+    component.setcanvasSizeX(mockedEvent);
+    expect(component['workspaceSizeX']).toEqual(2);
   });
 
   it('#setCanvasSizeY should set canvas Y', () => {
-    component['changed'] = true;
-    component.setcanvasSizeY({
-      target: {
-        value: 10
-      }
-    });
-    component['workspaceService'].size.next(new CoordinatesXY(100, 100));
-    // expect(component['workspaceSize'].getY()).toEqual(10);
+    const mockedEvent: KeyboardEvent = new KeyboardEvent('keypress', {key: 'c'});
+    Object.defineProperty(mockedEvent, 'target', { value: { value: '2' } });
+    component.setcanvasSizeY(mockedEvent);
+    expect(component['workspaceSizeY']).toEqual(2);
   });
 
   it('#onColorSelect should be able to select color', () => {
@@ -91,7 +77,7 @@ describe('CreateNewComponent', () => {
     const spy2 = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     const spy = spyOn(component['colorSelectorService'], 'updateColor');
     component.onColorSelect();

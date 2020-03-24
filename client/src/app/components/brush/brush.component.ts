@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Filter, FilterList } from 'src/app/components/brush/patterns';
 import { Tools } from 'src/app/enums/tools';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { BrushService } from 'src/app/services/index/drawable/brush/brush.service';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { BrushService } from 'src/app/services/drawable/brush/brush.service';
+import { DrawablePropertiesService } from 'src/app/services/drawable/properties/drawable-properties.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({
   selector: 'app-brush',
@@ -19,8 +19,8 @@ export class BrushComponent {
   showFilters: boolean;
   selectedOption: Filter;
 
-  readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
-  readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
+  readonly SLIDER_MINIMUM: number = CONSTANT.THICKNESS_MINIMUM;
+  readonly SLIDER_MAXIMUM: number = CONSTANT.THICKNESS_MAXIMUM;
 
   constructor(
     public service: BrushService,

@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
 import { MatSliderChange, MatRadioChange } from '@angular/material';
-import { TextService } from 'src/app/services/index/drawable/text/text.service';
+import { TextService } from 'src/app/services/drawable/text/text.service';
 import { Subscription } from 'rxjs';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { CharacterFont } from 'src/app/enums/character-font';
 import { Alignment } from 'src/app/enums/text-alignement';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
+import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
 
 @Component({
   selector: 'app-text',

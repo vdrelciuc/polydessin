@@ -6,6 +6,7 @@ import { ColorPaletteComponent } from './color-palette.component';
 describe('ColorPaletteComponent', () => {
   let component: ColorPaletteComponent;
   let fixture: ComponentFixture<ColorPaletteComponent>;
+  const MAX_POSITION = 100;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -63,8 +64,8 @@ describe('ColorPaletteComponent', () => {
       clientX: 100,
       clientY: 100
     }));
-    expect(component['currentSelectedPosition'].x).toEqual(100);
-    expect(component['currentSelectedPosition'].y).toEqual(100);
+    expect(component['currentSelectedPosition'].x).toEqual(MAX_POSITION);
+    expect(component['currentSelectedPosition'].y).toEqual(MAX_POSITION);
     expect(spy).toHaveBeenCalled();
   });
 
@@ -86,8 +87,8 @@ describe('ColorPaletteComponent', () => {
       clientX: 100,
       clientY: 100
     }));
-    expect(component['currentSelectedPosition'].x).toEqual(100);
-    expect(component['currentSelectedPosition'].y).toEqual(100);
+    expect(component['currentSelectedPosition'].x).toEqual(MAX_POSITION);
+    expect(component['currentSelectedPosition'].y).toEqual(MAX_POSITION);
     expect(component['isMouseDown']).toBeTruthy();
   });
 });

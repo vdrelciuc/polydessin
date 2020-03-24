@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WorkingAreaComponent } from 'src/app/components/working-area/working-area.component';
 import { Tools } from 'src/app/enums/tools';
-import { HotkeysService } from '../events/shortcuts/hotkeys.service';
-import { ToolSelectorService } from '../tools/tool-selector.service';
+import { HotkeysService } from '../hotkeys/hotkeys.service';
+import { ToolSelectorService } from '../tools-selector/tool-selector.service';
+import { DrawerService } from '../side-nav-drawer/drawer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class ShortcutManagerService {
 
   constructor(
     public toolSelectorService: ToolSelectorService,
-    private shortcut: HotkeysService
+    private shortcut: HotkeysService,
+    private drawerService: DrawerService
     ) {
       this.bypassBrowserShortcuts();
       this.savedTool = Tools.None;
@@ -28,6 +30,7 @@ export class ShortcutManagerService {
 
   loadSavedTool(): void {
     this.toolSelectorService.setCurrentTool(this.savedTool);
+    this.drawerService.navIsOpened = true;
   }
 
   setWorkingAreaComponent(component: WorkingAreaComponent): void {
@@ -35,7 +38,7 @@ export class ShortcutManagerService {
   }
 
   disableShortcuts(): void {
-    for(let i: number = this.subscriptions.length - 1; i >= 0; --i) {
+    for (let i: number = this.subscriptions.length - 1; i >= 0; --i) {
       this.subscriptions[i].unsubscribe();
       this.subscriptions.pop();
     }

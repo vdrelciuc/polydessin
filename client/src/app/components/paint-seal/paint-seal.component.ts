@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { PaintSealService } from 'src/app/services/index/drawable/paint-seal/paint-seal.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { PaintSealService } from 'src/app/services/drawable/paint-seal/paint-seal.service';
 import { MatSliderChange } from '@angular/material';
 import { Tools } from 'src/app/enums/tools';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({
   selector: 'app-paint-seal',

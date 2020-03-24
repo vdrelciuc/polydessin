@@ -1,9 +1,9 @@
+// tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { EraserComponent } from './eraser.component';
-import { MatSliderModule, MatFormFieldModule } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule, MatSliderModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { EraserComponent } from './eraser.component';
 
 describe('EraserComponent', () => {
   let component: EraserComponent;

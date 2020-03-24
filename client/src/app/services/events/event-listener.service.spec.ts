@@ -3,9 +3,9 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Tools } from 'src/app/enums/tools';
-import { ColorSelectorService } from '../color-selector.service';
-import { LineService } from '../index/drawable/line/line.service';
-import { ToolSelectorService } from '../tools/tool-selector.service';
+import { ColorSelectorService } from '../color-selector/color-selector.service';
+import { LineService } from '../drawable/line/line.service';
+import { ToolSelectorService } from '../tools-selector/tool-selector.service';
 import { EventListenerService } from './event-listener.service';
 
 describe('EventListenerService', () => {
@@ -13,14 +13,16 @@ describe('EventListenerService', () => {
   let service: EventListenerService;
   let manipulator: Renderer2;
   const line: LineService = new LineService();
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  // tslint:disable-next-line: no-any | Reason : parentElement: Element creates an issue
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
+  // tslint:disable-next-line: no-any | Reason : parentElement: Element creates an issue
   const mockedEventListener = (parentElement: any, name: string, debugInfo: (event: Event) => void): void => {
     window.addEventListener(name, debugInfo);
-  }
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -79,13 +81,14 @@ describe('EventListenerService', () => {
   it('#initializeEvents should initialize events', () => {
     const spyOnListen = spyOn(manipulator, 'listen');
     service.initializeEvents();
+    // tslint:disable-next-line: no-magic-numbers | Reason : amount of event listeners
     expect(spyOnListen).toHaveBeenCalledTimes(10);
   });
 
   it('#initializeEvents should call window events', () => {
     service.currentTool = line;
     service.initializeEvents();
-    service['toolSelector'].setCurrentTool(Tools.Line)
+    service['toolSelector'].setCurrentTool(Tools.Line);
     const spy = spyOn(service['currentTool'], 'onKeyPressed');
     const spy2 = spyOn(service['currentTool'], 'onKeyReleased');
     window.dispatchEvent(new MouseEvent('keydown'));

@@ -32,7 +32,8 @@ export class WorkingAreaComponent implements OnInit {
     private shortcutManager: ShortcutManagerService,
     public route: Router,
     protected dialog: MatDialog) {
-      this.prepareWorkingAreaShortcuts();
+      this.shortcutManager.setWorkingAreaComponent(this);
+      this.shortcutManager.setupShortcuts();
   }
 
   ngOnInit(): void {

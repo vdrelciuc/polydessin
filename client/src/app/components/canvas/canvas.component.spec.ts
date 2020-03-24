@@ -1,17 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CanvasComponent } from './canvas.component';
 import { HttpClientModule } from '@angular/common/http';
-import { NO_ERRORS_SCHEMA, Renderer2, ElementRef } from '@angular/core';
+import { ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
-import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
-import { UndoRedoService } from 'src/app/services/tools/undo-redo/undo-redo.service';
+import { GridService } from 'src/app/services/drawable/grid/grid.service';
+import { UndoRedoService } from 'src/app/services/undo-redo/undo-redo.service';
+import { CanvasComponent } from './canvas.component';
 
 describe('CanvasComponent', () => {
   let component: CanvasComponent;
   let fixture: ComponentFixture<CanvasComponent>;
 
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  // tslint:disable-next-line: no-any | Reason : parentElement: Element creates an issue
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
@@ -76,7 +77,7 @@ describe('CanvasComponent', () => {
 
   it('#resetCanvas should reset default filters', () => {
     component['toolSelector'].memory = new UndoRedoService(
-      component['drawStack'], 
+      component['drawStack'],
       component['manipulator'],
       component['image']
     );

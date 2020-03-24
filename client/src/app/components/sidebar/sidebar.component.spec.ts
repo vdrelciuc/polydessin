@@ -2,15 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { MatDialog, MatSnackBarModule, MatTooltipModule, MatDialogModule, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogModule, MatDialogRef, MatSnackBarModule, MatTooltipModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { Tools } from 'src/app/enums/tools';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { SidebarComponent } from './sidebar.component';
+import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
+import { WarningDialogComponent } from '../warning/warning-dialog.component';
 import { WorkingAreaComponent } from '../working-area/working-area.component';
-import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
-import { of, Observable } from 'rxjs';
+import { SidebarComponent } from './sidebar.component';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -19,7 +19,8 @@ describe('SidebarComponent', () => {
 
   // https://medium.com/@aleixsuau/testing-angular-components-with-material-dialog-mddialog-1ae658b4e4b3
   class MdDialogMock {
-    open() {
+    // tslint:disable-next-line: no-any | Reason : unknown return type
+    open(): any {
       return {
         afterClosed: () => of(WarningDialogComponent)
       };
@@ -111,7 +112,7 @@ describe('SidebarComponent', () => {
     const spy = spyOn(component['dialog'], 'open')
     .and
     .returnValue({
-      afterClosed: () => new Observable
+      afterClosed: () => new Observable()
     } as unknown as MatDialogRef<{}, {}>);
     component.goHome();
     expect(spy).toHaveBeenCalledWith(WarningDialogComponent, { disableClose: true });

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { Tools } from '../../enums/tools';
-import { ToolSelectorService } from '../../services/tools/tool-selector.service';
+import { ToolSelectorService } from '../../services/tools-selector/tool-selector.service';
+import { WarningDialogComponent } from '../warning/warning-dialog.component';
 import { WorkingAreaComponent } from '../working-area/working-area.component';
-import { WarningDialogComponent } from '../create-new/warning-dialog/warning-dialog.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -53,7 +53,6 @@ export class SidebarComponent implements OnInit {
 
   goHome(): void {
     const warning = this.dialog.open(WarningDialogComponent, { disableClose: true });
-    console.log(warning);
     warning.afterClosed().subscribe((result) => {
       if (!result) {
         this.router.navigateByUrl('/');

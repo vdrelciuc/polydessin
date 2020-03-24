@@ -108,8 +108,8 @@ export const SVG_HTML_TAG = '<defs';
 export const MAX_TAGS_ALLOWED = 5;
 
 // Export
-export const EXPORT_MAX_WIDTH: number = 300;
-export const EXPORT_MAX_HEIGHT: number = 270;
+export const EXPORT_MAX_WIDTH = 300;
+export const EXPORT_MAX_HEIGHT = 270;
 
 // Backend server
 export const REST_API_ROOT = 'http://localhost:3000/api/images';

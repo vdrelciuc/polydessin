@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TextComponent } from './text.component';
 import { MatSliderModule, MatOptionModule, MatSliderChange, MatRadioChange } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TextService } from 'src/app/services/index/drawable/text/text.service';
+import { TextService } from 'src/app/services/drawable/text/text.service';
 import { Alignment } from 'src/app/enums/text-alignement';
 import { CharacterFont } from 'src/app/enums/character-font';
 import { DEFAULT_TEXT_SIZE } from 'src/app/classes/constants';

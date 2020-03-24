@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Tools } from '../../enums/tools';
-import { ToolSelectorService } from '../../services/tools/tool-selector.service';
+import { ToolSelectorService } from '../../services/tools-selector/tool-selector.service';
 
 @Component({
   selector: 'app-option-pannel',
@@ -12,7 +12,7 @@ export class OptionPannelComponent implements OnInit {
 
   constructor(public toolSelectorService: ToolSelectorService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setTool();
   }
 

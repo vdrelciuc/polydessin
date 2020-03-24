@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { WorkspaceService } from 'src/app/services/workspace.service';
+import { WorkspaceService } from 'src/app/services/workspace/workspace.service';
 
 @Component({
   selector: 'app-workspace',
@@ -11,13 +11,14 @@ import { WorkspaceService } from 'src/app/services/workspace.service';
 export class WorkspaceComponent implements OnInit {
   backgroundColor: Color;
 
-  constructor(protected workspaceService: WorkspaceService) {};
+  constructor(protected workspaceService: WorkspaceService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.backgroundColor = this.workspaceService.backgroundColor;
   }
 
-  onResize(event: any) {
+  // tslint:disable-next-line: no-any | Reason : unknown typedef of event
+  onResize(event: any): void {
     this.workspaceService.size.next(new CoordinatesXY(Math.floor(event.target.offsetWidth), Math.floor(event.target.offsetHeight)));
   }
 }

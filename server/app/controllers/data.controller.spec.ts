@@ -6,7 +6,6 @@ import { Application } from '../app';
 import { DateService } from '../services/date.service';
 import Types from '../types';
 
-// tslint:disable:no-any
 const HTTP_STATUS_OK = 200;
 
 describe('DateController', () => {
@@ -29,6 +28,7 @@ describe('DateController', () => {
         return supertest(app)
             .get('/api/date')
             .expect(HTTP_STATUS_OK)
+            // tslint:disable-next-line: no-any | Reason : unknown typedef
             .then((response: any) => {
                 expect(response.body).to.deep.equal(expectedMessage);
             });
@@ -40,6 +40,7 @@ describe('DateController', () => {
         return supertest(app)
             .get('/api/date')
             .expect(HTTP_STATUS_OK)
+            // tslint:disable-next-line: no-any | Reason : unknown typedef
             .then((response: any) => {
                 expect(response.body.title).to.equal('Error');
             });
