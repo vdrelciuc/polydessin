@@ -81,7 +81,9 @@ export class TextService extends DrawableService{
     for(const box of this.textBoxes) {
       box[1].remove();
       this.subElement.remove();
+      this.textBoxes.delete(box[0]);
     }
+    this.textBoxes.clear();
   }
 
   delete(): void {
@@ -143,9 +145,7 @@ export class TextService extends DrawableService{
 
   private createElement(): void {
     this.subElement = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
-
     this.createCurrentTextBox();
-
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
   }
 
