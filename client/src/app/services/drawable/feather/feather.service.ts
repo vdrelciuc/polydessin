@@ -4,6 +4,8 @@ import { ColorSelectorService } from '../../color-selector/color-selector.servic
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { BehaviorSubject } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +17,13 @@ export class FeatherService extends DrawableService {
   angle: BehaviorSubject<number>;
 
   private altPressed: boolean;
+  private canDraw: boolean;
+  private preview: SVGLineElement;
 
   constructor() {
     super();
     this.thickness = new BehaviorSubject<number>(1);
-    this.height = new BehaviorSubject<number>(1);
+    this.height = new BehaviorSubject<number>(10);
     this.angle = new BehaviorSubject<number>(0);
     this.altPressed = false;
   }
@@ -30,6 +34,51 @@ export class FeatherService extends DrawableService {
     colorSelectorService: ColorSelectorService, 
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
+  }
+
+  onSelect(): void {
+    this.subElement = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
+    this.manipulator.appendChild(this.image.nativeElement, this.subElement);
+  }
+
+  endTool(): void {
+    this.preview.remove()
+    if(this.subElement !== undefined) {
+      this.subElement.remove();
+    }
+  }
+
+  onMouseOutCanvas(event: MouseEvent): void {
+    this.canDraw = false;
+    this.preview.remove();
+  }
+
+  onMouseInCanvas(event: MouseEvent): void {
+    this.createPreview();
+  }
+
+  onMousePress(event: MouseEvent): void {
+    if(event.button === CONSTANTS.LEFT_CLICK) {
+      this.canDraw = true;
+      this.onSelect();
+    }
+  }
+  
+  onMouseMove(event: MouseEvent): void {
+    this.updatePreview(CoordinatesXY.getEffectiveCoords(this.image, event));
+    if(this.canDraw) {
+      this.manipulator.appendChild(this.subElement, this.preview.cloneNode(true));
+    }
+  }
+
+  onMouseRelease(event: MouseEvent): void {
+    this.canDraw = false;
+    this.preview.remove();
+    if(this.subElement.childElementCount > 0) {
+      this.pushElement();
+    }
+    this.createPreview();
+    this.updatePreview(CoordinatesXY.getEffectiveCoords(this.image, event));
   }
 
   onKeyPressed(event: KeyboardEvent): void {
@@ -50,7 +99,25 @@ export class FeatherService extends DrawableService {
     } else {
       this.updateAngle(false);
     }
-    console.log(this.angle.value);
+  }
+
+  private createPreview(): void {
+    this.preview = this.manipulator.createElement(SVGProperties.line, SVGProperties.nameSpace);
+    this.manipulator.setAttribute(this.preview, SVGProperties.thickness, this.thickness.value.toString());
+    this.manipulator.setAttribute(this.preview, SVGProperties.color, this.colorSelectorService.primaryColor.value.getHex());
+    this.manipulator.appendChild(this.subElement, this.preview);
+  }
+
+  private updatePreview(mouse: CoordinatesXY): void {
+    if(this.preview === undefined) {
+      this.createPreview();
+    }
+    const endCoordiantes = CoordinatesXY.computeCoordinates(mouse, this.angle.value, this.height.value);
+    console.log(endCoordiantes);
+    this.manipulator.setAttribute(this.preview, SVGProperties.startX, mouse.getX().toString());
+    this.manipulator.setAttribute(this.preview, SVGProperties.startY, mouse.getY().toString());
+    this.manipulator.setAttribute(this.preview, SVGProperties.endX  , endCoordiantes.getX().toString());
+    this.manipulator.setAttribute(this.preview, SVGProperties.endY  , endCoordiantes.getY().toString());
   }
 
   private updateAngle(direction: boolean): void {

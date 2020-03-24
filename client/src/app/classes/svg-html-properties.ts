@@ -39,6 +39,11 @@ export enum SVGProperties {
 
   // Line
   polyLine = 'polyline',
+  line = 'line',
+  startX = 'x1',
+  startY = 'y1',
+  endX = 'x2',
+  endY = 'y2',
 
   // Point
   x = 'x',
