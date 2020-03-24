@@ -1,33 +1,50 @@
 <div id="container">
     <form>
-        <label class="title" id="radius">Rayon</label>
+        <div class="group">
+            <label class="title">Police</label>
+            <select (change)="setFont($event)">
+                <option value="ubuntu">Ubuntu</option>
+                <option value="laksaman">Laksaman</option>
+                <option value="noto sans">Noto Sans</option>
+                <option value="sans serif">Sans-serif</option>
+                <option value="ubuntu mono">Ubuntu Mono</option>
+              </select>
+          </div>
+    </form>
+    <form id="grid-form">
+      <div class="group">
+        <label class="title">Taille</label>
         <mat-slider
-            id="radius-slider"
-            name="radius-slider"
-            disabled="false"
-            [min]="SLIDER_MINIMUM"
-            [max]="SLIDER_MAXIMUM"
-            step="1"
-            thumbLabel="true"
-            tickInterval="false"
-            [(ngModel)]="service.radius"
-            vertical="false">
+          id="size-slider"
+          name="size-slider"
+          disabled="false"
+          [min]="2"
+          [max]="100"
+          step="1"
+          thumbLabel="true"
+          tickInterval="false"
+          [value]="service.size.value"
+          (change)="setSize($event)"
+          vertical="false">
         </mat-slider>
+      </div>
     </form>
     <form>
-        <label class="title" id="frequency">Fréquence</label>
-        <mat-slider
-            id="frequency-slider"
-            name="frequency-slider"
-            disabled="false"
-            [min]="1"
-            [max]="100"
-            step="1"
-            thumbLabel="true"
-            tickInterval="false"
-            [(ngModel)]="service.frequency"
-            vertical="false">
-        </mat-slider>
+        <div class="group">
+            <label class="title" class="paddRight">Allignement</label>
+            <mat-radio-group aria-label="Alignement" (change)="setAlignement($event)">
+                <mat-radio-button class="paddRight" checked value="gauche">Gauche</mat-radio-button>
+                <mat-radio-button class="paddRight" value="centre">Centre</mat-radio-button>
+                <mat-radio-button class="paddRight" value="droite">Droite</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </form>
+    <form>
+      <div class="group">
+        <label class="title" class="paddRight">Formattage</label>
+        <mat-slide-toggle class="paddRight" [checked]="service.isBold.value"   (change)="updateBold()"  >Bold  </mat-slide-toggle>
+        <mat-slide-toggle class="paddRight" [checked]="service.isItalic.value" (change)="updateItalic()">Italic</mat-slide-toggle>
+      </div>
     </form>
   </div>
   

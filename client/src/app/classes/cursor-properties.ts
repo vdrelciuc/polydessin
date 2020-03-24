@@ -1,4 +1,5 @@
 export enum CursorProperties {
+    writing = 'text',
     cursor = 'cursor',
     default = 'auto',
     vertical = 'n-resize',

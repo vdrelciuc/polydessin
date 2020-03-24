@@ -23,6 +23,8 @@ export enum SVGProperties {
   id = 'id',
   joint = 'stroke-linejoin',
   position = 'viewBox',
+  g = 'g',
+  class = 'class',
 
   // Circle and Ellipse
   centerX = 'cx',
@@ -53,5 +55,13 @@ export enum SVGProperties {
 
   // Polygon
   polygon = 'polygon',
-  points = 'points'
+  points = 'points',
+
+  // Text
+  style = 'style',
+  text = 'text',
+  font = 'font-family',
+  fontSize = 'font-size',
+  fontStyle = 'font-style',
+  fontWeight = 'font-weight',
 }

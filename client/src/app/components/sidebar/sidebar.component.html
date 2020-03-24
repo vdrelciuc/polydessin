@@ -132,7 +132,7 @@
     <div class="tool-group">
       <div class="left-column">
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('text')"
+          <button mat-button (click)="selectTool('text')"
                   [ngClass]="{'clicked': currentTool === 'text',
             'not-clicked': currentTool !== 'text'}">
             <img src="../../../assets/icons/text.svg">
