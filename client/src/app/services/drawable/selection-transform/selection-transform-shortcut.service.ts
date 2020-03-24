@@ -70,6 +70,7 @@ export class SelectionTransformShortcutService {
       this.onKeyUp(event.key);
     }));
   }
+
   getRotate(event: WheelEvent): number {
     const rotate = (event.altKey) ? this.slowRotate : this.fastRotate;
     return rotate * (event.deltaY > 0 ? 1 : -1);
@@ -89,28 +90,26 @@ export class SelectionTransformShortcutService {
           this.selectionGroup.remove();
           this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
           break;
-          case this.x:
-            if (event.ctrlKey) {
-              ClipboardService.cut();
-            }
-            break;
-          case this.c:
-            if (event.ctrlKey) {
-              ClipboardService.copy();
-            }
-            break;
-          case this.v:
-            if (event.ctrlKey) {
-              ClipboardService.paste();
-            }
-            break;
-          case this.d:
-            if (event.ctrlKey) {
-              ClipboardService.duplicate();
-              event.preventDefault();
-            }
-            break;
-        default:
+        case this.x:
+          if (event.ctrlKey) {
+            ClipboardService.cut();
+          }
+          break;
+        case this.c:
+          if (event.ctrlKey) {
+            ClipboardService.copy();
+          }
+          break;
+        case this.v:
+          if (event.ctrlKey) {
+            ClipboardService.paste();
+          }
+          break;
+        case this.d:
+          if (event.ctrlKey) {
+            ClipboardService.duplicate();
+            event.preventDefault();
+          }
           break;
       }
     }

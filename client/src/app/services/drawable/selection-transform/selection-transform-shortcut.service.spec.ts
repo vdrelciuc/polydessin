@@ -6,6 +6,7 @@ import { Stack } from 'src/app/classes/stack';
 import { Transform } from 'src/app/classes/transformations';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
+import { ClipboardService } from '../../clipboard/clipboard.service';
 
 describe('SelectionTransformShortcutService', () => {
   let service: SelectionTransformShortcutService;
@@ -16,6 +17,7 @@ describe('SelectionTransformShortcutService', () => {
   let selectionGroup: SVGGElement;
 
   let mockedEvent: KeyboardEvent;
+  let mockedWheelEvent: WheelEvent;
 
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
@@ -24,12 +26,23 @@ describe('SelectionTransformShortcutService', () => {
   };
 
   const eventMocker = (event: string, keyUsed: string) => new KeyboardEvent(event, {key: keyUsed});
+  
+  const wheelEventMocker = (event: string, rollValue: number, altPressed: boolean) =>
+    new WheelEvent(event, {deltaY: rollValue, altKey: altPressed});
 
   const mockedListener = (target: any, eventName: string, callback: (event: any) => boolean | void): () => void => {
     if (eventName === 'keydown') {
-      window.addEventListener<'keydown'>(eventName, () => service['onKeyDown'](mockedEvent.key));
+      window.addEventListener<'keydown'>(eventName, () => service['onKeyDown'](mockedEvent));
     } else if (eventName === 'keyup') {
       window.addEventListener<'keyup'>(eventName, () => service['onKeyUp'](mockedEvent.key));
+    } else if (eventName === 'wheel') {
+      window.addEventListener<'wheel'>(eventName, () => {
+        if (mockedWheelEvent.shiftKey) {
+          Transform.rotateEach(service.getRotate(mockedWheelEvent));
+        } else {
+          Transform.rotate(service.getRotate(mockedWheelEvent));
+        }
+      });
     }
     return () => undefined;
   };
@@ -89,6 +102,12 @@ describe('SelectionTransformShortcutService', () => {
     expect(service['drawStack']).toBeDefined();
     expect(service['image']).toBeDefined();
     expect(service['selectionGroup']).toBeDefined();
+  });
+
+  it('#setupShortcuts should setup pasteShortcut listener only on first call', () => {
+    const oldPasteShortcutListener = service['pasteShortcutListener'];
+    service.setupShortcuts(manipulator, drawStack, image, selectionGroup);
+    expect(service['pasteShortcutListener']).toEqual(oldPasteShortcutListener);
   });
 
   it('#onKeyDown should translate left when left key is pressed only once', () => {
@@ -226,5 +245,76 @@ describe('SelectionTransformShortcutService', () => {
     mockedEvent = eventMocker('keyup', CONSTANTS.LEFT);
     window.dispatchEvent(mockedEvent);
     expect(service['isMoving']).toBe(false);
+  });
+
+  it('#getRotate should return fast rotation speed when alt key is not pressed', () => {
+    mockedWheelEvent = wheelEventMocker('wheel', 1, false);
+    const rotationValue = service.getRotate(mockedWheelEvent);
+    expect(rotationValue).toBe(service['fastRotate']);
+  });
+
+  it('#getRotate should return slow rotation speed when alt key is pressed', () => {
+    mockedWheelEvent = wheelEventMocker('wheel', 1, true);
+    const rotationValue = service.getRotate(mockedWheelEvent);
+    expect(rotationValue).toBe(service['slowRotate']);
+  });
+
+  it('#onKeyDown should delegate to Transform class if delete key is pressed', () => {
+    mockedEvent = eventMocker('keydown', 'Delete');
+
+    const keyDownSpy = spyOn<any>(service, 'onKeyDown').and.callThrough();
+    const transformSpy = spyOn<any>(Transform, 'delete').and.callThrough();
+    window.dispatchEvent(mockedEvent);
+
+    expect(keyDownSpy).toHaveBeenCalled();
+    expect(transformSpy).toHaveBeenCalled();
+  });
+
+  it('#onKeyDown should delegate to Clipboard service if ctrl+x key is pressed', () => {
+    mockedEvent = eventMocker('keydown', 'x');
+    Object.defineProperty(mockedEvent, 'ctrlKey', { value: true });
+
+    const keyDownSpy = spyOn<any>(service, 'onKeyDown').and.callThrough();
+    const transformSpy = spyOn<any>(ClipboardService, 'cut').and.callFake(() => null);
+    window.dispatchEvent(mockedEvent);
+
+    expect(keyDownSpy).toHaveBeenCalled();
+    expect(transformSpy).toHaveBeenCalled();
+  });
+
+  it('#onKeyDown should delegate to Clipboard service if ctrl+c key is pressed', () => {
+    mockedEvent = eventMocker('keydown', 'c');
+    Object.defineProperty(mockedEvent, 'ctrlKey', { value: true });
+
+    const keyDownSpy = spyOn<any>(service, 'onKeyDown').and.callThrough();
+    const transformSpy = spyOn<any>(ClipboardService, 'copy').and.callFake(() => null);
+    window.dispatchEvent(mockedEvent);
+
+    expect(keyDownSpy).toHaveBeenCalled();
+    expect(transformSpy).toHaveBeenCalled();
+  });
+
+  it('#onKeyDown should delegate to Clipboard service if ctrl+v key is pressed', () => {
+    mockedEvent = eventMocker('keydown', 'v');
+    Object.defineProperty(mockedEvent, 'ctrlKey', { value: true });
+
+    const keyDownSpy = spyOn<any>(service, 'onKeyDown').and.callThrough();
+    const transformSpy = spyOn<any>(ClipboardService, 'paste').and.callFake(() => null);
+    window.dispatchEvent(mockedEvent);
+
+    expect(keyDownSpy).toHaveBeenCalled();
+    expect(transformSpy).toHaveBeenCalled();
+  });
+
+  it('#onKeyDown should delegate to Clipboard service if ctrl+d key is pressed', () => {
+    mockedEvent = eventMocker('keydown', 'd');
+    Object.defineProperty(mockedEvent, 'ctrlKey', { value: true });
+
+    const keyDownSpy = spyOn<any>(service, 'onKeyDown').and.callThrough();
+    const transformSpy = spyOn<any>(ClipboardService, 'duplicate').and.callFake(() => null);
+    window.dispatchEvent(mockedEvent);
+
+    expect(keyDownSpy).toHaveBeenCalled();
+    expect(transformSpy).toHaveBeenCalled();
   });
 });
