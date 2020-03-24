@@ -42,12 +42,12 @@ export class Transform {
 
   static translate(translationX: number, translationY: number): void {
     for (const element of Transform.elementsToTransform) {
-      this.translateSingleElement(translationX, translationY, element);
+      Transform.translateSingleElement(translationX, translationY, element);
     }
     Transform.needsUpdate.next(true);
   }
 
-  private static translateSingleElement(translationX: number, translationY: number, element: SVGGElement): void {
+  static translateSingleElement(translationX: number, translationY: number, element: SVGGElement): void {
       const initialElementTransform = element.getAttribute(SVGProperties.transform);
       if (initialElementTransform === null) {
         const newTransform = `${TransformType.translation}(${translationX}, ${translationY})`;
@@ -84,7 +84,7 @@ export class Transform {
         const indexOfOldTranslate = initialElementTransform.indexOf('rotate(');
         /*tslint:disable-next-line: no-magic-numbers*/
         if (indexOfOldTranslate === -1) {
-          const newTransform = ` ${initialElementTransform} ` +
+          const newTransform = `${initialElementTransform} ` +
           `${TransformType.rotation}(${rotation}, ${bBox.x + bBox.width / 2}, ${bBox.y + bBox.height / 2})`;
           Transform.manipulator.setAttribute(element, SVGProperties.transform, newTransform);
         } else {
@@ -111,7 +111,7 @@ export class Transform {
       const angle = Math.atan2(deltaY, deltaX) + rotation / 180 * Math.PI;
       const translationX = radius * Math.cos(angle) - deltaX;
       const translationY = radius * Math.sin(angle) - deltaY;
-      this.translateSingleElement(translationX, translationY, element);
+      Transform.translateSingleElement(translationX, translationY, element);
     }
     Transform.rotateEach(rotation);
   }
