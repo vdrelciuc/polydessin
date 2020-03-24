@@ -4,6 +4,7 @@ import { WorkingAreaComponent } from 'src/app/components/working-area/working-ar
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from '../hotkeys/hotkeys.service';
 import { ToolSelectorService } from '../tools-selector/tool-selector.service';
+import { DrawerService } from '../side-nav-drawer/drawer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class ShortcutManagerService {
 
   constructor(
     public toolSelectorService: ToolSelectorService,
-    private shortcut: HotkeysService
+    private shortcut: HotkeysService,
+    private drawerService: DrawerService
     ) {
       this.bypassBrowserShortcuts();
       this.savedTool = Tools.None;
@@ -28,6 +30,7 @@ export class ShortcutManagerService {
 
   loadSavedTool(): void {
     this.toolSelectorService.setCurrentTool(this.savedTool);
+    this.drawerService.navIsOpened = true;
   }
 
   setWorkingAreaComponent(component: WorkingAreaComponent): void {
