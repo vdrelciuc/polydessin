@@ -2,15 +2,15 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { TextService } from './text.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { CursorProperties } from 'src/app/classes/cursor-properties';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { TextAttributes } from 'src/app/interfaces/text-attributes';
 import { CharacterFont } from 'src/app/enums/character-font';
 import { Alignment } from 'src/app/enums/text-alignement';
+import { ColorSelectorService } from '../../color-selector/color-selector.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
 describe('TextService', () => {
 

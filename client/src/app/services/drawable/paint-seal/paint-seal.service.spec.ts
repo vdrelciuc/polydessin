@@ -3,14 +3,14 @@ import * as CONSTANTS from 'src/app/classes/constants';
 
 import { PaintSealService } from './paint-seal.service';
 import { BFSAlgorithm } from 'src/app/classes/bfs-algorithm';
-import { PipetteService } from 'src/app/services/pipette.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { ColorSelectorService } from '../../color-selector/color-selector.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { PipetteService } from '../../pipette/pipette.service';
 
 describe('PaintSealService', () => {
 
