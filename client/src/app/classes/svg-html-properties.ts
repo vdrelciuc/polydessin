@@ -64,4 +64,5 @@ export enum SVGProperties {
   fontSize = 'font-size',
   fontStyle = 'font-style',
   fontWeight = 'font-weight',
+  teextPosition = 'text-anchor',
 }

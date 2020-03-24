@@ -1,7 +1,7 @@
 import { BFSAlgorithm } from './bfs-algorithm';
 import { CoordinatesXY } from './coordinates-x-y';
 
-fdescribe('BFSAlgorithm', () => {
+describe('BFSAlgorithm', () => {
     let algorithm: BFSAlgorithm;
 
     beforeEach(() => {

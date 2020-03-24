@@ -9,17 +9,14 @@ import { CharacterFont } from 'src/app/enums/character-font';
 import { CursorProperties } from 'src/app/classes/cursor-properties';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { TextAttributes } from 'src/app/interfaces/text-attributes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TextService extends DrawableService{
 
-  size: BehaviorSubject<number>;
-  alignment: BehaviorSubject<Alignment>;
-  font: BehaviorSubject<string>;
-  isItalic: BehaviorSubject<boolean>;
-  isBold: BehaviorSubject<boolean>;
+  properties: BehaviorSubject<TextAttributes>;
   private textBoxes: Map<number, SVGTextElement>;
   private currentTextbox: SVGTextElement;
   private currentBoxNumber: number;
@@ -28,11 +25,13 @@ export class TextService extends DrawableService{
 
   constructor() {
     super();
-    this.size = new BehaviorSubject<number>(CONSTANTS.DEFAULT_TEXT_SIZE);
-    this.alignment = new BehaviorSubject<Alignment>(Alignment.Left);
-    this.font = new BehaviorSubject<string>(CharacterFont.Ubuntu);
-    this.isItalic = new BehaviorSubject<boolean>(false);
-    this.isBold = new BehaviorSubject<boolean>(false);
+    this.properties = new BehaviorSubject<TextAttributes>({
+      alignment: Alignment.Left,
+      font: CharacterFont.Ubuntu,
+      isItalic: false,
+      isBold: false,
+      size: CONSTANTS.DEFAULT_TEXT_SIZE
+    });
     this.textBoxes = new Map<number, SVGTextElement>();
     this.toByPass = CONSTANTS.KEYS_TO_BYPASS;
     this.currentBoxNumber = 0;
@@ -45,11 +44,7 @@ export class TextService extends DrawableService{
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
       this.colorSelectorService.primaryColor.subscribe( () => this.updateStyle() );
-      this.size.subscribe( () => this.updateStyle() );
-      this.alignment.subscribe( () => this.updateStyle() );
-      this.font.subscribe( () => this.updateStyle() );
-      this.isItalic.subscribe( () => this.updateStyle() );
-      this.isBold.subscribe( () => this.updateStyle() );
+      this.properties.subscribe( () => this.updateStyle() );
   }
 
   onSelect(): void {
@@ -69,7 +64,6 @@ export class TextService extends DrawableService{
       this.pushElement();
     }
     this.createElement();
-  
   }
 
   onKeyPressed(event: KeyboardEvent): void {
@@ -78,7 +72,6 @@ export class TextService extends DrawableService{
     }
     if(this.currentTextbox !== undefined) {
       const text = this.currentTextbox.innerHTML;
-      // this.currentTextbox.innerHTML = text.replace('|', event.key) + '|'; 
       const index = text.indexOf('|');
       this.currentTextbox.innerHTML = text.slice(0, index) + event.key + text.slice(index, text.length);
     }
@@ -107,7 +100,7 @@ export class TextService extends DrawableService{
     } else {
       this.currentTextbox.remove();
       this.textBoxes.delete(--this.currentBoxNumber);
-      this.clickPosition.setY(this.clickPosition.getY() - this.size.value  * CONSTANTS.TEXT_SPACING);
+      this.clickPosition.setY(this.clickPosition.getY() - this.properties.value.size  * CONSTANTS.TEXT_SPACING);
       if(this.currentBoxNumber === 0) {
         this.createCurrentTextBox();
       } else {
@@ -145,7 +138,7 @@ export class TextService extends DrawableService{
     this.updateStyle();
     this.manipulator.appendChild(this.subElement, this.currentTextbox);
     this.textBoxes.set(this.currentBoxNumber++, this.currentTextbox);
-    this.clickPosition.setY(this.clickPosition.getY() + this.size.value  * CONSTANTS.TEXT_SPACING);
+    this.clickPosition.setY(this.clickPosition.getY() + this.properties.value.size  * CONSTANTS.TEXT_SPACING);
   }
 
   private createElement(): void {
@@ -158,17 +151,18 @@ export class TextService extends DrawableService{
 
   private updateStyle(): void {
     if(this.currentTextbox !== undefined) {
-      this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontSize, this.size.value.toString());
-      this.manipulator.setAttribute(this.currentTextbox, SVGProperties.font, this.font.value.toString());
+      this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontSize, this.properties.value.size.toString());
+      this.manipulator.setAttribute(this.currentTextbox, SVGProperties.font, this.properties.value.font.toString());
       this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fill, 
         this.colorSelectorService.primaryColor.value.getHex()
       );
-      if(this.isItalic.value) {
+      if(this.properties.value.isItalic) {
         this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontStyle, 'italic');
       }
-      if(this.isBold.value) {
+      if(this.properties.value.isBold) {
         this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontWeight, 'bold');
       }
+      this.manipulator.setAttribute(this.currentTextbox, SVGProperties.teextPosition, this.properties.value.alignment);
     }
   }
 }
