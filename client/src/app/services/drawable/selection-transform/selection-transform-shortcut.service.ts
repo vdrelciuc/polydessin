@@ -62,7 +62,7 @@ export class SelectionTransformShortcutService {
   }
   getRotate(event: WheelEvent): number {
     const rotate = (event.altKey) ? this.slowRotate : this.fastRotate;
-    return rotate * event.deltaY;
+    return rotate * (event.deltaY > 0 ? 1 : -1);
   }
 
   deleteShortcuts(): void {
