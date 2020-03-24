@@ -132,6 +132,7 @@ export class ToolSelectorService {
   getGrid(): GridService { return this.grid; }
   getPaintSeal(): PaintSealService { return this.paintSeal; }
   getText(): TextService { return this.text; }
+  getFeather(): FeatherService { return this.feather; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);

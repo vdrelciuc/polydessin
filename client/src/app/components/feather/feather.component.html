@@ -1,1 +1,41 @@
-<p>feather works!</p>
+<div id="container">
+    <form id="feather-form">
+      <div class="head-group">
+        <label class="title" id="thickness">Épaisseur</label>
+        <mat-slider #thicknessSlider
+          id="thickness-slider"
+          name="thickness-slider"
+          disabled="false"
+          [min]="1"
+          [max]="2"
+          step="1"
+          thumbLabel="true"
+          tickInterval="false"
+          [value]="service.thickness.value"
+          (change)="changeThickness(thicknessSlider.value)"
+          vertical="false"
+          >
+        </mat-slider>
+      </div>
+    </form>
+    <form id="feather-form">
+        <div class="head-group">
+          <label class="title" id="height">Longeur</label>
+          <mat-slider
+            id="height-slider"
+            name="heigth-slider"
+            disabled="false"
+            [min]="1"
+            [max]="100"
+            step="1"
+            thumbLabel="true"
+            tickInterval="false"
+            [value]="service.height.value"
+            (change)="changeHeight(thicknessSlider.value)"
+            vertical="false"
+            >
+          </mat-slider>
+        </div>
+      </form>
+  </div>
+  
