@@ -122,7 +122,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
     this.colorSelectorService.colorToChange = ColorType.Background;
     this.colorSelectorService.updateColor(this.previewColor);
     this.createNewService.canvasSize.next(new CoordinatesXY(this.workspaceSizeX, this.workspaceSizeY));
-    this.dialogRef.close();
     history.state.comingFromEntryPoint = false;
+    this.dialogRef.close();
   }
 }

@@ -43,11 +43,17 @@ constructor(
     });
   }
 
+  disableShortcuts(): void {
+    for (let i: number = this.subscriptions.length - 1; i >= 0; --i) {
+      this.subscriptions[i].unsubscribe();
+      this.subscriptions.pop();
+    }
+  }
+
   private setupShortcuts(): void {
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
       (event) => {
         this.createNewBtn.nativeElement.click();
-        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
       }
     )
     );
@@ -55,7 +61,6 @@ constructor(
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.g', description: 'Opening gallery' }).subscribe(
       (event) => {
         this.openGalleryBtn.nativeElement.click();
-        this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
       }
     )
     );
