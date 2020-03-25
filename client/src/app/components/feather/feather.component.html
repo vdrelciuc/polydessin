@@ -11,8 +11,7 @@
           step="1"
           thumbLabel="true"
           tickInterval="false"
-          [value]="service.thickness.value"
-          (change)="changeThickness(thicknessSlider.value)"
+          [(ngModel)]="service.thickness"
           vertical="false"
           >
         </mat-slider>
@@ -30,8 +29,7 @@
           step="1"
           thumbLabel="true"
           tickInterval="false"
-          [value]="service.height.value"
-          (change)="changeHeight(heightSlider.value)"
+          [(ngModel)]="service.height"
           vertical="false"
           >
         </mat-slider>
@@ -49,12 +47,10 @@
           step="1"
           thumbLabel="true"
           tickInterval="false"
-          [value]="service.angle.value"
-          (change)="changeAngle(orientationSlider.value)"
+          [(ngModel)]="service.angle"
           vertical="false"
           >
         </mat-slider>
       </div>
     </form>
   </div>
-  

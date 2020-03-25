@@ -15,16 +15,4 @@ export class FeatherComponent {
   ) {
     this.service = this.toolSelector.getFeather();
   }
-
-  changeThickness(newThickness: number): void {
-    this.service.thickness.next(newThickness);
-  }
-
-  changeHeight(newHeight: number): void {
-    this.service.height.next(newHeight);
-  }
-
-  changeAngle(newAngle: number): void {
-    this.service.angle.next(newAngle);
-  }
 }
