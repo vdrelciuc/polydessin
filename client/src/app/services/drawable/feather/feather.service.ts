@@ -14,12 +14,10 @@ export class FeatherService extends DrawableService {
   readonly thickness: number = 1;
   height: number;
   angle: number;
-  private path: string;
-  private position: number;
 
+  private previousMouse: CoordinatesXY;
   private isDrawing: boolean;
   private preview: SVGLineElement;
-  private polygon: SVGPolygonElement;
 
   constructor() {
     super();
@@ -38,15 +36,6 @@ export class FeatherService extends DrawableService {
   onSelect(): void {
     this.subElement = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
-
-    this.polygon = this.manipulator.createElement(SVGProperties.polygon, SVGProperties.nameSpace);
-    this.manipulator.appendChild(this.subElement, this.polygon);
-    this.manipulator.setAttribute(this.polygon, SVGProperties.fill, this.colorSelectorService.primaryColor.value.getHex());
-    this.manipulator.setAttribute(this.polygon, SVGProperties.fillOpacity, this.colorSelectorService.primaryTransparency.value.toString());
-    this.manipulator.setAttribute(this.polygon, 'fill-rule', 'nonzero');
-
-    this.path = '';
-    this.position = 0;
   }
 
   endTool(): void {
@@ -86,21 +75,28 @@ export class FeatherService extends DrawableService {
     if (event.button === CONSTANTS.LEFT_CLICK) {
       this.isDrawing = true;
       this.onSelect();
-      const firstPoint =
-        new CoordinatesXY(CoordinatesXY.effectiveX(this.image, event.clientX) + 1, CoordinatesXY.effectiveY(this.image, event.clientY) + 1);
-      this.addPath(firstPoint);
-      this.addPath(CoordinatesXY.getEffectiveCoords(this.image, event));
+      this.previousMouse = CoordinatesXY.getEffectiveCoords(this.image, event);
+
     }
   }
   addPath(mouse: CoordinatesXY): void {
-    const firstPoint = CoordinatesXY.computeCoordinates(mouse, this.angle, this.height / 2);
-    const firstPointString = `${firstPoint.getX()},${firstPoint.getY()} `;
-    const secondPoint = CoordinatesXY.computeCoordinates(mouse, this.angle, -this.height / 2);
-    const secondPointString = `${secondPoint.getX()},${secondPoint.getY()} `;
+    if (this.previousMouse.distanceTo(mouse) > 0) {
+      const polygon = this.manipulator.createElement(SVGProperties.polygon, SVGProperties.nameSpace);
+      this.manipulator.appendChild(this.subElement, polygon);
+      this.manipulator.setAttribute(polygon, SVGProperties.fill, this.colorSelectorService.primaryColor.value.getHex());
+      this.manipulator.setAttribute(polygon, SVGProperties.fillOpacity, this.colorSelectorService.primaryTransparency.value.toString());
+      const firstPoint = CoordinatesXY.computeCoordinates(this.previousMouse, this.angle, this.height / 2);
+      const secondPoint = CoordinatesXY.computeCoordinates(this.previousMouse, this.angle, -this.height / 2);
+      const thirdPoint = CoordinatesXY.computeCoordinates(mouse, this.angle, -this.height / 2);
+      const forthPoint = CoordinatesXY.computeCoordinates(mouse, this.angle, this.height / 2);
 
-    this.path = this.path.slice(0, this.position) + firstPointString + secondPointString + this.path.slice(this.position);
-    this.position += firstPointString.length;
-    this.manipulator.setAttribute(this.polygon, SVGProperties.points, this.path);
+      const points = `${firstPoint.getX()},${firstPoint.getY()} ` +
+                     `${secondPoint.getX()},${secondPoint.getY()} ` +
+                     `${thirdPoint.getX()},${thirdPoint.getY()} ` +
+                     `${forthPoint.getX()},${forthPoint.getY()}`;
+      this.manipulator.setAttribute(polygon, SVGProperties.points, points);
+      this.previousMouse = mouse;
+    }
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -122,6 +118,9 @@ export class FeatherService extends DrawableService {
     let delta = (event.altKey ? CONSTANTS.MOUSE_ROLL_CHANGE_ALT : CONSTANTS.MOUSE_ROLL_CHANGE);
     delta *= (event.deltaY < 0 ? 1 : -1);
     this.angle += delta;
+    if (this.angle >= 360) { this.angle -= 360; }
+    if (this.angle < 0) { this.angle += 360; }
+    this.updatePreview(CoordinatesXY.getEffectiveCoords(this.image, event));
   }
 
   private createPreview(): void {
