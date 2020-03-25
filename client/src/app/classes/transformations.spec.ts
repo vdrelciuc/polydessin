@@ -4,7 +4,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { Stack } from './stack';
 import { Transform } from './transformations';
 
-fdescribe('Transform', () => {
+describe('Transform', () => {
 
     let manipulator: Renderer2;
     let transform: string | null;

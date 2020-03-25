@@ -40,15 +40,15 @@ export class ClipboardService {
     const imageWidth = ClipboardService.image.nativeElement.getBoundingClientRect().right;
     const imageHeight = ClipboardService.image.nativeElement.getBoundingClientRect().bottom;
     if (ClipboardService.copyTop + ClipboardService.INCREMENT_BETWEEN < imageHeight &&
-    ClipboardService.copyLeft + ClipboardService.INCREMENT_BETWEEN < imageWidth) {
+      ClipboardService.copyLeft + ClipboardService.INCREMENT_BETWEEN < imageWidth) {
       if (ClipboardService.copyTop + ClipboardService.currentShift >= imageHeight ||
-      ClipboardService.copyLeft + ClipboardService.currentShift >= imageWidth) {
+        ClipboardService.copyLeft + ClipboardService.currentShift >= imageWidth) {
         ClipboardService.currentShift = ClipboardService.INCREMENT_BETWEEN;
       }
       Transform.setElements(pasteElements, ClipboardService.manipulator);
       Transform.translate(ClipboardService.currentShift, ClipboardService.currentShift);
       ClipboardService.currentShift += ClipboardService.INCREMENT_BETWEEN;
-      }
+    }
     ClipboardService.drawStack.addSVG(ClipboardService.image.nativeElement.cloneNode(true) as SVGElement);
     ClipboardService.pastedElements.next(pasteElements.getAll());
   }
