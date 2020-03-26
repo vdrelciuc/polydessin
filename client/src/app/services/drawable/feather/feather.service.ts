@@ -40,7 +40,7 @@ export class FeatherService extends DrawableService {
 
   endTool(): void {
     if (this.isDrawing) {
-      this.subElement.remove();
+      //this.subElement.remove();
       delete(this.subElement);
       this.isDrawing = false;
     }
@@ -48,6 +48,7 @@ export class FeatherService extends DrawableService {
       this.preview.remove();
       delete(this.preview);
     }
+    this.subElement.remove();
   }
 
   onMouseOutCanvas(event: MouseEvent): void {
@@ -68,15 +69,13 @@ export class FeatherService extends DrawableService {
   }
 
   onMousePress(event: MouseEvent): void {
-    if (this.preview !== undefined) {
+    if (this.preview !== undefined && event.button === CONSTANTS.LEFT_CLICK) {
+      this.manipulator.appendChild(this.subElement, this.preview.cloneNode());
       this.preview.remove();
       delete(this.preview);
-    }
-    if (event.button === CONSTANTS.LEFT_CLICK) {
-      this.isDrawing = true;
-      this.onSelect();
-      this.previousMouse = CoordinatesXY.getEffectiveCoords(this.image, event);
 
+      this.isDrawing = true;
+      this.previousMouse = CoordinatesXY.getEffectiveCoords(this.image, event);
     }
   }
   addPath(mouse: CoordinatesXY): void {
@@ -89,6 +88,11 @@ export class FeatherService extends DrawableService {
       const secondPoint = CoordinatesXY.computeCoordinates(this.previousMouse, this.angle, -this.height / 2);
       const thirdPoint = CoordinatesXY.computeCoordinates(mouse, this.angle, -this.height / 2);
       const forthPoint = CoordinatesXY.computeCoordinates(mouse, this.angle, this.height / 2);
+
+      // let backShiftX = 0;
+      // let backShiftY = 0;
+      // backShiftX = firstPoint.getX() > forthPoint.getX() ? 1 : -1;
+      // backShiftY = firstPoint.getY() > forthPoint.getY() ? 1 : -1;
 
       const points = `${firstPoint.getX()},${firstPoint.getY()} ` +
                      `${secondPoint.getX()},${secondPoint.getY()} ` +
@@ -111,6 +115,7 @@ export class FeatherService extends DrawableService {
     this.isDrawing = false;
     this.onMouseMove(event);
     this.pushElement();
+    this.onSelect();
     this.updatePreview(CoordinatesXY.getEffectiveCoords(this.image, event));
   }
 
