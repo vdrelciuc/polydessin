@@ -14,13 +14,13 @@
         <div>
           <div>
             <a #createNewBtn class="btn btn-warning btn-center " routerLink = '/dessin'
-               role="button" [state]="{path : '', comingFromEntryPoint : true, goingToGallery : false}">
+               role="button" (click)="disableShortcuts()" [state]="{path : '', comingFromEntryPoint : true, goingToGallery : false}">
               Creer un nouveau dessin
             </a>
           </div>
           <div>
             <a #openGalleryBtn class="btn btn-warning btn-center " routerLink = '/dessin'
-               role="button" [state]="{path : '', comingFromEntryPoint : true, goingToGallery : true}">
+               role="button" (click)="disableShortcuts()" [state]="{path : '', comingFromEntryPoint : true, goingToGallery : true}">
               Ouvrir la Galerie de dessins
             </a>
           </div>

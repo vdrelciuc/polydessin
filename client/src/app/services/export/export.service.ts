@@ -1,10 +1,11 @@
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { EXPORT_MAX_HEIGHT, EXPORT_MAX_WIDTH } from 'src/app/classes/constants';
 import { REGEX_TITLE } from 'src/app/classes/regular-expressions';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageExportType } from 'src/app/enums/export-type';
 import { ImageFormat } from 'src/app/enums/image-format';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class ExportService {
   isTitleValid: BehaviorSubject<boolean>;
 
   private image: ElementRef<SVGElement>; // My actual svg
+  private manipulator: Renderer2;
   private serialized: XMLSerializer;
   private cloneSVG: ElementRef<SVGElement>; // copy of SVG element to set filters on it
   private filtersMap: Map<ImageFilter, string>;
@@ -33,7 +35,8 @@ export class ExportService {
     this.initializeMap();
   }
 
-  initialize(image: ElementRef<SVGElement>): void {
+  initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
+    this.manipulator = manipulator;
     this.image = image; // my actual SVG Element
   }
 
@@ -150,6 +153,11 @@ export class ExportService {
   private applyFilterFomSvg(): void {
     this.cloneSVG = new ElementRef<SVGElement>(this.image.nativeElement);
     (this.cloneSVG.nativeElement as Node ) = this.image.nativeElement.cloneNode(true);
+    const background: SVGRectElement = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+    this.manipulator.setAttribute(background, SVGProperties.width, this.image.nativeElement.getAttribute(SVGProperties.width) as string);
+    this.manipulator.setAttribute(background, SVGProperties.height, this.image.nativeElement.getAttribute(SVGProperties.height) as string);
+    this.manipulator.setAttribute(background, SVGProperties.fill, this.image.nativeElement.style.backgroundColor as string);
+    this.cloneSVG.nativeElement.insertBefore(background, (this.cloneSVG.nativeElement.firstChild as ChildNode));
     const tempFilter = this.filtersMap.get(this.currentFilter.getValue());
     if (tempFilter !== undefined) {
       this.cloneSVG.nativeElement.setAttribute('filter', tempFilter);

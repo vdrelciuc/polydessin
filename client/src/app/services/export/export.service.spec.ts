@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageFormat } from 'src/app/enums/image-format';
 import { ExportService } from './export.service';
+import { Renderer2 } from '@angular/core';
 
 describe('ExportService', () => {
   let service: ExportService;
@@ -67,7 +68,7 @@ describe('ExportService', () => {
   it('#initialize should init reference image', () => {
     const mockedElementRef = { nativeElement: mockedElement };
     expect(service['image'].nativeElement.id).toEqual('100');
-    service.initialize(mockedElementRef);
+    service.initialize({} as unknown as Renderer2, mockedElementRef);
     expect(service['image']).toEqual(mockedElementRef);
   });
 
