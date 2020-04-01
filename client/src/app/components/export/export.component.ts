@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageExportType } from 'src/app/enums/export-type';
 import { ImageFormat } from 'src/app/enums/image-format';
@@ -36,6 +36,7 @@ export class ExportComponent implements AfterViewInit {
   constructor(
     private dialogRef: MatDialogRef<ExportComponent>,
     private exportation: ExportService,
+    private snack: MatSnackBar,
     private shortcutManager: ShortcutManagerService
     ) {
       this.shortcutManager.disableShortcuts();
@@ -57,6 +58,9 @@ export class ExportComponent implements AfterViewInit {
       this.exportFormats = Object.keys(ImageFormat);
       this.exportFilters = Object.keys(ImageFilter);
       this.exportTypes = Object.keys(ImageExportType);
+
+      this.isTitleValid = false;
+      this.isEmailValid = false;
 
       this.initializeMaps();
   }
@@ -113,8 +117,22 @@ export class ExportComponent implements AfterViewInit {
   }
 
   exportConfirmation(): void {
-    this.onDialogClose();
-    this.exportation.export(this.title);
+    if (this.selectedExportType === ImageExportType.Téléchargement) {
+      if (!this.isTitleValid) {
+        this.snack.open('Titre invalide', '', { duration: 3000 });
+      } else {
+        this.onDialogClose();
+        this.exportation.export(this.title);
+      }
+    } else if (this.selectedExportType === ImageExportType.Courriel) {
+      if (!this.isTitleValid) {
+        this.snack.open('Titre invalide', '', { duration: 3000 });
+      } else if (!this.isEmailValid) {
+        this.snack.open('Courriel invalide', '', { duration: 3000 });
+      } else {
+        // Email export action
+      }
+    }
   }
 
   onTitleUpdate(event: KeyboardEvent): void {
