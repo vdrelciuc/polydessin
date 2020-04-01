@@ -21,7 +21,9 @@ export class ExportComponent implements AfterViewInit {
   exportTypes: string[];
   selectedExportType: string;
   title: string;
-  isTitleValid: boolean; // variable never used
+  email: string;
+  isTitleValid: boolean;
+  isEmailValid: boolean;
 
   private formatsMap: Map<string, ImageFormat>;
   private filtersMap: Map<string, ImageFilter>;
@@ -48,6 +50,9 @@ export class ExportComponent implements AfterViewInit {
       });
       this.exportation.isTitleValid.subscribe((validity: boolean) => {
         this.isTitleValid = validity;
+      });
+      this.exportation.isEmailValid.subscribe((validity: boolean) => {
+        this.isEmailValid = validity;
       });
       this.exportFormats = Object.keys(ImageFormat);
       this.exportFilters = Object.keys(ImageFilter);
@@ -116,5 +121,13 @@ export class ExportComponent implements AfterViewInit {
     if (event.target !== null) {
       this.exportation.validateTitle((event.target as HTMLInputElement).value);
     }
+    console.log('Title: ' + this.isTitleValid);
+  }
+
+  onEmailUpdate(event: KeyboardEvent): void {
+    if (event.target !== null) {
+      this.exportation.validateEmail((event.target as HTMLInputElement).value);
+    }
+    console.log('Email: ' + this.isEmailValid);
   }
 }

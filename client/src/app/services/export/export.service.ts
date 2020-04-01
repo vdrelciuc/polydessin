@@ -1,11 +1,11 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { EXPORT_MAX_HEIGHT, EXPORT_MAX_WIDTH } from 'src/app/classes/constants';
-import { REGEX_TITLE } from 'src/app/classes/regular-expressions';
+import { REGEX_EMAIL, REGEX_TITLE } from 'src/app/classes/regular-expressions';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageExportType } from 'src/app/enums/export-type';
 import { ImageFormat } from 'src/app/enums/image-format';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,7 @@ export class ExportService {
   currentFilter: BehaviorSubject<ImageFilter>;
   currentExportType: BehaviorSubject<ImageExportType>;
   isTitleValid: BehaviorSubject<boolean>;
+  isEmailValid: BehaviorSubject<boolean>;
 
   private image: ElementRef<SVGElement>; // My actual svg
   private manipulator: Renderer2;
@@ -31,6 +32,7 @@ export class ExportService {
     this.currentFilter = new BehaviorSubject<ImageFilter>(ImageFilter.Aucun);
     this.currentExportType = new BehaviorSubject<ImageExportType>(ImageExportType.Téléchargement);
     this.isTitleValid = new BehaviorSubject<boolean>(false);
+    this.isEmailValid = new BehaviorSubject<boolean>(false);
     this.serialized = new XMLSerializer();
     this.initializeMap();
   }
@@ -42,6 +44,10 @@ export class ExportService {
 
   validateTitle(title: string): void {
     this.isTitleValid.next(REGEX_TITLE.test(title));
+  }
+
+  validateEmail(email: string): void {
+    this.isEmailValid.next(REGEX_EMAIL.test(email));
   }
 
   export(imageTitle: string): void {
