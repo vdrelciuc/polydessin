@@ -140,13 +140,11 @@ export class ExportComponent implements AfterViewInit {
     if (event.target !== null) {
       this.exportation.validateTitle((event.target as HTMLInputElement).value);
     }
-    console.log('Title: ' + this.isTitleValid);
   }
 
   onEmailUpdate(event: KeyboardEvent): void {
     if (event.target !== null) {
       this.exportation.validateEmail((event.target as HTMLInputElement).value);
     }
-    console.log('Email: ' + this.isEmailValid);
   }
 }
