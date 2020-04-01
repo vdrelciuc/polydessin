@@ -113,6 +113,7 @@ export const EXPORT_MAX_HEIGHT = 270;
 
 // Backend server
 export const REST_API_ROOT = 'http://localhost:3000/api/images';
+export const REST_API_EMAIL = 'http://localhost:3000/api/email';
 
 // MouseEvents
 export const LEFT_CLICK = 0;
@@ -120,4 +121,9 @@ export const RIGHT_CLICK = 2;
 
 // HTTP Codes
 export const HTTP_STATUS_OK = 201;
-
+export const HTTP_STATUS_BAD_REQUEST = 400;
+export const HTTP_STATUS_FORBIDDEN = 403;
+export const HTTP_STATUS_NOT_FOUND = 404;
+export const HTTP_STATUS_UNPROCESSABLE = 422;
+export const HTTP_STATUS_TOO_MANY = 429;
+export const HTTP_STATUS_INTERNAL_ERROR = 500;

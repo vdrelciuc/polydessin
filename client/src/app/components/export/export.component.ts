@@ -121,8 +121,8 @@ export class ExportComponent implements AfterViewInit {
       if (!this.isTitleValid) {
         this.snack.open('Titre invalide', '', { duration: 3000 });
       } else {
-        this.onDialogClose();
         this.exportation.export(this.title);
+        this.onDialogClose();
       }
     } else if (this.selectedExportType === ImageExportType.Courriel) {
       if (!this.isTitleValid) {
@@ -130,7 +130,8 @@ export class ExportComponent implements AfterViewInit {
       } else if (!this.isEmailValid) {
         this.snack.open('Courriel invalide', '', { duration: 3000 });
       } else {
-        // Email export action
+        this.exportation.email(this.title, this.email);
+        this.onDialogClose();
       }
     }
   }

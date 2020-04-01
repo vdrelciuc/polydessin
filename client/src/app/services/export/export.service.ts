@@ -1,6 +1,8 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { EXPORT_MAX_HEIGHT, EXPORT_MAX_WIDTH } from 'src/app/classes/constants';
+import { MatSnackBar } from '@angular/material';
+import { BehaviorSubject, Observable } from 'rxjs';
+import * as CONSTANTS from 'src/app/classes/constants';
 import { REGEX_EMAIL, REGEX_TITLE } from 'src/app/classes/regular-expressions';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ImageFilter } from 'src/app/enums/color-filter';
@@ -27,7 +29,7 @@ export class ExportService {
   private cloneSVG: ElementRef<SVGElement>; // copy of SVG element to set filters on it
   private filtersMap: Map<ImageFilter, string>;
 
-  constructor() {
+  constructor(private http: HttpClient, private snack: MatSnackBar) {
     this.currentFormat = new BehaviorSubject<ImageFormat>(ImageFormat.JPEG);
     this.currentFilter = new BehaviorSubject<ImageFilter>(ImageFilter.Aucun);
     this.currentExportType = new BehaviorSubject<ImageExportType>(ImageExportType.Téléchargement);
@@ -63,13 +65,79 @@ export class ExportService {
     }
   }
 
+  email(imageTitle: string, email: string): void {
+    if (this.currentFormat.getValue() === ImageFormat.SVG) {
+      this.applyFilterFomSvg();
+      this.sendEmail(imageTitle, email, this.deserializeImageToSvg(), 'svg').subscribe(() => {
+        this.snack.open('Courriel envoyé avec succès', '', { duration: 3000 });
+      }, (error: HttpErrorResponse) => {
+        this.handleError(error);
+      });
+    } else {
+      const context = this.originalCanvas.getContext('2d');
+      if (context !== null) {
+        this.applyFilterFromCanvas(context);
+
+        let extension = '';
+        if (this.currentFormat.getValue() === ImageFormat.JPEG) {
+          this.imageAfterDeserialization.src = this.originalCanvas.toDataURL('image/jpeg');
+          extension = 'jpeg';
+        } else if (this.currentFormat.getValue() === ImageFormat.PNG) {
+          this.imageAfterDeserialization.src = this.originalCanvas.toDataURL('image/png');
+          extension = 'png';
+        }
+
+        this.sendEmail(imageTitle, email, this.imageAfterDeserialization.src, extension).subscribe(() => {
+          this.snack.open('Courriel envoyé avec succès', '', { duration: 3000 });
+        }, (error: HttpErrorResponse) => {
+          this.handleError(error);
+        });
+      }
+    }
+  }
+
+  sendEmail(imageTitle: string, email: string, imageData: string, ext: string): Observable<string> {
+    return this.http.post(CONSTANTS.REST_API_EMAIL, {
+      to: email,
+      payload: imageData,
+      extension: ext,
+      title: imageTitle
+    }, { responseType: 'text'});
+  }
+
+  handleError(error: HttpErrorResponse): void {
+    switch (error.status) {
+      case CONSTANTS.HTTP_STATUS_OK:
+        this.snack.open('Courriel envoyé avec succès', '', { duration: 3000 });
+        break;
+      case CONSTANTS.HTTP_STATUS_BAD_REQUEST:
+        this.snack.open('Adresse courriel invalide ou manquante', '', { duration: 3000 });
+        break;
+      case CONSTANTS.HTTP_STATUS_FORBIDDEN:
+        this.snack.open('Clé API manquante ou invalide', '', { duration: 3000 });
+        break;
+      case CONSTANTS.HTTP_STATUS_UNPROCESSABLE:
+        this.snack.open('Adresse courriel ou fichier joint manquant', '', { duration: 3000 });
+        break;
+      case CONSTANTS.HTTP_STATUS_TOO_MANY:
+        this.snack.open('Quota d\'envoi de courriels dépassé', '', { duration: 3000 });
+        break;
+      case CONSTANTS.HTTP_STATUS_INTERNAL_ERROR:
+        this.snack.open('Erreur interne au serveur d\'envoi', '', { duration: 3000 });
+        break;
+      default:
+        this.snack.open('Erreur de communication avec le serveur', '', { duration: 3000 });
+        break;
+    }
+  }
+
   drawPreview(firstCall: boolean): void {
     const contextBinded = this.canvas.getContext('2d');
     if (contextBinded !== null) {
       contextBinded.clearRect(0, 0, contextBinded.canvas.width, contextBinded.canvas.height);
       this.applyFilterForPreview(contextBinded);
-      let scaleX = EXPORT_MAX_HEIGHT / this.originalCanvas.width;
-      let scaleY = (EXPORT_MAX_WIDTH / this.originalCanvas.height) / 2;
+      let scaleX = CONSTANTS.EXPORT_MAX_HEIGHT / this.originalCanvas.width;
+      let scaleY = (CONSTANTS.EXPORT_MAX_WIDTH / this.originalCanvas.height) / 2;
       if (scaleX > 1) {
         scaleX = 1;
       }

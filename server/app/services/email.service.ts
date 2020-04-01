@@ -65,6 +65,9 @@ export class EmailService {
         const options = {
             method: 'POST',
             url: CONSTANTS.API_URL,
+            qs: {
+              dry_run: 1 // Used for testing purposes until email API is fixed
+            },
             headers: {
               'X-Team-Key': CONSTANTS.MAIL_API_KEY,
               'Content-Type': 'application/x-www-form-urlencoded'
