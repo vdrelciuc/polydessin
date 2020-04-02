@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { WorkingAreaComponent } from 'src/app/components/working-area/working-area.component';
 import { Tools } from 'src/app/enums/tools';
 import { HotkeysService } from '../hotkeys/hotkeys.service';
+import { DrawerService } from '../side-nav-drawer/drawer.service';
 import { ToolSelectorService } from '../tools-selector/tool-selector.service';
 
 @Injectable({
@@ -15,7 +16,8 @@ export class ShortcutManagerService {
 
   constructor(
     public toolSelectorService: ToolSelectorService,
-    private shortcut: HotkeysService
+    private shortcut: HotkeysService,
+    private drawerService: DrawerService
     ) {
       this.bypassBrowserShortcuts();
       this.savedTool = Tools.None;
@@ -28,6 +30,7 @@ export class ShortcutManagerService {
 
   loadSavedTool(): void {
     this.toolSelectorService.setCurrentTool(this.savedTool);
+    this.drawerService.navIsOpened = true;
   }
 
   setWorkingAreaComponent(component: WorkingAreaComponent): void {
@@ -39,7 +42,6 @@ export class ShortcutManagerService {
       this.subscriptions[i].unsubscribe();
       this.subscriptions.pop();
     }
-    // this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
     this.bypassBrowserShortcuts();
   }
 
@@ -124,7 +126,7 @@ export class ShortcutManagerService {
         }
       )
     );
-    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'A', description: 'Selecting spray with shortcut' }).subscribe(
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'a', description: 'Selecting spray with shortcut' }).subscribe(
         (event) => {
           this.toolSelectorService.setCurrentTool(Tools.Spray);
         }
@@ -134,6 +136,20 @@ export class ShortcutManagerService {
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'i', description: 'Selecting pipette with shortcut' }).subscribe(
       (event) => {
         this.toolSelectorService.setCurrentTool(Tools.Pipette);
+      }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 'b', description: 'Selecting bucket with shortcut' }).subscribe(
+      (event) => {
+        this.toolSelectorService.setCurrentTool(Tools.Bucket);
+      }
+      )
+    );
+
+    this.subscriptions.push(this.shortcut.addShortcut({ keys: 't', description: 'Selecting text with shortcut' }).subscribe(
+      (event) => {
+        this.toolSelectorService.setCurrentTool(Tools.Text);
       }
       )
     );

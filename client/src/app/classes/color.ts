@@ -11,62 +11,64 @@ export class Color {
   private hex: string;
 
   constructor(color?: string | number[]) {
-      if (typeof color === 'string') {
-          this.setHex(color);
-      } else if (color instanceof Array) {
-          this.setRGB(color);
-      } else {
-          this.hex = CONSTANT.DEFAULT_PRIMARY_COLOR;
-      }
+    if (typeof color === 'string') {
+        this.setHex(color);
+    } else if (color instanceof Array) {
+        this.setRGB(color);
+    } else {
+        this.hex = CONSTANT.DEFAULT_PRIMARY_COLOR;
+    }
   }
 
   private static rgbToHex(value: number): string {
-      let hex = Number(value).toString(CONSTANT.HEX_BASE);
-      if (hex.length < 2) {
-          hex = '0' + hex;
-      }
-      hex = hex.toUpperCase();
-      return hex;
+    let hex = Number(value).toString(CONSTANT.HEX_BASE);
+    if (hex.length < 2) {
+        hex = '0' + hex;
     }
-  private static clamp(value: number): number {
-      return Math.min(Math.max(value, CONSTANT.COLOR_MIN_VALUE), CONSTANT.COLOR_MAX_VALUE);
+    hex = hex.toUpperCase();
+    return hex;
   }
+
+  private static clamp(value: number): number {
+    return Math.min(Math.max(value, CONSTANT.COLOR_MIN_VALUE), CONSTANT.COLOR_MAX_VALUE);
+  }
+
   getHex(): string {
-      return this.hex;
+    return this.hex;
   }
 
   getRGB(): number[] {
-      const red: string = this.getRedHex();
-      const green: string = this.getGreenHex();
-      const blue: string = this.getBlueHex();
-      return [parseInt(red, CONSTANT.HEX_BASE), parseInt(green, CONSTANT.HEX_BASE), parseInt(blue, CONSTANT.HEX_BASE)];
+    const red: string = this.getRedHex();
+    const green: string = this.getGreenHex();
+    const blue: string = this.getBlueHex();
+    return [parseInt(red, CONSTANT.HEX_BASE), parseInt(green, CONSTANT.HEX_BASE), parseInt(blue, CONSTANT.HEX_BASE)];
   }
 
   setHex(hex: string): void {
-      let padding = 0;
-      if (hex.indexOf('#') !== -1) {
-          padding =  1;
-      }
-      if (hex.length === (CONSTANT.HEX_LENGTH + padding)) {
-          if (COLOR_REGEX_WITH_HASHTAG.test(hex)) {
-              this.hex = hex.toUpperCase();
-          } else if (COLOR_REGEX_WITHOUT_HASHTAG.test(hex)) {
-              this.hex = '#'.concat(hex).toUpperCase();
-          }
-      }
+    let padding = 0;
+    if (hex.indexOf('#') !== -1) {
+        padding =  1;
+    }
+    if (hex.length === (CONSTANT.HEX_LENGTH + padding)) {
+        if (COLOR_REGEX_WITH_HASHTAG.test(hex)) {
+            this.hex = hex.toUpperCase();
+        } else if (COLOR_REGEX_WITHOUT_HASHTAG.test(hex)) {
+            this.hex = '#'.concat(hex).toUpperCase();
+        }
+    }
   }
 
   setRGB(rgb: number[]): void {
-      if (rgb.length === 3) {
-          rgb[0] = Color.clamp(rgb[0]);
-          rgb[1] = Color.clamp(rgb[1]);
-          rgb[2] = Color.clamp(rgb[2]);
+    if (rgb.length === 3) {
+        rgb[0] = Color.clamp(rgb[0]);
+        rgb[1] = Color.clamp(rgb[1]);
+        rgb[2] = Color.clamp(rgb[2]);
 
-          this.hex = '#';
-          for (let i = 0; i < CONSTANT.BYTES_IN_HEX; i++) {
-              this.hex += Color.rgbToHex(rgb[i]);
-          }
-      }
+        this.hex = '#';
+        for (let i = 0; i < CONSTANT.BYTES_IN_HEX; i++) {
+            this.hex += Color.rgbToHex(rgb[i]);
+        }
+    }
   }
 
   getRedHex(): string {
@@ -148,7 +150,6 @@ export class Color {
   }
 
   // Inspired from https://stackoverflow.com/questions/22692134/detect-similar-colours-from-hex-values
-
   isSimilarTo(otherColor: Color): boolean {
     // RGB of 'this' color
     const redOfThis = this.getRGB()[0];
@@ -169,5 +170,22 @@ export class Color {
     const isSameColorFactor = 0.98;
     const divisionFactor = 3;
     return (redDifference + greenDifference + blueDifference) / divisionFactor > isSameColorFactor;
+  }
+
+  isSimilarWithTolerance(color: Color | null, tolerance: number): boolean {
+    if(color !== null) {
+      if (tolerance === 0) {
+          return color.getHex() === this.getHex();
+      } else {
+          const colorRGB = color.getRGB();
+          const curentRGB = this.getRGB();
+          const difference =
+            Math.abs(colorRGB[0] - curentRGB[0]) + 
+            Math.abs(colorRGB[1] - curentRGB[1]) + 
+            Math.abs(colorRGB[2] - curentRGB[2]) ;
+          return difference <= ((tolerance / 100) * (CONSTANT.COLOR_MAX_VALUE * CONSTANT.BYTES_IN_HEX));
+      }
+    }
+    return false;
   }
 }

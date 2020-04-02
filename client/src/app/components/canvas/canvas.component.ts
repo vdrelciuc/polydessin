@@ -53,7 +53,7 @@ export class CanvasComponent implements OnInit {
   ngOnInit(): void {
     this.filters = this.image.nativeElement.innerHTML;
     this.toolSelector.initialize(this.manipulator, this.image, this.colorSelectorService, this.drawStack, this.invisibleCanvas);
-    this.exportService.initialize(this.image);
+    this.exportService.initialize(this.manipulator, this.image);
     ClipboardService.initialize(this.manipulator, this.image, this.drawStack);
     this.eventListener = new EventListenerService(this.image, this.toolSelector, this.manipulator);
     this.eventListener.initializeEvents();

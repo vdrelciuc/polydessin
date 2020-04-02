@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { WorkingAreaComponent } from 'src/app/components/working-area/working-area.component';
 import { Tools } from 'src/app/enums/tools';
 import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';

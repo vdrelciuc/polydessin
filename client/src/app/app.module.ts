@@ -25,6 +25,8 @@ import { ExportComponent } from './components/export/export.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { GridComponent } from './components/grid/grid.component';
 import { AerosolGuideComponent } from './components/guideTemplaates/aerosol-guide/aerosol-guide.component';
+import { PaintSealComponent } from './components/paint-seal/paint-seal.component';
+import { TextComponent } from './components/text/text.component';
 // tslint:disable-next-line: max-line-length | Reason : import cannot be splitted into several lines
 import { ApplicateurCouleurGuideComponent } from './components/guideTemplaates/applicateur-couleur-guide/applicateur-couleur-guide.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
@@ -94,7 +96,7 @@ import { DrawablePropertiesService } from './services/drawable/properties/drawab
     WarningDialogComponent,
     ExportComponent,
     PipetteComponent,
-
+    TextComponent,
     EllipseComponent,
     EraserComponent,
     SelectionComponent,
@@ -115,7 +117,9 @@ import { DrawablePropertiesService } from './services/drawable/properties/drawab
     UndoRedoComponent,
     SaveServerGuideComponent,
     GalleryGuideComponent,
-    ExportGuideComponent
+    ExportGuideComponent,
+    PaintSealComponent,
+    TextComponent
   ],
   entryComponents: [
     ColorPickerComponent,

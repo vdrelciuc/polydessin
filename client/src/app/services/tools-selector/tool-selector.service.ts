@@ -16,6 +16,8 @@ import { PolygonService } from '../drawable/polygon/polygon.service';
 import { RectangleService } from '../drawable/rectangle/rectangle.service';
 import { SelectionService } from '../drawable/selection/selection.service';
 import { SprayService } from '../drawable/spray/spray.service';
+import { PaintSealService } from '../drawable/paint-seal/paint-seal.service';
+import { TextService } from '../drawable/text/text.service';
 import { PipetteService } from '../pipette/pipette.service';
 import { UndoRedoService } from '../undo-redo/undo-redo.service';
 
@@ -37,10 +39,12 @@ export class ToolSelectorService {
   private colorApplicator: ColorApplicatorService;
   private spray: SprayService;
   private grid: GridService;
-
+  private paintSeal: PaintSealService;
   private ellipse: EllipseService;
   private eraser: EraserService;
   private pipette: PipetteService;
+  private text: TextService;
+
   disableUndo: boolean;
   disableRedo: boolean;
 
@@ -58,6 +62,8 @@ export class ToolSelectorService {
     this.colorApplicator = new ColorApplicatorService();
     this.spray = new SprayService();
     this.grid = new GridService();
+    this.paintSeal = new PaintSealService();
+    this.text = new TextService();
 
     this.tools.set(Tools.Spray, this.spray);
     this.tools.set(Tools.ColorApplicator, this.colorApplicator);
@@ -71,6 +77,8 @@ export class ToolSelectorService {
     this.tools.set(Tools.Ellipse, this.ellipse);
     this.tools.set(Tools.Eraser, this.eraser);
     this.tools.set(Tools.Grid, this.grid);
+    this.tools.set(Tools.Bucket, this.paintSeal);
+    this.tools.set(Tools.Text, this.text);
     this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
     this.setCurrentTool(Tools.Selection);
 
@@ -118,12 +126,17 @@ export class ToolSelectorService {
   getColorApplicator(): ColorApplicatorService { return  this.colorApplicator; }
   getSpray(): SprayService { return  this.spray; }
   getGrid(): GridService { return this.grid; }
+  getPaintSeal(): PaintSealService { return this.paintSeal; }
+  getText(): TextService { return this.text; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);
     if (foundTool !== undefined) {
       if (this.tool !== undefined) {
         this.tool.endTool();
+      }
+      if(tool === Tools.Bucket) {
+        this.paintSeal.assignPipette(this.pipette);
       }
       this.tool = foundTool;
       this.tool.onSelect();

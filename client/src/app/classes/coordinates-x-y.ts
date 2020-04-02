@@ -20,6 +20,12 @@ export class CoordinatesXY {
     return new CoordinatesXY(effectiveX, effectiveY);
   }
 
+  static getEffectiveCoords_2(referenceElement: ElementRef<SVGElement>, pointer: CoordinatesXY): CoordinatesXY {
+    const effectiveX = CoordinatesXY.effectiveX(referenceElement, pointer.getX());
+    const effectiveY = CoordinatesXY.effectiveY(referenceElement, pointer.getY());
+    return new CoordinatesXY(effectiveX, effectiveY);
+  }
+
   static effectiveX(referenceElement: ElementRef<SVGElement>, onScreenX: number): number {
     return onScreenX - referenceElement.nativeElement.getBoundingClientRect().left;
   }
@@ -43,6 +49,10 @@ export class CoordinatesXY {
 
   getX(): number  { return this.x; }
   getY(): number  { return this.y; }
+
+  clone(): CoordinatesXY {
+    return new CoordinatesXY(this.x, this.y);
+  }
 
   setX(x: number): void {
     // if (x >= 0) {
@@ -108,4 +118,7 @@ export class CoordinatesXY {
     );
   }
 
+  distanceTo(point: CoordinatesXY): number {
+    return Math.pow(point.x - this.x, 2) + Math.pow(point.y - this.y, 2);
+  }
 }

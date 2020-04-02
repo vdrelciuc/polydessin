@@ -73,6 +73,32 @@ export const OPACITY_MAXIMUM = 1;
 export const THICKNESS_STEP = 5;
 // export const OPACITY_STEP = 0.1;
 
+// Text 
+export const DEFAULT_TEXT_SIZE = 12;
+export const TEXT_SPACING = 1.5;
+export let KEYS_TO_BYPASS = new Set<string>();
+KEYS_TO_BYPASS.add('Shift');
+KEYS_TO_BYPASS.add('Control');
+KEYS_TO_BYPASS.add('NumLock');
+KEYS_TO_BYPASS.add('Pause');
+KEYS_TO_BYPASS.add('Home');
+KEYS_TO_BYPASS.add('Tab');
+KEYS_TO_BYPASS.add('CapsLock');
+KEYS_TO_BYPASS.add('Alt');
+KEYS_TO_BYPASS.add('ContextMenu');
+KEYS_TO_BYPASS.add('ArrowUp');
+KEYS_TO_BYPASS.add('ArrowDown');
+KEYS_TO_BYPASS.add('Enter');
+KEYS_TO_BYPASS.add('Backspace');
+KEYS_TO_BYPASS.add('Delete');
+KEYS_TO_BYPASS.add('Escape');
+KEYS_TO_BYPASS.add('ArrowLeft');
+KEYS_TO_BYPASS.add('ArrowRight');
+KEYS_TO_BYPASS.add('|');
+for(let i = 1; i < 13; ++i) {
+    KEYS_TO_BYPASS.add('F'+i.toString());
+}
+
 // Gallery
 export const TILE_WIDTH_PX = 250;
 export const SVG_SERIAL_SIGNATURE = 'data:image/svg+xml;';
@@ -87,6 +113,7 @@ export const EXPORT_MAX_HEIGHT = 270;
 
 // Backend server
 export const REST_API_ROOT = 'http://localhost:3000/api/images';
+export const REST_API_EMAIL = 'http://localhost:3000/api/email';
 
 // MouseEvents
 export const LEFT_CLICK = 0;
@@ -94,3 +121,9 @@ export const RIGHT_CLICK = 2;
 
 // HTTP Codes
 export const HTTP_STATUS_OK = 201;
+export const HTTP_STATUS_BAD_REQUEST = 400;
+export const HTTP_STATUS_FORBIDDEN = 403;
+export const HTTP_STATUS_NOT_FOUND = 404;
+export const HTTP_STATUS_UNPROCESSABLE = 422;
+export const HTTP_STATUS_TOO_MANY = 429;
+export const HTTP_STATUS_INTERNAL_ERROR = 500;

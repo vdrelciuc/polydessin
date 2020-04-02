@@ -43,8 +43,21 @@ export class PipetteService extends DrawableService {
 
   initializeProperties(): void { /* No properties to initialize */ }
 
+  onClick(event: MouseEvent): void {
+    const position = CoordinatesXY.getEffectiveCoords(this.image, event);
+    const newColor = this.getColorAtPosition(position);
+    if (newColor != null && (event.button === CONSTANTS.LEFT_CLICK || event.button === CONSTANTS.RIGHT_CLICK)) {
+      if (event.button === CONSTANTS.LEFT_CLICK) {
+        this.colorSelectorService.colorToChange = ColorType.Primary;
+      } else {
+        this.colorSelectorService.colorToChange = ColorType.Secondary;
+      }
+      this.colorSelectorService.updateColor(newColor);
+    }
+  }
+
   // Adapted from https://jsfiddle.net/Wijmo5/h2L3gw88/
-  private getColorAtPosition(coordinates: CoordinatesXY): Color | null {
+  getColorAtPosition(coordinates: CoordinatesXY): Color | null {
     const ctx = this.hiddenCanvas.getContext('2d');
     if (this.hiddenCanvas !== null && ctx !== null) {
       const xml = new XMLSerializer().serializeToString(this.image.nativeElement);
@@ -75,18 +88,5 @@ export class PipetteService extends DrawableService {
 
   private correctDigits(n: string): string {
     return n.length > 1 ? n : '0' + n;
-  }
-
-  onClick(event: MouseEvent): void {
-    const position = CoordinatesXY.getEffectiveCoords(this.image, event);
-    const newColor = this.getColorAtPosition(position);
-    if (newColor != null && (event.button === CONSTANTS.LEFT_CLICK || event.button === CONSTANTS.RIGHT_CLICK)) {
-      if (event.button === CONSTANTS.LEFT_CLICK) {
-        this.colorSelectorService.colorToChange = ColorType.Primary;
-      } else {
-        this.colorSelectorService.colorToChange = ColorType.Secondary;
-      }
-      this.colorSelectorService.updateColor(newColor);
-    }
   }
 }
