@@ -16,7 +16,7 @@ npm-debug.log
 *.js
 
 # Exclusion des variables d'environnement
-.env
+*.env
 
 # Garder les fichiers necessaires pour les tests
 !systemjs.config.js
