@@ -1,9 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
+import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Renderer2 } from '@angular/core';
+import { MatSnackBarModule } from '@angular/material';
+import * as CONSTANTS from 'src/app/classes/constants';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageFormat } from 'src/app/enums/image-format';
 import { ExportService } from './export.service';
-import { Renderer2 } from '@angular/core';
 
 describe('ExportService', () => {
   let service: ExportService;
@@ -14,7 +18,13 @@ describe('ExportService', () => {
   } as unknown as SVGElement;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        MatSnackBarModule,
+
+      ]
+    });
     service = TestBed.get(ExportService);
     service['image'] = {
       nativeElement: {
@@ -117,6 +127,94 @@ describe('ExportService', () => {
       [ 'download', 'title.JPEG' ]
     ]);
     expect(spy2).toHaveBeenCalledTimes(2);
+  });
+
+  it('#email should send svg with filter', () => {
+    service['currentFormat'].next(ImageFormat.SVG);
+    service['currentFilter'].next(ImageFilter.Négatif);
+    const spy = spyOn(service, 'sendEmail');
+    const spy2 = spyOn(service['serialized'], 'serializeToString').and.callFake(() => {
+      return 'string';
+    });
+
+    service.email('title', 'my@email.com');
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
+  });
+
+  it('#email should send png without filter', () => {
+    service['currentFormat'].next(ImageFormat.JPEG);
+    service['currentFilter'].next(undefined as unknown as ImageFilter);
+    spyOn(service['originalCanvas'], 'toDataURL').and.callFake( () => {
+      return 'data';
+    });
+    service['imageAfterDeserialization'] = {
+      src: '1',
+    } as unknown as HTMLImageElement;
+    const spy = spyOn(service, 'sendEmail');
+
+    service.email('title', 'my@email.com');
+    expect(spy).toHaveBeenCalled();
+    expect(service['imageAfterDeserialization'].src).toEqual('data');
+  });
+
+  it('#sendEmail should send an email', () => {
+    const spy = spyOn(service['http'], 'post');
+    const validEmail = 'test@email.com';
+    const validTitle = 'My title';
+    const validData = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQA';
+    const validExtension = 'jpeg';
+    service.sendEmail(validTitle, validEmail, validData, validExtension);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#handleError should tell if email was sent successfully', () => {
+    const spy = spyOn(service['snack'], 'open');
+    const error = new HttpErrorResponse({ status: CONSTANTS.HTTP_STATUS_OK });
+    service.handleError(error);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#handleError should tell if email is missing', () => {
+    const spy = spyOn(service['snack'], 'open');
+    const error = new HttpErrorResponse({ status: CONSTANTS.HTTP_STATUS_BAD_REQUEST });
+    service.handleError(error);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#handleError should tell if API key is missing', () => {
+    const spy = spyOn(service['snack'], 'open');
+    const error = new HttpErrorResponse({ status: CONSTANTS.HTTP_STATUS_FORBIDDEN });
+    service.handleError(error);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#handleError should tell if payload is missing', () => {
+    const spy = spyOn(service['snack'], 'open');
+    const error = new HttpErrorResponse({ status: CONSTANTS.HTTP_STATUS_UNPROCESSABLE });
+    service.handleError(error);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#handleError should tell if too many emails were sent', () => {
+    const spy = spyOn(service['snack'], 'open');
+    const error = new HttpErrorResponse({ status: CONSTANTS.HTTP_STATUS_TOO_MANY });
+    service.handleError(error);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#handleError should tell if there was an internal error', () => {
+    const spy = spyOn(service['snack'], 'open');
+    const error = new HttpErrorResponse({ status: CONSTANTS.HTTP_STATUS_INTERNAL_ERROR });
+    service.handleError(error);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('#handleError should tell if there was a communication error', () => {
+    const spy = spyOn(service['snack'], 'open');
+    const error = new HttpErrorResponse({ status: CONSTANTS.HTTP_STATUS_NOT_FOUND });
+    service.handleError(error);
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#drawPreview should preview element on firstCall', () => {

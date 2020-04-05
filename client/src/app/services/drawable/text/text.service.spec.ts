@@ -1,16 +1,16 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { TextService } from './text.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-import { CursorProperties } from 'src/app/classes/cursor-properties';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { TextAttributes } from 'src/app/interfaces/text-attributes';
+import { CursorProperties } from 'src/app/classes/cursor-properties';
 import { CharacterFont } from 'src/app/enums/character-font';
 import { Alignment } from 'src/app/enums/text-alignement';
+import { TextAttributes } from 'src/app/interfaces/text-attributes';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
+import { TextService } from './text.service';
 
 describe('TextService', () => {
 
@@ -91,7 +91,7 @@ describe('TextService', () => {
 
   it('#endTool should reset cursor only', () => {
     const spy = spyOn(service['manipulator'], 'setAttribute');
-    service['subElement'] = undefined as unknown as SVGGElement; 
+    service['subElement'] = undefined as unknown as SVGGElement;
     service.endTool();
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(service['image'].nativeElement, CursorProperties.cursor, CursorProperties.default);
@@ -104,7 +104,7 @@ describe('TextService', () => {
       clientY: 500
     }));
     expect(spy).toHaveBeenCalledTimes(6);
-    expect(service['clickPosition']).toEqual(new CoordinatesXY(500,518));
+    expect(service['clickPosition']).toEqual(new CoordinatesXY(500, 518));
   });
 
   it('#onClick should setup new svgtext and push old one', () => {
@@ -115,7 +115,7 @@ describe('TextService', () => {
       clientY: 500
     }));
     expect(spy).toHaveBeenCalledTimes(7);
-    expect(service['clickPosition']).toEqual(new CoordinatesXY(500,518));
+    expect(service['clickPosition']).toEqual(new CoordinatesXY(500, 518));
   });
 
   it('#onKeyPressed should do nothing, key is bypassed', () => {
@@ -145,7 +145,7 @@ describe('TextService', () => {
   it('#cancel should cancel svg text', () => {
     service['subElement'] = {remove: () => null} as unknown as SVGGElement;
     const spy = spyOn(service['subElement'], 'remove');
-    let testMap = new Map<number, SVGTextElement>();
+    const testMap = new Map<number, SVGTextElement>();
     testMap.set(0, { innerHTML: 'test0', remove: () => null } as unknown as SVGTextElement);
     testMap.set(1, { innerHTML: 'test1', remove: () => null } as unknown as SVGTextElement);
     service['textBoxes'] = testMap;
@@ -153,24 +153,24 @@ describe('TextService', () => {
     expect(spy).toHaveBeenCalled();
     expect(service['textBoxes'].size).toEqual(0);
   });
-  
+
   it('#delete should remove next character', () => {
     service['currentTextbox'] = { innerHTML: '1|a'} as unknown as SVGTextElement;
     service.delete();
     expect(service['currentTextbox'].innerHTML).toEqual('1|');
-  }); 
+  });
 
   it('#delete should do nothing current position is the last character', () => {
     service['currentTextbox'] = { innerHTML: '1|'} as unknown as SVGTextElement;
     service.delete();
     expect(service['currentTextbox'].innerHTML).toEqual('1|');
-  }); 
+  });
 
   it('#backspace should remove previous character', () => {
     service['currentTextbox'] = { innerHTML: '1ba|'} as unknown as SVGTextElement;
     service.backspace();
     expect(service['currentTextbox'].innerHTML).toEqual('1b|');
-  }); 
+  });
 
   it('#backspace should remove enter and go to previous text box', () => {
     service['clickPosition'] = new CoordinatesXY(100, 100);
@@ -182,7 +182,7 @@ describe('TextService', () => {
     service['currentTextbox'] = text1;
     service.backspace();
     expect(service['currentTextbox'].innerHTML).toEqual('box0|');
-  }); 
+  });
 
   it('#backspace should do nothing, first box and is empty', () => {
     service['clickPosition'] = new CoordinatesXY(100, 100);
@@ -192,7 +192,7 @@ describe('TextService', () => {
     service['currentTextbox'] = text1;
     service.backspace();
     expect(service['currentTextbox'].innerHTML).toEqual('|');
-  }); 
+  });
 
   it('#moveLeft should move current position one index to the left', () => {
     service['currentTextbox'] = { innerHTML: '1ba|'} as unknown as SVGTextElement;
@@ -243,7 +243,6 @@ describe('TextService', () => {
     expect(service['currentTextbox'].innerHTML).toEqual('|aba');
     expect((service['textBoxes'].get(0) as SVGTextElement).innerHTML).toEqual('box0');
   });
-
 
   it('#createCurrentTextBox should create a new textbox on the click position', () => {
     service['clickPosition'] = new CoordinatesXY(100, 100);
