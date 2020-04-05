@@ -45,7 +45,10 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('feather')"
+          <button mat-button 
+                  matTooltipPosition="after"
+                  aria-label="feather-tooltip"
+                  (click)="selectTool('feather')"
                   [ngClass]="{'clicked': currentTool === 'feather',
             'not-clicked': currentTool !== 'feather'}">
             <img src="../../../assets/icons/feather.svg">

@@ -34,6 +34,18 @@ export class CoordinatesXY {
     return onScreenY - referenceElement.nativeElement.getBoundingClientRect().top;
   }
 
+  static computeCoordinates(origin: CoordinatesXY, angle: number, distance: number): CoordinatesXY {
+    const radian = CoordinatesXY.toRadian(angle);
+    return new CoordinatesXY(
+      origin.getX() + distance * Math.cos(radian),
+      origin.getY() + distance * Math.sin(radian)
+    );
+  }
+
+  static toRadian(degree: number): number {
+    return degree * (Math.PI / 180);
+  }
+
   private static findQuadrantFromDelta(distanceX: number, distanceY: number): 1 | 2 | 3 | 4 {
     if (distanceX >= 0 && distanceY >= 0) {
       return 1;
@@ -55,15 +67,11 @@ export class CoordinatesXY {
   }
 
   setX(x: number): void {
-    // if (x >= 0) {
-      this.x = x;
-    // }
+    this.x = x;
   }
 
   setY(y: number): void {
-    // if (y >= 0) {
-      this.y = y;
-    // }
+    this.y = y;
   }
 
   getClosestPoint(pointerX: number, pointerY: number, verticalLimit: number): CoordinatesXY {

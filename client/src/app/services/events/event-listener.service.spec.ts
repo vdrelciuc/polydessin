@@ -82,7 +82,7 @@ describe('EventListenerService', () => {
     const spyOnListen = spyOn(manipulator, 'listen');
     service.initializeEvents();
     // tslint:disable-next-line: no-magic-numbers | Reason : amount of event listeners
-    expect(spyOnListen).toHaveBeenCalledTimes(10);
+    expect(spyOnListen).toHaveBeenCalledTimes(11);
   });
 
   it('#initializeEvents should call window events', () => {
