@@ -25,6 +25,10 @@
     }
 }
 
+::ng-deep .mat-select-value {
+    color: whitesmoke;
+}
+
 ::ng-deep .mat-slider-ticks-container {
     background-color: grey;
 }

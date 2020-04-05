@@ -2,11 +2,8 @@
     <form>
         <div class="group">
             <label class="title">Police</label>
-            <select (change)="setFont($event)">
-                <option value="ubuntu">Ubuntu</option>
-                <option value="laksaman">Laksaman</option>
-                <option value="noto sans">Noto Sans</option>
-                <option value="sans serif">Sans-serif</option>
+            <select mat-select (change)="setFont($event)">
+                <option value="courier">Courier</option>
                 <option value="ubuntu mono">Ubuntu Mono</option>
               </select>
           </div>
