@@ -2,14 +2,14 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialogRef, MatGridListModule, MatRadioModule, MatSnackBar, MatSnackBarModule } from '@angular/material';
+import { MatDialogRef, MatGridListModule, MatRadioModule, MatSnackBarModule } from '@angular/material';
 // import { ExportService } from 'src/app/services/export/export.service';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageExportType } from 'src/app/enums/export-type';
 import { ImageFormat } from 'src/app/enums/image-format';
 import { ExportComponent } from './export.component';
 
-describe('ExportComponent', () => {
+fdescribe('ExportComponent', () => {
   let component: ExportComponent;
   let fixture: ComponentFixture<ExportComponent>;
 
@@ -29,7 +29,7 @@ describe('ExportComponent', () => {
       imports: [
         MatSnackBarModule,
         HttpClientModule,
-        MatSnackBar,
+        MatSnackBarModule,
         MatRadioModule,
         MatGridListModule
       ],
