@@ -12,7 +12,7 @@ import { Alignment } from 'src/app/enums/text-alignement';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ColorSelectorService } from '../../color-selector/color-selector.service';
 
-fdescribe('TextService', () => {
+describe('TextService', () => {
 
   let service: TextService;
 
