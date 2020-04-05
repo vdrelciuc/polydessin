@@ -125,7 +125,6 @@ export class TextService extends DrawableService{
       this.subElement.remove();
       this.textBoxes.delete(box[0]);
     }
-    this.maxSize.size = 0;
     this.textBoxes.clear();
   }
 

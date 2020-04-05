@@ -2,17 +2,17 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { TextService } from './text.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
 import { CursorProperties } from 'src/app/classes/cursor-properties';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { TextAttributes } from 'src/app/interfaces/text-attributes';
 import { CharacterFont } from 'src/app/enums/character-font';
 import { Alignment } from 'src/app/enums/text-alignement';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ColorSelectorService } from '../../color-selector/color-selector.service';
 
-describe('TextService', () => {
+fdescribe('TextService', () => {
 
   let service: TextService;
 
@@ -28,7 +28,9 @@ describe('TextService', () => {
         {
           provide: Renderer2,
           useValue: {
-            createElement: () => mockedRendered,
+            createElement: (p1: any, p2: string, p3?: any) => ({
+              setAttributeNS: ()=> null
+            }),
             setAttribute: () => mockedRendered,
             appendChild: () => mockedRendered,
             removeChild: () => mockedRendered,
@@ -103,7 +105,7 @@ describe('TextService', () => {
       clientX: 500,
       clientY: 500
     }));
-    expect(spy).toHaveBeenCalledTimes(6);
+    expect(spy).toHaveBeenCalledTimes(7);
     expect(service['clickPosition']).toEqual(new CoordinatesXY(500,518));
   });
 
@@ -114,7 +116,7 @@ describe('TextService', () => {
       clientX: 500,
       clientY: 500
     }));
-    expect(spy).toHaveBeenCalledTimes(7);
+    expect(spy).toHaveBeenCalledTimes(8);
     expect(service['clickPosition']).toEqual(new CoordinatesXY(500,518));
   });
 
@@ -142,6 +144,35 @@ describe('TextService', () => {
     expect(service['currentTextbox']).toEqual(undefined as unknown as SVGTextElement);
   });
 
+  it('#changeAlignment should align to the left', () => {
+    const target = {innerHTML: '   blabla'} as unknown as SVGTextElement;
+    service['textBoxes'].set(0, {innerHTML: '   bla'} as unknown as SVGTextElement);
+    service['textBoxes'].set(1, target);
+    service.changeAlignment(Alignment.Left);
+    expect((service['textBoxes'].get(1) as SVGTextElement).innerHTML).toEqual('blabla');
+    expect((service['textBoxes'].get(0) as SVGTextElement).innerHTML).toEqual('bla');
+  });
+
+  it('#changeAlignment should align to the middle', () => {
+    const target = {innerHTML: 'blabla|'} as unknown as SVGTextElement;
+    service['currentTextbox'] = target;
+    service['textBoxes'].set(0, {innerHTML: 'bla'} as unknown as SVGTextElement);
+    service['textBoxes'].set(1, target);
+    service.changeAlignment(Alignment.Center);
+    expect((service['textBoxes'].get(1) as SVGTextElement).innerHTML).toEqual('blabla| ');
+    expect((service['textBoxes'].get(0) as SVGTextElement).innerHTML).toEqual('  bla  ');
+  });
+
+  it('#changeAlignment should align to the right', () => {
+    const target = {innerHTML: 'blabla|'} as unknown as SVGTextElement;
+    service['currentTextbox'] = target;
+    service['textBoxes'].set(0, {innerHTML: 'bla'} as unknown as SVGTextElement);
+    service['textBoxes'].set(1, target);
+    service.changeAlignment(Alignment.Right);
+    expect((service['textBoxes'].get(1) as SVGTextElement).innerHTML).toEqual(' blabla|');
+    expect((service['textBoxes'].get(0) as SVGTextElement).innerHTML).toEqual('    bla');
+  });
+
   it('#cancel should cancel svg text', () => {
     service['subElement'] = {remove: () => null} as unknown as SVGGElement;
     const spy = spyOn(service['subElement'], 'remove');
@@ -156,6 +187,17 @@ describe('TextService', () => {
   
   it('#delete should remove next character', () => {
     service['currentTextbox'] = { innerHTML: '1|a'} as unknown as SVGTextElement;
+    service['maxSize'] = {
+      size: 4,
+      target: service['currentTextbox']
+    };
+    service['textBoxes'].set(0, service['currentTextbox']);
+    service.delete();
+    expect(service['currentTextbox'].innerHTML).toEqual('1|');
+  }); 
+
+  it('#delete should remove next from largest textbox', () => {
+    service['currentTextbox'] = { innerHTML: '1|a'} as unknown as SVGTextElement;
     service.delete();
     expect(service['currentTextbox'].innerHTML).toEqual('1|');
   }); 
@@ -169,6 +211,19 @@ describe('TextService', () => {
   it('#backspace should remove previous character', () => {
     service['currentTextbox'] = { innerHTML: '1ba|'} as unknown as SVGTextElement;
     service.backspace();
+    expect(service['currentTextbox'].innerHTML).toEqual('1b|');
+  }); 
+
+  it('#backspace should remove previous character from largest box', () => {
+    service['currentTextbox'] = { innerHTML: '1ba|'} as unknown as SVGTextElement;
+    service['maxSize'] = {
+      size: 4,
+      target: service['currentTextbox']
+    };
+    service['textBoxes'].set(0, service['currentTextbox']);
+    const spy = spyOn(service, 'changeAlignment');
+    service.backspace();
+    expect(spy).toHaveBeenCalled();
     expect(service['currentTextbox'].innerHTML).toEqual('1b|');
   }); 
 
@@ -249,16 +304,32 @@ describe('TextService', () => {
     service['clickPosition'] = new CoordinatesXY(100, 100);
     service['properties'] = new BehaviorSubject<TextAttributes>({
       size: 12,
-      font: CharacterFont.Laksaman,
+      font: CharacterFont.C,
       isItalic: true,
       isBold: true,
       alignment: Alignment.Center
     });
     const spy = spyOn(service['manipulator'], 'setAttribute');
     service.createCurrentTextBox();
-    expect(spy).toHaveBeenCalledTimes(8);
+    expect(spy).toHaveBeenCalledTimes(7);
     expect(service['currentBoxNumber']).toEqual(1);
     expect(service['clickPosition'].getX()).toEqual(100);
     expect(service['clickPosition'].getY()).toEqual(118);
+  });
+
+  it('#toLeft should return largest textbox size', () => {
+    service['textBoxes'].set(0, {innerHTML: '  bla'} as unknown as SVGTextElement);
+    expect((service['textBoxes'].get(0) as SVGTextElement).innerHTML.length).toEqual(5);
+    service['toLeft']();
+    expect((service['textBoxes'].get(0) as SVGTextElement).innerHTML.length).toEqual(3);
+  });
+
+  it('#findSizeOfLargestTextbox should remove spaces to the left', () => {
+    const target = {innerHTML: 'blabla'} as unknown as SVGTextElement;
+    service['textBoxes'].set(0, {innerHTML: 'bla'} as unknown as SVGTextElement);
+    service['textBoxes'].set(1, target);
+    service['findSizeOfLargestTextbox']();
+    expect(service['maxSize'].target).toEqual(target);
+    expect(service['maxSize'].size).toEqual(6);
   });
 });
