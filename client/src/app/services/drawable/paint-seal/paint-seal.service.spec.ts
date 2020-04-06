@@ -1,16 +1,15 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-import * as CONSTANTS from 'src/app/classes/constants';
-
-import { PaintSealService } from './paint-seal.service';
-import { BFSAlgorithm } from 'src/app/classes/bfs-algorithm';
-import { PipetteService } from 'src/app/services/pipette.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
+import { BFSAlgorithm } from 'src/app/classes/bfs-algorithm';
 import { Color } from 'src/app/classes/color';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawStackService } from 'src/app/services/tools/draw-stack/draw-stack.service';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import * as CONSTANTS from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { ColorSelectorService } from '../../color-selector/color-selector.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { PipetteService } from '../../pipette/pipette.service';
+import { PaintSealService } from './paint-seal.service';
 
 describe('PaintSealService', () => {
 
@@ -131,7 +130,7 @@ describe('PaintSealService', () => {
   it('#generatePathDefinition should generate a path defintion attribute', () => {
     service['algorithm'] = {
       pathsToFill: [
-        [ new CoordinatesXY(100,100), new CoordinatesXY(400,400), new CoordinatesXY(200, 200)],
+        [ new CoordinatesXY(100, 100), new CoordinatesXY(400, 400), new CoordinatesXY(200, 200)],
         [ ]
       ]
     } as unknown as BFSAlgorithm;

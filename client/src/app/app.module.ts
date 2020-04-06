@@ -64,6 +64,7 @@ import { ResizeObserverDirective } from './components/workspace/resize-observer.
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/drawable/properties/drawable-properties.service';
+import { FeatherComponent } from './components/feather/feather.component';
 
 @NgModule({
   declarations: [
@@ -119,7 +120,8 @@ import { DrawablePropertiesService } from './services/drawable/properties/drawab
     GalleryGuideComponent,
     ExportGuideComponent,
     PaintSealComponent,
-    TextComponent
+    TextComponent,
+    FeatherComponent
   ],
   entryComponents: [
     ColorPickerComponent,

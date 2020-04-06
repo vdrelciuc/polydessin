@@ -71,6 +71,7 @@ export class TextComponent implements OnInit, OnDestroy {
     if(value !== null) {
       const alignment = value as Alignment;
       if(alignment !== undefined) {
+        this.service.changeAlignment(alignment);
         let attributes = this.service.properties.value;
         attributes.alignment = alignment;
         this.service.properties.next(attributes);

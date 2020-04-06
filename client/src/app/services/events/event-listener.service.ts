@@ -86,5 +86,11 @@ export class EventListenerService {
         this.currentTool.onKeyReleased(event);
       }
     });
+
+    this.manipulator.listen(this.image.nativeElement, 'mousewheel', (event: WheelEvent) => {
+      if (this.currentTool !== undefined) {
+        this.currentTool.onMouseWheel(event);
+      }
+    });
   }
 }

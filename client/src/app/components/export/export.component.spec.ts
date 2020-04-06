@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialogRef, MatGridListModule, MatRadioModule } from '@angular/material';
+import { MatDialogRef, MatGridListModule, MatRadioModule, MatSnackBarModule } from '@angular/material';
 // import { ExportService } from 'src/app/services/export/export.service';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageExportType } from 'src/app/enums/export-type';
@@ -26,6 +27,9 @@ describe('ExportComponent', () => {
         // ExportService,
       ],
       imports: [
+        MatSnackBarModule,
+        HttpClientModule,
+        MatSnackBarModule,
         MatRadioModule,
         MatGridListModule
       ],
@@ -86,13 +90,71 @@ describe('ExportComponent', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('#onDialogClose shoud close dialog and export', () => {
+  it('#exportConfirmation should export if title is valid', () => {
     component['title'] = 'title';
+    component['isTitleValid'] = true;
+    component['selectedExportType'] = 'T\u00E9l\u00E9chargement';
     const spy = spyOn(component['dialogRef'], 'close');
     const spy2 = spyOn(component['exportation'], 'export');
     component.exportConfirmation();
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy2).toHaveBeenCalledWith('title');
+  });
+
+  it('#exportConfirmation shoud show error if title is invalid', () => {
+    component['title'] = 'titl!e';
+    component['selectedExportType'] = 'T\u00E9l\u00E9chargement';
+    component['isTitleValid'] = false;
+    const spy = spyOn(component['dialogRef'], 'close');
+    const spy2 = spyOn(component['exportation'], 'export');
+    const spy3 = spyOn(component['snack'], 'open');
+    component.exportConfirmation();
+    expect(spy).toHaveBeenCalledTimes(0);
+    expect(spy2).toHaveBeenCalledTimes(0);
+    expect(spy3).toHaveBeenCalledTimes(1);
+  });
+
+  it('#exportConfirmation should email if title and email are valid', () => {
+    component['title'] = 'title';
+    component['email'] = 'test@email.com';
+    component['isTitleValid'] = true;
+    component['isEmailValid'] = true;
+    component['selectedExportType'] = 'Courriel';
+    const spy = spyOn(component['dialogRef'], 'close');
+    const spy2 = spyOn(component['exportation'], 'email');
+    component.exportConfirmation();
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy2).toHaveBeenCalledWith('title', 'email');
+  });
+
+  it('#exportConfirmation should not email if title is invalid', () => {
+    component['title'] = 'ti!tle';
+    component['email'] = 'test@email.com';
+    component['isTitleValid'] = false;
+    component['isEmailValid'] = true;
+    component['selectedExportType'] = 'Courriel';
+    const spy = spyOn(component['dialogRef'], 'close');
+    const spy2 = spyOn(component['exportation'], 'email');
+    const spy3 = spyOn(component['snack'], 'open');
+    component.exportConfirmation();
+    expect(spy).toHaveBeenCalledTimes(0);
+    expect(spy2).toHaveBeenCalledTimes(0);
+    expect(spy3).toHaveBeenCalledTimes(1);
+  });
+
+  it('#exportConfirmation should not email if email is invalid', () => {
+    component['title'] = 'title';
+    component['email'] = 'testemail.com';
+    component['isTitleValid'] = true;
+    component['isEmailValid'] = false;
+    component['selectedExportType'] = 'Courriel';
+    const spy = spyOn(component['dialogRef'], 'close');
+    const spy2 = spyOn(component['exportation'], 'email');
+    const spy3 = spyOn(component['snack'], 'open');
+    component.exportConfirmation();
+    expect(spy).toHaveBeenCalledTimes(0);
+    expect(spy2).toHaveBeenCalledTimes(0);
+    expect(spy3).toHaveBeenCalledTimes(1);
   });
 
   it('#onTitleUpdate shoud validate title', () => {
@@ -109,6 +171,28 @@ describe('ExportComponent', () => {
 
   it('#onTitleUpdate shoud not validate title, target is null', () => {
     const spy = spyOn(component['exportation'], 'validateTitle');
+    component.onTitleUpdate(
+      {
+        target: null
+      } as unknown as KeyboardEvent
+    );
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('#onEmailUpdate shoud validate email', () => {
+    const spy = spyOn(component['exportation'], 'validateEmail');
+    component.onEmailUpdate(
+      {
+        target: {
+          value: 'test@email.com'
+        } as HTMLInputElement
+      } as unknown as KeyboardEvent
+    );
+    expect(spy).toHaveBeenCalledWith('test@email.com');
+  });
+
+  it('#onEmailUpdate shoud not validate email, target is null', () => {
+    const spy = spyOn(component['exportation'], 'validateEmail');
     component.onTitleUpdate(
       {
         target: null
