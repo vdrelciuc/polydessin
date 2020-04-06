@@ -26,7 +26,7 @@ export class SelectionService extends DrawableService {
   private selectionBox: DOMRect;
   private selectedElements: Stack<SVGGElement>;
   private selectionRect: SVGRectElement;
-  private resizeGroup: SVGGElement;
+  resizeGroup: SVGGElement;
   private controlPoints: SVGRectElement[];
   private oldMousePosition: CoordinatesXY;
   private elementsToInvert: Stack<SVGGElement>;
@@ -290,7 +290,7 @@ export class SelectionService extends DrawableService {
     this.transformShortcuts.setupShortcuts(this.manipulator, this.drawStack, this.image, this.resizeGroup);
   }
 
-  private setGeneratedAreaBorders(): void {
+  setGeneratedAreaBorders(): void {
     const selection = new Stack<SVGGElement>();
     for (const element of this.selectedElements.getAll()) {
       selection.push_back(element);

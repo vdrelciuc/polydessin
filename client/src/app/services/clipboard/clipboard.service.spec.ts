@@ -1,16 +1,14 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { ClipboardService } from './clipboard.service';
-import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { Transform } from 'src/app/classes/transformations';
 import { Stack } from 'src/app/classes/stack';
 
-describe('ClipboardService', () => {
+fdescribe('ClipboardService', () => {
   let service: ClipboardService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
-  let drawStack: DrawStackService;
 
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
@@ -69,14 +67,12 @@ describe('ClipboardService', () => {
             nativeElement: {}
           },
         },
-        DrawStackService,
         Transform
       ],
     });
     service = getTestBed().get(ClipboardService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
-    drawStack = getTestBed().get(DrawStackService);
     ClipboardService['selectedElements'] = new Stack<SVGGElement>();
     ClipboardService['copyTop'] = 0;
     ClipboardService['copyLeft'] = 0;
@@ -85,7 +81,7 @@ describe('ClipboardService', () => {
     image.nativeElement.cloneNode = jasmine.createSpy().and.returnValue(undefined);
     image.nativeElement.getBoundingClientRect = jasmine.createSpy().and.callFake(mockedSVGBBox);
 
-    ClipboardService.initialize(manipulator, image, drawStack);
+    ClipboardService.initialize(manipulator, image);
   });
 
   it('should be created', () => {
@@ -95,7 +91,6 @@ describe('ClipboardService', () => {
   it('#initialize should initialize class attributes', () => {
     expect(ClipboardService['manipulator']).toBeDefined();
     expect(ClipboardService['image']).toBeDefined();
-    expect(ClipboardService['drawStack']).toBeDefined();
   });
 
   it('#pasteDisabled should return true when no element has been copied', () => {

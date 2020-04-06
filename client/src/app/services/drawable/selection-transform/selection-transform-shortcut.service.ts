@@ -88,11 +88,14 @@ export class SelectionTransformShortcutService {
         case this.delete:
           Transform.delete();
           this.selectionGroup.remove();
-          this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+          this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
           break;
         case this.x:
           if (event.ctrlKey) {
             ClipboardService.cut();
+            this.selectionGroup.remove();
+            this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
+            this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
           }
           break;
         case this.c:
@@ -103,12 +106,18 @@ export class SelectionTransformShortcutService {
         case this.v:
           if (event.ctrlKey) {
             ClipboardService.paste();
+            this.selectionGroup.remove();
+            this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
+            this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
           }
           break;
         case this.d:
           if (event.ctrlKey) {
             ClipboardService.duplicate();
             event.preventDefault();
+            this.selectionGroup.remove();
+            this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
+            this.manipulator.appendChild(this.image.nativeElement, this.selectionGroup);
           }
           break;
       }
@@ -168,7 +177,7 @@ export class SelectionTransformShortcutService {
         break;
     }
 
-    if (!this.leftArrowIsPressed && !this.rightArrowIsPressed && !this.upArrowIsPressed && !this.downArrowIsPressed) {
+    if (!this.leftArrowIsPressed && !this.rightArrowIsPressed && !this.upArrowIsPressed && !this.downArrowIsPressed && this.isMoving) {
       this.isMoving = false;
 
       this.selectionGroup.remove();

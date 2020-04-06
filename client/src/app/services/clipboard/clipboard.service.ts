@@ -2,7 +2,6 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Stack } from 'src/app/classes/stack';
 import { Transform } from 'src/app/classes/transformations';
-import { DrawStackService } from '../draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,17 +12,15 @@ export class ClipboardService {
 
   private static manipulator: Renderer2;
   private static image: ElementRef<SVGElement>;
-  private static drawStack: DrawStackService;
 
   private static selectedElements: Stack<SVGGElement> = new Stack<SVGGElement>();
   private static copyTop: number;
   private static copyLeft: number;
   private static currentShift: number;
 
-  static initialize(manipulator: Renderer2, image: ElementRef<SVGElement>, drawStack: DrawStackService): void {
+  static initialize(manipulator: Renderer2, image: ElementRef<SVGElement>): void {
     ClipboardService.manipulator = manipulator;
     ClipboardService.image = image;
-    ClipboardService.drawStack = drawStack;
   }
 
   static pasteDisabled(): boolean {
@@ -49,7 +46,6 @@ export class ClipboardService {
       Transform.translate(ClipboardService.currentShift, ClipboardService.currentShift);
       ClipboardService.currentShift += ClipboardService.INCREMENT_BETWEEN;
     }
-    ClipboardService.drawStack.addSVG(ClipboardService.image.nativeElement.cloneNode(true) as SVGElement);
     ClipboardService.pastedElements.next(pasteElements.getAll());
   }
 
@@ -70,7 +66,6 @@ export class ClipboardService {
   static cut(): void {
     ClipboardService.copy();
     Transform.delete();
-    ClipboardService.drawStack.addSVG(ClipboardService.image.nativeElement.cloneNode(true) as SVGElement);
   }
 
   static duplicate(): void {
@@ -99,7 +94,6 @@ export class ClipboardService {
       (top + ClipboardService.INCREMENT_BETWEEN < imageBot) ?
       ClipboardService.INCREMENT_BETWEEN : ClipboardService.INCREMENT_BETWEEN - imageHeight - bot + top
     );
-    ClipboardService.drawStack.addSVG(ClipboardService.image.nativeElement.cloneNode(true) as SVGElement);
     ClipboardService.pastedElements.next(duplicateElements.getAll());
   }
 }

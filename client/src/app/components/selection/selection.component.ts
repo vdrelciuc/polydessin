@@ -32,17 +32,29 @@ export class SelectionComponent {
 
   paste(): void {
     ClipboardService.paste();
+    this.selectionService.resizeGroup.remove();
+    this.selectionService.pushElement();
+    this.selectionService.setGeneratedAreaBorders();
   }
 
   cut(): void {
     ClipboardService.cut();
+    this.selectionService.resizeGroup.remove();
+    this.selectionService.pushElement();
+    this.selectionService.setGeneratedAreaBorders();
   }
 
   duplicate(): void {
     ClipboardService.duplicate();
+    this.selectionService.resizeGroup.remove();
+    this.selectionService.pushElement();
+    this.selectionService.setGeneratedAreaBorders();
   }
 
   delete(): void {
     Transform.delete();
+    this.selectionService.resizeGroup.remove();
+    this.selectionService.pushElement();
+    this.selectionService.setGeneratedAreaBorders();
   }
 }
