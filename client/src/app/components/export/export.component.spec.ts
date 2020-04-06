@@ -9,7 +9,7 @@ import { ImageExportType } from 'src/app/enums/export-type';
 import { ImageFormat } from 'src/app/enums/image-format';
 import { ExportComponent } from './export.component';
 
-fdescribe('ExportComponent', () => {
+describe('ExportComponent', () => {
   let component: ExportComponent;
   let fixture: ComponentFixture<ExportComponent>;
 
