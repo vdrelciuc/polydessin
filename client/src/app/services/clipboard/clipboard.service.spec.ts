@@ -5,7 +5,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { Transform } from 'src/app/classes/transformations';
 import { Stack } from 'src/app/classes/stack';
 
-fdescribe('ClipboardService', () => {
+describe('ClipboardService', () => {
   let service: ClipboardService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
