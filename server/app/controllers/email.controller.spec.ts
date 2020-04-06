@@ -90,14 +90,4 @@ describe('EmailController', () => {
                 expect(error);
             });
     });
-
-    it('should forward an error from Mail API', async () => {
-        emailService.sendEmail.resolves({ status: HttpStatus.UNPROCESSABLE});
-        return supertest(app)
-            .post('/api/email')
-            .send({to: validReq.to, payload: validReq.payload, extension: validReq.extension, title: validReq.title})
-            .then((response: any) => {
-                expect(response.statusCode).to.equal(HttpStatus.UNPROCESSABLE);
-            });
-    });
 });
