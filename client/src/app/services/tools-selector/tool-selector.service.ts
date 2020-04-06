@@ -20,6 +20,7 @@ import { PaintSealService } from '../drawable/paint-seal/paint-seal.service';
 import { TextService } from '../drawable/text/text.service';
 import { PipetteService } from '../pipette/pipette.service';
 import { UndoRedoService } from '../undo-redo/undo-redo.service';
+import { FeatherService } from '../drawable/feather/feather.service';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,7 @@ export class ToolSelectorService {
   private eraser: EraserService;
   private pipette: PipetteService;
   private text: TextService;
+  private feather: FeatherService;
 
   disableUndo: boolean;
   disableRedo: boolean;
@@ -64,6 +66,7 @@ export class ToolSelectorService {
     this.grid = new GridService();
     this.paintSeal = new PaintSealService();
     this.text = new TextService();
+    this.feather = new FeatherService();
 
     this.tools.set(Tools.Spray, this.spray);
     this.tools.set(Tools.ColorApplicator, this.colorApplicator);
@@ -79,6 +82,7 @@ export class ToolSelectorService {
     this.tools.set(Tools.Grid, this.grid);
     this.tools.set(Tools.Bucket, this.paintSeal);
     this.tools.set(Tools.Text, this.text);
+    this.tools.set(Tools.Feather, this.feather);
     this.$currentTool = new BehaviorSubject<Tools>(Tools.None);
     this.setCurrentTool(Tools.Selection);
 
@@ -128,6 +132,7 @@ export class ToolSelectorService {
   getGrid(): GridService { return this.grid; }
   getPaintSeal(): PaintSealService { return this.paintSeal; }
   getText(): TextService { return this.text; }
+  getFeather(): FeatherService { return this.feather; }
 
   setCurrentTool(tool: Tools): void {
     const foundTool = this.getTool(tool);

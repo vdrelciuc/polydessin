@@ -72,13 +72,13 @@ describe('TextComponent', () => {
   });
 
   it('#setFont should set valid new font', () => {
-    component.setFont({target: {value: CharacterFont.SS}} as unknown as Event);
-    expect(component['service'].properties.value.font).toEqual(CharacterFont.SS);
+    component.setFont({target: {value: CharacterFont.Mono}} as unknown as Event);
+    expect(component['service'].properties.value.font).toEqual(CharacterFont.Mono);
   });
 
   it('#setFont should not set invalid font', () => {
     component.setFont({target: {value: undefined}} as unknown as Event);
-    expect(component['service'].properties.value.font).toEqual(CharacterFont.Ubuntu);
+    expect(component['service'].properties.value.font).toEqual(CharacterFont.C);
   });
 
   it('#setAlignement should set valid new alignment', () => {
