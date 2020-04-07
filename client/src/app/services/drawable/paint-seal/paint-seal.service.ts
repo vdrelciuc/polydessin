@@ -1,15 +1,15 @@
-import { Injectable, Renderer2, ElementRef } from '@angular/core';
-import { DrawableService } from '../drawable.service';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { BFSAlgorithm } from 'src/app/classes/bfs-algorithm';
+import { Color } from 'src/app/classes/color';
 import { VISUAL_DIFFERENCE } from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { Color } from 'src/app/classes/color';
 import { CursorProperties } from 'src/app/classes/cursor-properties';
-import { BFSAlgorithm } from 'src/app/classes/bfs-algorithm';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from '../../color-selector/color-selector.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { PipetteService } from '../../pipette/pipette.service';
+import { DrawableService } from '../drawable.service';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +59,7 @@ export class PaintSealService extends DrawableService {
   }
 
   onClick(event: MouseEvent): void {
-    if(this.mouseDown) {
+    if (this.mouseDown) {
       this.algorithm = new BFSAlgorithm(
         this.image.nativeElement.scrollWidth,
         this.image.nativeElement.scrollHeight,
@@ -93,12 +93,14 @@ export class PaintSealService extends DrawableService {
 
   private generatePathDefinition(): string {
     let pathDefinition = '';
-    if(this.algorithm.pathsToFill !== undefined) {
+    if (this.algorithm.pathsToFill !== undefined) {
       this.algorithm.pathsToFill.forEach((array) => {
         array.forEach((pixel: CoordinatesXY, i: number) => {
-          if(i === 0) {
+          if (i === 0) {
+            // tslint:disable-next-line: no-magic-numbers | Reason : 0.5 is the step
             pathDefinition += ` M${pixel.getX() + 0.5} ${pixel.getY() + 0.5}`;
           } else {
+            // tslint:disable-next-line: no-magic-numbers | Reason : 0.5 is the step
             pathDefinition += ` L${pixel.getX() + 0.5} ${pixel.getY() + 0.5}`;
           }
         });

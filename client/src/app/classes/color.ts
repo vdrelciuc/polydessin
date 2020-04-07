@@ -173,15 +173,15 @@ export class Color {
   }
 
   isSimilarWithTolerance(color: Color | null, tolerance: number): boolean {
-    if(color !== null) {
+    if (color !== null) {
       if (tolerance === 0) {
           return color.getHex() === this.getHex();
       } else {
           const colorRGB = color.getRGB();
           const curentRGB = this.getRGB();
           const difference =
-            Math.abs(colorRGB[0] - curentRGB[0]) + 
-            Math.abs(colorRGB[1] - curentRGB[1]) + 
+            Math.abs(colorRGB[0] - curentRGB[0]) +
+            Math.abs(colorRGB[1] - curentRGB[1]) +
             Math.abs(colorRGB[2] - curentRGB[2]) ;
           return difference <= ((tolerance / 100) * (CONSTANT.COLOR_MAX_VALUE * CONSTANT.BYTES_IN_HEX));
       }

@@ -61,13 +61,9 @@ export class SelectionService extends DrawableService {
     this.transformShortcuts.deleteShortcuts();
   }
 
-  hasNoSelection(): boolean {
-    return this.selectedElements.isEmpty();
-  }
+  hasNoSelection(): boolean { return this.selectedElements.isEmpty(); }
 
-  onMouseOutCanvas(event: MouseEvent): void {
-    this.onMouseRelease(event);
-  }
+  onMouseOutCanvas(event: MouseEvent): void { this.onMouseRelease(event); }
 
   onMousePress(event: MouseEvent): void {
     this.selectionOrigin = CoordinatesXY.getEffectiveCoords(this.image, event);
@@ -196,13 +192,11 @@ export class SelectionService extends DrawableService {
     this.manipulator.setAttribute(this.perimeter, SVGProperties.dashedBorder, '4, 4');
     this.manipulator.setAttribute(this.perimeter, SVGProperties.color, 'black');
     this.manipulator.setAttribute(this.perimeter, SVGProperties.fill, 'grey');
-
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.dashedBorder, '4, 4');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.dashedBorderOffset, '4');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.color, 'white');
-
     this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.resizeGroup = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Selection);

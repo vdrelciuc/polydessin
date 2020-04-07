@@ -49,7 +49,7 @@ export class SelectionTransformShortcutService {
         if (event.key === this.v) {
           this.onKeyDown(event);
         }
-      })
+      });
     }
     this.shortcutListener.push(manipulator.listen(window, 'keydown', (event: KeyboardEvent) => {
       if (event.key !== this.v) {
@@ -73,6 +73,7 @@ export class SelectionTransformShortcutService {
 
   getRotate(event: WheelEvent): number {
     const rotate = (event.altKey) ? this.slowRotate : this.fastRotate;
+    // tslint:disable-next-line: no-magic-numbers | Reason: -1 designates an exception
     return rotate * (event.deltaY > 0 ? 1 : -1);
   }
 

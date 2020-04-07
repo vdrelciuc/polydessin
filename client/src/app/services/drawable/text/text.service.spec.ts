@@ -1,6 +1,6 @@
-import { getTestBed, TestBed } from '@angular/core/testing';
-
+// tslint:disable: no-magic-numbers | Reason: arbitrary values used for testing purposes
 import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
@@ -16,7 +16,8 @@ describe('TextService', () => {
 
   let service: TextService;
 
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  // tslint:disable-next-line: no-any | Reason: typedef of parentElement throws an exception if specified
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
@@ -28,6 +29,7 @@ describe('TextService', () => {
         {
           provide: Renderer2,
           useValue: {
+            // tslint:disable-next-line: no-any | Reason: unknown typedef for p elements
             createElement: (p1: any, p2: string, p3?: any) => ({
               setAttributeNS: () => null
             }),
@@ -106,7 +108,7 @@ describe('TextService', () => {
       clientY: 500
     }));
     expect(spy).toHaveBeenCalledTimes(7);
-    expect(service['clickPosition']).toEqual(new CoordinatesXY(500,518));
+    expect(service['clickPosition']).toEqual(new CoordinatesXY(500, 518));
   });
 
   it('#onClick should setup new svgtext and push old one', () => {
@@ -117,7 +119,7 @@ describe('TextService', () => {
       clientY: 500
     }));
     expect(spy).toHaveBeenCalledTimes(8);
-    expect(service['clickPosition']).toEqual(new CoordinatesXY(500,518));
+    expect(service['clickPosition']).toEqual(new CoordinatesXY(500, 518));
   });
 
   it('#onKeyPressed should do nothing, key is bypassed', () => {

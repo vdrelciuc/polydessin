@@ -1,3 +1,4 @@
+// tslint:disable: no-any | Reason: any is used for api response and typedef is unknown/unspecified
 import { expect } from 'chai';
 import * as supertest from 'supertest';
 import { Stubbed, testingContainer } from '../../test/test-utils';

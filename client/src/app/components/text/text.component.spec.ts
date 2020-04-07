@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TextComponent } from './text.component';
-import { MatSliderModule, MatOptionModule, MatSliderChange, MatRadioChange } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TextService } from 'src/app/services/drawable/text/text.service';
-import { Alignment } from 'src/app/enums/text-alignement';
-import { CharacterFont } from 'src/app/enums/character-font';
+import { MatOptionModule, MatRadioChange, MatSliderChange, MatSliderModule } from '@angular/material';
 import { DEFAULT_TEXT_SIZE } from 'src/app/classes/constants';
+import { CharacterFont } from 'src/app/enums/character-font';
+import { Alignment } from 'src/app/enums/text-alignement';
+import { TextService } from 'src/app/services/drawable/text/text.service';
+import { TextComponent } from './text.component';
 
 describe('TextComponent', () => {
   let component: TextComponent;
@@ -36,6 +36,7 @@ describe('TextComponent', () => {
     const spy = spyOn(component['shortcutManager'], 'disableShortcuts');
     component.ngOnInit();
     expect(spy).toHaveBeenCalled();
+    // tslint:disable-next-line: no-magic-numbers | Reason: default value, used for testing purposes
     expect(component['subscriptions'].length).toEqual(6);
   });
 
@@ -58,16 +59,16 @@ describe('TextComponent', () => {
   });
 
   it('#updateBold should toggle bold', () => {
-    component.updateBold()
+    component.updateBold();
     expect(component['service'].properties.value.isBold).toEqual(true);
-    component.updateBold()
+    component.updateBold();
     expect(component['service'].properties.value.isBold).toEqual(false);
   });
 
   it('#updateBold should toggle italic', () => {
-    component.updateItalic()
+    component.updateItalic();
     expect(component['service'].properties.value.isItalic).toEqual(true);
-    component.updateItalic()
+    component.updateItalic();
     expect(component['service'].properties.value.isItalic).toEqual(false);
   });
 

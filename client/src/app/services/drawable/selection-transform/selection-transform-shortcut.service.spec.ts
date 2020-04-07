@@ -5,8 +5,8 @@ import * as CONSTANTS from 'src/app/classes/constants';
 import { Stack } from 'src/app/classes/stack';
 import { Transform } from 'src/app/classes/transformations';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
-import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
 import { ClipboardService } from '../../clipboard/clipboard.service';
+import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
 
 describe('SelectionTransformShortcutService', () => {
   let service: SelectionTransformShortcutService;
@@ -26,23 +26,27 @@ describe('SelectionTransformShortcutService', () => {
   };
 
   const eventMocker = (event: string, keyUsed: string) => new KeyboardEvent(event, {key: keyUsed});
-  
+
   const wheelEventMocker = (event: string, rollValue: number, altPressed: boolean) =>
     new WheelEvent(event, {deltaY: rollValue, altKey: altPressed});
 
   const mockedListener = (target: any, eventName: string, callback: (event: any) => boolean | void): () => void => {
-    if (eventName === 'keydown') {
-      window.addEventListener<'keydown'>(eventName, () => service['onKeyDown'](mockedEvent));
-    } else if (eventName === 'keyup') {
-      window.addEventListener<'keyup'>(eventName, () => service['onKeyUp'](mockedEvent.key));
-    } else if (eventName === 'wheel') {
-      window.addEventListener<'wheel'>(eventName, () => {
-        if (mockedWheelEvent.shiftKey) {
-          Transform.rotateEach(service.getRotate(mockedWheelEvent));
-        } else {
-          Transform.rotate(service.getRotate(mockedWheelEvent));
-        }
-      });
+    switch (eventName) {
+      case 'keydown':
+        window.addEventListener<'keydown'>(eventName, () => service['onKeyDown'](mockedEvent));
+        break;
+      case 'keyup':
+        window.addEventListener<'keyup'>(eventName, () => service['onKeyUp'](mockedEvent.key));
+        break;
+      case 'wheel':
+        window.addEventListener<'wheel'>(eventName, () => {
+          if (mockedWheelEvent.shiftKey) {
+            Transform.rotateEach(service.getRotate(mockedWheelEvent));
+          } else {
+            Transform.rotate(service.getRotate(mockedWheelEvent));
+          }
+        });
+        break;
     }
     return () => undefined;
   };

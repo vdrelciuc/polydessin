@@ -17,7 +17,8 @@ describe('PaintSealService', () => {
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
 
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  // tslint:disable-next-line: no-any | Reason: typedef of parentElement throws an exception
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
@@ -122,6 +123,7 @@ describe('PaintSealService', () => {
       clientY: 100,
     } as unknown as MouseEvent);
     expect(service['mouseDown']).toEqual(false);
+    // tslint:disable-next-line: no-magic-numbers | Reason : expected amount of calls
     expect(spy).toHaveBeenCalledTimes(8);
     expect(spy).toHaveBeenCalledWith(null, SVGProperties.d, '');
     expect(service['algorithm']).not.toEqual(undefined as unknown as BFSAlgorithm);
@@ -130,6 +132,7 @@ describe('PaintSealService', () => {
   it('#generatePathDefinition should generate a path defintion attribute', () => {
     service['algorithm'] = {
       pathsToFill: [
+        // tslint:disable-next-line: no-magic-numbers | Reason : arbitrary values used for testing purposes
         [ new CoordinatesXY(100, 100), new CoordinatesXY(400, 400), new CoordinatesXY(200, 200)],
         [ ]
       ]

@@ -61,6 +61,7 @@ describe('Email Service', () => {
     it('#validateEmail should allow a valid email', () => {
         const validEmail = 'john.doe@test.com';
         const validation = emailService.validateEmail(validEmail);
+        // tslint:disable: no-unused-expression | Reason: unknown reason why tslint considers expect as unused when Chai uses it
         expect(validation).to.be.true;
     });
 

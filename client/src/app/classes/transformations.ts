@@ -108,6 +108,7 @@ export class Transform {
       const deltaY = (element.getBoundingClientRect().top + element.getBoundingClientRect().bottom) / 2 - Transform.centerY;
       const radius = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
+      // tslint:disable-next-line: no-magic-numbers | Reason: 180 degrees = half a circle
       const angle = Math.atan2(deltaY, deltaX) + rotation / 180 * Math.PI;
       const translationX = radius * Math.cos(angle) - deltaX;
       const translationY = radius * Math.sin(angle) - deltaY;

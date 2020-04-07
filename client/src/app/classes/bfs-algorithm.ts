@@ -1,6 +1,6 @@
-import { CoordinatesXY } from './coordinates-x-y';
 import { Color } from './color';
 import * as CONSTANTS from './constants';
+import { CoordinatesXY } from './coordinates-x-y';
 
 export class BFSAlgorithm {
     pathsToFill: CoordinatesXY[][];
@@ -27,7 +27,7 @@ export class BFSAlgorithm {
         this.visited = new Set([]);
         this.queue = [];
         this.strokes = [];
-        this.strokesSet = new Set([]);  
+        this.strokesSet = new Set([]);
         this.tolerance = tolerance;
     }
 
@@ -73,7 +73,7 @@ export class BFSAlgorithm {
         this.createPathToFill();
     }
 
-    private createPathToFill() {
+    private createPathToFill(): void {
         if (this.strokes.length !== 0) {
             this.pathsToFill = [];
             this.visited = new Set([]);
@@ -85,6 +85,7 @@ export class BFSAlgorithm {
             while ((pixel.getX() >= 0 && pixel.getY() >= 0)) {
                 this.tmpPath.push(pixel.clone());
 
+                // tslint:disable-next-line: no-magic-numbers | Reason : negative value designates exception
                 const closestNeighbor: CoordinatesXY = new CoordinatesXY(-1, -1);
                 this.updateClosestNeighbor(pixel, closestNeighbor);
 
@@ -119,6 +120,7 @@ export class BFSAlgorithm {
             }
         });
 
+        // tslint:disable-next-line: no-magic-numbers | Reason: arbitraty limit
         if (closestNeighborDistance > 100 && this.tmpPath.length > 0) {
             this.pathsToFill.push(this.tmpPath);
             this.tmpPath = [];
@@ -159,9 +161,9 @@ export class BFSAlgorithm {
 
     private isValidPosition(pixel: CoordinatesXY): boolean {
         return (
-            pixel.getX() >= 0           && 
-            pixel.getX() <  this.width  && 
-            pixel.getY() >= 0           && 
+            pixel.getX() >= 0           &&
+            pixel.getX() <  this.width  &&
+            pixel.getY() >= 0           &&
             pixel.getY() <  this.height
         );
     }
@@ -169,8 +171,8 @@ export class BFSAlgorithm {
     private getPixelColor(pixel: CoordinatesXY): Color {
         let index: number = (CONSTANTS.BYTES_IN_HEX + 1) * (pixel.getX() + pixel.getY() * this.width);
         return new Color([
-            this.data[index++], 
-            this.data[index++], 
+            this.data[index++],
+            this.data[index++],
             this.data[index]
         ]);
     }

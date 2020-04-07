@@ -9,18 +9,18 @@ import { ColorApplicatorService } from '../drawable/color-applicator/color-appli
 import { DrawableService } from '../drawable/drawable.service';
 import { EllipseService } from '../drawable/ellipse/ellipse.service';
 import { EraserService } from '../drawable/eraser/eraser.service';
+import { FeatherService } from '../drawable/feather/feather.service';
 import { GridService } from '../drawable/grid/grid.service';
 import { LineService } from '../drawable/line/line.service';
+import { PaintSealService } from '../drawable/paint-seal/paint-seal.service';
 import { PencilService } from '../drawable/pencil/pencil.service';
 import { PolygonService } from '../drawable/polygon/polygon.service';
 import { RectangleService } from '../drawable/rectangle/rectangle.service';
 import { SelectionService } from '../drawable/selection/selection.service';
 import { SprayService } from '../drawable/spray/spray.service';
-import { PaintSealService } from '../drawable/paint-seal/paint-seal.service';
 import { TextService } from '../drawable/text/text.service';
 import { PipetteService } from '../pipette/pipette.service';
 import { UndoRedoService } from '../undo-redo/undo-redo.service';
-import { FeatherService } from '../drawable/feather/feather.service';
 
 @Injectable({
   providedIn: 'root'
@@ -140,7 +140,7 @@ export class ToolSelectorService {
       if (this.tool !== undefined) {
         this.tool.endTool();
       }
-      if(tool === Tools.Bucket) {
+      if (tool === Tools.Bucket) {
         this.paintSeal.assignPipette(this.pipette);
       }
       this.tool = foundTool;

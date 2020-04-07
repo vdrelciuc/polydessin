@@ -22,11 +22,10 @@ import { CreateNewComponent } from './components/create-new/create-new.component
 import { EllipseComponent } from './components/ellipse/ellipse.component';
 import { EraserComponent } from './components/eraser/eraser.component';
 import { ExportComponent } from './components/export/export.component';
+import { FeatherComponent } from './components/feather/feather.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { GridComponent } from './components/grid/grid.component';
 import { AerosolGuideComponent } from './components/guideTemplaates/aerosol-guide/aerosol-guide.component';
-import { PaintSealComponent } from './components/paint-seal/paint-seal.component';
-import { TextComponent } from './components/text/text.component';
 // tslint:disable-next-line: max-line-length | Reason : import cannot be splitted into several lines
 import { ApplicateurCouleurGuideComponent } from './components/guideTemplaates/applicateur-couleur-guide/applicateur-couleur-guide.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
@@ -48,6 +47,7 @@ import { UndoRedoComponent } from './components/guideTemplaates/undo-redo/undo-r
 import { HomeComponent } from './components/home/home.component';
 import { LineComponent } from './components/line/line.component';
 import { OptionPannelComponent } from './components/option-pannel/option-pannel.component';
+import { PaintSealComponent } from './components/paint-seal/paint-seal.component';
 import { PencilComponent } from './components/pencil/pencil.component';
 import { PipetteComponent } from './components/pipette/pipette.component';
 import { PolygonComponent } from './components/polygon/polygon.component';
@@ -57,6 +57,7 @@ import { SaveServerComponent } from './components/save-server/save-server.compon
 import { SelectionComponent } from './components/selection/selection.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SprayComponent } from './components/spray/spray.component';
+import { TextComponent } from './components/text/text.component';
 import { UserGuideComponent } from './components/user-guide/user-guide.component';
 import { WarningDialogComponent } from './components/warning/warning-dialog.component';
 import { WorkingAreaComponent } from './components/working-area/working-area.component';
@@ -64,7 +65,6 @@ import { ResizeObserverDirective } from './components/workspace/resize-observer.
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/drawable/properties/drawable-properties.service';
-import { FeatherComponent } from './components/feather/feather.component';
 
 @NgModule({
   declarations: [

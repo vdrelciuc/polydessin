@@ -75,7 +75,7 @@ export const OPACITY_MAXIMUM = 1;
 export const THICKNESS_STEP = 5;
 // export const OPACITY_STEP = 0.1;
 
-// Text 
+// Text
 export const DEFAULT_TEXT_SIZE = 12;
 export const TEXT_SPACING = 1.5;
 export let KEYS_TO_BYPASS = new Set<string>();
@@ -97,8 +97,11 @@ KEYS_TO_BYPASS.add('Escape');
 KEYS_TO_BYPASS.add('ArrowLeft');
 KEYS_TO_BYPASS.add('ArrowRight');
 KEYS_TO_BYPASS.add('|');
-for(let i = 1; i < 13; ++i) {
-    KEYS_TO_BYPASS.add('F'+i.toString());
+
+const KEYS_COUNT = 13;
+
+for (let i = 1; i < KEYS_COUNT; ++i) {
+    KEYS_TO_BYPASS.add('F' + i.toString());
 }
 
 // Feather
