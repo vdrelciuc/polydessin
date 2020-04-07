@@ -1,21 +1,21 @@
-import { Injectable, Renderer2, ElementRef } from '@angular/core';
-import { DrawableService } from '../drawable.service';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
-import { Alignment } from 'src/app/enums/text-alignement';
-import { CharacterFont } from 'src/app/enums/character-font';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { CursorProperties } from 'src/app/classes/cursor-properties';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { CharacterFont } from 'src/app/enums/character-font';
+import { Alignment } from 'src/app/enums/text-alignement';
+import { Max } from 'src/app/interfaces/max-text';
 import { TextAttributes } from 'src/app/interfaces/text-attributes';
 import { ColorSelectorService } from '../../color-selector/color-selector.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { Max } from 'src/app/interfaces/max-text';
+import { DrawableService } from '../drawable.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TextService extends DrawableService{
+export class TextService extends DrawableService {
 
   properties: BehaviorSubject<TextAttributes>;
   private textBoxes: Map<number, SVGTextElement>;
@@ -40,9 +40,9 @@ export class TextService extends DrawableService{
   }
 
   initialize(
-    manipulator: Renderer2, 
+    manipulator: Renderer2,
     image: ElementRef<SVGElement>,
-    colorSelectorService: ColorSelectorService, 
+    colorSelectorService: ColorSelectorService,
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
       this.colorSelectorService.primaryColor.subscribe( () => this.updateStyle() );
@@ -54,7 +54,7 @@ export class TextService extends DrawableService{
   }
 
   endTool(): void {
-    if(this.subElement !== undefined) {
+    if (this.subElement !== undefined) {
       this.pushElement();
     }
     this.manipulator.setAttribute(this.image.nativeElement, CursorProperties.cursor, CursorProperties.default);
@@ -62,21 +62,21 @@ export class TextService extends DrawableService{
 
   onClick(event: MouseEvent): void {
     this.clickPosition = CoordinatesXY.getEffectiveCoords(this.image, event);
-    if(this.subElement !== undefined) {
+    if (this.subElement !== undefined) {
       this.pushElement();
     }
     this.createElement();
   }
 
   onKeyPressed(event: KeyboardEvent): void {
-    if(this.toByPass.has(event.key)) {
+    if (this.toByPass.has(event.key)) {
       return ;
     }
-    if(this.currentTextbox !== undefined) {
+    if (this.currentTextbox !== undefined) {
       const text = this.currentTextbox.innerHTML;
       const index = text.indexOf('|');
       this.currentTextbox.innerHTML = text.slice(0, index) + event.key + text.slice(index, text.length);
-      if(this.maxSize !== undefined && text.length > this.maxSize.size) {
+      if (this.maxSize !== undefined && text.length > this.maxSize.size) {
         this.changeAlignment(this.properties.value.alignment);
       }
     }
@@ -84,21 +84,21 @@ export class TextService extends DrawableService{
 
   changeAlignment(newAlignment: Alignment): void {
     this.findSizeOfLargestTextbox();
-    switch(newAlignment) {
+    switch (newAlignment) {
       case Alignment.Left: {
           this.toLeft();
-        break;
+          break;
       }
       case Alignment.Center: {
         this.toLeft();
-        for(let textBox of this.textBoxes) {
+        for (const textBox of this.textBoxes) {
           const text = textBox[1].innerHTML;
           let gap = this.maxSize.size - text.length;
-          const before = Math.floor(gap / 2)
+          const before = Math.floor(gap / 2);
           textBox[1].innerHTML = ' '.repeat(before);
           gap -= before;
           textBox[1].innerHTML += text + ' '.repeat(gap);
-          if(textBox[1] === this.currentTextbox) {
+          if (textBox[1] === this.currentTextbox) {
             textBox[1].innerHTML += ' ';
           }
         }
@@ -106,10 +106,10 @@ export class TextService extends DrawableService{
       }
       case Alignment.Right: {
         this.toLeft();
-        for(let textBox of this.textBoxes) {
+        for (const textBox of this.textBoxes) {
           const text = textBox[1].innerHTML;
           textBox[1].innerHTML = ' '.repeat(this.maxSize.size - text.length);
-          if(textBox[1] === this.currentTextbox) {
+          if (textBox[1] === this.currentTextbox) {
             textBox[1].innerHTML += ' ';
           }
           textBox[1].innerHTML += text;
@@ -120,7 +120,7 @@ export class TextService extends DrawableService{
   }
 
   cancel(): void {
-    for(const box of this.textBoxes) {
+    for (const box of this.textBoxes) {
       box[1].remove();
       this.subElement.remove();
       this.textBoxes.delete(box[0]);
@@ -131,10 +131,10 @@ export class TextService extends DrawableService{
   delete(): void {
     const text = this.currentTextbox.innerHTML;
     const index = text.indexOf('|');
-    if(index !== text.length - 1) {
+    if (index !== text.length - 1) {
       this.currentTextbox.innerHTML = text.slice(0, index + 1) + text.slice(index + 2, text.length);
     }
-    if(this.maxSize !== undefined && this.currentTextbox === this.maxSize.target) {
+    if (this.maxSize !== undefined && this.currentTextbox === this.maxSize.target) {
       this.changeAlignment(this.properties.value.alignment);
     }
   }
@@ -142,20 +142,20 @@ export class TextService extends DrawableService{
   backspace(): void {
     const text = this.currentTextbox.innerHTML;
     const index = text.indexOf('|');
-    if(index > 0) {
+    if (index > 0) {
       this.currentTextbox.innerHTML = text.slice(0, index - 1) + text.slice(index, text.length);
     } else {
       this.currentTextbox.remove();
       this.textBoxes.delete(--this.currentBoxNumber);
       this.clickPosition.setY(this.clickPosition.getY() - this.properties.value.size  * CONSTANTS.TEXT_SPACING);
-      if(this.currentBoxNumber === 0) {
+      if (this.currentBoxNumber === 0) {
         this.createCurrentTextBox();
       } else {
         this.currentTextbox = this.textBoxes.get(this.currentBoxNumber - 1) as SVGTextElement;
         this.currentTextbox.innerHTML += text;
       }
     }
-    if(this.maxSize !== undefined && this.currentTextbox === this.maxSize.target) {
+    if (this.maxSize !== undefined && this.currentTextbox === this.maxSize.target) {
       this.changeAlignment(this.properties.value.alignment);
     }
   }
@@ -163,10 +163,10 @@ export class TextService extends DrawableService{
   moveLeft(): void {
     const text = this.currentTextbox.innerHTML;
     const index = text.indexOf('|');
-    if(index > 0) {
+    if (index > 0) {
       this.currentTextbox.innerHTML = text.slice(0, index - 1) + '|' + text[index - 1] + text.slice(index + 1, text.length);
     } else {
-        if(this.currentBoxNumber !== 1) {
+        if (this.currentBoxNumber !== 1) {
           this.currentTextbox.innerHTML = text.substr(1);
           this.currentTextbox = this.textBoxes.get((--this.currentBoxNumber) - 1) as SVGTextElement;
           this.currentTextbox.innerHTML +=  '|';
@@ -177,10 +177,10 @@ export class TextService extends DrawableService{
   moveRight(): void {
     const text = this.currentTextbox.innerHTML;
     const index = text.indexOf('|');
-    if(index < text.length - 1) {
+    if (index < text.length - 1) {
       this.currentTextbox.innerHTML = text.slice(0, index) + text[index + 1] + '|'  + text.slice(index + 2, text.length);
     } else {
-      if(this.currentBoxNumber < this.textBoxes.size) {
+      if (this.currentBoxNumber < this.textBoxes.size) {
         this.currentTextbox.innerHTML = text.substr(0, index);
         this.currentTextbox = this.textBoxes.get(this.currentBoxNumber ++) as SVGTextElement;
         this.currentTextbox.innerHTML =  '|' + this.currentTextbox.innerHTML;
@@ -189,14 +189,14 @@ export class TextService extends DrawableService{
   }
 
   createCurrentTextBox(): void {
-    if(this.currentTextbox !== undefined) {
+    if (this.currentTextbox !== undefined) {
       const text = this.currentTextbox.innerHTML;
       this.currentTextbox.innerHTML = text.substr(0, text.length - 1);
     }
     this.currentTextbox = this.manipulator.createElement(SVGProperties.text, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.currentTextbox, SVGProperties.x,     this.clickPosition.getX().toString());
     this.manipulator.setAttribute(this.currentTextbox, SVGProperties.y,     this.clickPosition.getY().toString());
-    this.currentTextbox.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve");
+    this.currentTextbox.setAttributeNS('http://www.w3.org/XML/1998/namespace', 'xml:space', 'preserve');
     this.currentTextbox.innerHTML = '|';
     this.updateStyle();
     this.manipulator.appendChild(this.subElement, this.currentTextbox);
@@ -205,9 +205,9 @@ export class TextService extends DrawableService{
   }
 
   private toLeft(): void {
-    for(let textBox of this.textBoxes) {
+    for (const textBox of this.textBoxes) {
       let text = textBox[1].innerHTML;
-      while(text[0] === ' ') {
+      while (text[0] === ' ') {
         text = text.substr(1);
       }
       textBox[1].innerHTML = text;
@@ -220,9 +220,9 @@ export class TextService extends DrawableService{
       size: (this.textBoxes.get(0) as SVGTextElement).innerHTML.length
     };
     let currentElementLength = 0;
-    for(const textBox of this.textBoxes) {
+    for (const textBox of this.textBoxes) {
       currentElementLength = textBox[1].innerHTML.length;
-      if(currentElementLength > this.maxSize.size) {
+      if (currentElementLength > this.maxSize.size) {
         this.maxSize = {
           target: textBox[1],
           size: currentElementLength
@@ -238,18 +238,18 @@ export class TextService extends DrawableService{
   }
 
   private updateStyle(): void {
-    if(this.currentTextbox !== undefined) {
+    if (this.currentTextbox !== undefined) {
       this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontSize, this.properties.value.size.toString());
       this.manipulator.setAttribute(this.currentTextbox, SVGProperties.font, this.properties.value.font.toString());
-      this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fill, 
+      this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fill,
         this.colorSelectorService.primaryColor.value.getHex()
       );
-      if(this.properties.value.isItalic) {
+      if (this.properties.value.isItalic) {
         this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontStyle, 'italic');
       } else {
         this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontStyle, ' ');
       }
-      if(this.properties.value.isBold) {
+      if (this.properties.value.isBold) {
         this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontWeight, 'bold');
       } else {
         this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontWeight, ' ');

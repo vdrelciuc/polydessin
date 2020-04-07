@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
+import { Transform } from 'src/app/classes/transformations';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { SelectionService } from 'src/app/services/drawable/selection/selection.service';
 import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
-import { Transform } from 'src/app/classes/transformations';
 
 @Component({
   selector: 'app-selection',
@@ -22,7 +22,7 @@ export class SelectionComponent {
     return this.selectionService.hasNoSelection();
   }
 
-  selectAll() {
+  selectAll(): void {
     this.selectionService.selectAllElements();
   }
 
@@ -32,17 +32,27 @@ export class SelectionComponent {
 
   paste(): void {
     ClipboardService.paste();
+    this.pushSVG();
   }
 
   cut(): void {
     ClipboardService.cut();
+    this.pushSVG();
   }
 
   duplicate(): void {
     ClipboardService.duplicate();
+    this.pushSVG();
   }
 
   delete(): void {
     Transform.delete();
+    this.pushSVG();
+  }
+
+  pushSVG(): void {
+    this.selectionService.resizeGroup.remove();
+    this.selectionService.pushElement();
+    this.selectionService.setGeneratedAreaBorders();
   }
 }

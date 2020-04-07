@@ -1,8 +1,8 @@
+    // tslint:disable: no-magic-numbers | Reason: arbitrary values used for testing purposes
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { PaintSealComponent } from './paint-seal.component';
-import { MatSliderModule, MatSliderChange } from '@angular/material';
+import { MatSliderChange, MatSliderModule } from '@angular/material';
 import { PaintSealService } from 'src/app/services/drawable/paint-seal/paint-seal.service';
+import { PaintSealComponent } from './paint-seal.component';
 
 describe('PaintSealComponent', () => {
   let component: PaintSealComponent;

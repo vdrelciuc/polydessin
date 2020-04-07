@@ -25,8 +25,8 @@ describe('Transform', () => {
             right: 4,
             bottom: 4,
             toJSON: () =>  null
-        }
-    }
+        };
+    };
 
     const resetTransform = () => { transform = null; };
 
@@ -249,5 +249,4 @@ describe('Transform', () => {
         expect(rotateSpy).toHaveBeenCalled();
     });
 
-    
 });

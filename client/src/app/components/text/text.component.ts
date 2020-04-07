@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatSliderChange, MatRadioChange } from '@angular/material';
-import { TextService } from 'src/app/services/drawable/text/text.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatRadioChange, MatSliderChange } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { CharacterFont } from 'src/app/enums/character-font';
 import { Alignment } from 'src/app/enums/text-alignement';
-import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
+import { TextService } from 'src/app/services/drawable/text/text.service';
 import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({
   selector: 'app-text',
@@ -14,14 +14,14 @@ import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
   styleUrls: ['./text.component.scss']
 })
 export class TextComponent implements OnInit, OnDestroy {
-  
+
   private subscriptions: Subscription[] = [];
 
   constructor(
     private shortcutManager: ShortcutManagerService,
     private shortcuts: HotkeysService,
     public service: TextService,
-    private toolSelector: ToolSelectorService) { 
+    private toolSelector: ToolSelectorService) {
       this.service = this.toolSelector.getText();
   }
 
@@ -31,36 +31,36 @@ export class TextComponent implements OnInit, OnDestroy {
     this.setupShortcuts();
   }
 
-  ngOnDestroy(): void {    
+  ngOnDestroy(): void {
     this.disableShortcuts();
     this.shortcutManager.setupShortcuts();
   }
 
   setSize(event: MatSliderChange): void {
     const value = event.value;
-    if(value !== null) {
-      let attributes = this.service.properties.value;
+    if (value !== null) {
+      const attributes = this.service.properties.value;
       attributes.size = value;
       this.service.properties.next(attributes);
     }
   }
 
   updateBold(): void {
-    let attributes = this.service.properties.value;
+    const attributes = this.service.properties.value;
     attributes.isBold = !attributes.isBold;
     this.service.properties.next(attributes);
   }
 
   updateItalic(): void {
-    let attributes = this.service.properties.value;
+    const attributes = this.service.properties.value;
     attributes.isItalic = !attributes.isItalic;
     this.service.properties.next(attributes);
   }
 
-  setFont(event: Event) {
+  setFont(event: Event): void {
     const font = (event.target as HTMLSelectElement).value as CharacterFont;
-    if(font !== undefined) {
-      let attributes = this.service.properties.value;
+    if (font !== undefined) {
+      const attributes = this.service.properties.value;
       attributes.font = font;
       this.service.properties.next(attributes);
     }
@@ -68,11 +68,11 @@ export class TextComponent implements OnInit, OnDestroy {
 
   setAlignement(event: MatRadioChange): void {
     const value = event.value;
-    if(value !== null) {
+    if (value !== null) {
       const alignment = value as Alignment;
-      if(alignment !== undefined) {
+      if (alignment !== undefined) {
         this.service.changeAlignment(alignment);
-        let attributes = this.service.properties.value;
+        const attributes = this.service.properties.value;
         attributes.alignment = alignment;
         this.service.properties.next(attributes);
       }
@@ -80,7 +80,7 @@ export class TextComponent implements OnInit, OnDestroy {
   }
 
   private disableShortcuts(): void {
-    for(let i: number = this.subscriptions.length - 1; i >= 0; --i) {
+    for (let i: number = this.subscriptions.length - 1; i >= 0; --i) {
       this.subscriptions[i].unsubscribe();
       this.subscriptions.pop();
     }
@@ -94,7 +94,7 @@ export class TextComponent implements OnInit, OnDestroy {
       )
     );
 
-  this.subscriptions.push(this.shortcuts.addShortcut({ keys: 'arrowright', description: 'Moving right' }).subscribe(
+    this.subscriptions.push(this.shortcuts.addShortcut({ keys: 'arrowright', description: 'Moving right' }).subscribe(
         (event) => {
           this.service.moveRight();
         }

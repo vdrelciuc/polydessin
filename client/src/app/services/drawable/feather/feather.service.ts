@@ -1,10 +1,10 @@
-import { Injectable, Renderer2, ElementRef } from '@angular/core';
-import { DrawableService } from '../drawable.service';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import * as CONSTANTS from 'src/app/classes/constants';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from '../../color-selector/color-selector.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import * as CONSTANTS from 'src/app/classes/constants';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { DrawableService } from '../drawable.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +18,11 @@ export class FeatherService extends DrawableService {
   private previousMouse: CoordinatesXY;
   private isDrawing: boolean;
   private preview: SVGLineElement;
+  private readonly DEFAULT_HEIGHT: number = 10;
 
   constructor() {
     super();
-    this.height = 10;
+    this.height = this.DEFAULT_HEIGHT;
     this.angle = 0;
   }
 
@@ -40,7 +41,7 @@ export class FeatherService extends DrawableService {
 
   endTool(): void {
     if (this.isDrawing) {
-      //this.subElement.remove();
+      // this.subElement.remove();
       delete(this.subElement);
       this.isDrawing = false;
     }
@@ -121,9 +122,12 @@ export class FeatherService extends DrawableService {
 
   onMouseWheel(event: WheelEvent): void {
     let delta = (event.altKey ? CONSTANTS.MOUSE_ROLL_CHANGE_ALT : CONSTANTS.MOUSE_ROLL_CHANGE);
+    // tslint:disable-next-line: no-magic-numbers | Reason: -1 designates an exception
     delta *= (event.deltaY < 0 ? 1 : -1);
     this.angle += delta;
+    // tslint:disable-next-line: no-magic-numbers | Reason: 360 is a full circle
     if (this.angle >= 360) { this.angle -= 360; }
+    // tslint:disable-next-line: no-magic-numbers | Reason: 360 is a full circle
     if (this.angle < 0) { this.angle += 360; }
     this.updatePreview(CoordinatesXY.getEffectiveCoords(this.image, event));
   }

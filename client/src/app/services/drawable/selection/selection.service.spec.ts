@@ -24,6 +24,8 @@ describe('SelectionService', () => {
   let gResizeGroup: SVGGElement;
   let controlPoint: SVGRectElement;
 
+  let spyRemove: jasmine.Spy<InferableFunction>;
+
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
     const element = new Element();
     parentElement.children.push(element);
@@ -104,11 +106,11 @@ describe('SelectionService', () => {
       getTestBed().get<ColorSelectorService>(ColorSelectorService as Type<ColorSelectorService>),
       getTestBed().get<DrawStackService>(DrawStackService as Type<DrawStackService>));
 
+    spyOn<any>(Transform, 'setElements').and.callFake(() => undefined);
     service['selectionRect'].getBoundingClientRect = jasmine.createSpy().and.callFake(mockedBBox);
     service['transformShortcuts'].setupShortcuts = jasmine.createSpy().and.callFake(() => undefined);
     service['image'].nativeElement.cloneNode = jasmine.createSpy().and.returnValue(undefined);
-    service['subElement'].remove = jasmine.createSpy().and.returnValue(mockedRendered);
-    service['resizeGroup'].remove = jasmine.createSpy().and.returnValue(mockedRendered);
+    spyRemove = service['subElement'].remove = jasmine.createSpy().and.returnValue(mockedRendered);
     service['state'] = SelectionState.idle;
     setupElementsInCanvas();
   });
@@ -270,9 +272,8 @@ describe('SelectionService', () => {
 
     service['state'] = SelectionState.selecting;
     service['selectedElements'].push_back(firstGElement);
-    const spy = spyOn<any>(service['manipulator'], 'removeChild');
     service.onMouseRelease(mockedEvent);
-    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spyRemove).toHaveBeenCalledTimes(1);
   });
 
   it('#onMouseRelease should remove selection box after an inversion drag', () => {
@@ -283,9 +284,8 @@ describe('SelectionService', () => {
     service['selectedElements'].push_back(firstGElement);
     service['elementsToInvert'].push_back(firstGElement);
     service['elementsToInvert'].push_back(secondGElement);
-    const spy = spyOn<any>(service['manipulator'], 'removeChild');
     service.onMouseRelease(mockedEvent);
-    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spyRemove).toHaveBeenCalledTimes(1);
   });
 
   it('#onMouseRelease should allow undo/redo after mouse was released', () => {

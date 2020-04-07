@@ -29,7 +29,7 @@ export abstract class DrawableService {
     this.attributes = new DrawablePropertiesService();
   }
 
-  protected pushElement(): void {
+  pushElement(): void {
     const nextID = this.drawStack.getNextID();
     this.drawStack.addElementWithInfos({
       target: this.subElement,

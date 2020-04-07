@@ -1,18 +1,17 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-
-import { ClipboardService } from './clipboard.service';
-import { DrawStackService } from '../draw-stack/draw-stack.service';
+// tslint:disable: no-magic-numbers | Reason: arbitrary values used for testing purposes
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { Transform } from 'src/app/classes/transformations';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { Stack } from 'src/app/classes/stack';
+import { Transform } from 'src/app/classes/transformations';
+import { ClipboardService } from './clipboard.service';
 
 describe('ClipboardService', () => {
   let service: ClipboardService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
-  let drawStack: DrawStackService;
 
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  // tslint:disable-next-line: no-any | Defining parentElement as an ElementRef throws an exception
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
@@ -29,7 +28,7 @@ describe('ClipboardService', () => {
         right: 109,
         bottom: 109,
         toJSON: () =>  null
-    }
+    };
   };
 
   const mockedSVGBBox = (): DOMRect => {
@@ -43,7 +42,7 @@ describe('ClipboardService', () => {
         right: 100,
         bottom: 100,
         toJSON: () =>  null
-    }
+    };
   };
 
   const addElementToSelection = (): void => {
@@ -69,14 +68,12 @@ describe('ClipboardService', () => {
             nativeElement: {}
           },
         },
-        DrawStackService,
         Transform
       ],
     });
     service = getTestBed().get(ClipboardService);
     manipulator = getTestBed().get<Renderer2>(Renderer2 as Type<Renderer2>);
     image = getTestBed().get<ElementRef>(ElementRef as Type<ElementRef>);
-    drawStack = getTestBed().get(DrawStackService);
     ClipboardService['selectedElements'] = new Stack<SVGGElement>();
     ClipboardService['copyTop'] = 0;
     ClipboardService['copyLeft'] = 0;
@@ -85,7 +82,7 @@ describe('ClipboardService', () => {
     image.nativeElement.cloneNode = jasmine.createSpy().and.returnValue(undefined);
     image.nativeElement.getBoundingClientRect = jasmine.createSpy().and.callFake(mockedSVGBBox);
 
-    ClipboardService.initialize(manipulator, image, drawStack);
+    ClipboardService.initialize(manipulator, image);
   });
 
   it('should be created', () => {
@@ -95,7 +92,6 @@ describe('ClipboardService', () => {
   it('#initialize should initialize class attributes', () => {
     expect(ClipboardService['manipulator']).toBeDefined();
     expect(ClipboardService['image']).toBeDefined();
-    expect(ClipboardService['drawStack']).toBeDefined();
   });
 
   it('#pasteDisabled should return true when no element has been copied', () => {
@@ -110,7 +106,7 @@ describe('ClipboardService', () => {
 
   it('#cut should save elements in clipboard and delete selection', () => {
     addElementToSelection();
-    const spy = spyOn<any>(Transform, 'delete');
+    const spy = spyOn(Transform, 'delete');
     expect(ClipboardService['selectedElements'].size()).toBe(0);
     ClipboardService.cut();
     expect(ClipboardService['selectedElements'].size()).toBe(1);
@@ -141,9 +137,9 @@ describe('ClipboardService', () => {
   it('#paste should add elements from clipboard to SVG', () => {
     addElementToSelection();
     ClipboardService.copy();
-    const spy = spyOn<any>(manipulator, 'appendChild');
+    const spy = spyOn(manipulator, 'appendChild');
     ClipboardService.paste();
-    expect(spy).toHaveBeenCalled()
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#paste should shift elements by 5px if paste is repeated', () => {
@@ -187,7 +183,7 @@ describe('ClipboardService', () => {
     ClipboardService.copy();
     ClipboardService['copyLeft'] = 99;
     ClipboardService['copyTop'] = 99;
-    const pasteSpy = spyOn<any>(Transform, 'setElements');
+    const pasteSpy = spyOn(Transform, 'setElements');
 
     ClipboardService.paste();
     expect(pasteSpy).not.toHaveBeenCalled();
@@ -202,7 +198,7 @@ describe('ClipboardService', () => {
 
   it('#duplicate should reset shift to far left and top if duplicate is about to add an element out of canvas on right or bottom', () => {
     addElementToSelection();
-    const translateSpy = spyOn<any>(Transform, 'translate');
+    const translateSpy = spyOn(Transform, 'translate');
     Transform.elementsToTransform[0].getBoundingClientRect = jasmine.createSpy().and.callFake(mockedElementBBox);
     ClipboardService.duplicate();
     expect(translateSpy).toHaveBeenCalledWith(-105, -105);

@@ -3,4 +3,3 @@ export enum Alignment {
     Center = 'Middle',
     Right = 'Right'
 }
-  

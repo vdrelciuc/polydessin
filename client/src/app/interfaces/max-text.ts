@@ -1,4 +1,4 @@
 export interface Max {
-    target: SVGTextElement,
-    size: number
+    target: SVGTextElement;
+    size: number;
 }

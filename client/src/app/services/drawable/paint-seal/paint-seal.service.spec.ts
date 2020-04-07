@@ -1,16 +1,15 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-import * as CONSTANTS from 'src/app/classes/constants';
-
-import { PaintSealService } from './paint-seal.service';
-import { BFSAlgorithm } from 'src/app/classes/bfs-algorithm';
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
+import { BFSAlgorithm } from 'src/app/classes/bfs-algorithm';
 import { Color } from 'src/app/classes/color';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import * as CONSTANTS from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { ColorSelectorService } from '../../color-selector/color-selector.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { PipetteService } from '../../pipette/pipette.service';
+import { PaintSealService } from './paint-seal.service';
 
 describe('PaintSealService', () => {
 
@@ -18,7 +17,8 @@ describe('PaintSealService', () => {
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
 
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  // tslint:disable-next-line: no-any | Reason: typedef of parentElement throws an exception
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
@@ -123,6 +123,7 @@ describe('PaintSealService', () => {
       clientY: 100,
     } as unknown as MouseEvent);
     expect(service['mouseDown']).toEqual(false);
+    // tslint:disable-next-line: no-magic-numbers | Reason : expected amount of calls
     expect(spy).toHaveBeenCalledTimes(8);
     expect(spy).toHaveBeenCalledWith(null, SVGProperties.d, '');
     expect(service['algorithm']).not.toEqual(undefined as unknown as BFSAlgorithm);
@@ -131,7 +132,8 @@ describe('PaintSealService', () => {
   it('#generatePathDefinition should generate a path defintion attribute', () => {
     service['algorithm'] = {
       pathsToFill: [
-        [ new CoordinatesXY(100,100), new CoordinatesXY(400,400), new CoordinatesXY(200, 200)],
+        // tslint:disable-next-line: no-magic-numbers | Reason : arbitrary values used for testing purposes
+        [ new CoordinatesXY(100, 100), new CoordinatesXY(400, 400), new CoordinatesXY(200, 200)],
         [ ]
       ]
     } as unknown as BFSAlgorithm;

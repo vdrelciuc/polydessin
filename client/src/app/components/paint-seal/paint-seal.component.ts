@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { PaintSealService } from 'src/app/services/drawable/paint-seal/paint-seal.service';
 import { MatSliderChange } from '@angular/material';
 import { Tools } from 'src/app/enums/tools';
+import { PaintSealService } from 'src/app/services/drawable/paint-seal/paint-seal.service';
 import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class PaintSealComponent {
 
   setTolerance(event: MatSliderChange): void {
     const value = event.value;
-    if(value !== null) {
+    if (value !== null) {
       this.service.tolerance.next(value);
     }
   }
