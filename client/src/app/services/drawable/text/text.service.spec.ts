@@ -84,6 +84,9 @@ describe('TextService', () => {
   });
 
   it('#endTool should reset cursor and push element', () => {
+    service['currentTextbox'] = {
+      innerHTML: 'asdasd|'
+    } as unknown as SVGTextElement;
     const spy = spyOn(service['manipulator'], 'setAttribute');
     service['subElement'] = {
       id: 1
@@ -91,6 +94,7 @@ describe('TextService', () => {
     service.endTool();
     expect(spy).toHaveBeenCalledTimes(2);
     expect(spy).toHaveBeenCalledWith(service['image'].nativeElement, CursorProperties.cursor, CursorProperties.default);
+    expect(service['currentTextbox'].innerHTML).toEqual('asdasd');
   });
 
   it('#endTool should reset cursor only', () => {

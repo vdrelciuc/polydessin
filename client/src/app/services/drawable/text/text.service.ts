@@ -46,7 +46,7 @@ export class TextService extends DrawableService {
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
       this.colorSelectorService.primaryColor.subscribe( () => this.updateStyle() );
-      this.properties.subscribe( () => this.updateStyle() );
+      this.properties.subscribe( () => this.textBoxes.forEach( textBox => this.updateStyle(textBox)));
   }
 
   onSelect(): void {
@@ -54,6 +54,9 @@ export class TextService extends DrawableService {
   }
 
   endTool(): void {
+    const text = this.currentTextbox.innerHTML;
+    const index = text.indexOf('|');
+    this.currentTextbox.innerHTML = text.slice(0, index) + text.slice(index + 1, text.length);
     if (this.subElement !== undefined) {
       this.pushElement();
     }
@@ -64,6 +67,7 @@ export class TextService extends DrawableService {
     this.clickPosition = CoordinatesXY.getEffectiveCoords(this.image, event);
     if (this.subElement !== undefined) {
       this.pushElement();
+      this.textBoxes = new Map<number, SVGTextElement>();
     }
     this.createElement();
   }
@@ -237,22 +241,22 @@ export class TextService extends DrawableService {
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
   }
 
-  private updateStyle(): void {
+  private updateStyle(toUpdate: SVGTextElement = this.currentTextbox): void {
     if (this.currentTextbox !== undefined) {
-      this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontSize, this.properties.value.size.toString());
-      this.manipulator.setAttribute(this.currentTextbox, SVGProperties.font, this.properties.value.font.toString());
-      this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fill,
+      this.manipulator.setAttribute(toUpdate, SVGProperties.fontSize, this.properties.value.size.toString());
+      this.manipulator.setAttribute(toUpdate, SVGProperties.font, this.properties.value.font.toString());
+      this.manipulator.setAttribute(toUpdate, SVGProperties.fill,
         this.colorSelectorService.primaryColor.value.getHex()
       );
       if (this.properties.value.isItalic) {
-        this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontStyle, 'italic');
+        this.manipulator.setAttribute(toUpdate, SVGProperties.fontStyle, 'italic');
       } else {
-        this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontStyle, ' ');
+        this.manipulator.setAttribute(toUpdate, SVGProperties.fontStyle, ' ');
       }
       if (this.properties.value.isBold) {
-        this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontWeight, 'bold');
+        this.manipulator.setAttribute(toUpdate, SVGProperties.fontWeight, 'bold');
       } else {
-        this.manipulator.setAttribute(this.currentTextbox, SVGProperties.fontWeight, ' ');
+        this.manipulator.setAttribute(toUpdate, SVGProperties.fontWeight, ' ');
       }
     }
   }
