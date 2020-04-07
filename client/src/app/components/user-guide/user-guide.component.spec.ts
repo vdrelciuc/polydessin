@@ -9,6 +9,9 @@ import { UserGuideComponent } from './user-guide.component';
 describe('UserGuideComponent', () => {
   let component: UserGuideComponent;
   let fixture: ComponentFixture<UserGuideComponent>;
+  history.pushState({
+    path: 'test'
+  }, 'mockState');
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -48,10 +51,10 @@ describe('UserGuideComponent', () => {
 
   it('#ngOnInit should update previous module', () => {
     history.pushState({
-      path: 'test'
-    }, 'mockState');
+      path: 'test2'
+    }, 'mockState2');
     component.ngOnInit();
-    expect(component.previousModuleRoute).toEqual('test');
+    expect(component.previousModuleRoute).toEqual('test2');
   });
 
   it('#getCurrentSubCategorie should return current sub ', () => {
@@ -59,12 +62,6 @@ describe('UserGuideComponent', () => {
     component['currentSubCategorie'] = mocked;
     expect(component.getCurrentSubCategorie()).toEqual(mocked);
   });
-
-  // it('#setCurrentSubCategorie should return current sub ', () => {
-  //   const mocked = 'mocked';
-  //   component.setCurrentSubCategorie(mocked);
-  //   expect(component['currentSubCategorie']).toEqual(mocked);
-  // });
 
   it('#findIndex should return index of invalid param', () => {
     expect(component.findIndex('mocked')).toEqual([0, 0, true]);
@@ -80,17 +77,23 @@ describe('UserGuideComponent', () => {
 
   it('#getNextElement should return next element', () => {
     component['currentSubCategorie'] = 'Pinceau';
+    const spy = spyOn(component, 'getPath').and.callFake( () => 'path');
     expect(component.getNextElement()).toEqual('Crayon');
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#getNextElement should return next element in another section', () => {
     component['currentSubCategorie'] = 'Couleur';
+    const spy = spyOn(component, 'getPath').and.callFake( () => 'path');
     expect(component.getNextElement()).toEqual('Ligne');
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#getNextElement should not return next element', () => {
     component['currentSubCategorie'] = 'Nouveau Dessin';
+    const spy = spyOn(component, 'getPath').and.callFake( () => 'path');
     expect(component.getNextElement()).toEqual('Nouveau Dessin');
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('#getPreviousElement should return previous element', () => {
@@ -100,7 +103,9 @@ describe('UserGuideComponent', () => {
 
   it('#getPreviousElement should return previous element in another section', () => {
     component['currentSubCategorie'] = 'Pinceau';
+    const spy = spyOn(component, 'getPath').and.callFake( () => 'path');
     expect(component.getPreviousElement()).toEqual('Bienvenue');
+    expect(spy).toHaveBeenCalled();
   });
 
   it('#getPreviousElement should not return previous element', () => {
@@ -110,7 +115,9 @@ describe('UserGuideComponent', () => {
 
   it('#closeGuide should close', () => {
     const spy = spyOn(component.dialogRef, 'close');
+    const spy2 = spyOn(component['router'], 'navigate');
     component.closeGuide();
     expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
   });
 });

@@ -1,8 +1,9 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageExportType } from 'src/app/enums/export-type';
 import { ImageFormat } from 'src/app/enums/image-format';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ExportService } from '../../services/export/export.service';
 
 @Component({
@@ -20,7 +21,9 @@ export class ExportComponent implements AfterViewInit {
   exportTypes: string[];
   selectedExportType: string;
   title: string;
-  isTitleValid: boolean; // variable never used
+  email: string;
+  isTitleValid: boolean;
+  isEmailValid: boolean;
 
   private formatsMap: Map<string, ImageFormat>;
   private filtersMap: Map<string, ImageFilter>;
@@ -30,24 +33,36 @@ export class ExportComponent implements AfterViewInit {
   @ViewChild('myDownload', {static : false}) myDownload: ElementRef;
   @ViewChild('proccessingCanas', {static : false}) proccessingCanas: ElementRef;
 
-  constructor(private dialogRef: MatDialogRef<ExportComponent>, private exportation: ExportService) {
-    this.exportation.currentFilter.subscribe((filter: ImageFilter) => {
-      this.selectedFilter = filter.toString();
-    });
-    this.exportation.currentFormat.subscribe((format: ImageFormat) => {
-      this.selectedFormat = format.toString();
-    });
-    this.exportation.currentExportType.subscribe((exportType: ImageExportType) => {
-      this.selectedExportType = exportType.toString();
-    });
-    this.exportation.isTitleValid.subscribe((validity: boolean) => {
-      this.isTitleValid = validity;
-    });
-    this.exportFormats = Object.keys(ImageFormat);
-    this.exportFilters = Object.keys(ImageFilter);
-    this.exportTypes = Object.keys(ImageExportType);
+  constructor(
+    private dialogRef: MatDialogRef<ExportComponent>,
+    private exportation: ExportService,
+    private snack: MatSnackBar,
+    private shortcutManager: ShortcutManagerService
+    ) {
+      this.shortcutManager.disableShortcuts();
+      this.exportation.currentFilter.subscribe((filter: ImageFilter) => {
+        this.selectedFilter = filter.toString();
+      });
+      this.exportation.currentFormat.subscribe((format: ImageFormat) => {
+        this.selectedFormat = format.toString();
+      });
+      this.exportation.currentExportType.subscribe((exportType: ImageExportType) => {
+        this.selectedExportType = exportType.toString();
+      });
+      this.exportation.isTitleValid.subscribe((validity: boolean) => {
+        this.isTitleValid = validity;
+      });
+      this.exportation.isEmailValid.subscribe((validity: boolean) => {
+        this.isEmailValid = validity;
+      });
+      this.exportFormats = Object.keys(ImageFormat);
+      this.exportFilters = Object.keys(ImageFilter);
+      this.exportTypes = Object.keys(ImageExportType);
 
-    this.initializeMaps();
+      this.isTitleValid = false;
+      this.isEmailValid = false;
+
+      this.initializeMaps();
   }
 
   private initializeMaps(): void {
@@ -102,13 +117,34 @@ export class ExportComponent implements AfterViewInit {
   }
 
   exportConfirmation(): void {
-    this.onDialogClose();
-    this.exportation.export(this.title);
+    if (this.selectedExportType === ImageExportType.Téléchargement) {
+      if (!this.isTitleValid) {
+        this.snack.open('Titre invalide', '', { duration: 3000 });
+      } else {
+        this.exportation.export(this.title);
+        this.onDialogClose();
+      }
+    } else if (this.selectedExportType === ImageExportType.Courriel) {
+      if (!this.isTitleValid) {
+        this.snack.open('Titre invalide', '', { duration: 3000 });
+      } else if (!this.isEmailValid) {
+        this.snack.open('Courriel invalide', '', { duration: 3000 });
+      } else {
+        this.exportation.email(this.title, this.email);
+        this.onDialogClose();
+      }
+    }
   }
 
   onTitleUpdate(event: KeyboardEvent): void {
     if (event.target !== null) {
       this.exportation.validateTitle((event.target as HTMLInputElement).value);
+    }
+  }
+
+  onEmailUpdate(event: KeyboardEvent): void {
+    if (event.target !== null) {
+      this.exportation.validateEmail((event.target as HTMLInputElement).value);
     }
   }
 }

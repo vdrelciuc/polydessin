@@ -2,7 +2,7 @@
 import { Directive, ElementRef, EventEmitter, OnDestroy, Output } from '@angular/core';
 // import ResizeObserver from 'resize-observer-polyfill'; //not needed really since > Chrome 64
 
-type ResizeObserverCallback = (entries: ResizeObserverEntry[], observer: ResizeObserver) => void
+type ResizeObserverCallback = (entries: ResizeObserverEntry[], observer: ResizeObserver) => void;
 
 interface ResizeObserverEntry {
     readonly target: Element;
@@ -18,7 +18,7 @@ interface ResizeObserver {
 declare var ResizeObserver: {
   prototype: ResizeObserver;
   new(callback: ResizeObserverCallback): ResizeObserver;
-}
+};
 
 interface ResizeObserver {
   observe(target: Element): void;
@@ -42,6 +42,7 @@ const ro = new ResizeObserver((entries) => {
 @Directive({ selector: '[resizeObserver]' })
 export class ResizeObserverDirective implements OnDestroy {
   @Output()
+  // tslint:disable-next-line: typedef | Reason : resize: EventEmitter throws a compilation error
   resize = new EventEmitter();
 
   constructor(private el: ElementRef) {
@@ -50,11 +51,12 @@ export class ResizeObserverDirective implements OnDestroy {
     ro.observe(target);
   }
 
-  _resizeCallback(entry: any) {
+  // tslint:disable-next-line: no-any | Reason : unknwon typedef for entry
+  _resizeCallback(entry: any): void {
     this.resize.emit(entry);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     const target = this.el.nativeElement;
     ro.unobserve(target);
     entriesMap.delete(target);

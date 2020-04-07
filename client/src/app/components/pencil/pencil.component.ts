@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import * as CONSTANT from 'src/app/classes/constants';
 import { Tools } from 'src/app/enums/tools';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { PencilService } from 'src/app/services/index/drawable/pencil/pencil.service';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { PencilService } from 'src/app/services/drawable/pencil/pencil.service';
+import { DrawablePropertiesService } from 'src/app/services/drawable/properties/drawable-properties.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({
   selector: 'app-pencil',
@@ -14,8 +14,8 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector.servic
 export class PencilComponent {
 
   readonly name: string = Tools.Pencil;
-  readonly SLIDER_MINIMUM = CONSTANT.THICKNESS_MINIMUM;
-  readonly SLIDER_MAXIMUM = CONSTANT.THICKNESS_MAXIMUM;
+  readonly SLIDER_MINIMUM: number = CONSTANT.THICKNESS_MINIMUM;
+  readonly SLIDER_MAXIMUM: number = CONSTANT.THICKNESS_MAXIMUM;
   protected thickness: number;
 
   constructor(

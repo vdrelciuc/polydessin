@@ -45,7 +45,10 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('feather')"
+          <button mat-button 
+                  matTooltipPosition="after"
+                  aria-label="feather-tooltip"
+                  (click)="selectTool('feather')"
                   [ngClass]="{'clicked': currentTool === 'feather',
             'not-clicked': currentTool !== 'feather'}">
             <img src="../../../assets/icons/feather.svg">
@@ -132,7 +135,7 @@
     <div class="tool-group">
       <div class="left-column">
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('text')"
+          <button mat-button (click)="selectTool('text')"
                   [ngClass]="{'clicked': currentTool === 'text',
             'not-clicked': currentTool !== 'text'}">
             <img src="../../../assets/icons/text.svg">
@@ -178,7 +181,11 @@
       </div>
       <div class="right-column">
         <div class="icon">
-          <button mat-button disabled (click)="selectTool('bucket')"
+          <button mat-button 
+                  matTooltipPosition="after"
+                  aria-label="paint-seal-tooltip"
+                  (click)="selectTool('bucket')"
+                  [matTooltip]="this.toolSelectorService.getPaintSeal().frenchName"
                   [ngClass]="{'clicked': currentTool === 'bucket',
             'not-clicked': currentTool !== 'bucket'}">
             <img src="../../../assets/icons/bucket.svg">
@@ -207,7 +214,9 @@
     <div class="bottom">
       <div class="left-column">
         <div class="icon">
-          <button mat-button (click)="toolSelectorService.memory.undo()">
+          <button mat-button 
+          [disabled]="toolSelectorService.disableUndo"
+          (click)="toolSelectorService.memory.undo()">
             <img src="../../../assets/icons/undo1.svg">
           </button>
         </div>
@@ -222,14 +231,16 @@
           </button>
         </div>
         <div class="icon">
-          <button mat-button disabled>
+          <button mat-button (click)="goHome()">
             <img src="../../../assets/icons/home.svg">
           </button>
         </div>
       </div>
       <div class="right-column">
         <div class="icon">
-          <button mat-button (click)="toolSelectorService.memory.redo()">
+          <button mat-button 
+          [disabled]="toolSelectorService.disableRedo"
+          (click)="toolSelectorService.memory.redo()">
             <img src="../../../assets/icons/redo.svg">
           </button>
         </div>
@@ -246,7 +257,7 @@
         <div class="icon" >
           <a  [routerLink]="['' ,{outlets : { guideSubCategory : ['bienvenue']}}]"
               skipLocationChange
-              role="button" (click)="openDialog()">
+              role="button" (click)="openUserGuide()">
             <button mat-button>
               <img src="../../../assets/icons/guide.svg">
             </button>

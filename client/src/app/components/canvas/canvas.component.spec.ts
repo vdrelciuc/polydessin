@@ -1,15 +1,34 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+<<<<<<< HEAD
 import { CanvasComponent } from './canvas.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
+=======
+import { HttpClientModule } from '@angular/common/http';
+import { ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
+import { MatSnackBarModule } from '@angular/material';
+import { GridService } from 'src/app/services/drawable/grid/grid.service';
+import { UndoRedoService } from 'src/app/services/undo-redo/undo-redo.service';
+import { CanvasComponent } from './canvas.component';
+>>>>>>> master
 
 describe('CanvasComponent', () => {
   let component: CanvasComponent;
   let fixture: ComponentFixture<CanvasComponent>;
 
+<<<<<<< HEAD
+=======
+  // tslint:disable-next-line: no-any | Reason : parentElement: Element creates an issue
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
+    const element = new Element();
+    parentElement.children.push(element);
+    return element;
+  };
+
+>>>>>>> master
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ CanvasComponent ],

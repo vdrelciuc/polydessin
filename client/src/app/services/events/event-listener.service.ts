@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { DrawableService } from '../index/drawable/drawable.service';
-import { ToolSelectorService } from '../tools/tool-selector.service';
+import { DrawableService } from '../drawable/drawable.service';
+import { ToolSelectorService } from '../tools-selector/tool-selector.service';
 
 @Injectable({
   providedIn: 'root',
@@ -84,6 +84,12 @@ export class EventListenerService {
     this.manipulator.listen(window, 'keyup', (event: KeyboardEvent) => {
       if (this.currentTool !== undefined) {
         this.currentTool.onKeyReleased(event);
+      }
+    });
+
+    this.manipulator.listen(this.image.nativeElement, 'mousewheel', (event: WheelEvent) => {
+      if (this.currentTool !== undefined) {
+        this.currentTool.onMouseWheel(event);
       }
     });
   }

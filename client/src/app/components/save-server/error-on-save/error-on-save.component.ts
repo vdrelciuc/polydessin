@@ -9,6 +9,4 @@ export class ErrorOnSaveComponent  {
 
   errorTitle: boolean;
 
-  constructor() {
-  }
 }

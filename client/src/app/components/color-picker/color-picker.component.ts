@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Color } from 'src/app/classes/color';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
 @Component({
   selector: 'app-color-picker',
@@ -16,28 +17,32 @@ export class ColorPickerComponent {
 
   constructor(
     private dialogRef: MatDialogRef<ColorPickerComponent>,
-    private colorSelectorService: ColorSelectorService) {
-    this.selectedColor = this.colorSelectorService.getCurrentlySelectedColor();
-    this.selectedHue = this.colorSelectorService.getCurrentlySelectedColor();
+    private shortcutManager: ShortcutManagerService,
+    private colorSelectorService: ColorSelectorService
+    ) {
+      this.shortcutManager.disableShortcuts();
+      this.selectedColor = this.colorSelectorService.getCurrentlySelectedColor();
+      this.selectedHue = this.colorSelectorService.getCurrentlySelectedColor();
   }
 
-  updateRed(event: any): void {
-    this.selectedColor.setRedHex(event.target.value);
+  updateRed(event: KeyboardEvent): void {
+    this.selectedColor.setRedHex((event.target as HTMLInputElement).value);
   }
 
-  updateGreen(event: any): void {
-    this.selectedColor.setGreenHex(event.target.value);
+  updateGreen(event: KeyboardEvent): void {
+    this.selectedColor.setGreenHex((event.target as HTMLInputElement).value);
   }
 
-  updateBlue(event: any): void {
-    this.selectedColor.setBlueHex(event.target.value);
+  updateBlue(event: KeyboardEvent): void {
+    this.selectedColor.setBlueHex((event.target as HTMLInputElement).value);
   }
 
-  onDialogClose() {
+  onDialogClose(): void {
     this.dialogRef.close();
+    this.shortcutManager.setupShortcuts();
   }
 
-  onConfirm() {
+  onConfirm(): void {
     this.colorSelectorService.updateColor(this.selectedColor);
     this.onDialogClose();
   }

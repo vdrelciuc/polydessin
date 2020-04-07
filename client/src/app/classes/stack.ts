@@ -1,6 +1,7 @@
 export class Stack<T> {
 
   private stack: T[];
+  private readonly EMPTY_STACK_INDEX: number = -1;
 
   constructor() {
     this.stack = new Array<T>();
@@ -10,7 +11,7 @@ export class Stack<T> {
   delete(toDelete: T): void {
     if (this.stack.length > 0) {
       const indexToRemove = this.stack.indexOf(toDelete);
-      if (indexToRemove !== -1) {
+      if (indexToRemove !== this.EMPTY_STACK_INDEX) {
         this.stack.splice(indexToRemove, 1);
       }
     }

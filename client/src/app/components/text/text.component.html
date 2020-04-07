@@ -1,0 +1,47 @@
+<div id="container">
+    <form>
+        <div class="group">
+            <label class="title">Police</label>
+            <select mat-select (change)="setFont($event)">
+                <option value="courier">Courier</option>
+                <option value="ubuntu mono">Ubuntu Mono</option>
+              </select>
+          </div>
+    </form>
+    <form id="grid-form">
+      <div class="group">
+        <label class="title">Taille</label>
+        <mat-slider
+          id="size-slider"
+          name="size-slider"
+          disabled="false"
+          [min]="2"
+          [max]="100"
+          step="1"
+          thumbLabel="true"
+          tickInterval="false"
+          [value]="service.properties.value.size"
+          (change)="setSize($event)"
+          vertical="false">
+        </mat-slider>
+      </div>
+    </form>
+    <form>
+        <div class="group">
+            <label class="title" class="paddRight">Allignement</label>
+            <mat-radio-group aria-label="Alignement" (change)="setAlignement($event)">
+                <mat-radio-button class="paddRight" checked value="Left">Gauche</mat-radio-button>
+                <mat-radio-button class="paddRight" value="Middle">Centre</mat-radio-button>
+                <mat-radio-button class="paddRight" value="Right">Droite</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </form>
+    <form>
+      <div class="group">
+        <label class="title" class="paddRight">Formattage</label>
+        <mat-slide-toggle class="paddRight" [checked]="service.properties.value.isBold"   (change)="updateBold()"  >Bold  </mat-slide-toggle>
+        <mat-slide-toggle class="paddRight" [checked]="service.properties.value.isItalic" (change)="updateItalic()">Italic</mat-slide-toggle>
+      </div>
+    </form>
+  </div>
+  

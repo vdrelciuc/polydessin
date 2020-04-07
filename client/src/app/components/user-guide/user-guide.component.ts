@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatAccordion} from '@angular/material/expansion';
 import { Router } from '@angular/router';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
 @Component({
   selector: 'app-user-guide',
@@ -11,17 +12,22 @@ import { Router } from '@angular/router';
 
 export class UserGuideComponent implements OnInit {
 
-  constructor(public router: Router,
-              public dialogRef: MatDialogRef<UserGuideComponent>
-              ) {
+  private currentSubCategorie: string;
+  previousModuleRoute: string;
 
+  constructor(
+    private shortcutManager: ShortcutManagerService,
+    public router: Router,
+    public dialogRef: MatDialogRef<UserGuideComponent>
+    ) {
+      this.shortcutManager.disableShortcuts();
+      this.currentSubCategorie = 'Bienvenue';
+      this.previousModuleRoute = '';
   }
 
   @ViewChild('myaccordion', {static: true}) myPanels: MatAccordion;
 
-  private currentSubCategorie = 'Bienvenue';
-  previousModuleRoute = '';
-
+  // tslint:disable-next-line: no-any | Reason : custom element type
   categories: any[] = [
     {
       type: {
@@ -75,33 +81,25 @@ export class UserGuideComponent implements OnInit {
     }
   ];
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (history.state.path !== null && history.state.path !== undefined) {
       this.previousModuleRoute = history.state.path;
     }
   }
 
-  openAll() {
+  openAll(): void {
     this.myPanels.openAll();
   }
 
-  /**
-   *
-   *
-   */
   getCurrentSubCategorie(): string {
     return this.currentSubCategorie;
   }
 
-  setCurrentSubCategorie(value: string) {
+  setCurrentSubCategorie(value: string): void {
     this.currentSubCategorie = value;
     this.router.navigate([{outlets : { guideSubCategory : [this.getPath()] }}], { skipLocationChange: true });
   }
 
-  /**
-   *
-   *
-   */
   findIndex(nom: string): [number, number, boolean] {
     for (let i = 0 ; i < this.categories.length ; ++i) {
       for (let j = 0 ; j < this.categories[i].type.elements.length ; ++j) {
@@ -122,6 +120,7 @@ export class UserGuideComponent implements OnInit {
     if (currentElement === 'Nouveau Dessin') {
       return 'Nouveau Dessin';
     }
+    // tslint:disable-next-line: no-any | Reason : custom element type
     const indexes: any[] = this.findIndex(currentElement);
     if (indexes[2] === true) {
       indexes[0]++;
@@ -143,6 +142,7 @@ export class UserGuideComponent implements OnInit {
     if (currentElement === 'Bienvenue') {
       return 'Bienvenue';
     }
+    // tslint:disable-next-line: no-any | Reason : custom element type
     const indexes: any[] = this.findIndex(currentElement);
     if (indexes[1] === 0) {
       indexes[0]--;
@@ -160,12 +160,14 @@ export class UserGuideComponent implements OnInit {
   }
 
   getPath(): string {
+    // tslint:disable-next-line: no-any | Reason : custom element type
     const indexes: any[] = this.findIndex(this.currentSubCategorie);
     return this.categories[indexes[0]].type.elements[indexes[1]].path;
   }
 
-  closeGuide() {
+  closeGuide(): void {
     this.dialogRef.close();
+    this.shortcutManager.setupShortcuts();
     this.router.navigate([{outlets: {guideSubCategory: null}}]);
   }
 

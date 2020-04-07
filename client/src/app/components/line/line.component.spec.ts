@@ -4,20 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule,
   MatSliderModule, MatSlideToggleModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HotkeysService } from 'src/app/services/events/shortcuts/hotkeys.service';
-import { LineService } from 'src/app/services/index/drawable/line/line.service';
-import { DrawablePropertiesService } from 'src/app/services/index/drawable/properties/drawable-properties.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
+import { LineService } from 'src/app/services/drawable/line/line.service';
+import { DrawablePropertiesService } from 'src/app/services/drawable/properties/drawable-properties.service';
+import { HotkeysService } from 'src/app/services/hotkeys/hotkeys.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 import { LineComponent } from './line.component';
 
 describe('LineComponent', () => {
   let component: LineComponent;
-  let fixture: ComponentFixture<LineComponent>
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  let fixture: ComponentFixture<LineComponent>;
+  // tslint:disable-next-line: no-any | Reason : parentElement: Element creates an issue
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
-  }
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -74,7 +75,7 @@ describe('LineComponent', () => {
     expect(spy2).toHaveBeenCalled();
   });
 
-  it('#setupShortcuts should try shortcuts with line is done', () => {
+  it('#setupShortcuts should try shortcuts with line is not done', () => {
     const spy = spyOn(component['service'], 'deleteLine');
     component['service']['isDone'] = false;
     document.dispatchEvent(new KeyboardEvent('keydown', {
@@ -82,5 +83,21 @@ describe('LineComponent', () => {
       bubbles: true
     }));
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('#setupShortcuts should try shortcuts with line is done', () => {
+    const spy = spyOn(component['service'], 'deleteLine');
+    component['service']['isDone'] = true;
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'escape',
+      bubbles: true
+    }));
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('#updateJunctionType should update junction type', () => {
+    component['service'].jointIsDot = false;
+    component.updateJunctionType();
+    expect(component['service'].jointIsDot).toEqual(true);
   });
 });

@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SaveServerComponent } from './save-server.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialogRef, MatSnackBarModule, MatDialogModule, MatDialog, MatSnackBar } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
-import { ErrorOnSaveComponent } from './error-on-save/error-on-save.component';
-import { SaveServerService } from 'src/app/services/saveServer/save-server.service';
-import { ExportService } from 'src/app/services/export/export.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatDialog, MatDialogModule, MatDialogRef, MatSnackBar, MatSnackBarModule } from '@angular/material';
 import { REGEX_TITLE } from 'src/app/classes/regular-expressions';
+import { ExportService } from 'src/app/services/export/export.service';
+import { SaveServerService } from 'src/app/services/save-server/save-server.service';
+import { ErrorOnSaveComponent } from './error-on-save/error-on-save.component';
+import { SaveServerComponent } from './save-server.component';
 
 describe('SaveServerComponent', () => {
   let component: SaveServerComponent;
@@ -25,7 +25,16 @@ describe('SaveServerComponent', () => {
           },
         },
         MatSnackBar,
-        MatDialog,
+        {
+          provide: MatDialog,
+          useValue: () => ({
+            open: () => ({
+              componentInstance: {
+                errorTitle: 'bla',
+              },
+            })
+          }),
+        },
         SaveServerService,
         ExportService
       ],
@@ -69,15 +78,13 @@ describe('SaveServerComponent', () => {
   it('#saveConfirmation should save', async () => {
     component['isValidTitle'] = true;
     component['isSaving'] = true;
-    const spy = spyOn(component['dialog'], 'open');
     const spy2 = spyOn(component['snacks'], 'open');
     await component.saveConfirmation();
-    expect(spy).not.toHaveBeenCalledWith(ErrorOnSaveComponent, {disableClose: true});
     expect(spy2).toHaveBeenCalledWith('Début de la sauvegarde', '', {duration : 1400} );
   });
 
   it('#addTag should show error, max number of tags reached', () => {
-    let tags = new Set<string>();
+    const tags = new Set<string>();
     tags.add('test1');
     tags.add('test2');
     tags.add('test3');
@@ -99,7 +106,7 @@ describe('SaveServerComponent', () => {
   it('#addTag should add valid tag', () => {
     const spy = spyOn(component['snacks'], 'open');
     component.addTag('valid');
-    expect(component['tags'].has('valid')).toEqual(true);
+    expect(component['tags'].has('VALID')).toEqual(true);
     expect(component['tagName']).toEqual('');
     expect(spy).not.toHaveBeenCalled();
   });
@@ -108,20 +115,20 @@ describe('SaveServerComponent', () => {
     const spy = spyOn(component['saveService'], 'removeTag');
     const tags = component['tags'];
     component.removeTag('test');
-    expect(spy).toHaveBeenCalledWith('test', tags)
+    expect(spy).toHaveBeenCalledWith('test', tags);
   });
 
   it('#checkTitleValidity should return invalid title', () => {
-    const spy = spyOn(component['saveService'], 'checkTitleValidity').and.callFake(function(title: string) {
+    const spy = spyOn(component['saveService'], 'checkTitleValidity').and.callFake((title: string) => {
       return REGEX_TITLE.test(title);
-    });;
+    });
     const ret = component.checkTitleValidity('1');
     expect(spy).toHaveBeenCalledWith('1');
     expect(ret).toEqual(false);
   });
 
   it('#checkTitleValidity should return valid title', () => {
-    const spy = spyOn(component['saveService'], 'checkTitleValidity').and.callFake(function(title: string) {
+    const spy = spyOn(component['saveService'], 'checkTitleValidity').and.callFake((title: string) => {
       return REGEX_TITLE.test(title);
     });
     const ret = component.checkTitleValidity('test');

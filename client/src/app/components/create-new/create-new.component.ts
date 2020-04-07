@@ -3,16 +3,17 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Color } from 'src/app/classes/color';
-import { DEFAULT_SECONDARY_COLOR } from 'src/app/classes/constants';
+import * as CONSTANTS from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { ColorType } from 'src/app/enums/color-types';
-import { CanvasService } from 'src/app/services/canvas.service';
-import { ColorSelectorService } from 'src/app/services/color-selector.service';
-import { CreateNewService } from 'src/app/services/create-new.service';
-import { WorkspaceService } from 'src/app/services/workspace.service';
-import { HotkeysService } from '../../services/events/shortcuts/hotkeys.service';
+import { CanvasService } from 'src/app/services/canvas/canvas.service';
+import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
+import { CreateNewService } from 'src/app/services/create-new/create-new.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { WorkspaceService } from 'src/app/services/workspace/workspace.service';
+import { HotkeysService } from '../../services/hotkeys/hotkeys.service';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
-import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
+import { WarningDialogComponent } from '../warning/warning-dialog.component';
 
 @Component({
   selector: 'app-create-new',
@@ -35,9 +36,11 @@ export class CreateNewComponent implements OnInit, OnDestroy {
               private createNewService: CreateNewService,
               private workspaceService: WorkspaceService,
               private canvasService: CanvasService,
+              private shortcutManager: ShortcutManagerService,
               public router: Router,
               private shortcut: HotkeysService
               ) {
+    this.shortcutManager.disableShortcuts();
     this.subscriptions.push(this.shortcut.addShortcut({ keys: 'control.o', description: 'Opening create a new drawing' }).subscribe(
       (event) => {
         // cant open a nez dialog
@@ -47,7 +50,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach ( (subscription) => subscription.unsubscribe() );
-    this.workspaceService.Size.next(this.workspaceService.Size.value);
+    this.workspaceService.size.next(this.workspaceService.size.value);
   }
 
   ngOnInit(): void {
@@ -59,20 +62,20 @@ export class CreateNewComponent implements OnInit, OnDestroy {
     this.colorSelectorService.temporaryColor.subscribe((color: Color) => {
       this.previewColor = color;
     });
-    this.colorSelectorService.temporaryColor.next(new Color(DEFAULT_SECONDARY_COLOR))
-    this.workspaceService.Size.subscribe((size: CoordinatesXY) => {
+    this.colorSelectorService.temporaryColor.next(new Color(CONSTANTS.DEFAULT_SECONDARY_COLOR));
+    this.workspaceService.size.subscribe((size: CoordinatesXY) => {
       if (!this.changed) {
         this.workspaceSizeX = size.getX();
         this.workspaceSizeY = size.getY();
       }
     });
   }
-  setcanvasSizeX(event: any): void {
-    this.workspaceSizeX = event.target.value;
+  setcanvasSizeX(event: KeyboardEvent): void {
+    this.workspaceSizeX = parseInt((event.target as HTMLInputElement).value, CONSTANTS.DECIMAL_BASE);
     this.changed = true;
   }
-  setcanvasSizeY(event: any): void {
-    this.workspaceSizeY = event.target.value;
+  setcanvasSizeY(event: KeyboardEvent): void {
+    this.workspaceSizeY = parseInt((event.target as HTMLInputElement).value, CONSTANTS.DECIMAL_BASE);
     this.changed = true;
   }
 
@@ -83,7 +86,9 @@ export class CreateNewComponent implements OnInit, OnDestroy {
   }
 
   private launchColorDialog(): void {
-    this.dialog.open(ColorPickerComponent, { disableClose: true });
+    this.dialog.open(ColorPickerComponent, { disableClose: true }).afterClosed().subscribe(() => {
+      this.shortcutManager.disableShortcuts();
+    });
   }
 
   onConfirm(): void {
@@ -117,7 +122,7 @@ export class CreateNewComponent implements OnInit, OnDestroy {
     this.colorSelectorService.colorToChange = ColorType.Background;
     this.colorSelectorService.updateColor(this.previewColor);
     this.createNewService.canvasSize.next(new CoordinatesXY(this.workspaceSizeX, this.workspaceSizeY));
-    this.dialogRef.close();
     history.state.comingFromEntryPoint = false;
+    this.dialogRef.close();
   }
 }

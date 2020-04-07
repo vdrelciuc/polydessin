@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Tools } from 'src/app/enums/tools';
-import * as CONSTANT from 'src/app/classes/constants';
 import { MatSliderChange } from '@angular/material';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector.service';
-import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
+import * as CONSTANT from 'src/app/classes/constants';
+import { Tools } from 'src/app/enums/tools';
+import { GridService } from 'src/app/services/drawable/grid/grid.service';
+import { ToolSelectorService } from 'src/app/services/tools-selector/tool-selector.service';
 
 @Component({
   selector: 'app-grid',
@@ -13,10 +13,10 @@ import { GridService } from 'src/app/services/index/drawable/grid/grid.service';
 export class GridComponent {
 
   readonly name: string = Tools.Grid;
-  readonly THICKNESS_SLIDER_MINIMUM = CONSTANT.GRID_MINIMUM;
-  readonly THICKNESS_SLIDER_MAXIMUM = CONSTANT.GRID_MAXIMUM;
-  readonly OPACITY_SLIDER_MINIMUM = CONSTANT.OPACITY_MINIMUM;
-  readonly OPACITY_SLIDER_MAXIMUM = CONSTANT.OPACITY_MAXIMUM;
+  readonly THICKNESS_SLIDER_MINIMUM: number = CONSTANT.GRID_MINIMUM;
+  readonly THICKNESS_SLIDER_MAXIMUM: number = CONSTANT.GRID_MAXIMUM;
+  readonly OPACITY_SLIDER_MINIMUM: number = CONSTANT.OPACITY_MINIMUM;
+  readonly OPACITY_SLIDER_MAXIMUM: number = CONSTANT.OPACITY_MAXIMUM;
 
   constructor(
     public service: GridService,
@@ -27,17 +27,16 @@ export class GridComponent {
 
   setThickness(event: MatSliderChange): void {
     const value = event.value;
-    if(value !== null) {
+    if (value !== null) {
       this.service.thickness.next(value);
     }
   }
 
   setOpacity(event: MatSliderChange): void {
     const value = event.value;
-    if(value !== null) {
+    if (value !== null) {
       this.service.opacity.next(value);
     }
   }
-
 
 }
