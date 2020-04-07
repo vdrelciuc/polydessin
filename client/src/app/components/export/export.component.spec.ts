@@ -124,7 +124,7 @@ describe('ExportComponent', () => {
     const spy2 = spyOn(component['exportation'], 'email');
     component.exportConfirmation();
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy2).toHaveBeenCalledWith('title', 'email');
+    expect(spy2).toHaveBeenCalledWith('title', 'test@email.com');
   });
 
   it('#exportConfirmation should not email if title is invalid', () => {

@@ -6,7 +6,7 @@ import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.ser
 describe('ShortcutManagerService', () => {
 
   let service: ShortcutManagerService;
-  const numberOfSubscription = 29;
+  const numberOfSubscription = 32;
   const numberOfDefaultToPrevent = 4;
 
   beforeEach(() => {

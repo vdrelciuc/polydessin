@@ -174,7 +174,7 @@ describe('SelectionService', () => {
     service['selectedElements'].push_back(secondGElement);
     service.onMousePress(mockedEvent);
     expect(service['state']).toBe(SelectionState.leftClickInSelection);
-    expect(service['selectedElements'].getAll().length).toBe(2); // Should not have reset
+    expect(service['selectedElements'].getAll().length).toBe(3); // Should not have reset
   });
 
   it('#onMousePress with left click should select new element if clicked element is not in selection', () => {
@@ -252,7 +252,7 @@ describe('SelectionService', () => {
     service['state'] = SelectionState.singleRightClick;
     service['selectedElements'].push_back(firstGElement);
     service.onMouseRelease(mockedEvent);
-    expect(service['selectedElements'].getAll().length).toBe(2);
+    expect(service['selectedElements'].getAll().length).toBe(3);
   });
 
   it('#onMouseRelease should remove selected clicked element if mouse was not moved after right click', () => {

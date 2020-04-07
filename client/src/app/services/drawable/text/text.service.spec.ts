@@ -97,12 +97,16 @@ describe('TextService', () => {
     expect(service['currentTextbox'].innerHTML).toEqual('asdasd');
   });
 
-  it('#endTool should reset cursor only', () => {
+  it('#endTool should reset cursor', () => {
+    service['currentTextbox'] = {
+      innerHTML: 'bla|'
+    } as unknown as SVGTextElement;
     const spy = spyOn(service['manipulator'], 'setAttribute');
     service['subElement'] = undefined as unknown as SVGGElement;
     service.endTool();
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(service['image'].nativeElement, CursorProperties.cursor, CursorProperties.default);
+    expect(service['currentTextbox'].innerHTML).toEqual('bla');
   });
 
   it('#onClick should setup svgtext', () => {

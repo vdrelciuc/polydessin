@@ -83,6 +83,10 @@ describe('TextComponent', () => {
   });
 
   it('#setAlignement should set valid new alignment', () => {
+    component['service']['currentTextbox'] = {
+      innerHTML: 'bla'
+    } as unknown as SVGTextElement;
+    component['service']['textBoxes'].set(0, component['service']['currentTextbox']);
     component.setAlignement({value: Alignment.Right} as unknown as MatRadioChange);
     expect(component['service'].properties.value.alignment).toEqual(Alignment.Right);
   });

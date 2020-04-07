@@ -61,7 +61,7 @@ describe('SidebarComponent', () => {
   });
 
   it('#ngOnInit should init', () => {
-    expect(component.currentTool).toEqual(Tools.None);
+    expect(component.currentTool).toEqual(Tools.Selection);
     component['toolSelectorService'].$currentTool.next(Tools.Brush);
     expect(component.currentTool).toEqual(Tools.Brush);
   });

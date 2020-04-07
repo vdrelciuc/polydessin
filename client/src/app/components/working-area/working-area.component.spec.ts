@@ -47,12 +47,15 @@ import { SelectionComponent } from '../selection/selection.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { WorkspaceComponent } from '../workspace/workspace.component';
 import { WorkingAreaComponent } from './working-area.component';
+import { TextComponent } from '../text/text.component';
+import { FeatherComponent } from '../feather/feather.component';
+import { PaintSealComponent } from '../paint-seal/paint-seal.component';
 
 describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;
   let fixture: ComponentFixture<WorkingAreaComponent>;
 
-  const numberOfSubscription = 29;
+  const numberOfSubscription = 32;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -75,7 +78,10 @@ describe('WorkingAreaComponent', () => {
         GridComponent,
         EraserComponent,
         PolygonComponent,
-        SelectionComponent
+        SelectionComponent,
+        TextComponent,
+        FeatherComponent,
+        PaintSealComponent
       ],
       imports: [
         BrowserAnimationsModule,

@@ -44,6 +44,7 @@ describe('EventListenerService', () => {
           $currentTool: new BehaviorSubject<Tools>(Tools.Line),
           getLine: () => line,
           getCurrentTool: () => line,
+          setCurrentTool: () => null
         },
       },
       {

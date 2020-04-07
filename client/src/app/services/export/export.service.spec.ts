@@ -8,6 +8,7 @@ import * as CONSTANTS from 'src/app/classes/constants';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageFormat } from 'src/app/enums/image-format';
 import { ExportService } from './export.service';
+import { Observable } from 'rxjs';
 
 describe('ExportService', () => {
   let service: ExportService;
@@ -53,6 +54,12 @@ describe('ExportService', () => {
         drawImage: () => null
       } as unknown as CanvasRenderingContext2D)
     } as unknown as HTMLCanvasElement;
+
+    service['manipulator'] = {
+      createElement: () => null,
+      setAttribute: () => null,
+
+    } as unknown as Renderer2;
 
     service['canvas'] = {
       filter: null,
@@ -132,11 +139,10 @@ describe('ExportService', () => {
   it('#email should send svg with filter', () => {
     service['currentFormat'].next(ImageFormat.SVG);
     service['currentFilter'].next(ImageFilter.Négatif);
-    const spy = spyOn(service, 'sendEmail');
+    const spy = spyOn(service, 'sendEmail').and.callFake( () => new Observable() );
     const spy2 = spyOn(service['serialized'], 'serializeToString').and.callFake(() => {
       return 'string';
     });
-
     service.email('title', 'my@email.com');
     expect(spy).toHaveBeenCalled();
     expect(spy2).toHaveBeenCalled();
@@ -151,7 +157,7 @@ describe('ExportService', () => {
     service['imageAfterDeserialization'] = {
       src: '1',
     } as unknown as HTMLImageElement;
-    const spy = spyOn(service, 'sendEmail');
+    const spy = spyOn(service, 'sendEmail').and.callFake( () => new Observable() );
 
     service.email('title', 'my@email.com');
     expect(spy).toHaveBeenCalled();

@@ -28,6 +28,9 @@ import { RectangleComponent } from '../rectangle/rectangle.component';
 import { SelectionComponent } from '../selection/selection.component';
 import { SprayComponent } from '../spray/spray.component';
 import { OptionPannelComponent } from './option-pannel.component';
+import { TextComponent } from '../text/text.component';
+import { PaintSealComponent } from '../paint-seal/paint-seal.component';
+import { FeatherComponent } from '../feather/feather.component';
 
 describe('OptionPannelComponent', () => {
   let component: OptionPannelComponent;
@@ -51,6 +54,9 @@ describe('OptionPannelComponent', () => {
         GridComponent,
         PipetteComponent,
         SprayComponent,
+        TextComponent,
+        PaintSealComponent,
+        FeatherComponent
       ],
       providers: [
         ColorPaletteComponent,
@@ -73,6 +79,9 @@ describe('OptionPannelComponent', () => {
         RectangleComponent,
         PipetteComponent,
         SprayComponent,
+        TextComponent,
+        PaintSealComponent,
+        FeatherComponent,
         MatDialog
       ],
       imports: [
