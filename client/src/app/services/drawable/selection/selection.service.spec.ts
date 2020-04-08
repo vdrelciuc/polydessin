@@ -9,7 +9,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector/color-sele
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { SelectionService } from './selection.service';
 
-describe('SelectionService', () => {
+fdescribe('SelectionService', () => {
   let service: SelectionService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
@@ -174,7 +174,7 @@ describe('SelectionService', () => {
     service['selectedElements'].push_back(secondGElement);
     service.onMousePress(mockedEvent);
     expect(service['state']).toBe(SelectionState.leftClickInSelection);
-    expect(service['selectedElements'].getAll().length).toBe(3); // Should not have reset
+    expect(service['selectedElements'].getAll().length).toBe(2); // Should not have reset
   });
 
   it('#onMousePress with left click should select new element if clicked element is not in selection', () => {
@@ -252,7 +252,7 @@ describe('SelectionService', () => {
     service['state'] = SelectionState.singleRightClick;
     service['selectedElements'].push_back(firstGElement);
     service.onMouseRelease(mockedEvent);
-    expect(service['selectedElements'].getAll().length).toBe(3);
+    expect(service['selectedElements'].getAll().length).toBe(2);
   });
 
   it('#onMouseRelease should remove selected clicked element if mouse was not moved after right click', () => {
