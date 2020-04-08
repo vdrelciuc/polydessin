@@ -9,7 +9,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector/color-sele
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { SelectionService } from './selection.service';
 
-fdescribe('SelectionService', () => {
+describe('SelectionService', () => {
   let service: SelectionService;
   let manipulator: Renderer2;
   let image: ElementRef<SVGPolylineElement>;
