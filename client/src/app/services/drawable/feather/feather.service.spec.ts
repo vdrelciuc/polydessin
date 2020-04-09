@@ -7,7 +7,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SVGProperties } from 'src/app/classes/svg-html-properties';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
-fdescribe('FeatherService', () => {
+describe('FeatherService', () => {
 
   let service: FeatherService;
   const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
