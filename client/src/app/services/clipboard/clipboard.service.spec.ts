@@ -59,13 +59,27 @@ describe('ClipboardService', () => {
             createElement: () => mockedRendered,
             setAttribute: () => mockedRendered,
             appendChild: () => mockedRendered,
-            removeChild: () => mockedRendered
+            removeChild: () => mockedRendered,
+            getAttribute: () => null
         },
       },
       {
         provide: ElementRef,
         useValue: {
-            nativeElement: {}
+            nativeElement: {
+              getAttribute: () => null,
+              childNodes: [
+                {
+                  getBoundingClientRect: () => ({
+                    left: 100,
+                    right: 100,
+                    top: 100,
+                    bottom: 100
+                  }),
+                  getAttribute: () => null
+                }
+              ]
+            }
           },
         },
         Transform

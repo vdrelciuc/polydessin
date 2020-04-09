@@ -93,7 +93,26 @@ describe('SelectionService', () => {
                   bottom: boundBottom
                 };
                 return boundRect;
+              },
+              childNodes: [ { 
+                firstChild: {
+                  getBoundingClientRect: () => {
+                    const boundLeft = 50;
+                    const boundRight = 150;
+                    const boundTop = 50;
+                    const boundBottom = 150;
+                    const boundRect = {
+                      left: boundLeft,
+                      right: boundRight,
+                      top: boundTop,
+                      bottom: boundBottom
+                    };
+                    return boundRect;
+                },
+                getAttribute: () => null
               }
+            
+            }]
             },
           },
         }

@@ -6,41 +6,41 @@ export class BFSAlgorithm {
     pathsToFill: CoordinatesXY[][];
     private width: number;
     private height: number;
-    private context2D: CanvasRenderingContext2D;
+    private context: CanvasRenderingContext2D;
     private visited: Set<string>;
     private queue: CoordinatesXY[];
     private strokes: CoordinatesXY[];
     private strokesSet: Set<string>;
     private tolerance: number;
     private data: Uint8ClampedArray;
-    private tmpPath: CoordinatesXY[];
+    private path: CoordinatesXY[];
 
     constructor(
         width: number,
         height: number,
-        context2D: CanvasRenderingContext2D,
+        context: CanvasRenderingContext2D,
         tolerance: number,
     ) {
         this.width = width;
         this.height = height;
-        this.context2D = context2D;
+        this.context = context;
         this.visited = new Set([]);
+        this.strokesSet = new Set([]);
         this.queue = [];
         this.strokes = [];
-        this.strokesSet = new Set([]);
         this.tolerance = tolerance;
     }
 
     BFS(clickPosition: CoordinatesXY): void {
-        this.data = this.context2D.getImageData(0, 0, this.width, this.height).data;
+        this.data = this.context.getImageData(0, 0, this.width, this.height).data;
 
-        const targetColor: Color = this.getPixelColor(clickPosition);
+        const targetColor: Color = this.getColor(clickPosition);
         this.queue.push(clickPosition);
 
         while (this.queue.length > 0) {
             const pixel: CoordinatesXY = this.queue.pop() as CoordinatesXY;
 
-            if (!targetColor.isSimilarWithTolerance(this.getPixelColor(pixel), this.tolerance)) {
+            if (!targetColor.isSimilarWithTolerance(this.getColor(pixel), this.tolerance)) {
                 continue;
             }
 
@@ -60,7 +60,7 @@ export class BFSAlgorithm {
                     this.strokesSet.add(`${pixel.getX()} ${pixel.getY()}`);
                     break;
                 }
-                if (targetColor.isSimilarWithTolerance(this.getPixelColor(neighborPixel), this.tolerance)) {
+                if (targetColor.isSimilarWithTolerance(this.getColor(neighborPixel), this.tolerance)) {
                     this.queue.push(neighborPixel);
                     this.visited.add(`${neighborPixel.getX()} ${neighborPixel.getY()}`);
                 } else {
@@ -70,39 +70,39 @@ export class BFSAlgorithm {
                 }
             }
         }
-        this.createPathToFill();
+        this.calculatePath();
     }
 
-    private createPathToFill(): void {
+    private calculatePath(): void {
         if (this.strokes.length !== 0) {
             this.pathsToFill = [];
             this.visited = new Set([]);
-            this.tmpPath = [];
+            this.path = [];
 
             const pixel: CoordinatesXY = this.strokes[0];
             this.visited.add(`${pixel.getX()} ${pixel.getY()}`);
 
             while ((pixel.getX() >= 0 && pixel.getY() >= 0)) {
-                this.tmpPath.push(pixel.clone());
+                this.path.push(pixel.clone());
 
                 // tslint:disable-next-line: no-magic-numbers | Reason : negative value designates exception
                 const closestNeighbor: CoordinatesXY = new CoordinatesXY(-1, -1);
-                this.updateClosestNeighbor(pixel, closestNeighbor);
+                this.updateNext(pixel, closestNeighbor);
 
                 this.visited.add(`${closestNeighbor.getX()} ${closestNeighbor.getY()}`);
                 pixel.setX(closestNeighbor.getX());
                 pixel.setY(closestNeighbor.getY());
             }
 
-            this.pathsToFill.push(this.tmpPath);
-            this.tmpPath = [];
+            this.pathsToFill.push(this.path);
+            this.path = [];
         }
     }
 
-    private updateClosestNeighbor(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
-        this.searchInDirectNeighbors(pixel, closestNeighbor);
+    private updateNext(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
+        this.searchNext(pixel, closestNeighbor);
         if (!(closestNeighbor.getX() >= 0 && closestNeighbor.getY() >= 0)) {
-            this.searchInIndirectNeighbors(pixel, closestNeighbor);
+            this.searchOtherNeighbords(pixel, closestNeighbor);
             this.findClosestPixel(pixel, closestNeighbor);
         }
     }
@@ -121,30 +121,10 @@ export class BFSAlgorithm {
         });
 
         // tslint:disable-next-line: no-magic-numbers | Reason: arbitraty limit
-        if (closestNeighborDistance > 100 && this.tmpPath.length > 0) {
-            this.pathsToFill.push(this.tmpPath);
-            this.tmpPath = [];
+        if (closestNeighborDistance > 100 && this.path.length > 0) {
+            this.pathsToFill.push(this.path);
+            this.path = [];
         }
-    }
-
-    private searchInDirectNeighbors(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
-        const neighborPixels = [
-            new CoordinatesXY(pixel.getX() - 1, pixel.getY()),
-            new CoordinatesXY(pixel.getX() + 1, pixel.getY()),
-            new CoordinatesXY(pixel.getX(),     pixel.getY() - 1),
-            new CoordinatesXY(pixel.getX(),     pixel.getY() + 1),
-        ];
-        this.searchIn(neighborPixels, closestNeighbor);
-    }
-
-    private searchInIndirectNeighbors(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
-        const neighborPixels = [
-            new CoordinatesXY(pixel.getX() - 1, pixel.getY() - 1),
-            new CoordinatesXY(pixel.getX() - 1, pixel.getY() + 1),
-            new CoordinatesXY(pixel.getX() + 1, pixel.getY() - 1),
-            new CoordinatesXY(pixel.getX() + 1, pixel.getY() + 1),
-        ];
-        this.searchIn(neighborPixels, closestNeighbor);
     }
 
     private searchIn(neighborPixels: CoordinatesXY[], closestNeighbor: CoordinatesXY): void {
@@ -168,12 +148,32 @@ export class BFSAlgorithm {
         );
     }
 
-    private getPixelColor(pixel: CoordinatesXY): Color {
+    private getColor(pixel: CoordinatesXY): Color {
         let index: number = (CONSTANTS.BYTES_IN_HEX + 1) * (pixel.getX() + pixel.getY() * this.width);
         return new Color([
             this.data[index++],
             this.data[index++],
             this.data[index]
         ]);
+    }
+
+    private searchOtherNeighbords(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
+        const neighborPixels = [
+            new CoordinatesXY(pixel.getX() - 1, pixel.getY() - 1),
+            new CoordinatesXY(pixel.getX() - 1, pixel.getY() + 1),
+            new CoordinatesXY(pixel.getX() + 1, pixel.getY() - 1),
+            new CoordinatesXY(pixel.getX() + 1, pixel.getY() + 1),
+        ];
+        this.searchIn(neighborPixels, closestNeighbor);
+    }
+
+    private searchNext(pixel: CoordinatesXY, closestNeighbor: CoordinatesXY): void {
+        const neighborPixels = [
+            new CoordinatesXY(pixel.getX() - 1, pixel.getY()),
+            new CoordinatesXY(pixel.getX() + 1, pixel.getY()),
+            new CoordinatesXY(pixel.getX(),     pixel.getY() - 1),
+            new CoordinatesXY(pixel.getX(),     pixel.getY() + 1),
+        ];
+        this.searchIn(neighborPixels, closestNeighbor);
     }
 }

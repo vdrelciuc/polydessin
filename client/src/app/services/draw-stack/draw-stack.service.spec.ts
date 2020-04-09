@@ -31,7 +31,6 @@ describe('DrawStackService', () => {
     const spy = spyOn(service['elements'], 'insert');
     service.addElementWithInfos(mockedSVGElementInfo);
     expect(service.changeAt.value).toEqual(-1);
-    expect(service.isAdding.value).toEqual(true);
     expect(service['nextId']).toEqual(1);
     expect(spy).toHaveBeenCalled();
   });
@@ -51,29 +50,8 @@ describe('DrawStackService', () => {
     mockedSVGElementInfo.id = 1;
     service.addElementWithInfos(mockedSVGElementInfo);
     expect(service.changeAt.value).toEqual(1);
-    expect(service.isAdding.value).toEqual(true);
     expect(spy).toHaveBeenCalled();
   });
-
-  // it('#addFromUndo should add element from undo', () => {
-  //   mockedSVGElementInfo.id = 10;
-  //   service.addFromUndo(mockedSVGElementInfo);
-  //   const addedElement = service['elements'].pop_back();
-  //   if(addedElement !== undefined) {
-  //     expect(addedElement.id).toEqual(10);
-  //   }
-  // });
-
-  // it('#addFromUndo should not add element from undo because duplicated', () => {
-  //   mockedSVGElementInfo.id = 10;
-  //   service.addFromUndo(mockedSVGElementInfo);
-  //   service.addFromUndo(mockedSVGElementInfo);
-  //   expect(service['elements'].getAll().length).toEqual(1);
-  //   const addedElement = service['elements'].pop_back();
-  //   if(addedElement !== undefined) {
-  //     expect(addedElement.id).toEqual(10);
-  //   }
-  // });
 
   it('#removeElement should remove valid element', () => {
     mockedSVGElementInfo.id = 15;

@@ -41,6 +41,7 @@ describe('ToolSelectorService', () => {
         createElement: () => null,
         setAttribute: () => null,
         appendChild: () => null,
+        removeChild: () => null,
       } as unknown as Renderer2,
       {
         nativeElement:  {

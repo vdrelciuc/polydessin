@@ -16,17 +16,17 @@ describe('BFSAlgorithm', () => {
         );
     });
 
-    it('#createPathToFill should create path', () => {
+    it('#calculatePath should create path', () => {
         algorithm['strokes'] = [new CoordinatesXY(100, 100), new CoordinatesXY(200, 200)];
-        algorithm['createPathToFill']();
+        algorithm['calculatePath']();
         expect(algorithm['pathsToFill']).toEqual([[new CoordinatesXY(100, 100)], [new CoordinatesXY(200, 200)], [ ]]);
-        expect(algorithm['tmpPath']).toEqual([]);
+        expect(algorithm['path']).toEqual([]);
     });
 
     it('#findClosestPixel should find closest pixel', () => {
         algorithm['strokes'] = [new CoordinatesXY(100, 100), new CoordinatesXY(200, 200)];
         const close = new CoordinatesXY(105, 105);
-        algorithm['tmpPath'] = [];
+        algorithm['path'] = [];
         algorithm['findClosestPixel'](new CoordinatesXY(90, 90), close);
         expect(close.getX()).toEqual(100);
         expect(close.getY()).toEqual(100);
@@ -35,7 +35,7 @@ describe('BFSAlgorithm', () => {
     it('#findClosestPixel should closest be more than 100', () => {
         algorithm['strokes'] = [new CoordinatesXY(1000, 1000), new CoordinatesXY(2000, 2000)];
         const close = new CoordinatesXY(105, 105);
-        algorithm['tmpPath'] = [new CoordinatesXY(400, 400)];
+        algorithm['path'] = [new CoordinatesXY(400, 400)];
         algorithm['pathsToFill'] = [];
         algorithm['findClosestPixel'](new CoordinatesXY(90, 90), close);
         expect(close.getX()).toEqual(1000);
@@ -46,7 +46,7 @@ describe('BFSAlgorithm', () => {
     it('#searchInDirectNeighbors should search in array and find element', () => {
         const close = new CoordinatesXY(100, 100);
         algorithm['strokesSet'].add('200 200');
-        algorithm['searchInDirectNeighbors'](new CoordinatesXY(200, 199), close);
+        algorithm['searchNext'](new CoordinatesXY(200, 199), close);
         expect(close.getX()).toEqual(200);
         expect(close.getY()).toEqual(200);
     });
@@ -54,7 +54,7 @@ describe('BFSAlgorithm', () => {
     it('#searchInIndirectNeighbors should search in array and find element', () => {
         const close = new CoordinatesXY(100, 100);
         algorithm['strokesSet'].add('200 200');
-        algorithm['searchInIndirectNeighbors'](new CoordinatesXY(199, 199), close);
+        algorithm['searchOtherNeighbords'](new CoordinatesXY(199, 199), close);
         expect(close.getX()).toEqual(200);
         expect(close.getY()).toEqual(200);
     });
@@ -97,9 +97,9 @@ describe('BFSAlgorithm', () => {
         expect(algorithm['isValidPosition'](new CoordinatesXY(10, 10))).toEqual(true);
     });
 
-    it('#getPixelColor should get pixel color from data array', () => {
+    it('#getColor should get pixel color from data array', () => {
         algorithm['data'] = [0, 0, 0, 0, 0, 100, 100, 100] as unknown as Uint8ClampedArray;
-        const ret = algorithm['getPixelColor'](new CoordinatesXY(1, 0));
+        const ret = algorithm['getColor'](new CoordinatesXY(1, 0));
         expect(ret.getRGB()).toEqual([0, 100, 100]);
     });
 });

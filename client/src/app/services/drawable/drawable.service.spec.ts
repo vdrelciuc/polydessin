@@ -36,7 +36,8 @@ describe('DrawableService', () => {
       {
         getNextID: () => 1,
         addSVGWithNewElement: ()  => null,
-        addElementWithInfos: () => null
+        addElementWithInfos: () => null,
+        isAdding: new BehaviorSubject<boolean>(true)
       } as unknown as DrawStackService
     );
   });

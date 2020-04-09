@@ -16,6 +16,7 @@ describe('ExportService', () => {
     id: '100',
     setAttribute: () => null,
     cloneNode: () => mockedElement as unknown as Node,
+    insertBefore: () => null,
   } as unknown as SVGElement;
 
   beforeEach(() => {
@@ -31,7 +32,12 @@ describe('ExportService', () => {
       nativeElement: {
         id: '100',
         setAttribute: () => null,
+        getAttribute: () => null,
+        insertBefore: () => null,
         cloneNode: () => mockedElement,
+        style: () => ({
+          backgroundColor: 'red'
+        })
       } as unknown as SVGElement
     };
 
