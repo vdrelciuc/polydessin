@@ -41,7 +41,6 @@ export class FeatherService extends DrawableService {
 
   endTool(): void {
     if (this.isDrawing) {
-      // this.subElement.remove();
       delete(this.subElement);
       this.isDrawing = false;
     }
@@ -49,13 +48,15 @@ export class FeatherService extends DrawableService {
       this.preview.remove();
       delete(this.preview);
     }
-    this.subElement.remove();
+    if(this.subElement !== undefined) {
+      this.subElement.remove();
+    }
   }
 
   onMouseOutCanvas(event: MouseEvent): void {
     if (this.isDrawing) {
       this.onMouseMove(event);
-      this.isDrawing = false;
+      // this.isDrawing = false;
       this.pushElement();
     }
     if (this.preview !== undefined) {
