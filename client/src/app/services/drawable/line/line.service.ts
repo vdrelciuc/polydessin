@@ -192,7 +192,7 @@ export class LineService extends DrawableService {
           pointToDisplay = lastPoint.getClosestPoint(effectiveX, effectiveY, canvasHeight);
         }
       }
-      const circle: SVGCircleElement = this.manipulator.createElement('circle', 'http://www.w3.org/2000/svg');
+      const circle: SVGCircleElement = this.manipulator.createElement(SVGProperties.circle, SVGProperties.nameSpace);
       this.manipulator.setAttribute(circle, SVGProperties.centerX, pointToDisplay.getX().toString());
       this.manipulator.setAttribute(circle, SVGProperties.centerY, pointToDisplay.getY().toString());
       this.manipulator.setAttribute(circle, SVGProperties.radius, (this.dotDiameter / 2).toString());
@@ -255,9 +255,9 @@ export class LineService extends DrawableService {
   }
 
   private updateProperties(): void {
-    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    this.subElement = this.manipulator.createElement(SVGProperties.g,SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Line);
-    this.line = this.manipulator.createElement(SVGProperties.polyLine, 'http://www.w3.org/2000/svg');
+    this.line = this.manipulator.createElement(SVGProperties.polyLine, SVGProperties.nameSpace);
 
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());

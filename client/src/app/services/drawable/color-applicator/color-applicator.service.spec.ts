@@ -7,6 +7,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector/color-sele
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { ColorApplicatorService } from './color-applicator.service';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 describe('ColorApplicatorService', () => {
   let service: ColorApplicatorService;
@@ -78,7 +79,7 @@ describe('ColorApplicatorService', () => {
   it('#onClick should set new fill color of rectangle on left click if fill is not none', () => {
     mockedFillAttribute = (new Color()).getHex();
     mockedEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'rect') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.rectangle) });
 
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
@@ -93,7 +94,7 @@ describe('ColorApplicatorService', () => {
   it('#onClick should set new fill color of ellipse on left click if fill is not none', () => {
     mockedFillAttribute = (new Color()).getHex();
     mockedEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'ellipse') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.ellipse) });
 
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
@@ -108,7 +109,7 @@ describe('ColorApplicatorService', () => {
   it('#onClick should set new fill color of polygon on left click if fill is not none', () => {
     mockedFillAttribute = (new Color()).getHex();
     mockedEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'polygon') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.polygon) });
 
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
@@ -123,7 +124,7 @@ describe('ColorApplicatorService', () => {
   it('#onClick should not set new fill color of rectangle on left click if fill is none', () => {
     mockedFillAttribute = 'none';
     mockedEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'rect') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.rectangle) });
 
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
@@ -138,7 +139,7 @@ describe('ColorApplicatorService', () => {
   it('#onClick should not set new fill color of ellipse on left click if fill is none', () => {
     mockedFillAttribute = 'none';
     mockedEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'ellipse') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.ellipse) });
 
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
@@ -153,7 +154,7 @@ describe('ColorApplicatorService', () => {
   it('#onClick should not set new fill color of polygon on left click if fill is none', () => {
     mockedFillAttribute = 'none';
     mockedEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'polygon') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.polygon) });
 
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
@@ -167,7 +168,7 @@ describe('ColorApplicatorService', () => {
 
   it('#onClick should set new border color of rectangle on right click', () => {
     mockedEvent = eventMocker('click', RIGHT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'rect') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.rectangle) });
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
@@ -180,7 +181,7 @@ describe('ColorApplicatorService', () => {
 
   it('#onClick should set new border color of ellipse on right click', () => {
     mockedEvent = eventMocker('click', RIGHT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'ellipse') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.ellipse) });
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
@@ -193,7 +194,7 @@ describe('ColorApplicatorService', () => {
 
   it('#onClick should set new border color of polygon on right click', () => {
     mockedEvent = eventMocker('click', RIGHT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'polygon') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.polygon) });
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange').and.callThrough();
@@ -207,7 +208,7 @@ describe('ColorApplicatorService', () => {
   it('#onClick should set new border color of path on left click', () => {
     mockedFillAttribute = 'none';
     mockedEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'path') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.path) });
 
     spyOn<any>((mockedEvent.target as SVGElement), 'getAttribute').and.returnValue(mockedFillAttribute);
     const leftClickSpy = spyOn<any>(service, 'onLeftClick').and.callThrough();
@@ -221,7 +222,7 @@ describe('ColorApplicatorService', () => {
 
   it('#onClick should not set new border color of path on right click', () => {
     mockedEvent = eventMocker('click', RIGHT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'path') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.path) });
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const pathChangeSpy = spyOn<any>(service, 'pathChange').and.callThrough();
@@ -235,9 +236,9 @@ describe('ColorApplicatorService', () => {
   it('#onClick should set new border color of line on left click', () => {
     mockedFillAttribute = 'none';
     mockedEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    const gElelemt = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    const polylineElement = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-    const circleElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const gElelemt = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
+    const polylineElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.polyLine);
+    const circleElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.circle);
     gElelemt.appendChild(polylineElement);
     gElelemt.appendChild(circleElement);
 
@@ -257,7 +258,7 @@ describe('ColorApplicatorService', () => {
 
   it('#onClick should not set new border color of line on right click', () => {
     mockedEvent = eventMocker('click', RIGHT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'polyline') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.polyLine) });
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const pathChangeSpy = spyOn<any>(service, 'pathChange').and.callThrough();
@@ -271,9 +272,9 @@ describe('ColorApplicatorService', () => {
   it('#onClick should set new fill color of spray on left click', () => {
     mockedFillAttribute = 'none';
     mockedEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    const gElelemt = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    const circle1Element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    const circle2Element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const gElelemt = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
+    const circle1Element = document.createElementNS(SVGProperties.nameSpace, SVGProperties.circle);
+    const circle2Element = document.createElementNS(SVGProperties.nameSpace, SVGProperties.circle);
     gElelemt.appendChild(circle1Element);
     gElelemt.appendChild(circle2Element);
 
@@ -294,7 +295,7 @@ describe('ColorApplicatorService', () => {
 
   it('#onClick should not set new fill color of spray on right click', () => {
     mockedEvent = eventMocker('click', RIGHT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'circle') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.circle) });
 
     const rightClickSpy = spyOn<any>(service, 'onRightClick').and.callThrough();
     const pathChangeSpy = spyOn<any>(service, 'pathChange').and.callThrough();
@@ -307,7 +308,7 @@ describe('ColorApplicatorService', () => {
 
   it('#onClick should not do anything if button is not left or right click', () => {
     mockedEvent = eventMocker('click', 1, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'circle') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, SVGProperties.circle) });
 
     const leftClickSpy = spyOn<any>(service, 'onLeftClick');
     const rightClickSpy = spyOn<any>(service, 'onRightClick');
@@ -320,7 +321,7 @@ describe('ColorApplicatorService', () => {
 
   it('#onClick should not do anything if the clicked element is the SVG', () => {
     mockedEvent = eventMocker('click', RIGHT_CLICK, 0, 0);
-    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS('http://www.w3.org/2000/svg', 'svg') });
+    Object.defineProperty(mockedEvent, 'target', { value: document.createElementNS(SVGProperties.nameSpace, 'svg') });
 
     const pathChangeSpy = spyOn<any>(service, 'pathChange');
     const shapeChangeSpy = spyOn<any>(service, 'shapeChange');

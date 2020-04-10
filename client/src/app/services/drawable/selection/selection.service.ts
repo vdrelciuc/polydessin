@@ -183,8 +183,8 @@ export class SelectionService extends DrawableService {
 
   private setupProperties(): void {
     // Creating perimeter
-    this.perimeter = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
-    this.perimeterAlternative = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+    this.perimeter = this.manipulator.createElement(SVGProperties.rectangle, SVGProperties.nameSpace);
+    this.perimeterAlternative = this.manipulator.createElement(SVGProperties.rectangle, SVGProperties.nameSpace);
 
     // Adding perimeter properties
     this.manipulator.setAttribute(this.perimeter, SVGProperties.fillOpacity, '10%');
@@ -197,14 +197,14 @@ export class SelectionService extends DrawableService {
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.dashedBorder, '4, 4');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.dashedBorderOffset, '4');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.color, 'white');
-    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.resizeGroup = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    this.subElement = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
+    this.resizeGroup = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Selection);
     this.manipulator.appendChild(this.subElement, this.perimeter);
     this.manipulator.appendChild(this.subElement, this.perimeterAlternative);
 
     // Creating selection rectangle
-    this.selectionRect = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+    this.selectionRect = this.manipulator.createElement(SVGProperties.rectangle, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.selectionRect, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.selectionRect, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.selectionRect, SVGProperties.color, 'black');
@@ -216,7 +216,7 @@ export class SelectionService extends DrawableService {
     const controlPointQuantity = 4;
     this.controlPoints = new Array<SVGRectElement>(controlPointQuantity);
     for (let i = 0; i < controlPointQuantity; i++) {
-      this.controlPoints[i] = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+      this.controlPoints[i] = this.manipulator.createElement(SVGProperties.rectangle, SVGProperties.nameSpace);
       this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.fill, 'white');
       this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.color, 'black');
       this.manipulator.setAttribute(this.controlPoints[i], SVGProperties.thickness, '1');
@@ -276,7 +276,7 @@ export class SelectionService extends DrawableService {
     this.onMouseRelease(new MouseEvent(''));
     this.endTool();
     for (const element of [].slice.call(this.image.nativeElement.childNodes, 1)) {
-      if (element !== this.subElement && element !== this.resizeGroup && element.tagName === 'g') {
+      if (element !== this.subElement && element !== this.resizeGroup && element.tagName === SVGProperties.g) {
         this.selectedElements.push_back(element);
       }
     }
@@ -337,7 +337,7 @@ export class SelectionService extends DrawableService {
     const gElementBBox = element.getBoundingClientRect();
     const firstChild = element.firstChild as HTMLElement;
     const thickness = firstChild.getAttribute(SVGProperties.thickness);
-    if (thickness !== null && (firstChild.tagName === 'path' || firstChild.tagName === 'polyline')) {
+    if (thickness !== null && (firstChild.tagName === SVGProperties.path || firstChild.tagName === SVGProperties.polyLine)) {
       const firstChildBBox = firstChild.getBoundingClientRect();
       return {
         left: Math.min(gElementBBox.left, firstChildBBox.left - parseInt(thickness, 10) / 2),

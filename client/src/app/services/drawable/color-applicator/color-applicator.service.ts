@@ -54,14 +54,14 @@ export class ColorApplicatorService extends DrawableService {
     const newColor = this.colorSelectorService.primaryColor.getValue().getHex();
     const newOpacity = this.colorSelectorService.primaryTransparency.getValue().toString();
 
-    if ((clickedElement.tagName === 'rect' || clickedElement.tagName === 'ellipse' || clickedElement.tagName === 'polygon') && hasFill) {
+    if ((clickedElement.tagName === SVGProperties.rectangle || clickedElement.tagName === SVGProperties.ellipse || clickedElement.tagName === SVGProperties.polygon) && hasFill) {
       this.shapeChange(clickedElement, newColor, newOpacity, true);
-    } else if (clickedElement.tagName === 'path') {
+    } else if (clickedElement.tagName === SVGProperties.path) {
       this.pathChange(clickedElement, newColor, newOpacity);
-    } else if ((clickedElement.tagName === 'polyline' || clickedElement.tagName === 'circle') && clickedElement.parentNode !== null) {
+    } else if ((clickedElement.tagName === SVGProperties.polyLine || clickedElement.tagName === SVGProperties.circle) && clickedElement.parentNode !== null) {
       const children = clickedElement.parentNode.childNodes;
 
-      if ((children[0] as SVGElement).tagName === 'polyline') {
+      if ((children[0] as SVGElement).tagName === SVGProperties.polyLine) {
         this.pathChange(children[0] as SVGElement, newColor, newOpacity);
       } else {
         this.shapeChange(children[0] as SVGElement, newColor, newOpacity, true);
@@ -82,7 +82,7 @@ export class ColorApplicatorService extends DrawableService {
     switch (clickedElement.tagName) {
       case 'rect':
       case 'ellipse':
-      case 'polygon':
+      case SVGProperties.polygon:
         this.shapeChange(clickedElement, newColor, newOpacity, false);
         break;
     }

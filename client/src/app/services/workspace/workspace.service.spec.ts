@@ -26,5 +26,4 @@ describe('WorkspaceService', () => {
     service.backgroundColor.setHex('898989');
     expect(service.checkIfSameBackgroundColor(new Color('#898989'))).toBe(true);
   });
-
 });

@@ -205,25 +205,25 @@ export class PolygonService extends DrawableService {
 
   startDraw(): void {
     // Creating elements
-    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.polygon = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
+    this.subElement = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
+    this.polygon = this.manipulator.createElement(SVGProperties.polygon, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, this.drawStack.getNextID().toString());
 
     // Creating perimeter
-    this.perimeter = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
+    this.perimeter = this.manipulator.createElement(SVGProperties.polygon, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.perimeter, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.perimeter, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.perimeter, SVGProperties.dashedBorder, '4,4');
 
-    this.perimeterAlternative = this.manipulator.createElement(SVGProperties.polygon, 'http://www.w3.org/2000/svg');
+    this.perimeterAlternative = this.manipulator.createElement(SVGProperties.polygon, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.thickness, '1');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.dashedBorder, '4,4');
     this.manipulator.setAttribute(this.perimeterAlternative, SVGProperties.dashedBorderOffset, '4');
 
     // setting clip-path
-    this.clip = this.manipulator.createElement('clipPath', 'http://www.w3.org/2000/svg');
-    this.use = this.manipulator.createElement('use', 'http://www.w3.org/2000/svg');
+    this.clip = this.manipulator.createElement('clipPath', SVGProperties.nameSpace);
+    this.use = this.manipulator.createElement('use', SVGProperties.nameSpace);
 
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.polygon);

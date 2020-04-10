@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Transform } from 'src/app/classes/transformations';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { SelectionComponent } from './selection.component';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 describe('SelectionComponent', () => {
   let component: SelectionComponent;
@@ -19,7 +20,7 @@ describe('SelectionComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    component['selectionService'].resizeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    component['selectionService'].resizeGroup = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
     component['selectionService'].resizeGroup.remove = jasmine.createSpy().and.returnValue(undefined);
     component['selectionService'].pushElement = jasmine.createSpy().and.returnValue(undefined);
     component['selectionService'].setGeneratedAreaBorders = jasmine.createSpy().and.returnValue(undefined);

@@ -7,6 +7,7 @@ import { Transform } from 'src/app/classes/transformations';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 describe('SelectionTransformShortcutService', () => {
   let service: SelectionTransformShortcutService;
@@ -56,12 +57,12 @@ describe('SelectionTransformShortcutService', () => {
 
     const elementCount = 10;
     for (let i = 0; i < elementCount; i++) {
-      const element: SVGGElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      const element: SVGGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
       elementsToTransform.push_back(element);
     }
     Transform.setElements(elementsToTransform, manipulator);
 
-    selectionGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    selectionGroup = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
   };
 
   beforeEach(() => {

@@ -36,17 +36,17 @@ describe('SVGService', () => {
   });
 
   it('#getStack should return non empty stack', () => {
-    const element: SVGGElement = manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    const element: SVGGElement = manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
     manipulator.setAttribute(element, SVGProperties.title, 'test');
     stack.addElement(element);
     expect(stack.getStack().getAll().length).toEqual(1);
   });
 
   it('#addElement should add element at the end', () => {
-    const toAdd: SVGGElement = manipulator.createElement('g');
+    const toAdd: SVGGElement = manipulator.createElement(SVGProperties.g);
     manipulator.setAttribute(toAdd, SVGProperties.title, 'test');
     stack.addElement(toAdd);
-    const toAdd2: SVGGElement = manipulator.createElement('g');
+    const toAdd2: SVGGElement = manipulator.createElement(SVGProperties.g);
     manipulator.setAttribute(toAdd, SVGProperties.title, 'test22');
     stack.addElement(toAdd);
     expect(stack.getStack().getLast()).toEqual(toAdd2);

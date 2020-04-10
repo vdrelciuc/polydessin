@@ -8,6 +8,7 @@ import { SelectionState } from 'src/app/enums/selection-states';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { SelectionService } from './selection.service';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 describe('SelectionService', () => {
   let service: SelectionService;
@@ -40,25 +41,25 @@ describe('SelectionService', () => {
   const mockedBBox3 = () => ({ x: 200, y: 200, width: 10, height: 10, top: 200, left: 200, right: 210, bottom: 210, toJSON: () =>  null });
 
   const setupElementsInCanvas = () => {
-    canvas = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    canvas = document.createElementNS(SVGProperties.nameSpace, 'svg');
     canvasParent = document.createElement('APP-CANVAS');
     canvasParent.appendChild(canvas);
 
-    def = document.createElementNS('http://www.w3.org/2000/svg', 'def');
+    def = document.createElementNS(SVGProperties.nameSpace, 'def');
     canvas.appendChild(def);
 
-    firstGElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    clickedElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    firstGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
+    clickedElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.circle);
     firstGElement.appendChild(clickedElement);
     canvas.appendChild(firstGElement);
 
-    secondGElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    unselectedElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    secondGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
+    unselectedElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.rectangle);
     secondGElement.appendChild(unselectedElement);
     canvas.appendChild(secondGElement);
 
-    gResizeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    controlPoint = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    gResizeGroup = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
+    controlPoint = document.createElementNS(SVGProperties.nameSpace, SVGProperties.rectangle);
     gResizeGroup.appendChild(controlPoint);
     canvas.appendChild(gResizeGroup);
     service['controlPoints'] = [controlPoint];
@@ -383,8 +384,8 @@ describe('SelectionService', () => {
   });
 
   it('#getBBoxWithStroke should check stroke thickness if element is path or line', () => {
-    const gElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const gElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
+    const pathElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.path);
     gElement.appendChild(pathElement);
     gElement.getBoundingClientRect = jasmine.createSpy().and.callFake(mockedBBox);
     pathElement.getBoundingClientRect = jasmine.createSpy().and.callFake(mockedBBox2);
@@ -399,8 +400,8 @@ describe('SelectionService', () => {
   });
 
   it('#getBBoxWithStroke should not check stroke thickness if element is not path or line', () => {
-    const gElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    const gElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
+    const pathElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.rectangle);
     gElement.appendChild(pathElement);
     gElement.getBoundingClientRect = jasmine.createSpy().and.callFake(mockedBBox);
     pathElement.getBoundingClientRect = jasmine.createSpy().and.callFake(mockedBBox2);

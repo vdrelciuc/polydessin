@@ -227,7 +227,7 @@ export class ExportService {
   private applyFilterFomSvg(): void {
     this.cloneSVG = new ElementRef<SVGElement>(this.image.nativeElement);
     (this.cloneSVG.nativeElement as Node ) = this.image.nativeElement.cloneNode(true);
-    const background: SVGRectElement = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+    const background: SVGRectElement = this.manipulator.createElement(SVGProperties.rectangle, SVGProperties.nameSpace);
     this.manipulator.setAttribute(background, SVGProperties.width, this.image.nativeElement.getAttribute(SVGProperties.width) as string);
     this.manipulator.setAttribute(background, SVGProperties.height, this.image.nativeElement.getAttribute(SVGProperties.height) as string);
     this.manipulator.setAttribute(background, SVGProperties.fill, this.image.nativeElement.style.backgroundColor as string);

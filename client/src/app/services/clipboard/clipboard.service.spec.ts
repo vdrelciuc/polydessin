@@ -4,6 +4,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { Stack } from 'src/app/classes/stack';
 import { Transform } from 'src/app/classes/transformations';
 import { ClipboardService } from './clipboard.service';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 describe('ClipboardService', () => {
   let service: ClipboardService;
@@ -46,7 +47,7 @@ describe('ClipboardService', () => {
   };
 
   const addElementToSelection = (): void => {
-    const element: SVGGElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    const element: SVGGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
     Transform.elementsToTransform.push(element);
   };
 

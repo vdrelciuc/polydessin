@@ -64,7 +64,7 @@ export class SprayService extends DrawableService {
   }
   onMousePress(event: MouseEvent): void {
     this.isDrawing.next(true);
-    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    this.subElement = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, 'spray');
     this.manipulator.appendChild(this.image.nativeElement, this.subElement);
     if (!this.spraying) {
@@ -112,7 +112,7 @@ export class SprayService extends DrawableService {
   }
 
   private createDot(x: number, y: number): void {
-    const dot = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
+    const dot = this.manipulator.createElement(SVGProperties.circle, SVGProperties.nameSpace);
     this.manipulator.setAttribute(dot, SVGProperties.fill, this.color.getHex());
     this.manipulator.setAttribute(dot, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(dot, SVGProperties.radius, (CONSTANT.DOT_RADIUS / 2).toString());

@@ -182,11 +182,11 @@ export abstract class ShapeService extends DrawableService {
 
   protected setupProperties(): void {
     // Creating elements
-    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
+    this.subElement = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, this.drawStack.getNextID().toString());
-    this.shape = this.manipulator.createElement(this.svgHtmlTag, 'http://www.w3.org/2000/svg');
-    this.text = this.manipulator.createElement('text', 'http://www.w3.org/2000/svg');
-    this.perimeter = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+    this.shape = this.manipulator.createElement(this.svgHtmlTag, SVGProperties.nameSpace);
+    this.text = this.manipulator.createElement(SVGProperties.text, SVGProperties.nameSpace);
+    this.perimeter = this.manipulator.createElement(SVGProperties.rectangle, SVGProperties.nameSpace);
 
     // Adding shape properties
     const thickness = this.shapeStyle.hasBorder ? (this.shapeStyle.thickness * 2).toString() : '0';
@@ -211,8 +211,8 @@ export abstract class ShapeService extends DrawableService {
     this.manipulator.setAttribute(this.perimeter, SVGProperties.dashedBorder, '4, 2');
 
     // Removing border outside of shape
-    this.clip = this.manipulator.createElement('clipPath', 'http://www.w3.org/2000/svg');
-    this.use = this.manipulator.createElement('use', 'http://www.w3.org/2000/svg');
+    this.clip = this.manipulator.createElement('clipPath', SVGProperties.nameSpace);
+    this.use = this.manipulator.createElement('use', SVGProperties.nameSpace);
 
     // Adding elements to DOM
     this.manipulator.appendChild(this.subElement, this.shape);

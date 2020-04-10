@@ -3,6 +3,7 @@ import { Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { Stack } from './stack';
 import { Transform } from './transformations';
+import { SVGProperties } from './svg-html-properties';
 
 describe('Transform', () => {
 
@@ -40,7 +41,7 @@ describe('Transform', () => {
 
         resetTransform();
 
-        const element: SVGGElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const element: SVGGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
 
         stack = new Stack<SVGGElement>();
         stack.push_back(element);
@@ -57,7 +58,7 @@ describe('Transform', () => {
         expect(Transform.elementsToTransform.length).toBe(0);
 
         // Adding new element
-        const element: SVGGElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const element: SVGGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
         stack.push_back(element);
         Transform.setElements(stack, manipulator);
 
@@ -235,7 +236,7 @@ describe('Transform', () => {
     });
 
     it('#rotate should execute a translate followed by a rotate on the element', () => {
-        const secondElement: SVGGElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const secondElement: SVGGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
         stack.push_back(secondElement);
         Transform.setElements(stack, manipulator);
 

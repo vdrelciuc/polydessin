@@ -156,7 +156,7 @@ describe('EraserService', () => {
     service.onMouseMove({} as unknown as MouseEvent);
     expect(spy).toHaveBeenCalledWith(service['mousePointer'], SVGProperties.width, CONSTANTS.THICKNESS_MINIMUM_ERASER.toString() );
     expect(spy).toHaveBeenCalledTimes(8);
-    expect(spy2).toHaveBeenCalledWith(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+    expect(spy2).toHaveBeenCalledWith(SVGProperties.rectangle, SVGProperties.nameSpace);
   });
 
   it('#onMouseMove should change preview, but should not select', () => {
@@ -340,7 +340,7 @@ describe('EraserService', () => {
     expect(service['elements'].getAll().length).toEqual(2);
     service.onSelect();
     expect(service['elements'].getAll().length).toEqual(2);
-    expect(spy).toHaveBeenCalledWith('g');
+    expect(spy).toHaveBeenCalledWith(SVGProperties.g);
   });
 
   it('#selectElement should select element first time', () => {

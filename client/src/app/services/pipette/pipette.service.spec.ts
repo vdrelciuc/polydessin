@@ -8,6 +8,7 @@ import { ColorSelectorService } from '../color-selector/color-selector.service';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../drawable/properties/drawable-properties.service';
 import { PipetteService } from './pipette.service';
+import { SVGProperties } from 'src/app/classes/svg-html-properties';
 
 describe('PipetteService', () => {
   let service: PipetteService;
@@ -112,7 +113,7 @@ describe('PipetteService', () => {
   });
 
   it('#onSelect should set cursor to crosshair', () => {
-    service['image'].nativeElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    service['image'].nativeElement = document.createElementNS(SVGProperties.nameSpace, 'svg');
 
     const spy = spyOn<any>(service['manipulator'], 'setAttribute');
     service.onSelect();
@@ -120,7 +121,7 @@ describe('PipetteService', () => {
   });
 
   it('#onSelect should canvas be null', () => {
-    service['image'].nativeElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    service['image'].nativeElement = document.createElementNS(SVGProperties.nameSpace, 'svg');
     service['hiddenCanvas'].getContext = jasmine.createSpy().and.returnValue(null);
     const spy = spyOn<any>(service['manipulator'], 'setAttribute');
     service.onSelect();
@@ -129,7 +130,7 @@ describe('PipetteService', () => {
 
   it('#onClick should set new primary color on left click', () => {
     const mockedEvent: MouseEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    service['image'].nativeElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    service['image'].nativeElement = document.createElementNS(SVGProperties.nameSpace, 'svg');
 
     service['colorSelectorService'].updateColor = jasmine.createSpy().and.callFake(mockedUpdateColor);
     service.onClick(mockedEvent);
@@ -140,7 +141,7 @@ describe('PipetteService', () => {
 
   it('#onClick should set new secondary color on right click', () => {
     const mockedEvent: MouseEvent = eventMocker('click', RIGHT_CLICK, 0, 0);
-    service['image'].nativeElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    service['image'].nativeElement = document.createElementNS(SVGProperties.nameSpace, 'svg');
 
     service['colorSelectorService'].updateColor = jasmine.createSpy().and.callFake(mockedUpdateColor);
     service.onClick(mockedEvent);
@@ -151,7 +152,7 @@ describe('PipetteService', () => {
 
   it('#onClick should not set new primary color if canvas is not found on left click', () => {
     const mockedEvent: MouseEvent = eventMocker('click', LEFT_CLICK, 0, 0);
-    service['image'].nativeElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    service['image'].nativeElement = document.createElementNS(SVGProperties.nameSpace, 'svg');
 
     let spyHasBeenCalled = false;
     service['colorSelectorService'].updateColor = jasmine.createSpy().and.callFake(() => spyHasBeenCalled = true);
@@ -163,7 +164,7 @@ describe('PipetteService', () => {
 
   it('#onClick should not set new primary color if canvas is not found on right click', () => {
     const mockedEvent: MouseEvent = eventMocker('click', RIGHT_CLICK, 0, 0);
-    service['image'].nativeElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    service['image'].nativeElement = document.createElementNS(SVGProperties.nameSpace, 'svg');
 
     let spyHasBeenCalled = false;
     service['colorSelectorService'].updateColor = jasmine.createSpy().and.callFake(() => spyHasBeenCalled = true);

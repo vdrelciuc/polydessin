@@ -76,15 +76,15 @@ export class PencilService extends DrawableService {
     }
     this.isDrawing = true;
     this.beginDraw(event.clientX, event.clientY);
-    this.subElement = this.manipulator.createElement('g', 'http://www.w3.org/2000/svg');
-    this.line = this.manipulator.createElement('path', 'http://www.w3.org/2000/svg');
+    this.subElement = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
+    this.line = this.manipulator.createElement(SVGProperties.path, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, 'pencil-path');
     this.manipulator.setAttribute(this.line, SVGProperties.fill, 'none');
     this.manipulator.setAttribute(this.line, SVGProperties.color, this.color.getHex());
     this.manipulator.setAttribute(this.line, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(this.line, SVGProperties.typeOfLine, 'round');
     this.manipulator.setAttribute(this.line, SVGProperties.endOfLine, 'round');
-    this.manipulator.setAttribute(this.line, 'd', this.path);
+    this.manipulator.setAttribute(this.line, SVGProperties.d, this.path);
     this.manipulator.setAttribute(this.line, SVGProperties.thickness, this.thickness.toString());
 
     this.manipulator.appendChild(this.subElement, this.line);
@@ -148,7 +148,7 @@ export class PencilService extends DrawableService {
   }
 
   protected createCircle(x: number, y: number): void {
-    this.mousePointer = this.manipulator.createElement(SVGProperties.circle, 'http://www.w3.org/2000/svg');
+    this.mousePointer = this.manipulator.createElement(SVGProperties.circle, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, this.color.getHex());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.globalOpacity, this.opacity.toString());
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.radius, (this.thickness / 2).toString());

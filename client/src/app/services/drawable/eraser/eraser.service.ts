@@ -217,7 +217,7 @@ export class EraserService extends DrawableService {
   }
 
   protected createPreview(mouse: CoordinatesXY): void {
-    this.mousePointer = this.manipulator.createElement(SVGProperties.rectangle, 'http://www.w3.org/2000/svg');
+    this.mousePointer = this.manipulator.createElement(SVGProperties.rectangle, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.mousePointer, 'style', 'pointer-events:none;');
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.color, 'black');
     this.manipulator.setAttribute(this.mousePointer, SVGProperties.fill, 'white');
@@ -240,7 +240,7 @@ export class EraserService extends DrawableService {
   }
 
   private updateSVGElements(): void {
-    const inSVG = this.image.nativeElement.querySelectorAll('g');
+    const inSVG = this.image.nativeElement.querySelectorAll(SVGProperties.g);
     this.elements = new Stack<SVGElementInfos>();
     inSVG.forEach((element) => {
       const id = element.getAttribute(SVGProperties.title);

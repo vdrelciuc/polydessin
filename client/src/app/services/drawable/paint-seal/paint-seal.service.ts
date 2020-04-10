@@ -77,7 +77,7 @@ export class PaintSealService extends DrawableService {
   }
 
   private draw(d: string): void {
-    this.subElement = this.manipulator.createElement('g', SVGProperties.nameSpace);
+    this.subElement = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.subElement, SVGProperties.fill, this.fillColor.getHex());
     this.manipulator.setAttribute(this.subElement, SVGProperties.color, 'none');
     this.manipulator.setAttribute(this.subElement, SVGProperties.thickness, '1');
