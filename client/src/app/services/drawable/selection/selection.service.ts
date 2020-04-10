@@ -326,7 +326,10 @@ export class SelectionService extends DrawableService {
       this.manipulator.appendChild(this.image.nativeElement, this.resizeGroup);
       Transform.setElements(this.selectedElements, this.manipulator);
     } else {
-      this.manipulator.removeChild(this.image.nativeElement, this.resizeGroup);
+
+      // REMOVE CHILD CHANGE
+      // this.manipulator.removeChild(this.image.nativeElement, this.resizeGroup);
+      this.resizeGroup.remove();
     }
   }
 

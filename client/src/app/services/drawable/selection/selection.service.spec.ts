@@ -152,6 +152,16 @@ describe('SelectionService', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
+  it('#hasNoSelection should be empty', () => {
+      expect(service.hasNoSelection()).toEqual(true);
+  });
+
+
+  it('#hasNoSelection should contain one element', () => {
+    service['selectedElements'].push_back({} as unknown as SVGGElement);
+    expect(service.hasNoSelection()).toEqual(false);
+  });
+
   it('#onMouseOutCanvas should be considered as a mouse release', () => {
     const mouseReleaseSpy = spyOn<any>(service, 'onMouseRelease');
     const event = mouseEventMocker('mousemove', CONSTANTS.LEFT_CLICK, 0, 0);

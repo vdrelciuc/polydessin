@@ -5,7 +5,7 @@ import * as CONSTANT from 'src/app/classes/constants';
 import { BrushComponent } from './brush.component';
 import { FilterList } from './patterns';
 
-fdescribe('BrushComponent', () => {
+describe('BrushComponent', () => {
   let component: BrushComponent;
   let fixture: ComponentFixture<BrushComponent>;
   const mockedThickness = 15;
