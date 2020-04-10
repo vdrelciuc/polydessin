@@ -1,9 +1,9 @@
 // tslint:disable: no-any | Reason: used for mocked spies
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Transform } from 'src/app/classes/transformations';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { SelectionComponent } from './selection.component';
-import { SVGProperties } from 'src/app/enums/svg-html-properties';
 
 describe('SelectionComponent', () => {
   let component: SelectionComponent;

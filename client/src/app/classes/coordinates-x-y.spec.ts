@@ -89,11 +89,11 @@ describe('CoordinatedXY', () => {
   });
 
   it('#clone should clone current point', () => {
-    const point = new CoordinatesXY(10, 10);
-    const res = point.clone();
-    expect(res.getX()).toEqual(point.getX());
-    expect(res.getY()).toEqual(point.getY());
-  })
+    const pt = new CoordinatesXY(10, 10);
+    const res = pt.clone();
+    expect(res.getX()).toEqual(pt.getX());
+    expect(res.getY()).toEqual(pt.getY());
+  });
 
   it('#setX should change coordinates', () => {
     point.setX(1);
@@ -171,7 +171,7 @@ describe('CoordinatedXY', () => {
   });
 
   it('#distanceTo should return distance between 2 ponts', () => {
-    const ret = new CoordinatesXY(10, 10).distanceTo(new CoordinatesXY(100,100));
+    const ret = new CoordinatesXY(10, 10).distanceTo(new CoordinatesXY(100, 100));
     expect(ret).toEqual(16200);
-  })
+  });
 });

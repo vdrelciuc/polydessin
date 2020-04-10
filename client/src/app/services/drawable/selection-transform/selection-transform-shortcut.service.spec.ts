@@ -4,10 +4,10 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { Stack } from 'src/app/classes/stack';
 import { Transform } from 'src/app/classes/transformations';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
-import { SVGProperties } from 'src/app/enums/svg-html-properties';
 
 describe('SelectionTransformShortcutService', () => {
   let service: SelectionTransformShortcutService;

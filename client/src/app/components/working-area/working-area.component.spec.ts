@@ -36,20 +36,20 @@ import { ColorSliderComponent } from '../color-slider/color-slider.component';
 import { CreateNewComponent } from '../create-new/create-new.component';
 import { EllipseComponent } from '../ellipse/ellipse.component';
 import { EraserComponent } from '../eraser/eraser.component';
+import { FeatherComponent } from '../feather/feather.component';
 import { GalleryComponent } from '../gallery/gallery.component';
 import { GridComponent } from '../grid/grid.component';
 import { LineComponent } from '../line/line.component';
 import { OptionPannelComponent } from '../option-pannel/option-pannel.component';
+import { PaintSealComponent } from '../paint-seal/paint-seal.component';
 import { PencilComponent } from '../pencil/pencil.component';
 import { PolygonComponent } from '../polygon/polygon.component';
 import { RectangleComponent } from '../rectangle/rectangle.component';
 import { SelectionComponent } from '../selection/selection.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TextComponent } from '../text/text.component';
 import { WorkspaceComponent } from '../workspace/workspace.component';
 import { WorkingAreaComponent } from './working-area.component';
-import { TextComponent } from '../text/text.component';
-import { FeatherComponent } from '../feather/feather.component';
-import { PaintSealComponent } from '../paint-seal/paint-seal.component';
 
 describe('WorkingAreaComponent', () => {
   let component: WorkingAreaComponent;

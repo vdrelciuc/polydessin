@@ -5,10 +5,10 @@ import * as CONSTANTS from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Transform } from 'src/app/classes/transformations';
 import { SelectionState } from 'src/app/enums/selection-states';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { SelectionService } from './selection.service';
-import { SVGProperties } from 'src/app/enums/svg-html-properties';
 
 describe('SelectionService', () => {
   let service: SelectionService;
@@ -95,7 +95,7 @@ describe('SelectionService', () => {
                 };
                 return boundRect;
               },
-              childNodes: [ { 
+              childNodes: [ {
                 firstChild: {
                   getBoundingClientRect: () => {
                     const boundLeft = 50;
@@ -112,7 +112,7 @@ describe('SelectionService', () => {
                 },
                 getAttribute: () => null
               }
-            
+
             }]
             },
           },
@@ -156,7 +156,6 @@ describe('SelectionService', () => {
   it('#hasNoSelection should be empty', () => {
       expect(service.hasNoSelection()).toEqual(true);
   });
-
 
   it('#hasNoSelection should contain one element', () => {
     service['selectedElements'].push_back({} as unknown as SVGGElement);

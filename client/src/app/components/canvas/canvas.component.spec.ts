@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+// tslint:disable: no-magic-numbers | Reason: arbitrary values used for testing purposes
 import { HttpClientModule } from '@angular/common/http';
 import { ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material';
-import { CanvasComponent } from './canvas.component';
 import { SVGProperties } from 'src/app/enums/svg-html-properties';
+import { CanvasComponent } from './canvas.component';
 
 describe('CanvasComponent', () => {
   let component: CanvasComponent;

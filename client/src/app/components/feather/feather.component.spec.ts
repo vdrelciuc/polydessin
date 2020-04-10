@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FeatherComponent } from './feather.component';
-import { MatSliderModule } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatSliderModule } from '@angular/material';
 import { FeatherService } from 'src/app/services/drawable/feather/feather.service';
+import { FeatherComponent } from './feather.component';
 
 describe('FeatherComponent', () => {
   let component: FeatherComponent;

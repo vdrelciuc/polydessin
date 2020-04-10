@@ -19,18 +19,18 @@ import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { ColorSliderComponent } from '../color-slider/color-slider.component';
 import { EllipseComponent } from '../ellipse/ellipse.component';
 import { EraserComponent } from '../eraser/eraser.component';
+import { FeatherComponent } from '../feather/feather.component';
 import { GridComponent } from '../grid/grid.component';
 import { LineComponent } from '../line/line.component';
+import { PaintSealComponent } from '../paint-seal/paint-seal.component';
 import { PencilComponent } from '../pencil/pencil.component';
 import { PipetteComponent } from '../pipette/pipette.component';
 import { PolygonComponent } from '../polygon/polygon.component';
 import { RectangleComponent } from '../rectangle/rectangle.component';
 import { SelectionComponent } from '../selection/selection.component';
 import { SprayComponent } from '../spray/spray.component';
-import { OptionPannelComponent } from './option-pannel.component';
 import { TextComponent } from '../text/text.component';
-import { PaintSealComponent } from '../paint-seal/paint-seal.component';
-import { FeatherComponent } from '../feather/feather.component';
+import { OptionPannelComponent } from './option-pannel.component';
 
 describe('OptionPannelComponent', () => {
   let component: OptionPannelComponent;

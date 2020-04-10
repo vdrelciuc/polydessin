@@ -4,10 +4,10 @@ import { MatSnackBar } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { REGEX_EMAIL, REGEX_TITLE } from 'src/app/classes/regular-expressions';
-import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageExportType } from 'src/app/enums/export-type';
 import { ImageFormat } from 'src/app/enums/image-format';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 
 @Injectable({
   providedIn: 'root'

@@ -255,7 +255,7 @@ export class LineService extends DrawableService {
   }
 
   private updateProperties(): void {
-    this.subElement = this.manipulator.createElement(SVGProperties.g,SVGProperties.nameSpace);
+    this.subElement = this.manipulator.createElement(SVGProperties.g, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.subElement, SVGProperties.title, Tools.Line);
     this.line = this.manipulator.createElement(SVGProperties.polyLine, SVGProperties.nameSpace);
 

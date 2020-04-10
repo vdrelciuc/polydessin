@@ -38,7 +38,7 @@ describe('ColorPaletteComponent', () => {
 
   it('#ngOnChanges should setup changes not with new position', () => {
     const spy = spyOn(component['newColor'], 'emit');
-    component['currentSelectedPosition'] = undefined as unknown as {x:number, y:number};
+    component['currentSelectedPosition'] = undefined as unknown as {x: number, y: number};
     component.ngOnChanges({
       initialColor: new SimpleChange(null, new Color('#ABCDEF'), true)
     });
@@ -105,7 +105,6 @@ describe('ColorPaletteComponent', () => {
     const res = component['correctDigits']('1');
     expect(res).toEqual('01');
   });
-
 
   it('#correctDigits should not correct length is ok', () => {
     const res = component['correctDigits']('11');

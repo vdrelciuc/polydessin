@@ -2,9 +2,9 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { CharacterFont } from 'src/app/enums/character-font';
 import { CursorProperties } from 'src/app/enums/cursor-properties';
 import { SVGProperties } from 'src/app/enums/svg-html-properties';
-import { CharacterFont } from 'src/app/enums/character-font';
 import { Alignment } from 'src/app/enums/text-alignement';
 import { Max } from 'src/app/interfaces/max-text';
 import { TextAttributes } from 'src/app/interfaces/text-attributes';
@@ -46,7 +46,7 @@ export class TextService extends DrawableService {
     drawStack: DrawStackService): void {
       this.assignParams(manipulator, image, colorSelectorService, drawStack);
       this.colorSelectorService.primaryColor.subscribe( () => this.updateStyle() );
-      this.properties.subscribe( () => this.textBoxes.forEach( textBox => this.updateStyle(textBox)));
+      this.properties.subscribe( () => this.textBoxes.forEach( (textBox) => this.updateStyle(textBox)));
   }
 
   onSelect(): void {

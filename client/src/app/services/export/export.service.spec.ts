@@ -4,11 +4,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Renderer2 } from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
+import { Observable } from 'rxjs';
 import * as CONSTANTS from 'src/app/classes/constants';
 import { ImageFilter } from 'src/app/enums/color-filter';
 import { ImageFormat } from 'src/app/enums/image-format';
 import { ExportService } from './export.service';
-import { Observable } from 'rxjs';
 
 describe('ExportService', () => {
   let service: ExportService;

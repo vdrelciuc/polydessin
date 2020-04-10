@@ -48,7 +48,7 @@ export class FeatherService extends DrawableService {
       this.preview.remove();
       delete(this.preview);
     }
-    if(this.subElement !== undefined) {
+    if (this.subElement !== undefined) {
       this.subElement.remove();
     }
   }

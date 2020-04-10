@@ -1,8 +1,8 @@
 import { Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Stack } from './stack';
 import { SVGProperties } from '../enums/svg-html-properties';
 import { TransformType } from '../enums/transform-type';
+import { Stack } from './stack';
 
 export class Transform {
   static needsUpdate: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);

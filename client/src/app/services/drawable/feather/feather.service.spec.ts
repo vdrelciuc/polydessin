@@ -1,16 +1,17 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-
-import { FeatherService } from './feather.service';
+// tslint:disable: no-magic-numbers | Reason: arbitrary values used for testing purposes
 import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
+import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { ColorSelectorService } from '../../color-selector/color-selector.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { SVGProperties } from 'src/app/enums/svg-html-properties';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
+import { FeatherService } from './feather.service';
 
 describe('FeatherService', () => {
 
   let service: FeatherService;
-  const mockedRendered = (parentElement: any, name: string, debugInfo?: any): Element => {
+  // tslint:disable-next-line: no-any | Reason typedef Element of parentElement throws an error
+  const mockedRendered = (parentElement: any, name: string, debugInfo?: string): Element => {
     const element = new Element();
     parentElement.children.push(element);
     return element;
@@ -140,9 +141,6 @@ describe('FeatherService', () => {
     service['isDrawing'] = false;
     service.onMousePress({button: 1} as unknown as MouseEvent);
     service['isDrawing'] = false;
-  });
-
-  it('#addPath should ', () => {
   });
 
   it('#onMouseMove should only update preview', () => {

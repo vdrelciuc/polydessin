@@ -108,7 +108,7 @@ export class CanvasComponent implements OnInit {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         // We verify that our element has been created
-        if (this.image.nativeElement.getAttribute(SVGProperties.width )!== '0'){
+        if (this.image.nativeElement.getAttribute(SVGProperties.width ) !== '0') {
           localStorage.setItem('myInnerSvg', this.image.nativeElement.innerHTML);
           localStorage.setItem('myWidth', this.image.nativeElement.getAttribute(SVGProperties.width) as string);
           localStorage.setItem('myHeight', this.image.nativeElement.getAttribute(SVGProperties.height) as string);
@@ -124,7 +124,7 @@ export class CanvasComponent implements OnInit {
       subtree : true
     });
 
-    if (history.state.continueDrawing){
+    if (history.state.continueDrawing) {
       const width = localStorage.getItem('myWidth' ) as string ;
       const height = localStorage.getItem('myHeight' )  as string;
       const color = localStorage.getItem('myColor' ) as string ;

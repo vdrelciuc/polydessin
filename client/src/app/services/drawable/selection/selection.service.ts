@@ -1,11 +1,11 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { CONTROL_SIZE } from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { CursorProperties } from 'src/app/enums/cursor-properties';
 import { Stack } from 'src/app/classes/stack';
-import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { Transform } from 'src/app/classes/transformations';
+import { CursorProperties } from 'src/app/enums/cursor-properties';
 import { SelectionState } from 'src/app/enums/selection-states';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { BoundingBox } from 'src/app/interfaces/bounding-box';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
@@ -300,7 +300,6 @@ export class SelectionService extends DrawableService {
       let right = CoordinatesXY.effectiveX(this.image, firstElement.right);
       let top = CoordinatesXY.effectiveY(this.image, firstElement.top);
       let bottom = CoordinatesXY.effectiveY(this.image, firstElement.bottom);
-
       for (let i = 1; i < selection.getAll().length; i++) {
         const boundingBox = this.getBBoxWithStroke(selection.getAll()[i]);
         left = Math.min(left, CoordinatesXY.effectiveX(this.image, boundingBox.left));
@@ -326,7 +325,6 @@ export class SelectionService extends DrawableService {
       this.manipulator.appendChild(this.image.nativeElement, this.resizeGroup);
       Transform.setElements(this.selectedElements, this.manipulator);
     } else {
-
       // REMOVE CHILD CHANGE
       // this.manipulator.removeChild(this.image.nativeElement, this.resizeGroup);
       this.resizeGroup.remove();

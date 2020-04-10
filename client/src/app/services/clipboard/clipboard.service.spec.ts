@@ -3,8 +3,8 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { Stack } from 'src/app/classes/stack';
 import { Transform } from 'src/app/classes/transformations';
-import { ClipboardService } from './clipboard.service';
 import { SVGProperties } from 'src/app/enums/svg-html-properties';
+import { ClipboardService } from './clipboard.service';
 
 describe('ClipboardService', () => {
   let service: ClipboardService;

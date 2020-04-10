@@ -1,9 +1,9 @@
 /*tslint:disable: no-magic-numbers*/
 import { Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
+import { SVGProperties } from '../enums/svg-html-properties';
 import { Stack } from './stack';
 import { Transform } from './transformations';
-import { SVGProperties } from '../enums/svg-html-properties';
 
 describe('Transform', () => {
 
