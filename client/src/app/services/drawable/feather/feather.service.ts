@@ -22,6 +22,7 @@ export class FeatherService extends DrawableService {
 
   constructor() {
     super();
+    this.frenchName = 'Plume';
     this.height = this.DEFAULT_HEIGHT;
     this.angle = 0;
   }

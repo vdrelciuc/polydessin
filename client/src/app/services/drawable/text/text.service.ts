@@ -27,6 +27,7 @@ export class TextService extends DrawableService {
 
   constructor() {
     super();
+    this.frenchName = 'Texte';
     this.properties = new BehaviorSubject<TextAttributes>({
       alignment: Alignment.Left,
       font: CharacterFont.C,
@@ -54,9 +55,11 @@ export class TextService extends DrawableService {
   }
 
   endTool(): void {
-    const text = this.currentTextbox.innerHTML;
-    const index = text.indexOf('|');
-    this.currentTextbox.innerHTML = text.slice(0, index) + text.slice(index + 1, text.length);
+    if (this.currentTextbox !== undefined) {
+      const text = this.currentTextbox.innerHTML;
+      const index = text.indexOf('|');
+      this.currentTextbox.innerHTML = text.slice(0, index) + text.slice(index + 1, text.length);
+    }
     if (this.subElement !== undefined) {
       this.pushElement();
     }

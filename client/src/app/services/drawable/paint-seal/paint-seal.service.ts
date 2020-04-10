@@ -24,7 +24,7 @@ export class PaintSealService extends DrawableService {
 
   constructor() {
     super();
-    this.frenchName = 'Sceau de Peinture';
+    this.frenchName = 'Sceau de peinture';
     this.tolerance = new BehaviorSubject<number>(VISUAL_DIFFERENCE);
   }
 
