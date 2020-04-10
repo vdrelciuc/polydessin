@@ -3,7 +3,7 @@ import { Color } from 'src/app/classes/color';
 import { OFFSET_MIN, SIZEOF_POINT } from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';

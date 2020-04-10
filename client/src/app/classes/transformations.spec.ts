@@ -3,7 +3,7 @@ import { Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { Stack } from './stack';
 import { Transform } from './transformations';
-import { SVGProperties } from './svg-html-properties';
+import { SVGProperties } from '../enums/svg-html-properties';
 
 describe('Transform', () => {
 

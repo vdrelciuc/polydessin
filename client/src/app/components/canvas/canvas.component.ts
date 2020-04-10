@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { CanvasService } from 'src/app/services/canvas/canvas.service';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';

@@ -4,7 +4,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { CursorProperties } from 'src/app/classes/cursor-properties';
+import { CursorProperties } from 'src/app/enums/cursor-properties';
 import { CharacterFont } from 'src/app/enums/character-font';
 import { Alignment } from 'src/app/enums/text-alignement';
 import { TextAttributes } from 'src/app/interfaces/text-attributes';

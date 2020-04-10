@@ -1,6 +1,6 @@
 import { Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { SVGService } from './svg.service';
 
 describe('SVGService', () => {

@@ -7,7 +7,7 @@ import { Transform } from 'src/app/classes/transformations';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { SelectionTransformShortcutService } from './selection-transform-shortcut.service';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 
 describe('SelectionTransformShortcutService', () => {
   let service: SelectionTransformShortcutService;

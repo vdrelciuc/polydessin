@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANT from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { DrawableService } from '../drawable.service';

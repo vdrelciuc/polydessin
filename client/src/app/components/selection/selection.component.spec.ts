@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Transform } from 'src/app/classes/transformations';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { SelectionComponent } from './selection.component';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 
 describe('SelectionComponent', () => {
   let component: SelectionComponent;

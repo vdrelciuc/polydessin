@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Color } from 'src/app/classes/color';
 import * as CONSTANT from 'src/app/classes/constants';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { Tools } from 'src/app/enums/tools';
 import { ShapeService } from '../shapes/shape.service';
 

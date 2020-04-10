@@ -8,7 +8,7 @@ import { SelectionState } from 'src/app/enums/selection-states';
 import { ColorSelectorService } from 'src/app/services/color-selector/color-selector.service';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { SelectionService } from './selection.service';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 
 describe('SelectionService', () => {
   let service: SelectionService;

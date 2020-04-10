@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
 import { CanvasComponent } from './canvas.component';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 
 describe('CanvasComponent', () => {
   let component: CanvasComponent;

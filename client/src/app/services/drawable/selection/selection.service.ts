@@ -1,9 +1,9 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { CONTROL_SIZE } from 'src/app/classes/constants';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
-import { CursorProperties } from 'src/app/classes/cursor-properties';
+import { CursorProperties } from 'src/app/enums/cursor-properties';
 import { Stack } from 'src/app/classes/stack';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { Transform } from 'src/app/classes/transformations';
 import { SelectionState } from 'src/app/enums/selection-states';
 import { Tools } from 'src/app/enums/tools';

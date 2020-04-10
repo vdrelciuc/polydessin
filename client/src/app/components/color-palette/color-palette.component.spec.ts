@@ -109,6 +109,6 @@ describe('ColorPaletteComponent', () => {
 
   it('#correctDigits should not correct length is ok', () => {
     const res = component['correctDigits']('11');
-    expect(res).toEqual('11s');
+    expect(res).toEqual('11');
   });
 });

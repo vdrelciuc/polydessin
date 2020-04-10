@@ -4,7 +4,7 @@ import { FeatherService } from './feather.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { ColorSelectorService } from '../../color-selector/color-selector.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 
 describe('FeatherService', () => {

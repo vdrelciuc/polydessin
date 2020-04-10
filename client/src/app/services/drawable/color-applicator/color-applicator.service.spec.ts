@@ -7,7 +7,7 @@ import { ColorSelectorService } from 'src/app/services/color-selector/color-sele
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { DrawablePropertiesService } from '../properties/drawable-properties.service';
 import { ColorApplicatorService } from './color-applicator.service';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 
 describe('ColorApplicatorService', () => {
   let service: ColorApplicatorService;

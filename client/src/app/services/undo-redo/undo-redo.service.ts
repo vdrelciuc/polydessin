@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Stack } from 'src/app/classes/stack';
-import { SVGProperties } from 'src/app/classes/svg-html-properties';
+import { SVGProperties } from 'src/app/enums/svg-html-properties';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 
 @Injectable({
