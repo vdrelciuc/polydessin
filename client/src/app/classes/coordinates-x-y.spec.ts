@@ -13,11 +13,25 @@ describe('CoordinatedXY', () => {
     expect(new CoordinatesXY(0, 0)).toBeTruthy();
   });
 
-  it('#getEffectiveCoords should get coordinates', () => {
+  it('#getCoords should get coordinates', () => {
     expect(CoordinatesXY.getCoords(new MouseEvent('push', {
       clientX: 100,
       clientY: 100
     }))).toEqual(new CoordinatesXY(100, 100));
+  });
+
+  it('#getEffectiveCoords should get coordinates', () => {
+    expect(CoordinatesXY.getEffectiveCoords({
+      nativeElement: {
+        getBoundingClientRect: () => ({
+          left: 10,
+          top: 10
+        } as unknown as DOMRect)
+      } as unknown as SVGElement
+    }, new MouseEvent('click', {
+      clientX: 100,
+      clientY: 100
+    }))).toEqual(new CoordinatesXY(90, 90));
   });
 
   it('#effectiveX should get effective x', () => {
@@ -56,6 +70,12 @@ describe('CoordinatedXY', () => {
     ).toEqual(900);
   });
 
+  it('#computeCoordinates should reeturn new coordinates', () => {
+    const ret = CoordinatesXY.computeCoordinates(new CoordinatesXY(10, 10), 90, 10);
+    expect(ret.getX()).toEqual(10);
+    expect(ret.getY()).toEqual(20);
+  });
+
   it('#getCoords should get coordinates', () => {
     expect(CoordinatesXY.getCoords(new MouseEvent('push', {
       clientX: 100,
@@ -67,6 +87,13 @@ describe('CoordinatedXY', () => {
     expect(point.getX()).toBe(0);
     expect(point.getY()).toBe(0);
   });
+
+  it('#clone should clone current point', () => {
+    const point = new CoordinatesXY(10, 10);
+    const res = point.clone();
+    expect(res.getX()).toEqual(point.getX());
+    expect(res.getY()).toEqual(point.getY());
+  })
 
   it('#setX should change coordinates', () => {
     point.setX(1);
@@ -142,4 +169,9 @@ describe('CoordinatedXY', () => {
       } as DOMRect)
     ).toEqual(false);
   });
+
+  it('#distanceTo should return distance between 2 ponts', () => {
+    const ret = new CoordinatesXY(10, 10).distanceTo(new CoordinatesXY(100,100));
+    expect(ret).toEqual(16200);
+  })
 });

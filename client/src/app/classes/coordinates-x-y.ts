@@ -20,12 +20,6 @@ export class CoordinatesXY {
     return new CoordinatesXY(effectiveX, effectiveY);
   }
 
-  static getEffectiveCoords_2(referenceElement: ElementRef<SVGElement>, pointer: CoordinatesXY): CoordinatesXY {
-    const effectiveX = CoordinatesXY.effectiveX(referenceElement, pointer.getX());
-    const effectiveY = CoordinatesXY.effectiveY(referenceElement, pointer.getY());
-    return new CoordinatesXY(effectiveX, effectiveY);
-  }
-
   static effectiveX(referenceElement: ElementRef<SVGElement>, onScreenX: number): number {
     return onScreenX - referenceElement.nativeElement.getBoundingClientRect().left;
   }
