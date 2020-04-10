@@ -38,6 +38,10 @@ export class TextService extends DrawableService {
     this.textBoxes = new Map<number, SVGTextElement>();
     this.toByPass = CONSTANTS.KEYS_TO_BYPASS;
     this.currentBoxNumber = 0;
+    this.maxSize = {
+      target: undefined as unknown as SVGTextElement,
+      size: 0
+    };
   }
 
   initialize(
@@ -64,6 +68,7 @@ export class TextService extends DrawableService {
       this.pushElement();
     }
     this.manipulator.setAttribute(this.image.nativeElement, CursorProperties.cursor, CursorProperties.default);
+    this.currentBoxNumber = 0;
   }
 
   onClick(event: MouseEvent): void {
@@ -71,6 +76,7 @@ export class TextService extends DrawableService {
     if (this.subElement !== undefined) {
       this.pushElement();
       this.textBoxes = new Map<number, SVGTextElement>();
+      this.currentBoxNumber = 0;
     }
     this.createElement();
   }
@@ -91,23 +97,15 @@ export class TextService extends DrawableService {
 
   changeAlignment(newAlignment: Alignment): void {
     this.findSizeOfLargestTextbox();
+    this.toLeft();
     switch (newAlignment) {
-      case Alignment.Left: {
-          this.toLeft();
-          break;
-      }
       case Alignment.Center: {
         this.toLeft();
         for (const textBox of this.textBoxes) {
-          const text = textBox[1].innerHTML;
+          const text = textBox[1].innerHTML.trim();
           let gap = this.maxSize.size - text.length;
           const before = Math.floor(gap / 2);
-          textBox[1].innerHTML = ' '.repeat(before);
-          gap -= before;
-          textBox[1].innerHTML += text + ' '.repeat(gap);
-          if (textBox[1] === this.currentTextbox) {
-            textBox[1].innerHTML += ' ';
-          }
+          textBox[1].innerHTML = ' '.repeat(before) + text;
         }
         break;
       }
@@ -123,6 +121,8 @@ export class TextService extends DrawableService {
         }
         break;
       }
+      default:
+        break;
     }
   }
 
@@ -196,15 +196,18 @@ export class TextService extends DrawableService {
   }
 
   createCurrentTextBox(): void {
+    let restText = '';
     if (this.currentTextbox !== undefined) {
       const text = this.currentTextbox.innerHTML;
-      this.currentTextbox.innerHTML = text.substr(0, text.length - 1);
+      const cursor = text.indexOf('|');
+      this.currentTextbox.innerHTML = text.substr(0, cursor);
+      restText = text.substr(cursor);
     }
     this.currentTextbox = this.manipulator.createElement(SVGProperties.text, SVGProperties.nameSpace);
     this.manipulator.setAttribute(this.currentTextbox, SVGProperties.x,     this.clickPosition.getX().toString());
     this.manipulator.setAttribute(this.currentTextbox, SVGProperties.y,     this.clickPosition.getY().toString());
     this.currentTextbox.setAttributeNS('http://www.w3.org/XML/1998/namespace', 'xml:space', 'preserve');
-    this.currentTextbox.innerHTML = '|';
+    this.currentTextbox.innerHTML = restText === '' ? '|' : restText;
     this.updateStyle();
     this.manipulator.appendChild(this.subElement, this.currentTextbox);
     this.textBoxes.set(this.currentBoxNumber++, this.currentTextbox);
@@ -214,7 +217,7 @@ export class TextService extends DrawableService {
   private toLeft(): void {
     for (const textBox of this.textBoxes) {
       let text = textBox[1].innerHTML;
-      while (text[0] === ' ') {
+      while(text[0] === ' ') {
         text = text.substr(1);
       }
       textBox[1].innerHTML = text;
@@ -222,20 +225,15 @@ export class TextService extends DrawableService {
   }
 
   private findSizeOfLargestTextbox(): void {
-    this.maxSize = {
-      target: (this.textBoxes.get(0) as SVGTextElement),
-      size: (this.textBoxes.get(0) as SVGTextElement).innerHTML.length
-    };
     let currentElementLength = 0;
     for (const textBox of this.textBoxes) {
-      currentElementLength = textBox[1].innerHTML.length;
+      currentElementLength = textBox[1].innerHTML.trim().length;
       if (currentElementLength > this.maxSize.size) {
-        this.maxSize = {
-          target: textBox[1],
-          size: currentElementLength
-        };
+        this.maxSize.target = textBox[1];
+        this.maxSize.size = (currentElementLength);
       }
     }
+    console.log(this.maxSize.size);
   }
 
   private createElement(): void {
