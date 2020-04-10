@@ -169,8 +169,8 @@ fdescribe('TextService', () => {
     service['textBoxes'].set(0, {innerHTML: 'bla'} as unknown as SVGTextElement);
     service['textBoxes'].set(1, target);
     service.changeAlignment(Alignment.Center);
-    expect((service['textBoxes'].get(1) as SVGTextElement).innerHTML).toEqual('blabla| ');
-    expect((service['textBoxes'].get(0) as SVGTextElement).innerHTML).toEqual('  bla  ');
+    expect((service['textBoxes'].get(1) as SVGTextElement).innerHTML).toEqual('blabla|');
+    expect((service['textBoxes'].get(0) as SVGTextElement).innerHTML).toEqual('  bla');
   });
 
   it('#changeAlignment should align to the right', () => {
