@@ -1,7 +1,7 @@
 <div id="container">
     <form>
         <div class="group">
-            <label class="title">Police</label>
+            <label class="title">Police</label><br>
             <select mat-select (change)="setFont($event)">
                 <option value="courier">Courier</option>
                 <option value="ubuntu mono">Ubuntu Mono</option>
@@ -28,7 +28,7 @@
     </form>
     <form>
         <div class="group">
-            <label class="title" class="paddRight">Allignement</label>
+            <label class="title paddRight">Allignement</label>
             <mat-radio-group aria-label="Alignement" (change)="setAlignement($event)">
                 <mat-radio-button class="paddRight" checked value="Left">Gauche</mat-radio-button>
                 <mat-radio-button class="paddRight" value="Middle">Centre</mat-radio-button>
@@ -38,7 +38,7 @@
     </form>
     <form>
       <div class="group">
-        <label class="title" class="paddRight">Formattage</label>
+        <label class="title paddRight">Formattage</label>
         <mat-slide-toggle class="paddRight" [checked]="service.properties.value.isBold"   (change)="updateBold()"  >Bold  </mat-slide-toggle>
         <mat-slide-toggle class="paddRight" [checked]="service.properties.value.isItalic" (change)="updateItalic()">Italic</mat-slide-toggle>
       </div>
