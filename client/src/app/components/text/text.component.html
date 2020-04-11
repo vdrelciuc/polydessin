@@ -30,9 +30,9 @@
         <div class="group">
             <label class="title paddRight">Allignement</label>
             <mat-radio-group aria-label="Alignement" (change)="setAlignement($event)">
-                <mat-radio-button class="paddRight" checked value="Left">Gauche</mat-radio-button>
-                <mat-radio-button class="paddRight" value="Middle">Centre</mat-radio-button>
-                <mat-radio-button class="paddRight" value="Right">Droite</mat-radio-button>
+                <mat-radio-button class="paddRight" [checked]="service.properties.value.alignment === 'Left'" value="Left">Gauche</mat-radio-button>
+                <mat-radio-button class="paddRight" [checked]="service.properties.value.alignment === 'Middle'" value="Middle">Centre</mat-radio-button>
+                <mat-radio-button class="paddRight" [checked]="service.properties.value.alignment === 'Right'" value="Right">Droite</mat-radio-button>
             </mat-radio-group>
         </div>
     </form>

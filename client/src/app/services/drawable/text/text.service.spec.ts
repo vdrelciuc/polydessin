@@ -12,7 +12,7 @@ import { ColorSelectorService } from '../../color-selector/color-selector.servic
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TextService } from './text.service';
 
-fdescribe('TextService', () => {
+describe('TextService', () => {
 
   let service: TextService;
 
