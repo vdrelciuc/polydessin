@@ -124,7 +124,10 @@ export class CanvasComponent implements OnInit {
       subtree : true
     });
 
-    if (history.state.continueDrawing) {
+    if (history.state.continueDrawing || (localStorage.getItem('myWidth' ) !== undefined
+    && localStorage.getItem('myWidth' ) as string  !=='0'
+    )
+    ) {
       const width = localStorage.getItem('myWidth' ) as string ;
       const height = localStorage.getItem('myHeight' )  as string;
       const color = localStorage.getItem('myColor' ) as string ;
