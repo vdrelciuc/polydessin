@@ -147,9 +147,7 @@ export class TextService extends DrawableService {
     if (index !== text.length - 1) {
       this.currentTextbox.innerHTML = text.slice(0, index + 1) + text.slice(index + 2, text.length);
     }
-    //if (this.maxSize !== undefined && this.currentTextbox === this.maxSize.target) {
-      this.changeAlignment(this.properties.value.alignment);
-    //}
+    this.changeAlignment(this.properties.value.alignment);
   }
 
   backspace(): void {

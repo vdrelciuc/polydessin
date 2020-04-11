@@ -92,11 +92,6 @@ export class FeatherService extends DrawableService {
       const thirdPoint = CoordinatesXY.computeCoordinates(mouse, this.angle, -this.height / 2);
       const forthPoint = CoordinatesXY.computeCoordinates(mouse, this.angle, this.height / 2);
 
-      // let backShiftX = 0;
-      // let backShiftY = 0;
-      // backShiftX = firstPoint.getX() > forthPoint.getX() ? 1 : -1;
-      // backShiftY = firstPoint.getY() > forthPoint.getY() ? 1 : -1;
-
       const points = `${firstPoint.getX()},${firstPoint.getY()} ` +
                      `${secondPoint.getX()},${secondPoint.getY()} ` +
                      `${thirdPoint.getX()},${thirdPoint.getY()} ` +
