@@ -12,7 +12,7 @@ import { ColorSelectorService } from '../../color-selector/color-selector.servic
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TextService } from './text.service';
 
-describe('TextService', () => {
+fdescribe('TextService', () => {
 
   let service: TextService;
 
@@ -83,6 +83,28 @@ describe('TextService', () => {
     expect(spy).toHaveBeenCalledWith(service['image'].nativeElement, CursorProperties.cursor, CursorProperties.writing);
   });
 
+  it('#onSelect should not be undefined', () => {
+    service['currentTextbox'] = { innerHTML: 'bla|' } as unknown as SVGTextElement;
+    const spy = spyOn(service['manipulator'], 'setAttribute');
+    const spy2 = spyOn(service, 'moveRight');
+    const spy3 = spyOn(service, 'changeAlignment');
+    service.onSelect();
+    expect(spy).toHaveBeenCalledWith(service['image'].nativeElement, CursorProperties.cursor, CursorProperties.writing);
+    expect(spy2).toHaveBeenCalled();
+    expect(spy3).toHaveBeenCalled();
+  });
+
+  it('#endTool should end tool, without using it', () => {
+    service['currentTextbox'] = undefined as unknown as SVGTextElement;
+    const spy = spyOn(service['manipulator'], 'setAttribute');
+    service['subElement'] = {
+      id: 1
+    } as unknown as SVGGElement;
+    service.endTool();
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledWith(service['image'].nativeElement, CursorProperties.cursor, CursorProperties.default);
+  });
+
   it('#endTool should reset cursor and push element', () => {
     service['currentTextbox'] = {
       innerHTML: 'asdasd|'
@@ -121,7 +143,8 @@ describe('TextService', () => {
 
   it('#onClick should setup new svgtext and push old one', () => {
     service['subElement'] = { id: 10 } as unknown as SVGGElement;
-    const spy = spyOn(service['manipulator'], 'setAttribute');
+    service['currentTextbox'] = { innerHTML: 'bla' } as unknown as SVGTextElement;
+    const spy = spyOn(service['manipulator'], 'setAttribute' );
     service.onClick(new MouseEvent('click', {
       clientX: 500,
       clientY: 500
@@ -217,6 +240,14 @@ describe('TextService', () => {
     service.delete();
     expect(service['currentTextbox'].innerHTML).toEqual('1|');
   });
+
+  it('#backspace should do nothing, element is undefined', () => {
+    service['currentTextbox'] = undefined as unknown as SVGTextElement;
+    const spy = spyOn(service, 'changeAlignment');
+    service.backspace();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
 
   it('#backspace should remove previous character', () => {
     service['currentTextbox'] = { innerHTML: '1ba|'} as unknown as SVGTextElement;
@@ -322,6 +353,26 @@ describe('TextService', () => {
     service.createCurrentTextBox();
     expect(spy).toHaveBeenCalledTimes(7);
     expect(service['currentBoxNumber']).toEqual(1);
+    expect(service['clickPosition'].getX()).toEqual(100);
+    expect(service['clickPosition'].getY()).toEqual(118);
+  });
+
+  it('#createCurrentTextBox should create a new textbox ( not the first )', () => {
+    service['clickPosition'] = new CoordinatesXY(100, 100);
+    service['currentBoxNumber'] = 1;
+    service['properties'] = new BehaviorSubject<TextAttributes>({
+      size: 12,
+      font: CharacterFont.C,
+      isItalic: true,
+      isBold: true,
+      alignment: Alignment.Center
+    });
+    const spy = spyOn(service['manipulator'], 'setAttribute');
+    const spy2 = spyOn(service, 'changeAlignment');
+    service.createCurrentTextBox();
+    expect(spy).toHaveBeenCalledTimes(7);
+    expect(spy2).toHaveBeenCalledWith(Alignment.Center);
+    expect(service['currentBoxNumber']).toEqual(2);
     expect(service['clickPosition'].getX()).toEqual(100);
     expect(service['clickPosition'].getY()).toEqual(118);
   });
