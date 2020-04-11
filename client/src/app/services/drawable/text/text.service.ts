@@ -84,6 +84,7 @@ export class TextService extends DrawableService {
       this.pushElement();
       this.textBoxes = new Map<number, SVGTextElement>();
       this.currentBoxNumber = 0;
+      while (!this.moveRight());
     }
     this.createElement();
   }
@@ -146,9 +147,9 @@ export class TextService extends DrawableService {
     if (index !== text.length - 1) {
       this.currentTextbox.innerHTML = text.slice(0, index + 1) + text.slice(index + 2, text.length);
     }
-    if (this.maxSize !== undefined && this.currentTextbox === this.maxSize.target) {
+    //if (this.maxSize !== undefined && this.currentTextbox === this.maxSize.target) {
       this.changeAlignment(this.properties.value.alignment);
-    }
+    //}
   }
 
   backspace(): void {
@@ -188,18 +189,19 @@ export class TextService extends DrawableService {
     }
   }
 
-  moveRight(): void {
+  moveRight(): boolean {
     const text = this.currentTextbox.innerHTML;
     const index = text.indexOf('|');
     if (index < text.length - 1) {
       this.currentTextbox.innerHTML = text.slice(0, index) + text[index + 1] + '|'  + text.slice(index + 2, text.length);
-    } else {
-      if (this.currentBoxNumber < this.textBoxes.size) {
-        this.currentTextbox.innerHTML = text.substr(0, index);
-        this.currentTextbox = this.textBoxes.get(this.currentBoxNumber ++) as SVGTextElement;
-        this.currentTextbox.innerHTML =  '|' + this.currentTextbox.innerHTML;
-      }
+      return false;
+    } else if (this.currentBoxNumber < this.textBoxes.size) {
+      this.currentTextbox.innerHTML = text.substr(0, index);
+      this.currentTextbox = this.textBoxes.get(this.currentBoxNumber ++) as SVGTextElement;
+      this.currentTextbox.innerHTML =  '|' + this.currentTextbox.innerHTML;
+      return false;
     }
+    return true; // At the end of all text boxes
   }
 
   createCurrentTextBox(): void {
