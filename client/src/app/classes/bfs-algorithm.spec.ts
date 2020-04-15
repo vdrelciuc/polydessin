@@ -10,10 +10,19 @@ describe('BFSAlgorithm', () => {
             100,
             100,
             {
-
+                getImageData: () => ({
+                    data: [1, 1, 1, 1, 1, 1]
+                } as unknown as ImageData)
             } as unknown as CanvasRenderingContext2D,
             30
         );
+    });
+
+    it('#BFS should get image data', () => {
+        const data = [1, 1, 1, 1, 1, 1] as unknown as Uint8ClampedArray;
+        const spy = spyOn(algorithm['context'], 'getImageData').and.returnValue({data: data} as unknown as ImageData);
+        algorithm.BFS(new CoordinatesXY(1, 1));
+        expect(spy).toHaveBeenCalled();
     });
 
     it('#calculatePath should create path', () => {

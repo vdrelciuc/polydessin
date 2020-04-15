@@ -36,21 +36,17 @@ export class BFSAlgorithm {
 
         const targetColor: Color = this.getColor(clickPosition);
         this.queue.push(clickPosition);
-
         while (this.queue.length > 0) {
             const pixel: CoordinatesXY = this.queue.pop() as CoordinatesXY;
-
             if (!targetColor.isSimilarWithTolerance(this.getColor(pixel), this.tolerance)) {
                 continue;
             }
-
             const neighborPixels = [
                 new CoordinatesXY(pixel.getX() - 1, pixel.getY()),
                 new CoordinatesXY(pixel.getX() + 1, pixel.getY()),
                 new CoordinatesXY(pixel.getX(),     pixel.getY() - 1),
                 new CoordinatesXY(pixel.getX(),     pixel.getY() + 1),
             ];
-
             for (const neighborPixel of neighborPixels) {
                 if (this.visited.has(`${neighborPixel.getX()} ${neighborPixel.getY()}`)) {
                     continue;
