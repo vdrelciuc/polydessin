@@ -1,3 +1,4 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 import { TestBed } from '@angular/core/testing';
 
 import * as CONSTANT from 'src/app/classes/constants';

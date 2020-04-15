@@ -1,3 +1,4 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 import { SimpleChange } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Color } from 'src/app/classes/color';

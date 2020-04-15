@@ -1,3 +1,4 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Image } from 'src/app/interfaces/image';

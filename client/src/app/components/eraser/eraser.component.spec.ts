@@ -1,3 +1,4 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 // tslint:disable: no-magic-numbers | Reason : testing arbitrary values
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';

@@ -1,3 +1,4 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 // tslint:disable: no-magic-numbers | Reason : testing with arbitrary values
 import { ElementRef, Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';

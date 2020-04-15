@@ -1,4 +1,5 @@
-    // tslint:disable: no-magic-numbers | Reason: arbitrary values used for testing purposes
+// tslint:disable: no-string-literal | Reason: used to access private variables
+// tslint:disable: no-magic-numbers | Reason: arbitrary values used for testing purposes
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSliderChange, MatSliderModule } from '@angular/material';
 import { PaintSealService } from 'src/app/services/drawable/paint-seal/paint-seal.service';

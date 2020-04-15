@@ -1,3 +1,4 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
 import { FormsModule } from '@angular/forms';

@@ -1,3 +1,4 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 // tslint:disable: no-magic-numbers | Reason: arbitrary values used for testing purposes
 // tslint:disable: max-file-line-count | Reason: we have a lot of tests
 import { ElementRef, Renderer2, Type } from '@angular/core';

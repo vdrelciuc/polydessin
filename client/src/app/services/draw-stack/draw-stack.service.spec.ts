@@ -1,3 +1,4 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 import { TestBed } from '@angular/core/testing';
 
 import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';

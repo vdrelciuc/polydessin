@@ -1,3 +1,4 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
