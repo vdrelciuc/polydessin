@@ -108,26 +108,6 @@ describe('DrawStackService', () => {
     expect(service['elements'].getAll().length).toEqual(1);
   });
 
-  it('#addSVG should change current SVG', () => {
-    expect(service.addedSVG.value).toEqual(undefined);
-    service.addSVG(mockedSVGElementInfo.target as SVGElement);
-    expect(service.addedSVG.value).not.toEqual(undefined);
-    expect(service.addedSVG.value).not.toEqual(undefined);
-    if (service.addedSVG.value !== undefined) {
-      expect(service.addedSVG.value.getBoundingClientRect()).toEqual(new DOMRect(100, 100, 50, 50));
-    }
-  });
-
-  it('#addSVGToRedo should push SVG to redo', () => {
-    expect(service.addedToRedo.value).toEqual(undefined);
-    service.addSVGToRedo(mockedSVGElementInfo.target as SVGElement);
-    expect(service.addedToRedo.value).not.toEqual(undefined);
-    expect(service.addedToRedo.value).not.toEqual(undefined);
-    if (service.addedToRedo.value !== undefined) {
-      expect(service.addedToRedo.value.getBoundingClientRect()).toEqual(new DOMRect(100, 100, 50, 50));
-    }
-  });
-
   it('#addSVGWithNewElement should add svg and reset redo stack', () => {
     expect(service.addedSVG.value).toEqual(undefined);
     expect(service.reset.value).toEqual(false);

@@ -87,17 +87,13 @@ export class DrawStackService {
     return toRemove;
   }
 
-  addSVG(current: SVGElement): void {
-    this.addedSVG.next(current);
-  }
-
   addSVGToRedo(current: SVGElement): void {
     this.addedToRedo.next(current);
   }
 
   addSVGWithNewElement(current: SVGElement): void {
     this.reset.next(true);
-    this.addSVG(current);
+    this.addedSVG.next(current);
   }
 
   addingNewSVG(): void {

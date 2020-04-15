@@ -44,7 +44,7 @@ export class ColorApplicatorService extends DrawableService {
       event.button === 0 ? this.onLeftClick(clickedElement) : this.onRightClick(clickedElement);
 
       if (clickedElement.tagName !== 'svg') {
-        this.drawStack.addSVG(this.image.nativeElement.cloneNode(true) as SVGElement);
+        this.drawStack.addSVGWithNewElement(this.image.nativeElement.cloneNode(true) as SVGElement);
       }
     }
   }

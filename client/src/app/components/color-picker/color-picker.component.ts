@@ -13,7 +13,7 @@ export class ColorPickerComponent {
 
   selectedColor: Color;
   selectedHue: Color;
-  initialColor: Color;
+  initialColor: Color; // used in HTML to transfer value from Hue to Palette
 
   constructor(
     private dialogRef: MatDialogRef<ColorPickerComponent>,
