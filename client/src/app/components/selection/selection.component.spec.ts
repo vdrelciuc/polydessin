@@ -1,3 +1,4 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 // tslint:disable: no-any | Reason: used for mocked spies
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Transform } from 'src/app/classes/transformations';

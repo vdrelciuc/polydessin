@@ -1,7 +1,6 @@
+// tslint:disable: no-string-literal | Reason: used to access private variables
 import { TestBed } from '@angular/core/testing';
-
 import { HotkeysService } from './hotkeys.service';
-// import { emit } from 'cluster';
 
 describe('HotkeysService', () => {
 

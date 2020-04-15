@@ -1,4 +1,5 @@
 // tslint:disable: no-magic-numbers | Reason: arbitrary values used for testing purposes
+// tslint:disable: no-string-literal | Reason: used to access private variables
 import { HttpClientModule } from '@angular/common/http';
 import { ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';

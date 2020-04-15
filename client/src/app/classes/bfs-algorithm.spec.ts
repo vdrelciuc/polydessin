@@ -1,4 +1,5 @@
 // tslint:disable: no-magic-numbers | Reason : arbitrary values for testing purposes
+// tslint:disable: no-string-literal | Reason: used to access private variables
 import { BFSAlgorithm } from './bfs-algorithm';
 import { CoordinatesXY } from './coordinates-x-y';
 
