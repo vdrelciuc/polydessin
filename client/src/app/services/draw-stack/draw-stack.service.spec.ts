@@ -135,38 +135,6 @@ describe('DrawStackService', () => {
     expect(service.size()).toEqual(1);
   });
 
-  it('#findTopElementAt shouldn\'t find element, stack is empty', () => {
-    expect(service.findTopElementAt(new CoordinatesXY(10, 10))).toEqual(undefined);
-  });
-
-  it('#findTopElementAt should find the element at the correct position', () => {
-    const mockedStack = new Stack<SVGElementInfos>();
-    const element1 = {getBoundingClientRect: () => new DOMRect(10, 10, 100, 100)};
-    const element2 = {getBoundingClientRect: () => new DOMRect(1000, 1000, 10, 10)};
-    mockedStack.pushBack({target: element1 as unknown as SVGGElement, id: 0 });
-    mockedStack.pushBack({target: element2 as unknown as SVGGElement, id: 1 });
-    const foundElement = DrawStackService.findTopElementAt(
-      new CoordinatesXY(11, 11),
-      mockedStack
-    );
-    expect(foundElement).not.toBeUndefined();
-    if (foundElement !== undefined) {
-      expect(foundElement.id).toEqual(0);
-    }
-  });
-
-  it('#hasElementIn should find correct element', () => {
-    service['elements'] = new Stack<SVGElementInfos>();
-    service['elements'].pushBack(mockedSVGElementInfo);
-    expect(service.hasElementIn(0, new DOMRect(75, 75 , 100, 100))).toEqual(mockedSVGElementInfo);
-  });
-
-  it('#hasElementIn should return undefined (no element in surface)', () => {
-    service['elements'] = new Stack<SVGElementInfos>();
-    service['elements'].pushBack(mockedSVGElementInfo);
-    expect(service.hasElementIn(0, new DOMRect(10, 10 , 10, 10))).toEqual(undefined);
-  });
-
   it('#getRoot should get first as undefined, stack is empty', () => {
     expect(service.getRoot()).toEqual(undefined);
   });

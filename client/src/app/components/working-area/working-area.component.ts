@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { ExportService } from 'src/app/services/export/export.service';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
@@ -30,7 +29,6 @@ export class WorkingAreaComponent implements OnInit {
     private snackBar: MatSnackBar,
     private galleryService: GalleryService,
     private shortcutManager: ShortcutManagerService,
-    public route: Router,
     protected dialog: MatDialog) {
       this.shortcutManager.setWorkingAreaComponent(this);
       this.shortcutManager.setupShortcuts();

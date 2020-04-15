@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CoordinatesXY } from 'src/app/classes/coordinates-x-y';
 import { Stack } from 'src/app/classes/stack';
 import { SVGElementInfos } from 'src/app/interfaces/svg-element-infos';
 
@@ -29,16 +28,6 @@ export class DrawStackService {
   addedToRedo: BehaviorSubject<SVGElement | undefined>;
   reset: BehaviorSubject<boolean>;
   newSVG: BehaviorSubject<boolean>;
-
-  static findTopElementAt(position: CoordinatesXY, elements: Stack<SVGElementInfos>): SVGElementInfos | undefined {
-    const array = elements.getAll();
-    for (let i: number = array.length - 1; i >= 0; i--) {
-      if (position.inRadius(array[i].target.getBoundingClientRect())) {
-        return array[i];
-      }
-    }
-    return undefined;
-  }
 
   getAll(): Stack<SVGElementInfos> { return this.elements; }
 
@@ -102,18 +91,6 @@ export class DrawStackService {
 
   size(): number {
     return this.elements.getAll().length;
-  }
-
-  findTopElementAt(position: CoordinatesXY): SVGElementInfos | undefined {
-    return DrawStackService.findTopElementAt(position, this.elements);
-  }
-
-  hasElementIn(elementID: number, zone: DOMRect): SVGElementInfos | undefined {
-    const element = this.elements.getAll()[elementID].target.getBoundingClientRect();
-    const isIncludedX = zone.left <= element.right && zone.right >= element.left;
-    const isIncludedY = zone.top <= element.bottom && zone.bottom >= element.top;
-
-    return (isIncludedX && isIncludedY) ? this.elements.getAll()[elementID] : undefined;
   }
 
   getRoot(): SVGElementInfos | undefined {
