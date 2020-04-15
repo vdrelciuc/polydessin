@@ -1,6 +1,6 @@
 // tslint:disable: no-string-literal | Reason: used to access private variables
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { By } from '@angular/platform-browser';
