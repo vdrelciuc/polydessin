@@ -305,7 +305,7 @@ describe('EraserService', () => {
 
   it('#onMouseRelease should stop removing elements ', () => {
     service['brushDelete'] = new Stack<SVGElementInfos>();
-    service['brushDelete'].push_back(mockedSVGInfo);
+    service['brushDelete'].pushBack(mockedSVGInfo);
     service['mousePointer'] = {
       remove: () => null
     } as unknown as SVGRectElement;

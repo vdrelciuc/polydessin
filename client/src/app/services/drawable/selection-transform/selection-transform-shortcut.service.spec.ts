@@ -58,7 +58,7 @@ describe('SelectionTransformShortcutService', () => {
     const elementCount = 10;
     for (let i = 0; i < elementCount; i++) {
       const element: SVGGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
-      elementsToTransform.push_back(element);
+      elementsToTransform.pushBack(element);
     }
     Transform.setElements(elementsToTransform, manipulator);
 

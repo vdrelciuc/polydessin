@@ -158,7 +158,7 @@ describe('SelectionService', () => {
   });
 
   it('#hasNoSelection should contain one element', () => {
-    service['selectedElements'].push_back({} as unknown as SVGGElement);
+    service['selectedElements'].pushBack({} as unknown as SVGGElement);
     expect(service.hasNoSelection()).toEqual(false);
   });
 
@@ -199,8 +199,8 @@ describe('SelectionService', () => {
     const mockedEvent = mouseEventMocker('mousedown', CONSTANTS.LEFT_CLICK, 0, 0);
     Object.defineProperty(mockedEvent, 'target', { value: clickedElement });
 
-    service['selectedElements'].push_back(firstGElement);
-    service['selectedElements'].push_back(secondGElement);
+    service['selectedElements'].pushBack(firstGElement);
+    service['selectedElements'].pushBack(secondGElement);
     service.onMousePress(mockedEvent);
     expect(service['state']).toBe(SelectionState.leftClickInSelection);
     expect(service['selectedElements'].getAll().length).toBe(2); // Should not have reset
@@ -210,8 +210,8 @@ describe('SelectionService', () => {
     const mockedEvent = mouseEventMocker('mousedown', CONSTANTS.LEFT_CLICK, 0, 0);
     Object.defineProperty(mockedEvent, 'target', { value: unselectedElement });
 
-    service['selectedElements'].push_back(firstGElement);
-    service['elementsToInvert'].push_back(secondGElement);
+    service['selectedElements'].pushBack(firstGElement);
+    service['elementsToInvert'].pushBack(secondGElement);
     const singleClickSpy = spyOn<any>(service, 'onSingleClick').and.callThrough();
     service.onMousePress(mockedEvent);
     expect(singleClickSpy).toHaveBeenCalled();
@@ -224,7 +224,7 @@ describe('SelectionService', () => {
     const mockedEvent = mouseEventMocker('mousedown', CONSTANTS.LEFT_CLICK, outOfSelectionCoord, outOfSelectionCoord);
     Object.defineProperty(mockedEvent, 'target', { value: canvas });
 
-    service['selectedElements'].push_back(firstGElement);
+    service['selectedElements'].pushBack(firstGElement);
     service.onMousePress(mockedEvent);
     expect(service['selectedElements'].getAll().length).toBe(0);
   });
@@ -255,8 +255,8 @@ describe('SelectionService', () => {
     spyOn<any>(service, 'getBBoxWithStroke').and.callFake(mockedBBox);
 
     service['state'] = SelectionState.leftClickInSelection;
-    service['selectedElements'].push_back(firstGElement);
-    service['selectedElements'].push_back(secondGElement);
+    service['selectedElements'].pushBack(firstGElement);
+    service['selectedElements'].pushBack(secondGElement);
     service.onMouseRelease(mockedEvent);
     expect(service['selectedElements'].getAll().length).toBe(1); // Should have reset
   });
@@ -267,8 +267,8 @@ describe('SelectionService', () => {
     spyOn<any>(service, 'getBBoxWithStroke').and.callFake(mockedBBox);
 
     service['state'] = SelectionState.singleLeftClickOutOfSelection;
-    service['selectedElements'].push_back(firstGElement);
-    service['selectedElements'].push_back(secondGElement);
+    service['selectedElements'].pushBack(firstGElement);
+    service['selectedElements'].pushBack(secondGElement);
     service.onMouseRelease(mockedEvent);
     expect(service['selectedElements'].getAll().length).toBe(1); // Should have reset
   });
@@ -279,7 +279,7 @@ describe('SelectionService', () => {
     spyOn<any>(service, 'getBBoxWithStroke').and.callFake(mockedBBox);
 
     service['state'] = SelectionState.singleRightClick;
-    service['selectedElements'].push_back(firstGElement);
+    service['selectedElements'].pushBack(firstGElement);
     service.onMouseRelease(mockedEvent);
     expect(service['selectedElements'].getAll().length).toBe(2);
   });
@@ -289,7 +289,7 @@ describe('SelectionService', () => {
     Object.defineProperty(mockedEvent, 'target', { value: clickedElement });
 
     service['state'] = SelectionState.singleRightClick;
-    service['selectedElements'].push_back(firstGElement);
+    service['selectedElements'].pushBack(firstGElement);
     service['clickedElement'] = firstGElement;
     service.onMouseRelease(mockedEvent);
     expect(service['selectedElements'].getAll().length).toBe(0);
@@ -300,7 +300,7 @@ describe('SelectionService', () => {
     Object.defineProperty(mockedEvent, 'target', { value: clickedElement });
 
     service['state'] = SelectionState.selecting;
-    service['selectedElements'].push_back(firstGElement);
+    service['selectedElements'].pushBack(firstGElement);
     service.onMouseRelease(mockedEvent);
     expect(spyRemove).toHaveBeenCalledTimes(1);
   });
@@ -310,9 +310,9 @@ describe('SelectionService', () => {
     Object.defineProperty(mockedEvent, 'target', { value: clickedElement });
 
     service['state'] = SelectionState.inverting;
-    service['selectedElements'].push_back(firstGElement);
-    service['elementsToInvert'].push_back(firstGElement);
-    service['elementsToInvert'].push_back(secondGElement);
+    service['selectedElements'].pushBack(firstGElement);
+    service['elementsToInvert'].pushBack(firstGElement);
+    service['elementsToInvert'].pushBack(secondGElement);
     service.onMouseRelease(mockedEvent);
     expect(spyRemove).toHaveBeenCalledTimes(1);
   });

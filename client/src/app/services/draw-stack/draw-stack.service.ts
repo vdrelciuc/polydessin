@@ -64,7 +64,7 @@ export class DrawStackService {
   }
 
   removeLastElement(): SVGElementInfos | undefined {
-    const lastElement = this.elements.pop_back();
+    const lastElement = this.elements.popBack();
     if (lastElement !== undefined) {
       this.isAdding.next(false);
       this.nextId--;
@@ -74,12 +74,12 @@ export class DrawStackService {
 
   removeElements(from: number): Stack<SVGElementInfos> {
     const toRemove = new Stack<SVGElementInfos>();
-    let poped = this.elements.pop_back();
+    let poped = this.elements.popBack();
     while (poped !== undefined) {
-      toRemove.push_front(poped);
-      poped = this.elements.pop_back();
+      toRemove.pushFront(poped);
+      poped = this.elements.popBack();
       if (poped !== undefined && poped.id < from) {
-        this.elements.push_back(poped);
+        this.elements.pushBack(poped);
         break;
       }
     }

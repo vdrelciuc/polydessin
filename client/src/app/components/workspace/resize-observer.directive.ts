@@ -34,7 +34,7 @@ const ro = new ResizeObserver((entries) => {
   for (const entry of entries) {
     if (entriesMap.has(entry.target)) {
       const comp = entriesMap.get(entry.target);
-      comp._resizeCallback(entry);
+      comp.resizeCallback(entry);
     }
   }
 });
@@ -52,7 +52,7 @@ export class ResizeObserverDirective implements OnDestroy {
   }
 
   // tslint:disable-next-line: no-any | Reason : unknwon typedef for entry
-  _resizeCallback(entry: any): void {
+  resizeCallback(entry: any): void {
     this.resize.emit(entry);
   }
 

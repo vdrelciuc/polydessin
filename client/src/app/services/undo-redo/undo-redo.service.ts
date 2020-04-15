@@ -39,7 +39,7 @@ export class UndoRedoService {
         () => {
           const svg = this.drawStack.addedToRedo.value;
           if (svg !== undefined) {
-            this.removed.push_back(this.currentSVG);
+            this.removed.pushBack(this.currentSVG);
             this.redoElements.next(this.redoElements.value + 1);
             this.currentSVG = svg;
             this.drawStack.addedToRedo.next(undefined);
@@ -65,11 +65,11 @@ export class UndoRedoService {
   }
 
   undo(): void {
-    const toUndo = this.elements.pop_back();
+    const toUndo = this.elements.popBack();
     if (toUndo !== undefined) {
       this.undoElements.next(this.undoElements.value - 1);
       if (this.currentSVG.childElementCount > 1) {
-        this.removed.push_back(this.currentSVG);
+        this.removed.pushBack(this.currentSVG);
         this.redoElements.next(this.redoElements.value + 1);
       }
       this.currentSVG = toUndo;
@@ -82,7 +82,7 @@ export class UndoRedoService {
   }
 
   redo(): void {
-    const toRedo = this.removed.pop_back();
+    const toRedo = this.removed.popBack();
     if (toRedo !== undefined) {
       this.redoElements.next(this.redoElements.value - 1);
       this.setCurrent(toRedo);
@@ -117,7 +117,7 @@ export class UndoRedoService {
 
   private setCurrent(current: SVGElement): void {
     if (this.currentSVG !== undefined) {
-      this.elements.push_back(this.currentSVG);
+      this.elements.pushBack(this.currentSVG);
       this.undoElements.next(this.undoElements.value + 1);
       if (current.childElementCount === 1) {
         this.undoElements.next(this.elements.getAll().length);
@@ -127,7 +127,7 @@ export class UndoRedoService {
   }
 
   private addElement(toAdd: SVGElement): void {
-    this.elements.push_back(toAdd);
+    this.elements.pushBack(toAdd);
     this.undoElements.next(1);
   }
 

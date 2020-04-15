@@ -130,10 +130,10 @@ export class LineService extends DrawableService {
       const lastPoint = this.points.getLast();
       if (lastPoint !== undefined) {
         const canvasHeight = this.image.nativeElement.clientHeight;
-        this.points.push_back(lastPoint.getClosestPoint(onScreenX, onScreenY, canvasHeight));
+        this.points.pushBack(lastPoint.getClosestPoint(onScreenX, onScreenY, canvasHeight));
       }
     } else {
-      this.points.push_back(new CoordinatesXY(onScreenX, onScreenY));
+      this.points.pushBack(new CoordinatesXY(onScreenX, onScreenY));
     }
     this.updateLine();
   }
@@ -152,7 +152,7 @@ export class LineService extends DrawableService {
         const isWithin3Px: boolean = differenceOfCoordinatesX <= OFFSET_MIN && differenceOfCoordinatesY <= OFFSET_MIN;
         if (isWithin3Px) {
           this.removeLastPoint();
-          this.points.push_back(firstPoint);
+          this.points.pushBack(firstPoint);
         } else {
           this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
         }
@@ -200,7 +200,7 @@ export class LineService extends DrawableService {
       this.manipulator.setAttribute(circle, SVGProperties.fill, this.color.getHex());
       this.manipulator.setAttribute(circle, SVGProperties.globalOpacity, this.opacity.toString());
       this.manipulator.appendChild(this.subElement, circle);
-      this.circles.push_back(circle);
+      this.circles.pushBack(circle);
     }
     this.addPointToLine(CoordinatesXY.effectiveX(this.image, event.clientX), CoordinatesXY.effectiveY(this.image, event.clientY));
     this.followPointer();
@@ -228,11 +228,11 @@ export class LineService extends DrawableService {
   }
 
   removeLastPoint(): void {
-    const point = this.points.pop_back();
+    const point = this.points.popBack();
     if (point !== undefined) {
       this.updateLine();
       if (this.jointIsDot) {
-        const lastCircle = this.circles.pop_back();
+        const lastCircle = this.circles.popBack();
         this.manipulator.removeChild(this.subElement, lastCircle);
       }
       this.followPointer();

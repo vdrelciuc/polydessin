@@ -32,7 +32,7 @@ export class ClipboardService {
     for (const element of ClipboardService.selectedElements.getAll()) {
       const copy = element.cloneNode(true) as SVGGElement;
       ClipboardService.manipulator.appendChild(ClipboardService.image.nativeElement, copy);
-      pasteElements.push_back(copy);
+      pasteElements.pushBack(copy);
     }
     const imageWidth = ClipboardService.image.nativeElement.getBoundingClientRect().right;
     const imageHeight = ClipboardService.image.nativeElement.getBoundingClientRect().bottom;
@@ -54,7 +54,7 @@ export class ClipboardService {
     let top: number = ClipboardService.image.nativeElement.getBoundingClientRect().bottom;
     let left: number = ClipboardService.image.nativeElement.getBoundingClientRect().right;
     for (const element of Transform.elementsToTransform) {
-      ClipboardService.selectedElements.push_back(element.cloneNode(true) as SVGGElement);
+      ClipboardService.selectedElements.pushBack(element.cloneNode(true) as SVGGElement);
       top = Math.min(top, element.getBoundingClientRect().top);
       left = Math.min(left, element.getBoundingClientRect().left);
     }
@@ -81,7 +81,7 @@ export class ClipboardService {
       left = Math.min(left, element.getBoundingClientRect().left);
       bot = Math.max(bot, element.getBoundingClientRect().bottom);
       right = Math.max(right, element.getBoundingClientRect().right);
-      duplicateElements.push_back(copy);
+      duplicateElements.pushBack(copy);
     }
     Transform.setElements(duplicateElements, ClipboardService.manipulator);
     const imageRight = ClipboardService.image.nativeElement.getBoundingClientRect().right;

@@ -15,37 +15,37 @@ describe('Stack', () => {
 
   it('should add to the end', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
+      stack.pushBack(i);
     }
     expect(stack.getAll()).toEqual([0, 1, 2, 3, 4]);
   });
 
   it('should add to the beginning', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_front(i);
+      stack.pushFront(i);
     }
     expect(stack.getAll()).toEqual([4, 3, 2, 1, 0]);
   });
 
   it('should remove from the end', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
+      stack.pushBack(i);
     }
-    stack.pop_back();
+    stack.popBack();
     expect(stack.getAll()).toEqual([0, 1, 2, 3]);
   });
 
   it('should remove from the beginning', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
+      stack.pushBack(i);
     }
-    stack.pop_front();
+    stack.popFront();
     expect(stack.getAll()).toEqual([1, 2, 3, 4]);
   });
 
   it('should clear', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
+      stack.pushBack(i);
     }
     stack.clear();
     expect(stack.getAll()).toEqual([]);
@@ -53,7 +53,7 @@ describe('Stack', () => {
 
   it('should delete in the middle', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
+      stack.pushBack(i);
     }
     stack.delete(3);
     expect(stack.getAll()).toEqual([0, 1, 2, 4]);
@@ -61,7 +61,7 @@ describe('Stack', () => {
 
   it('should delete last element', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
+      stack.pushBack(i);
     }
     stack.delete(4);
     expect(stack.getAll()).toEqual([0, 1, 2, 3]);
@@ -69,7 +69,7 @@ describe('Stack', () => {
 
   it('should delete first element', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
+      stack.pushBack(i);
     }
     stack.delete(0);
     expect(stack.getAll()).toEqual([1, 2, 3, 4]);
@@ -77,7 +77,7 @@ describe('Stack', () => {
 
   it('should not delete non existent element', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
+      stack.pushBack(i);
     }
     stack.delete(9);
     expect(stack.getAll()).toEqual([0, 1, 2, 3, 4]);
@@ -89,7 +89,7 @@ describe('Stack', () => {
 
   it('should return last element', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
+      stack.pushBack(i);
     }
     expect(stack.getLast()).toBe(4);
   });
@@ -99,13 +99,13 @@ describe('Stack', () => {
   });
 
   it('should return undefined first element', () => {
-    stack.push_back(undefined as unknown as number);
-    expect(stack.pop_front()).toEqual(undefined);
+    stack.pushBack(undefined as unknown as number);
+    expect(stack.popFront()).toEqual(undefined);
   });
 
   it('should get root', () => {
     for (let i = 0; i < 5; ++i) {
-      stack.push_back(i);
+      stack.pushBack(i);
     }
     expect(stack.getRoot()).toEqual(0);
   });

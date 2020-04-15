@@ -44,7 +44,7 @@ describe('Transform', () => {
         const element: SVGGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
 
         stack = new Stack<SVGGElement>();
-        stack.push_back(element);
+        stack.pushBack(element);
         Transform.setElements(stack, manipulator);
     });
 
@@ -59,7 +59,7 @@ describe('Transform', () => {
 
         // Adding new element
         const element: SVGGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
-        stack.push_back(element);
+        stack.pushBack(element);
         Transform.setElements(stack, manipulator);
 
         expect(Transform.elementsToTransform.length).toBe(1);
@@ -237,7 +237,7 @@ describe('Transform', () => {
 
     it('#rotate should execute a translate followed by a rotate on the element', () => {
         const secondElement: SVGGElement = document.createElementNS(SVGProperties.nameSpace, SVGProperties.g);
-        stack.push_back(secondElement);
+        stack.pushBack(secondElement);
         Transform.setElements(stack, manipulator);
 
         // tslint:disable-next-line: no-any

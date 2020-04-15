@@ -102,7 +102,7 @@ describe('UndoRedoService', () => {
   });
 
   it('should reset redo stack', () => {
-    service['removed'].push_back(mockedSVG as unknown as SVGElement);
+    service['removed'].pushBack(mockedSVG as unknown as SVGElement);
     expect(service['removed'].getAll().length).toEqual(1);
     drawStack.reset.next(true);
     expect(service['removed'].getAll().length).toEqual(0);
@@ -122,7 +122,7 @@ describe('UndoRedoService', () => {
       childElementCount: 0
     } as SVGElement;
     expect(service['currentSVG'].childElementCount).toEqual(0);
-    service['elements'].push_back(mockedSVG as unknown as SVGElement);
+    service['elements'].pushBack(mockedSVG as unknown as SVGElement);
     service.undo();
     expect(service['changed'].value).toEqual(true);
     expect(service['currentSVG'].childElementCount).toEqual(1);
@@ -134,9 +134,9 @@ describe('UndoRedoService', () => {
       childElementCount: 2
     } as SVGElement;
     expect(service['currentSVG'].childElementCount).toEqual(2);
-    service['elements'].push_back(mockedSVG as unknown as SVGElement);
+    service['elements'].pushBack(mockedSVG as unknown as SVGElement);
     mockedSVG.childElementCount = 10;
-    service['elements'].push_back(mockedSVG as unknown as SVGElement);
+    service['elements'].pushBack(mockedSVG as unknown as SVGElement);
     expect(service['removed'].getAll().length).toEqual(0);
     service.undo();
     expect(service['removed'].getAll().length).toEqual(1);
@@ -160,7 +160,7 @@ describe('UndoRedoService', () => {
       childElementCount: 1,
       childNodes: [mockedSVG]
     };
-    service['removed'].push_back(mockedSVG2 as unknown as SVGElement);
+    service['removed'].pushBack(mockedSVG2 as unknown as SVGElement);
     expect(service['changed'].value).toEqual(false);
     service.redo();
     expect(service['currentSVG']).toEqual(mockedSVG2 as unknown as SVGElement);
@@ -178,7 +178,7 @@ describe('UndoRedoService', () => {
 
   it('#clear should clear all stack', () => {
     const stack = new Stack<SVGElement>();
-    stack.push_back(mockedSVG as unknown as SVGElement);
+    stack.pushBack(mockedSVG as unknown as SVGElement);
     service['elements'] = stack;
     service['removed'] = stack;
     expect(service['elements'].getAll().length).toEqual(1);

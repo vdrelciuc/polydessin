@@ -108,7 +108,7 @@ describe('LineService', () => {
     service['isStarted'] = true;
     service['shiftPressed'] = true;
     const mockedPoints = new Stack<CoordinatesXY>();
-    mockedPoints.push_back(new CoordinatesXY(10, 10));
+    mockedPoints.pushBack(new CoordinatesXY(10, 10));
     service['points'] = mockedPoints;
     const spy = spyOn(service['points'], 'getLast');
     service.onMouseMove(new MouseEvent('mousemove', {clientX: 100, clientY: 100}));
@@ -203,9 +203,9 @@ describe('LineService', () => {
 
   it('#onDoubleClick should not be within 3px', () => {
     const mockedPoints = new Stack<CoordinatesXY>();
-    mockedPoints.push_back(new CoordinatesXY(10, 10));
+    mockedPoints.pushBack(new CoordinatesXY(10, 10));
     const lastPoint = new CoordinatesXY(100, 100);
-    mockedPoints.push_back(lastPoint);
+    mockedPoints.pushBack(lastPoint);
     service['points'] = mockedPoints;
     service['isDone'] = false;
     service['isStarted'] = true;

@@ -21,11 +21,11 @@ export class Stack<T> {
     this.stack.splice(index, 0, toInsert);
   }
 
-  push_back(toAdd: T): void {
+  pushBack(toAdd: T): void {
     this.stack.push(toAdd);
   }
 
-  pop_back(): T | undefined {
+  popBack(): T | undefined {
     if (this.stack.length >= 1) {
       return this.stack.splice(this.stack.length - 1, 1)[0];
     }
@@ -39,7 +39,7 @@ export class Stack<T> {
     }
   }
 
-  push_front(toAdd: T): void {
+  pushFront(toAdd: T): void {
     const slicedArray: T[] = this.stack.splice(0, this.stack.length);
     this.stack[0] = toAdd;
     for (const element of slicedArray) {
@@ -47,7 +47,7 @@ export class Stack<T> {
     }
   }
 
-  pop_front(): T | undefined {
+  popFront(): T | undefined {
     if (this.stack.length >= 1) {
       const toReturn: T = this.stack[0];
       this.stack = this.stack.splice(1, this.stack.length);

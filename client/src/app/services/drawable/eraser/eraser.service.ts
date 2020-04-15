@@ -147,12 +147,12 @@ export class EraserService extends DrawableService {
     const elementOnTop = { target: element, id: Number(element.getAttribute(SVGProperties.title))};
     if (elementOnTop.target !== undefined) {
       if (this.leftClick) {
-        const previous = this.brushDelete.pop_back();
+        const previous = this.brushDelete.popBack();
         if (previous !== undefined) {
           previous.deleteWith = elementOnTop.id;
-          this.brushDelete.push_back(previous);
+          this.brushDelete.pushBack(previous);
         }
-        this.brushDelete.push_back(elementOnTop);
+        this.brushDelete.pushBack(elementOnTop);
         elementOnTop.target.remove();
         this.drawStack.removeElement(elementOnTop.id);
       } else {
@@ -245,7 +245,7 @@ export class EraserService extends DrawableService {
     inSVG.forEach((element) => {
       const id = element.getAttribute(SVGProperties.title);
       if (id !== null) {
-        this.elements.push_back({
+        this.elements.pushBack({
           target: element,
           id: Number(id)
         });

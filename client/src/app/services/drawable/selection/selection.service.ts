@@ -47,7 +47,7 @@ export class SelectionService extends DrawableService {
     Transform.needsButtonDisable.subscribe( () => { this.selectedElements = new Stack<SVGGElement>(); } );
     ClipboardService.pastedElements.subscribe( (paste) => {
       this.selectedElements.clear();
-      for (const element of paste) { this.selectedElements.push_back(element); }
+      for (const element of paste) { this.selectedElements.pushBack(element); }
       this.setGeneratedAreaBorders(); } );
   }
   initializeProperties(): void { /* No properties to initialize */ }
@@ -236,11 +236,11 @@ export class SelectionService extends DrawableService {
           this.state = SelectionState.leftClickInSelection;
         case SelectionState.leftClickInSelection:
           this.selectedElements = new Stack<SVGGElement>();
-          this.selectedElements.push_back(this.clickedElement);
+          this.selectedElements.pushBack(this.clickedElement);
           break;
         case SelectionState.singleRightClick:
           this.selectedElements.contains(this.clickedElement) ?
-            this.selectedElements.delete(this.clickedElement) : this.selectedElements.push_back(this.clickedElement);
+            this.selectedElements.delete(this.clickedElement) : this.selectedElements.pushBack(this.clickedElement);
           break;
       }
     } else if (this.state === SelectionState.leftClickInSelection || this.state === SelectionState.singleLeftClickOutOfSelection) {
@@ -251,7 +251,7 @@ export class SelectionService extends DrawableService {
 
   private invertSelection(): void {
     for (const element of this.elementsToInvert.getAll()) {
-      this.selectedElements.contains(element) ? this.selectedElements.delete(element) : this.selectedElements.push_back(element);
+      this.selectedElements.contains(element) ? this.selectedElements.delete(element) : this.selectedElements.pushBack(element);
     }
     this.elementsToInvert = new Stack<SVGGElement>();
   }
@@ -264,7 +264,7 @@ export class SelectionService extends DrawableService {
         const bBox = this.getBBoxWithStroke(element);
         if (!(bBox.left > this.selectionBox.right || this.selectionBox.left > bBox.right ||
             bBox.top > this.selectionBox.bottom || this.selectionBox.top > bBox.bottom)) {
-            stack.push_back(element);
+            stack.pushBack(element);
             }
       }
     }
@@ -277,7 +277,7 @@ export class SelectionService extends DrawableService {
     this.endTool();
     for (const element of [].slice.call(this.image.nativeElement.childNodes, 1)) {
       if (element !== this.subElement && element !== this.resizeGroup && element.tagName === SVGProperties.g) {
-        this.selectedElements.push_back(element);
+        this.selectedElements.pushBack(element);
       }
     }
     this.setGeneratedAreaBorders();
@@ -287,11 +287,11 @@ export class SelectionService extends DrawableService {
   setGeneratedAreaBorders(): void {
     const selection = new Stack<SVGGElement>();
     for (const element of this.selectedElements.getAll()) {
-      selection.push_back(element);
+      selection.pushBack(element);
     }
 
     for (const element of this.elementsToInvert.getAll()) {
-      selection.contains(element) ? selection.delete(element) : selection.push_back(element);
+      selection.contains(element) ? selection.delete(element) : selection.pushBack(element);
     }
 
     if (selection.getAll().length > 0) {

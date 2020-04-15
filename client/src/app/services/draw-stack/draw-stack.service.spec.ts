@@ -37,7 +37,7 @@ describe('DrawStackService', () => {
 
   it('#addElementWithInfos should not add duplicated element', () => {
     mockedSVGElementInfo.id = 0;
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     const spy = spyOn(service['elements'], 'insert');
     service.addElementWithInfos(mockedSVGElementInfo);
     expect(service['elements'].getAll().length).toEqual(1);
@@ -55,7 +55,7 @@ describe('DrawStackService', () => {
 
   it('#removeElement should remove valid element', () => {
     mockedSVGElementInfo.id = 15;
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     expect(service['elements'].getAll().length).not.toEqual(0);
     service.removeElement(15);
     expect(service['elements'].getAll().length).toEqual(0);
@@ -63,7 +63,7 @@ describe('DrawStackService', () => {
 
   it('#removeElement shouldn\'t remove non valid element', () => {
     mockedSVGElementInfo.id = 0;
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     expect(service['elements'].getAll().length).toEqual(1);
     service.removeElement(15);
     expect(service['elements'].getAll().length).toEqual(1);
@@ -76,7 +76,7 @@ describe('DrawStackService', () => {
   it('#removeLastElement should last inserted element', () => {
     mockedSVGElementInfo.id = 11;
     service['nextId'] = 4;
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     expect(service.removeLastElement()).toEqual(mockedSVGElementInfo);
     expect(service['nextId']).toEqual(3);
   });
@@ -87,22 +87,22 @@ describe('DrawStackService', () => {
 
   it('#removeElements should remove all elements from 0', () => {
     mockedSVGElementInfo.id = 1;
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     mockedSVGElementInfo.id = 2;
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     mockedSVGElementInfo.id = 3;
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     expect(service.removeElements(0).getAll().length).toEqual(3);
     expect(service['elements'].getAll().length).toEqual(0);
   });
 
   it('#removeElements should remove elements from 1', () => {
     mockedSVGElementInfo.id = 0;
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     const mockedSVGElementInfo1 = { target: { } as SVGGElement, id: 1 };
     const mockedSVGElementInfo2 = { target: { } as SVGGElement, id: 2 };
-    service['elements'].push_back(mockedSVGElementInfo1);
-    service['elements'].push_back(mockedSVGElementInfo2);
+    service['elements'].pushBack(mockedSVGElementInfo1);
+    service['elements'].pushBack(mockedSVGElementInfo2);
 
     expect(service.removeElements(1).getAll().length).toEqual(2);
     expect(service['elements'].getAll().length).toEqual(1);
@@ -145,13 +145,13 @@ describe('DrawStackService', () => {
   });
 
   it('#isEmpty should get false array is not empty', () => {
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     expect(service.isEmpty()).toEqual(false);
   });
 
   it('#size should get current size of array', () => {
     expect(service.size()).toEqual(0);
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     expect(service.size()).toEqual(1);
   });
 
@@ -163,8 +163,8 @@ describe('DrawStackService', () => {
     const mockedStack = new Stack<SVGElementInfos>();
     const element1 = {getBoundingClientRect: () => new DOMRect(10, 10, 100, 100)};
     const element2 = {getBoundingClientRect: () => new DOMRect(1000, 1000, 10, 10)};
-    mockedStack.push_back({target: element1 as unknown as SVGGElement, id: 0 });
-    mockedStack.push_back({target: element2 as unknown as SVGGElement, id: 1 });
+    mockedStack.pushBack({target: element1 as unknown as SVGGElement, id: 0 });
+    mockedStack.pushBack({target: element2 as unknown as SVGGElement, id: 1 });
     const foundElement = DrawStackService.findTopElementAt(
       new CoordinatesXY(11, 11),
       mockedStack
@@ -177,13 +177,13 @@ describe('DrawStackService', () => {
 
   it('#hasElementIn should find correct element', () => {
     service['elements'] = new Stack<SVGElementInfos>();
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     expect(service.hasElementIn(0, new DOMRect(75, 75 , 100, 100))).toEqual(mockedSVGElementInfo);
   });
 
   it('#hasElementIn should return undefined (no element in surface)', () => {
     service['elements'] = new Stack<SVGElementInfos>();
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     expect(service.hasElementIn(0, new DOMRect(10, 10 , 10, 10))).toEqual(undefined);
   });
 
@@ -193,7 +193,7 @@ describe('DrawStackService', () => {
 
   it('#getRoot should get first element', () => {
     mockedSVGElementInfo.id = 99;
-    service['elements'].push_back(mockedSVGElementInfo);
+    service['elements'].pushBack(mockedSVGElementInfo);
     const popedRoot = service.getRoot();
     if (popedRoot !== undefined) {
       expect(popedRoot.id).toEqual(99);
