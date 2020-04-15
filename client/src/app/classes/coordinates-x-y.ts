@@ -101,10 +101,6 @@ export class CoordinatesXY {
   }
 
   getQuadrant(origin: CoordinatesXY): 1 | 2 | 3 | 4 {
-    //    2 | 1
-    //   ---|---
-    //    3 | 4
-
     const isTop = this.y < origin.y;
     const isLeft = this.x < origin.x;
 
