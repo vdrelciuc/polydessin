@@ -66,7 +66,7 @@ export class EmailService {
             method: 'POST',
             url: CONSTANTS.API_URL,
             qs: {
-              dry_run: 1 // Used for testing purposes until email API is fixed
+              dry_run: 0 // Used for testing purposes until email API is fixed
             },
             headers: {
               'X-Team-Key': CONSTANTS.MAIL_API_KEY,
