@@ -84,7 +84,9 @@ export class TextService extends DrawableService {
       this.pushElement();
       this.textBoxes = new Map<number, SVGTextElement>();
       this.currentBoxNumber = 0;
-      while (!this.moveRight());
+      while (!this.moveRight()) {
+        // do nothing
+      }
     }
     this.createElement();
   }
@@ -109,7 +111,7 @@ export class TextService extends DrawableService {
         this.toLeft();
         for (const textBox of this.textBoxes) {
           const text = textBox[1].innerHTML.trim();
-          let gap = this.maxSize.size - text.length;
+          const gap = this.maxSize.size - text.length;
           const before = Math.floor(gap / 2);
           textBox[1].innerHTML = ' '.repeat(before) + text;
         }
@@ -227,7 +229,7 @@ export class TextService extends DrawableService {
   private toLeft(): void {
     for (const textBox of this.textBoxes) {
       let text = textBox[1].innerHTML;
-      while(text[0] === ' ') {
+      while (text[0] === ' ') {
         text = text.substr(1);
       }
       textBox[1].innerHTML = text;

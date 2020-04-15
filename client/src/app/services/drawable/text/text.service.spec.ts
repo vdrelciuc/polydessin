@@ -1,4 +1,5 @@
 // tslint:disable: no-magic-numbers | Reason: arbitrary values used for testing purposes
+// tslint:disable: max-file-line-count | Reason: we have a lot of tests
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
@@ -247,7 +248,6 @@ describe('TextService', () => {
     service.backspace();
     expect(spy).not.toHaveBeenCalled();
   });
-
 
   it('#backspace should remove previous character', () => {
     service['currentTextbox'] = { innerHTML: '1ba|'} as unknown as SVGTextElement;

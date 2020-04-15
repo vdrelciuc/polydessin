@@ -125,7 +125,7 @@ export class CanvasComponent implements OnInit {
     });
 
     if (history.state.continueDrawing || (localStorage.getItem('myWidth' ) !== undefined
-    && localStorage.getItem('myWidth' ) as string  !=='0'
+    && localStorage.getItem('myWidth' ) as string  !== '0'
     )
     ) {
       const width = localStorage.getItem('myWidth' ) as string ;

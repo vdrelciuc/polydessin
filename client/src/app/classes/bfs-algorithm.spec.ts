@@ -20,7 +20,7 @@ describe('BFSAlgorithm', () => {
 
     it('#BFS should get image data', () => {
         const data = [1, 1, 1, 1, 1, 1] as unknown as Uint8ClampedArray;
-        const spy = spyOn(algorithm['context'], 'getImageData').and.returnValue({data: data} as unknown as ImageData);
+        const spy = spyOn(algorithm['context'], 'getImageData').and.returnValue({data} as unknown as ImageData);
         algorithm.BFS(new CoordinatesXY(1, 1));
         expect(spy).toHaveBeenCalled();
     });
