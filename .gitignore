@@ -4,6 +4,8 @@
 /.vscode/*
 /.vscode/**
 /.idea/*
+*.vscode
+*debug.log
 
 package-lock.json
 .DS_Store
