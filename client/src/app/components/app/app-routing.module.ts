@@ -21,6 +21,13 @@ import {UndoRedoComponent} from '../guideTemplaates/undo-redo/undo-redo.componen
 import { HomeComponent } from '../home/home.component';
 import {UserGuideComponent} from '../user-guide/user-guide.component';
 import { WorkingAreaComponent } from '../working-area/working-area.component';
+import {SaveContinueGuideComponent} from "../guideTemplaates/save-continue-guide/save-continue-guide.component";
+import {RotationGuideComponent} from "../guideTemplaates/rotation-guide/rotation-guide.component";
+import {ClipboardGuideComponent} from "../guideTemplaates/clipboard-guide/clipboard-guide.component";
+import {TextGuideComponent} from "../guideTemplaates/text-guide/text-guide.component";
+import {PlumeGuideComponent} from "../guideTemplaates/plume-guide/plume-guide.component";
+import {SceauGuideComponent} from "../guideTemplaates/sceau-guide/sceau-guide.component";
+import {MailGuideComponent} from "../guideTemplaates/mail-guide/mail-guide.component";
 
 const routes: Routes = [
   {path : 'dessin' , component : WorkingAreaComponent},
@@ -45,7 +52,14 @@ const secondaryRoutes: Routes = [
   {path : 'pipette', component : PipetteGuideComponent , outlet: 'guideSubCategory'},
   {path : 'grid', component : GridGuideComponent , outlet: 'guideSubCategory'},
   {path : 'selection', component : SelectionDeplacementGuideComponent , outlet: 'guideSubCategory'},
-  {path : 'undo', component : UndoRedoComponent , outlet: 'guideSubCategory'}
+  {path : 'undo', component : UndoRedoComponent , outlet: 'guideSubCategory'},
+  {path : 'autoSave', component : SaveContinueGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'rotation', component : RotationGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'clipboard', component : ClipboardGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'text', component : TextGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'feather', component : PlumeGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'sceau', component : SceauGuideComponent , outlet: 'guideSubCategory'},
+  {path : 'mail', component : MailGuideComponent , outlet: 'guideSubCategory'}
 ];
 
 @NgModule({

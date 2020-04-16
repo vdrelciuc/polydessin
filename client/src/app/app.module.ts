@@ -65,6 +65,13 @@ import { ResizeObserverDirective } from './components/workspace/resize-observer.
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/drawable/properties/drawable-properties.service';
+import { ClipboardGuideComponent } from './components/guideTemplaates/clipboard-guide/clipboard-guide.component';
+import { SaveContinueGuideComponent } from './components/guideTemplaates/save-continue-guide/save-continue-guide.component';
+import { RotationGuideComponent } from './components/guideTemplaates/rotation-guide/rotation-guide.component';
+import { SceauGuideComponent } from './components/guideTemplaates/sceau-guide/sceau-guide.component';
+import { MailGuideComponent } from './components/guideTemplaates/mail-guide/mail-guide.component';
+import { TextGuideComponent } from './components/guideTemplaates/text-guide/text-guide.component';
+import { PlumeGuideComponent } from './components/guideTemplaates/plume-guide/plume-guide.component';
 
 @NgModule({
   declarations: [
@@ -121,7 +128,14 @@ import { DrawablePropertiesService } from './services/drawable/properties/drawab
     ExportGuideComponent,
     PaintSealComponent,
     TextComponent,
-    FeatherComponent
+    FeatherComponent,
+    ClipboardGuideComponent,
+    SaveContinueGuideComponent,
+    RotationGuideComponent,
+    SceauGuideComponent,
+    MailGuideComponent,
+    TextGuideComponent,
+    PlumeGuideComponent
   ],
   entryComponents: [
     ColorPickerComponent,

@@ -13,7 +13,7 @@ import { UserGuideComponent } from '../user-guide/user-guide.component';
 export class HomeComponent {
   @ViewChild('createNewBtn', { static: true }) createNewBtn: ElementRef<HTMLAnchorElement>;
   @ViewChild('openGalleryBtn', { static: true }) openGalleryBtn: ElementRef<HTMLAnchorElement>;
-  hasDrawing: boolean;
+  hasDrawing = false;
 
   private subscriptions: Subscription[] = [];
   options: object[] =
@@ -33,7 +33,9 @@ export class HomeComponent {
   ) {
     this.shortcutManager.disableShortcuts();
     this.setupShortcuts();
-    if (localStorage.getItem('myInnerSvg') !== null && localStorage.getItem('myInnerSvg') !== undefined) {
+    console.log(localStorage.getItem('myHeight'));
+    console.log(localStorage.getItem('myHeight'));
+    if (localStorage.length >0 && localStorage.getItem('myHeight') !== 'null') {
       this.hasDrawing = true;
     }
   }

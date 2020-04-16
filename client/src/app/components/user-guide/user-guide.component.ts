@@ -44,6 +44,7 @@ export class UserGuideComponent implements OnInit {
         elements: [
           { nom: 'Pinceau', path: 'pinceau'},
           { nom: 'Crayon', path: 'crayon'},
+          { nom: 'Plume', path: 'feather'},
           { nom: 'Couleur', path: 'couleur'},
         ]
       }
@@ -68,11 +69,16 @@ export class UserGuideComponent implements OnInit {
         elements: [
           { nom: 'Pipette', path: 'pipette' },
           { nom: 'Applicateur de Couleur', path: 'applyer' },
+          { nom: 'Sceau de peinture', path: 'sceau' },
           { nom: 'Selection et déplacement', path: 'selection' },
+          { nom: 'Rotation', path: 'selection' },
+          { nom: 'Presse papier', path: 'clipboard' },
           { nom: 'Grille', path: 'grid' },
           { nom: 'Exportation', path: 'export' },
+          { nom: 'Envoi par mail', path: 'mail' },
           { nom: 'Gallerie', path: 'gallery' },
           { nom: 'Sauvegarde sur serveur', path: 'saveServer' },
+          { nom: 'Sauvegarde automatique', path: 'autoSave' },
           { nom: 'Annuler refaire', path: 'undo' },
           { nom: 'Nouveau Dessin', path: 'nouveauDessin' }
 
