@@ -28,6 +28,7 @@ import { GridComponent } from './components/grid/grid.component';
 import { AerosolGuideComponent } from './components/guideTemplaates/aerosol-guide/aerosol-guide.component';
 // tslint:disable-next-line: max-line-length | Reason : import cannot be splitted into several lines
 import { ApplicateurCouleurGuideComponent } from './components/guideTemplaates/applicateur-couleur-guide/applicateur-couleur-guide.component';
+import { ClipboardGuideComponent } from './components/guideTemplaates/clipboard-guide/clipboard-guide.component';
 import { CouleurGuideComponent } from './components/guideTemplaates/couleur-guide/couleur-guide.component';
 import { CrayonGuideComponent } from './components/guideTemplaates/crayon-guide/crayon-guide.component';
 import { EllipseGuideComponent } from './components/guideTemplaates/ellipse-guide/ellipse-guide.component';
@@ -35,14 +36,20 @@ import { ExportGuideComponent } from './components/guideTemplaates/export-guide/
 import { GalleryGuideComponent } from './components/guideTemplaates/gallery-guide/gallery-guide.component';
 import { GridGuideComponent } from './components/guideTemplaates/grid-guide/grid-guide.component';
 import { LigneGuideComponent } from './components/guideTemplaates/ligne-guide/ligne-guide.component';
+import { MailGuideComponent } from './components/guideTemplaates/mail-guide/mail-guide.component';
 import { NouveauDessinComponent } from './components/guideTemplaates/nouveau-dessin/nouveau-dessin.component';
 import { PinceauGuideComponent } from './components/guideTemplaates/pinceau-guide/pinceau-guide.component';
 import { PipetteGuideComponent } from './components/guideTemplaates/pipette-guide/pipette-guide.component';
+import { PlumeGuideComponent } from './components/guideTemplaates/plume-guide/plume-guide.component';
 import { PolygoneGuideComponent } from './components/guideTemplaates/polygone-guide/polygone-guide.component';
 import { RectangleGuideComponent } from './components/guideTemplaates/rectangle-guide/rectangle-guide.component';
+import { RotationGuideComponent } from './components/guideTemplaates/rotation-guide/rotation-guide.component';
+import { SaveContinueGuideComponent } from './components/guideTemplaates/save-continue-guide/save-continue-guide.component';
 import { SaveServerGuideComponent } from './components/guideTemplaates/save-server-guide/save-server-guide.component';
+import { SceauGuideComponent } from './components/guideTemplaates/sceau-guide/sceau-guide.component';
 // tslint:disable-next-line: max-line-length | Reason : import cannot be splitted into several lines
 import { SelectionDeplacementGuideComponent } from './components/guideTemplaates/selection-deplacement-guide/selection-deplacement-guide.component';
+import { TextGuideComponent } from './components/guideTemplaates/text-guide/text-guide.component';
 import { UndoRedoComponent } from './components/guideTemplaates/undo-redo/undo-redo.component';
 import { HomeComponent } from './components/home/home.component';
 import { LineComponent } from './components/line/line.component';
@@ -65,13 +72,6 @@ import { ResizeObserverDirective } from './components/workspace/resize-observer.
 import { WorkspaceComponent } from './components/workspace/workspace.component';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { DrawablePropertiesService } from './services/drawable/properties/drawable-properties.service';
-import { ClipboardGuideComponent } from './components/guideTemplaates/clipboard-guide/clipboard-guide.component';
-import { SaveContinueGuideComponent } from './components/guideTemplaates/save-continue-guide/save-continue-guide.component';
-import { RotationGuideComponent } from './components/guideTemplaates/rotation-guide/rotation-guide.component';
-import { SceauGuideComponent } from './components/guideTemplaates/sceau-guide/sceau-guide.component';
-import { MailGuideComponent } from './components/guideTemplaates/mail-guide/mail-guide.component';
-import { TextGuideComponent } from './components/guideTemplaates/text-guide/text-guide.component';
-import { PlumeGuideComponent } from './components/guideTemplaates/plume-guide/plume-guide.component';
 
 @NgModule({
   declarations: [

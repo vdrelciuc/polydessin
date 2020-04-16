@@ -13,7 +13,8 @@ import { UserGuideComponent } from '../user-guide/user-guide.component';
 export class HomeComponent {
   @ViewChild('createNewBtn', { static: true }) createNewBtn: ElementRef<HTMLAnchorElement>;
   @ViewChild('openGalleryBtn', { static: true }) openGalleryBtn: ElementRef<HTMLAnchorElement>;
-  hasDrawing = false;
+  // tslint:disable-next-line: no-inferrable-types | Reason: hadDrawing needs a typedef
+  hasDrawing: boolean = false;
 
   private subscriptions: Subscription[] = [];
   options: object[] =
@@ -33,9 +34,7 @@ export class HomeComponent {
   ) {
     this.shortcutManager.disableShortcuts();
     this.setupShortcuts();
-    console.log(localStorage.getItem('myHeight'));
-    console.log(localStorage.getItem('myHeight'));
-    if (localStorage.length >0 && localStorage.getItem('myHeight') !== 'null') {
+    if (localStorage.length > 0 && localStorage.getItem('myHeight') !== 'null') {
       this.hasDrawing = true;
     }
   }

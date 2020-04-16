@@ -313,7 +313,7 @@ describe('LineService', () => {
     service.addPointToLine(105, 105);
     service['jointIsDot'] = true;
     service['shiftPressed'] = false;
-    const spy = spyOn(service['points'], 'pop_back');
+    const spy = spyOn(service['points'], 'popBack');
     service.removeLastPoint();
     expect(spy).toHaveBeenCalled();
   });
@@ -321,7 +321,7 @@ describe('LineService', () => {
   it('#removeLastPoint should remove last point', () => {
     service.addPointToLine(100, 100);
     service.addPointToLine(105, 105);
-    const spy = spyOn(service['points'], 'pop_back');
+    const spy = spyOn(service['points'], 'popBack');
     service['shiftPressed'] = false;
     service.removeLastPoint();
     expect(spy).toHaveBeenCalled();

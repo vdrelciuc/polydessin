@@ -3,6 +3,7 @@ import {RouterModule, Routes } from '@angular/router';
 import {AerosolGuideComponent} from '../guideTemplaates/aerosol-guide/aerosol-guide.component';
 import {ApplicateurCouleurGuideComponent} from '../guideTemplaates/applicateur-couleur-guide/applicateur-couleur-guide.component';
 import { BienvenueGuideComponent } from '../guideTemplaates/bienvenue-guide/bienvenue-guide.component';
+import {ClipboardGuideComponent} from '../guideTemplaates/clipboard-guide/clipboard-guide.component';
 import { CouleurGuideComponent } from '../guideTemplaates/couleur-guide/couleur-guide.component';
 import { CrayonGuideComponent } from '../guideTemplaates/crayon-guide/crayon-guide.component';
 import {EllipseGuideComponent} from '../guideTemplaates/ellipse-guide/ellipse-guide.component';
@@ -10,24 +11,23 @@ import {ExportGuideComponent} from '../guideTemplaates/export-guide/export-guide
 import {GalleryGuideComponent} from '../guideTemplaates/gallery-guide/gallery-guide.component';
 import {GridGuideComponent} from '../guideTemplaates/grid-guide/grid-guide.component';
 import { LigneGuideComponent } from '../guideTemplaates/ligne-guide/ligne-guide.component';
+import {MailGuideComponent} from '../guideTemplaates/mail-guide/mail-guide.component';
 import { NouveauDessinComponent } from '../guideTemplaates/nouveau-dessin/nouveau-dessin.component';
 import { PinceauGuideComponent } from '../guideTemplaates/pinceau-guide/pinceau-guide.component';
 import {PipetteGuideComponent} from '../guideTemplaates/pipette-guide/pipette-guide.component';
+import {PlumeGuideComponent} from '../guideTemplaates/plume-guide/plume-guide.component';
 import {PolygoneGuideComponent} from '../guideTemplaates/polygone-guide/polygone-guide.component';
 import { RectangleGuideComponent } from '../guideTemplaates/rectangle-guide/rectangle-guide.component';
+import {RotationGuideComponent} from '../guideTemplaates/rotation-guide/rotation-guide.component';
+import {SaveContinueGuideComponent} from '../guideTemplaates/save-continue-guide/save-continue-guide.component';
 import {SaveServerGuideComponent} from '../guideTemplaates/save-server-guide/save-server-guide.component';
+import {SceauGuideComponent} from '../guideTemplaates/sceau-guide/sceau-guide.component';
 import {SelectionDeplacementGuideComponent} from '../guideTemplaates/selection-deplacement-guide/selection-deplacement-guide.component';
+import {TextGuideComponent} from '../guideTemplaates/text-guide/text-guide.component';
 import {UndoRedoComponent} from '../guideTemplaates/undo-redo/undo-redo.component';
 import { HomeComponent } from '../home/home.component';
 import {UserGuideComponent} from '../user-guide/user-guide.component';
 import { WorkingAreaComponent } from '../working-area/working-area.component';
-import {SaveContinueGuideComponent} from "../guideTemplaates/save-continue-guide/save-continue-guide.component";
-import {RotationGuideComponent} from "../guideTemplaates/rotation-guide/rotation-guide.component";
-import {ClipboardGuideComponent} from "../guideTemplaates/clipboard-guide/clipboard-guide.component";
-import {TextGuideComponent} from "../guideTemplaates/text-guide/text-guide.component";
-import {PlumeGuideComponent} from "../guideTemplaates/plume-guide/plume-guide.component";
-import {SceauGuideComponent} from "../guideTemplaates/sceau-guide/sceau-guide.component";
-import {MailGuideComponent} from "../guideTemplaates/mail-guide/mail-guide.component";
 
 const routes: Routes = [
   {path : 'dessin' , component : WorkingAreaComponent},
