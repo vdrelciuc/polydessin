@@ -17,7 +17,8 @@ PolyDessin is an online-based graphics editor. The app allows you to use classic
 
 ## Configuration
 
-IMPORTANT: All the following commands need to be executed under the `/client` and `/server` directories
+- You will need to rename the file `/server/.env-template` to `/server/.env` and replace all the necessary fields
+- All the following commands need to be executed under the `/client` and `/server` directories
 
 ### Prerequisite
 
